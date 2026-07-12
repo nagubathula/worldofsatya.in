@@ -35,7 +35,7 @@ export function About() {
             className="text-4xl md:text-5xl font-serif text-black leading-tight"
           >
             Music, Cinema <br/>
-            <span className="text-[48px]">& Psychology.</span>
+            <span className="text-3xl md:text-[48px]">& Psychology.</span>
           </motion.h3>
 
           <div className="space-y-6 text-base md:text-lg text-black font-sans leading-relaxed">

@@ -47,9 +47,9 @@ export function Footer() {
       </div>
       
       <div className="max-w-7xl mx-auto mt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-white/50 text-sm font-sans">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
           <p className="text-base">Unfortunately, all good things come to an end. But drop your favourite movie and I'll try to watch it.</p>
-          <button className="px-4 py-2 border border-white/30 rounded-full hover:bg-white hover:text-black transition-colors">
+          <button className="px-4 py-2 border border-white/30 rounded-full hover:bg-white hover:text-black transition-colors w-full md:w-auto">
             Submit
           </button>
         </div>

@@ -8,7 +8,7 @@ export function Hero() {
     <section className="min-h-screen pt-32 pb-16 px-8 md:px-[110px] flex flex-col lg:flex-row items-center justify-between max-w-[1920px] mx-auto w-full gap-8">
       
       {/* Left Content */}
-      <div className="flex-1 flex flex-col justify-between h-[600px] z-10 relative">
+      <div className="flex-1 flex flex-col justify-between h-auto lg:h-[600px] z-10 relative gap-12 lg:gap-0">
         <div className="space-y-1">
           <p className="text-[21px] text-[#5d5d5d] font-serif italic leading-snug">
             Press play on the right. <br/>

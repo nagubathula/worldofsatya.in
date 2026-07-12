@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
 const projects = [
@@ -9,41 +9,31 @@ const projects = [
     id: 1,
     title: "Designing India’s First Employee Advocacy Platform",
     role: "Design Lead • b2b • SaaS",
-    image: "/images/NbU0l0KX6AVILpHZr98II19w.png", // Replace with real asset if available
-    color: "bg-[#F3F4F6]",
-    textColor: "text-black",
+    image: "/images/NbU0l0KX6AVILpHZr98II19w.png",
   },
   {
     id: 2,
     title: "Designing an Affordable IoT Companion for Everyday Plant Owners",
     role: "Product Designer • b2c • IoT + App",
-    image: "/images/cf7Ykti8tN1i5SnENxbgv3AZhM.jpg", // Replace with real asset if available
-    color: "bg-[#E5E7EB]",
-    textColor: "text-black",
+    image: "/images/cf7Ykti8tN1i5SnENxbgv3AZhM.jpg",
   },
   {
     id: 3,
     title: "Building a Multi-Feature Campus Platform Around a Dating Experience",
     role: "Founding Designer • b2c • Mobile App",
-    image: "/images/qPo8UwbXYQLdfL9GWywM4qmZs.jpg", // Replace with real asset if available
-    color: "bg-[#D1D5DB]",
-    textColor: "text-black",
+    image: "/images/qPo8UwbXYQLdfL9GWywM4qmZs.jpg",
   },
   {
     id: 4,
     title: "Creating a Community-Driven Archive of Indian Maximalist Aesthetics",
     role: "Brand Identity • Web Design • Passion Project",
-    image: "/images/OWAfbCEyptdBvl7S7klcSgsu5Q.jpeg", // Replace with real asset if available
-    color: "bg-[#9CA3AF]",
-    textColor: "text-white",
+    image: "/images/OWAfbCEyptdBvl7S7klcSgsu5Q.jpeg",
   },
   {
     id: 5,
     title: "Stealstickers.com - Coming Soon",
     role: "Side Project",
-    image: "/images/OWAfbCEyptdBvl7S7klcSgsu5Q.jpeg", // Placeholder
-    color: "bg-[#374151]",
-    textColor: "text-white",
+    image: "/images/OWAfbCEyptdBvl7S7klcSgsu5Q.jpeg",
   }
 ];
 
@@ -55,49 +45,73 @@ export function SelectedWorks() {
     offset: ["start start", "end end"]
   });
 
-  // Calculate translation based on the number of cards
-  // 5 cards = 4 gaps to scroll. We move x from 0% to -80% if there were 5 cards full width,
-  // but let's just use window width.
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75vw"]); // Approximate for 5 items
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75vw"]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
-    <section ref={targetRef} className="relative h-[400vh] bg-[#f2f2f2]" id="projects">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+    <section ref={targetRef} className={`relative bg-[#f2f2f2] ${isMobile ? 'h-auto pb-32' : 'h-[400vh]'}`} id="projects">
+      <div className={`flex flex-col ${isMobile ? '' : 'sticky top-0 h-screen items-center overflow-hidden'}`}>
         
         {/* Section Title */}
-        <div className="absolute top-12 md:top-24 left-8 md:left-[110px] z-10">
+        <div className={`${isMobile ? 'pt-24 px-8 pb-12' : 'absolute top-24 left-[110px] z-10'}`}>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-black font-sans">
             Selected Works
           </h2>
         </div>
 
-        {/* Horizontal scroll container */}
-        <motion.div style={{ x }} className="flex gap-16 px-8 md:px-[110px] mt-32">
-          {projects.map((project) => (
-            <div 
-              key={project.id} 
-              className="flex flex-col gap-6 shrink-0"
-            >
-              <div className="w-[85vw] md:w-[60vw] lg:w-[45vw] aspect-[4/3] rounded-3xl overflow-hidden relative shadow-md group">
-                <Image 
-                  src={project.image} 
-                  alt={project.title} 
-                  fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-105" 
-                />
+        {/* Mobile layout (Vertical Stack) */}
+        {isMobile && (
+          <div className="flex flex-col gap-12 px-8">
+            {projects.map((project) => (
+              <div key={project.id} className="flex flex-col gap-4">
+                <div className="w-full aspect-[4/3] rounded-3xl overflow-hidden relative shadow-md">
+                  <Image src={project.image} alt={project.title} fill className="object-cover" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-xl font-semibold font-sans leading-snug text-black">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm font-normal font-sans text-gray-600">
+                    {project.role}
+                  </p>
+                </div>
               </div>
-              
-              <div className="flex flex-col gap-2 max-w-[85vw] md:max-w-[60vw] lg:max-w-[45vw]">
-                <h3 className="text-xl md:text-2xl font-semibold font-sans leading-snug text-black">
-                  {project.title}
-                </h3>
-                <p className="text-sm md:text-base font-normal font-sans text-gray-600">
-                  {project.role}
-                </p>
+            ))}
+          </div>
+        )}
+
+        {/* Desktop layout (Horizontal Scroll) */}
+        {!isMobile && (
+          <motion.div style={{ x }} className="flex gap-16 px-[110px] mt-32 w-max">
+            {projects.map((project) => (
+              <div key={project.id} className="flex flex-col gap-6 shrink-0 w-[45vw]">
+                <div className="w-full aspect-[4/3] rounded-3xl overflow-hidden relative shadow-md group">
+                  <Image 
+                    src={project.image} 
+                    alt={project.title} 
+                    fill 
+                    className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-2xl font-semibold font-sans leading-snug text-black">
+                    {project.title}
+                  </h3>
+                  <p className="text-base font-normal font-sans text-gray-600">
+                    {project.role}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );
