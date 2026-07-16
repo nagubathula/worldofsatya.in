@@ -53,7 +53,7 @@ export function Footer() {
             Submit
           </button>
         </div>
-        <p className="text-xl font-sans text-white">Krisby</p>
+        <p className="text-xl font-sans text-white">SATYA</p>
       </div>
     </footer>
   );

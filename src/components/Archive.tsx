@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export function Archive() {
   return (
-    <section id="archive" className="min-h-screen py-32 px-8 md:px-[110px] w-full flex flex-col justify-center">
+    <section id="archive" className="min-h-screen py-32 px-8 md:px-12 w-full flex flex-col justify-center">
       <div className="max-w-4xl space-y-12">
         <motion.h4 
           initial={{ opacity: 0, y: 20 }}
@@ -13,7 +13,7 @@ export function Archive() {
           transition={{ duration: 0.6 }}
           className="text-xl md:text-2xl text-gray-500 font-serif italic max-w-sm"
         >
-          Beyond product work, I make things just because they're beautiful.
+          Beyond coding, I experiment with AI workflows, generate high-quality visual content, and create engaging social media strategies.
         </motion.h4>
         
         <motion.h1 
@@ -23,7 +23,7 @@ export function Archive() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-3xl md:text-5xl font-semibold tracking-tight text-[#131415] leading-tight"
         >
-          I have spent a significant amount of time creating identities — posters, brands, and visual experiences
+          I have spent a significant amount of time pushing the boundaries of Generative AI, creating tools, brand identities, and visual experiences.
         </motion.h1>
 
         <div className="pt-24 space-y-6">
