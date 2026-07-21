@@ -96,7 +96,7 @@ export function CassettePlayer() {
         style={{ transform: 'scale(min(1, calc((100vw - 32px) / 700)))', transformOrigin: 'center' }}
       >
         <div 
-          className="relative w-[700px] shrink-0 bg-[#e1dfda] rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.25),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_6px_rgba(0,0,0,0.05)] p-8 pt-10 border border-[#d2d0cb] flex flex-col gap-8 z-50"
+          className="relative w-[700px] shrink-0 bg-[#e1dfda] rounded-[32px] shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_6px_rgba(0,0,0,0.05)] p-8 pt-10 border border-[#d2d0cb] flex flex-col gap-8 z-50"
         >
       
       {/* Top vents */}
@@ -107,7 +107,7 @@ export function CassettePlayer() {
       </div>
 
       {/* Cassette Image Section */}
-      <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.1)] group">
+      <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden group">
         <Image 
           src="/images/QuOjsolNXDWvb627uFeMBpoQAqs.png"
           alt="Cassette Tape"

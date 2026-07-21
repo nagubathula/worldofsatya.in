@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 export default function AIVideoShowcase() {
   const videos = [
     {
@@ -44,6 +46,40 @@ export default function AIVideoShowcase() {
     }
   ];
 
+  const scrollContainerRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Duplicate the videos to create a seamless infinite loop
+  const duplicatedVideos = [...videos, ...videos];
+
+  useEffect(() => {
+    if (isHovered) return;
+
+    let animationFrameId;
+
+    const scroll = () => {
+      const container = scrollContainerRef.current;
+      if (container) {
+        // Increment scroll position
+        let currentScroll = container.scrollLeft;
+        currentScroll += 1; // 1 pixel per frame
+        
+        // When we've scrolled past the first set, reset to the beginning
+        // The first set of videos occupies exactly half of the total scrollable width
+        if (currentScroll >= container.scrollWidth / 2) {
+          currentScroll = 0;
+        }
+        
+        container.scrollLeft = currentScroll;
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isHovered]);
+
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
       <div className="flex flex-col gap-10">
@@ -54,10 +90,17 @@ export default function AIVideoShowcase() {
           </p>
         </div>
         
-        <div className="flex flex-col gap-12 min-w-0">
-          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 items-start scroll-smooth -mx-6 sm:-mx-12 md:-mx-[calc(50vw-384px+48px)] px-6 sm:px-12 md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {videos.map((video, i) => (
-              <div key={i} className="flex flex-col items-start group w-[85vw] sm:w-auto snap-center shrink-0">
+        <div 
+          className="flex flex-col gap-12 min-w-0"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <div 
+            ref={scrollContainerRef}
+            className="flex gap-6 overflow-x-auto pb-8 items-start -mx-6 sm:-mx-12 md:-mx-[calc(50vw-384px+48px)] px-6 sm:px-12 md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
+            {duplicatedVideos.map((video, i) => (
+              <div key={i} className="flex flex-col items-start group w-[85vw] sm:w-auto shrink-0">
                 <div className="relative rounded-3xl overflow-hidden bg-white mb-4 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
                     src={video.src} 
@@ -69,7 +112,6 @@ export default function AIVideoShowcase() {
                 </div>
                 <div className="w-full sm:max-w-xs">
                   <h3 className="text-xl font-semibold text-black tracking-tight mb-1">{video.title}</h3>
-                  <p className="text-black/60 text-sm leading-relaxed font-medium">{video.description}</p>
                 </div>
               </div>
             ))}
