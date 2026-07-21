@@ -52,12 +52,25 @@ export default function AIVideoShowcase() {
   // Duplicate the videos to create a seamless infinite loop
   const duplicatedVideos = [...videos, ...videos];
 
+  const handlePlay = (e) => {
+    const allVideos = document.querySelectorAll('video');
+    allVideos.forEach(v => {
+      if (v !== e.target && !v.paused) {
+        v.pause();
+      }
+    });
+  };
+
   useEffect(() => {
     if (isHovered) return;
 
     let animationFrameId;
 
     const scroll = () => {
+      if (window.innerWidth < 768) {
+        animationFrameId = requestAnimationFrame(scroll);
+        return;
+      }
       const container = scrollContainerRef.current;
       if (container) {
         // Increment scroll position
@@ -97,16 +110,20 @@ export default function AIVideoShowcase() {
         >
           <div 
             ref={scrollContainerRef}
-            className="flex gap-6 overflow-x-auto pb-8 items-start -mx-6 sm:-mx-12 md:-mx-[calc(50vw-384px+48px)] px-6 sm:px-12 md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            className="flex flex-col md:flex-row gap-12 md:gap-6 md:overflow-x-auto pb-8 items-center md:items-start md:-mx-[calc(50vw-384px+48px)] md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
             {duplicatedVideos.map((video, i) => (
-              <div key={i} className="flex flex-col items-start group w-[85vw] sm:w-auto shrink-0">
+              <div 
+                key={i} 
+                className={`flex flex-col items-start group w-full md:w-auto shrink-0 ${i >= videos.length ? 'hidden md:flex' : ''}`}
+              >
                 <div className="relative rounded-3xl overflow-hidden bg-white mb-4 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
-                    src={video.src} 
+                    src={`${video.src}#t=1`} 
                     controls 
                     preload="metadata"
                     playsInline
+                    onPlay={handlePlay}
                     className="w-full h-auto sm:w-auto sm:h-full"
                   />
                 </div>

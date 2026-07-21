@@ -8,6 +8,31 @@ export function CassettePlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [time, setTime] = useState(0);
   const audioRef = useRef(null);
+  const containerRef = useRef(null);
+  const playerRef = useRef(null);
+  const [scale, setScale] = useState(1);
+  const [playerHeight, setPlayerHeight] = useState(650);
+
+  // Initialize scale and height
+  useEffect(() => {
+    if (playerRef.current) {
+      setPlayerHeight(playerRef.current.offsetHeight);
+    }
+    
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        // Subtract 32px for some basic padding on mobile
+        const availableWidth = entry.contentRect.width - 32;
+        setScale(Math.max(0.1, Math.min(1, availableWidth / 700)));
+      }
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   // Initialize audio object
   useEffect(() => {
@@ -89,14 +114,23 @@ export function CassettePlayer() {
 
   return (
     <div
+      ref={containerRef}
       className="flex justify-center items-center w-full py-8 overflow-hidden"
     >
       <div 
-        className="flex justify-center items-center"
-        style={{ transform: 'scale(min(1, calc((100vw - 32px) / 700)))', transformOrigin: 'center' }}
+        className="relative transition-all duration-300"
+        style={{ 
+          width: 700 * scale,
+          height: playerHeight * scale,
+        }}
       >
         <div 
-          className="relative w-[700px] shrink-0 bg-[#e1dfda] rounded-[32px] shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_6px_rgba(0,0,0,0.05)] p-8 pt-10 border border-[#d2d0cb] flex flex-col gap-8 z-50"
+          ref={playerRef}
+          className="absolute top-0 left-0 w-[700px] shrink-0 bg-[#e1dfda] rounded-[32px] shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_6px_rgba(0,0,0,0.05)] p-8 pt-10 border border-[#d2d0cb] flex flex-col gap-8 z-50"
+          style={{ 
+            transform: `scale(${scale})`, 
+            transformOrigin: 'top left' 
+          }}
         >
       
       {/* Top vents */}
