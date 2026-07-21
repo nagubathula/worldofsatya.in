@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+
 
 export function CassettePlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -88,27 +88,14 @@ export function CassettePlayer() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 100, scale: 0.8, rotate: -5 }}
-      animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-      transition={{ duration: 1, type: "spring", bounce: 0.5 }}
-      className="flex justify-center items-center w-full min-h-screen py-10 overflow-hidden"
+    <div
+      className="flex justify-center items-center w-full py-8 overflow-hidden"
     >
       <div 
         className="flex justify-center items-center"
         style={{ transform: 'scale(min(1, calc((100vw - 32px) / 700)))', transformOrigin: 'center' }}
       >
-        <motion.div 
-          animate={{ 
-            y: [0, -10, 0],
-            rotate: 0
-          }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 4, 
-            ease: "easeInOut" 
-          }}
-          whileHover={{ scale: 1.05, rotate: 1 }}
+        <div 
           className="relative w-[700px] shrink-0 bg-[#e1dfda] rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.25),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_6px_rgba(0,0,0,0.05)] p-8 pt-10 border border-[#d2d0cb] flex flex-col gap-8 z-50"
         >
       
@@ -125,22 +112,17 @@ export function CassettePlayer() {
           src="/images/QuOjsolNXDWvb627uFeMBpoQAqs.png"
           alt="Cassette Tape"
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover"
           priority
         />
         {/* Semi-transparent overlay to simulate being inside a deck */}
-        <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none transition-opacity duration-300 group-hover:opacity-50" />
+        <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none" />
       </div>
 
       {/* Digital Display Area */}
       <div className="bg-[#121411] rounded shadow-[inset_0_2px_5px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.4)] border border-[#2a2a2a] py-2 px-3 flex justify-between items-center relative overflow-hidden">
         <div className="flex items-center gap-3 relative z-10">
-          <motion.div 
-            animate={{ 
-              opacity: isPlaying ? [1, 0.2, 1] : 1,
-              scale: isPlaying ? [1, 1.1, 1] : 1
-            }}
-            transition={{ repeat: isPlaying ? Infinity : 0, duration: 1, ease: "easeInOut" }}
+          <div 
             className={`w-2.5 h-2.5 rounded-full ${isPlaying ? 'bg-[#4ada5a] shadow-[0_0_8px_#4ada5a]' : 'bg-[#a3a19c]'}`} 
           />
           <div className="flex items-center">
@@ -164,15 +146,10 @@ export function CassettePlayer() {
                  ["30%", "90%", "20%", "100%", "50%", "80%", "30%"],
                  ["50%", "20%", "80%", "30%", "100%", "40%", "50%"]
                ].map((heights, i) => (
-                 <motion.div
+                 <div
                    key={i}
                    className="w-[3px] bg-[#4ada5a] rounded-t-sm shadow-[0_0_4px_#4ada5a]"
-                   animate={{ height: heights }}
-                   transition={{
-                     repeat: Infinity,
-                     duration: 0.4 + (i * 0.1),
-                     ease: "linear",
-                   }}
+                   style={{ height: heights[0] }}
                  />
                ))}
              </div>
@@ -193,7 +170,7 @@ export function CassettePlayer() {
         {/* Buttons */}
         <div className="flex justify-between gap-2">
           {/* STOP/EJECT */}
-          <button onClick={stopPlay} className="flex flex-col items-center gap-1.5 flex-1 group active:scale-95 transition-transform">
+          <button onClick={stopPlay} className="flex flex-col items-center gap-1.5 flex-1 group">
             <span className="text-[8px] text-[#85837e] font-sans font-semibold tracking-tight uppercase">STOP</span>
             <div className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] group-active:shadow-inner group-active:translate-y-1 transition-all" />
           </button>
@@ -203,29 +180,27 @@ export function CassettePlayer() {
             <div className="w-full h-10 bg-gradient-to-b from-[#f26725] to-[#d45012] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,0.4)] border border-[#c24813]" />
           </div>
           {/* PLAY */}
-          <button onClick={playAudio} className="flex flex-col items-center gap-1.5 flex-1 group active:scale-95 transition-transform">
+          <button onClick={playAudio} className="flex flex-col items-center gap-1.5 flex-1 group">
             <span className="text-[8px] text-[#85837e] font-sans font-semibold tracking-tight uppercase">▶ PLAY</span>
-            <motion.div 
-              animate={{ y: isPlaying ? 4 : 0, boxShadow: isPlaying ? "inset 0 4px 6px rgba(0,0,0,0.2)" : "" }}
-              className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] group-active:shadow-inner group-active:translate-y-1 transition-all" 
+            <div 
+              className={`w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] ${isPlaying ? 'translate-y-1 shadow-inner' : ''}`} 
             />
           </button>
           {/* REV */}
-          <button onClick={rewind} className="flex flex-col items-center gap-1.5 flex-1 group active:scale-95 transition-transform">
+          <button onClick={rewind} className="flex flex-col items-center gap-1.5 flex-1 group">
             <span className="text-[8px] text-[#85837e] font-sans font-semibold tracking-tight uppercase">◀◀ REV</span>
-            <div className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] group-active:shadow-inner group-active:translate-y-1 transition-all" />
+            <div className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2]" />
           </button>
           {/* CUE */}
-          <button onClick={fastForward} className="flex flex-col items-center gap-1.5 flex-1 group active:scale-95 transition-transform">
+          <button onClick={fastForward} className="flex flex-col items-center gap-1.5 flex-1 group">
             <span className="text-[8px] text-[#85837e] font-sans font-semibold tracking-tight uppercase">CUE ▶▶</span>
-            <div className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] group-active:shadow-inner group-active:translate-y-1 transition-all" />
+            <div className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2]" />
           </button>
           {/* PAUSE */}
-          <button onClick={togglePlay} className="flex flex-col items-center gap-1.5 flex-1 group active:scale-95 transition-transform">
+          <button onClick={togglePlay} className="flex flex-col items-center gap-1.5 flex-1 group">
             <span className="text-[8px] text-[#85837e] font-sans font-semibold tracking-tight uppercase">PAUSE</span>
-            <motion.div 
-              animate={{ y: !isPlaying && time > 0 ? 4 : 0, boxShadow: !isPlaying && time > 0 ? "inset 0 4px 6px rgba(0,0,0,0.2)" : "" }}
-              className="w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] group-active:shadow-inner group-active:translate-y-1 transition-all" 
+            <div 
+              className={`w-full h-10 bg-gradient-to-b from-[#fdfcf9] to-[#dcdbd7] rounded-md shadow-[0_4px_6px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.2),inset_0_2px_2px_rgba(255,255,255,1)] border border-[#b8b7b2] ${(!isPlaying && time > 0) ? 'translate-y-1 shadow-inner' : ''}`} 
             />
           </button>
         </div>
@@ -234,10 +209,8 @@ export function CassettePlayer() {
         <div className="flex flex-col items-start justify-end pb-3 pl-2 gap-2">
           <div className="flex items-center gap-2">
              <span className="text-[7px] text-[#85837e] font-sans font-semibold uppercase">PLAY</span>
-             <motion.div 
-               animate={{ opacity: isPlaying ? [1, 0.5, 1] : 0.3 }}
-               transition={{ repeat: Infinity, duration: 0.5 }}
-               className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-[#4ada5a] shadow-[0_0_6px_#4ada5a]' : 'bg-gray-400'}`} 
+             <div 
+               className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-[#4ada5a] shadow-[0_0_6px_#4ada5a]' : 'bg-gray-400 opacity-30'}`} 
              />
           </div>
           <div className="flex items-center gap-2">
@@ -247,8 +220,8 @@ export function CassettePlayer() {
         </div>
       </div>
       
-      </motion.div>
       </div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

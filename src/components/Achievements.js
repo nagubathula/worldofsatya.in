@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { Trophy, Star, Award, Medal } from "lucide-react";
 
 export default function Achievements() {
@@ -44,18 +44,14 @@ export default function Achievements() {
         
         <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
           {achievements.map((item, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              viewport={{ once: true, margin: "-50px" }}
               className="group p-6 border border-black/5 rounded-2xl bg-white/50 hover:bg-white transition-colors"
             >
               <div className="mb-4">{item.icon}</div>
               <h3 className="text-lg font-medium text-black tracking-tight mb-2">{item.title}</h3>
               <p className="text-black/70 text-sm leading-relaxed">{item.description}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 
 export default function ExperienceTimeline() {
   const experiences = [
@@ -48,12 +48,8 @@ export default function ExperienceTimeline() {
         
         <div className="md:col-span-8 flex flex-col">
           {experiences.map((exp, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              viewport={{ once: true, margin: "-50px" }}
               className="group flex flex-col md:flex-row py-8 border-b border-black/5 last:border-0"
             >
               <div className="md:w-1/4 mb-4 md:mb-0">
@@ -64,7 +60,7 @@ export default function ExperienceTimeline() {
                 <h4 className="text-base text-black/60 mb-4">{exp.company}</h4>
                 <p className="text-black/70 text-base max-w-lg leading-relaxed">{exp.description}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { Lock } from "lucide-react";
 
 export default function ToolShowcase() {
@@ -39,20 +39,16 @@ export default function ToolShowcase() {
         
         <div className="md:col-span-8 flex flex-col">
           {tools.map((tool, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              viewport={{ once: true, margin: "-50px" }}
               className="group flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-black/5 hover:border-black/20 transition-colors"
             >
               <div className="flex-1 pr-8">
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-3xl font-medium text-black tracking-tight group-hover:translate-x-2 transition-transform duration-300">{tool.title}</h3>
-                  <span className="text-[10px] font-mono tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded uppercase group-hover:translate-x-2 transition-transform duration-300">Internal</span>
+                  <h3 className="text-3xl font-medium text-black tracking-tight">{tool.title}</h3>
+                  <span className="text-[10px] font-mono tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded uppercase">Internal</span>
                 </div>
-                <p className="text-black/60 text-base max-w-md group-hover:translate-x-2 transition-transform duration-300 delay-75">
+                <p className="text-black/60 text-base max-w-md">
                   {tool.description}
                 </p>
               </div>
@@ -69,7 +65,7 @@ export default function ToolShowcase() {
                   <Lock size={16} />
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 
 export default function OpenSource() {
   const projects = [
@@ -28,18 +28,14 @@ export default function OpenSource() {
         
         <div className="md:col-span-8 flex flex-col gap-12">
           {projects.map((project, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              viewport={{ once: true, margin: "-50px" }}
               className="group"
             >
               <h3 className="text-2xl font-medium text-black tracking-tight mb-1">{project.name}</h3>
               <p className="text-sm font-mono text-black/40 mb-3">{project.role}</p>
               <p className="text-black/70 text-base max-w-lg leading-relaxed">{project.description}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

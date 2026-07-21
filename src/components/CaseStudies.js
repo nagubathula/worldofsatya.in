@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { ArrowUpRight } from "lucide-react";
 
 export default function CaseStudies() {
@@ -37,15 +37,11 @@ export default function CaseStudies() {
         
         <div className="md:col-span-8 flex flex-col gap-12">
           {studies.map((study, i) => (
-            <motion.a
+            <a
               href={study.link}
               target="_blank"
               rel="noopener noreferrer"
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              viewport={{ once: true, margin: "-50px" }}
               className="group block"
             >
               <div className="flex items-baseline justify-between mb-2">
@@ -56,7 +52,7 @@ export default function CaseStudies() {
               </div>
               <p className="text-black/60 text-base max-w-lg mb-2">{study.description}</p>
               <p className="text-sm font-mono text-black/40 uppercase tracking-wider">{study.type}</p>
-            </motion.a>
+            </a>
           ))}
         </div>
       </div>

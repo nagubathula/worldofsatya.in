@@ -2,7 +2,7 @@
 "use client";
 // components/ProjectShowcase.jsx
 import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -131,38 +131,14 @@ const ProjectCard = ({ project }) => {
   
     return (
         <div>
-      <motion.div
-        ref={cardRef}
-        layoutId={`project-card-${project.id}`}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 20 }}
-        transition={{ duration: 0.5 }}
+      <div
         className="relative overflow-hidden rounded-lg cursor-pointer"
-        onMouseMove={handleMouseMove}
         onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => {
-          setHovered(false);
-          setMousePosition({ x: 0, y: 0 });
-        }}
+        onMouseLeave={() => setHovered(false)}
       >
         <Link href={project.link} passHref>
-          <motion.div
-            className="aspect-square relative bg-gray-100 rounded-lg overflow-hidden"
-            animate={{
-              x: hovered ? mousePosition.x : 0,
-              y: hovered ? mousePosition.y : 0,
-              scale: hovered ? 1.05 : 1,
-              boxShadow: hovered 
-                ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
-                : "0 0 0 0 rgba(0, 0, 0, 0)"
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 150,
-              damping: 15,
-              mass: 1
-            }}
+          <div
+            className={`aspect-square relative bg-gray-100 rounded-lg overflow-hidden transition-all duration-300 ${hovered ? 'scale-105 shadow-xl' : 'scale-100 shadow-none'}`}
           >
             <div className="absolute right-4 top-4 bg-black bg-opacity-80 text-white text-xs px-3 py-1 rounded-full z-10">
               {project.category}
@@ -179,15 +155,8 @@ const ProjectCard = ({ project }) => {
               />
             </div>
             
-            <motion.div 
-              className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent"
-              animate={{
-                opacity: hovered ? 1 : 0,
-                y: hovered ? 0 : 10
-              }}
-              transition={{
-                duration: 0.3
-              }}
+            <div 
+              className={`absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent transition-all duration-300 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
             >
               <h3 className="text-white text-xl  mb-2">{project.title}</h3>
               <p className="text-gray-200 text-sm">{project.description}</p>
@@ -196,10 +165,10 @@ const ProjectCard = ({ project }) => {
                   {project.text}
                 </span>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </Link>
-      </motion.div>
+      </div>
       </div>
     );
   };
@@ -242,14 +211,11 @@ const ProjectCard = ({ project }) => {
           
           {/* Projects grid - main content */}
           <div className="lg:w-4/5">
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-              layout
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
-            </motion.div>
+            </div>
             
             {/* <div className="mt-12 text-center">
               <Link href="/all-projects">

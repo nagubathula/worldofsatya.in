@@ -1,16 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 
 export default function Footer() {
   return (
     <footer className="py-24 px-6 sm:px-12 max-w-7xl mx-auto w-full border-t border-black/5 flex flex-col items-center justify-center text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
+      <div>
         <p className="text-sm font-mono text-black/40 mb-4">Open for new opportunities</p>
         <a 
           href="mailto:nagubathula.satyasai@gmail.com"
@@ -18,7 +13,7 @@ export default function Footer() {
         >
           Let's Talk.
         </a>
-      </motion.div>
+      </div>
       
       <div className="mt-32 w-full flex flex-col md:flex-row justify-between items-center text-sm text-black/40">
         <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>

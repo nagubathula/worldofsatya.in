@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 
 export default function NodeVisualizer() {
   const nodes = [
@@ -20,27 +20,19 @@ export default function NodeVisualizer() {
         </div>
         
         <div className="md:col-span-8 flex flex-col gap-12 border-l border-black/5 pl-8 md:pl-16 relative">
-          <motion.div 
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <div 
             className="absolute top-0 bottom-0 left-[-1px] w-[2px] bg-gradient-to-b from-black via-black/20 to-transparent origin-top" 
           />
           
           {nodes.map((node, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.2, duration: 0.6 }}
-              viewport={{ once: true, margin: "-100px" }}
               className="relative"
             >
               <div className="absolute top-2 -left-[37px] md:-left-[69px] w-[6px] h-[6px] rounded-full bg-black" />
               <h3 className="text-2xl font-medium text-black mb-2 tracking-tight">{node.title}</h3>
               <p className="text-black/60 text-base max-w-md">{node.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

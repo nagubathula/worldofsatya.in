@@ -1,15 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 
 export default function ProfileCard() {
   return (
-    <motion.div
-      initial={{ y: 30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+    <div
       className="relative max-w-md mx-auto "
     >
       {/* Badge Holder */}
@@ -73,13 +70,12 @@ export default function ProfileCard() {
           </div>
           {/* Buttons */}
           <div className="flex justify-center gap-3 mt-6 text-xs">
-            <motion.a
-              whileHover={{ scale: 1.05 }}
+            <a
               href="#"
               className="flex items-center gap-2 px-5  rounded-full bg-[#3B3BFF] text-white  font-semibold shadow-md"
             >
               Contact Me  <div className="h-full aspect-square bg-black rounded-full"><ArrowUpRight size={16} /></div> 
-            </motion.a>
+            </a>
             <a
               href="#"
               className="px-4 py-2 bg-gray-100 rounded-full font-medium"
@@ -101,6 +97,6 @@ export default function ProfileCard() {
           available worldwide.
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }

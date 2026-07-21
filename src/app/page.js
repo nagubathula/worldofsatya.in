@@ -7,6 +7,7 @@ import OpenSource from "@/components/OpenSource";
 import Achievements from "@/components/Achievements";
 import Footer from "@/components/Footer";
 import { CassettePlayer } from "@/components/CassettePlayer";
+import AIVideoShowcase from "@/components/AIVideoShowcase";
 
 export default function Home() {
   return (
@@ -20,14 +21,25 @@ export default function Home() {
       </svg>
 
       <main className="relative z-10 flex flex-col bg-background">
-        <CassettePlayer />
         <HeroSection />
+        
+        {/* The Output: What I build */}
+        <CaseStudies />
+        <AIVideoShowcase />
+        
+        {/* The Process: How I build it */}
         <NodeVisualizer />
         <ToolShowcase />
-        <CaseStudies />
+        
+        {/* The Background: My Journey */}
+        <ExperienceTimeline />
+        
+        {/* Community & Recognition */}
         <OpenSource />
         <Achievements />
-        <ExperienceTimeline />
+        
+        {/* The Vibe: Creative Outro */}
+        <CassettePlayer />
       </main>
       
       <Footer />

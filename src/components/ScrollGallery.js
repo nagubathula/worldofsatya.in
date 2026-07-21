@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+
 import Image from "next/image";
 
 const ScrollGallery = () => {
@@ -38,17 +38,8 @@ const ScrollGallery = () => {
 
       {/* Top row - infinite scroll to left */}
       <div className="overflow-hidden relative mb-12">
-        <motion.div 
+        <div 
           className="flex gap-6 w-max"
-          animate={{ 
-            x: [0, '-33.33%'],
-          }}
-          transition={{ 
-            repeat: Infinity,
-            duration: 25,
-            ease: "linear",
-            repeatType: "loop"
-          }}
         >
           {duplicatedTopGifs.map((gif, index) => (
             <div 
@@ -62,22 +53,13 @@ const ScrollGallery = () => {
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Bottom row - infinite scroll to right */}
       {/* <div className="overflow-hidden relative">
-        <motion.div 
+        <div 
           className="flex gap-6 w-max"
-          animate={{ 
-            x: ['-33.33%',0 ],
-          }}
-          transition={{ 
-            repeat: Infinity,
-            duration: 25, 
-            ease: "linear",
-            repeatType: "loop"
-          }}
         >
           {duplicatedBottomGifs.map((gif, index) => (
             <div 
@@ -91,7 +73,7 @@ const ScrollGallery = () => {
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       </div> */}
     </div>
   );
