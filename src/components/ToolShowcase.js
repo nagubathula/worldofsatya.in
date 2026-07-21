@@ -37,27 +37,27 @@ export default function ToolShowcase() {
           </p>
         </div>
         
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-6">
           {tools.map((tool, i) => (
             <div
               key={i}
-              className="group flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-black/5 hover:border-black/20 transition-colors"
+              className="group flex flex-col gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="flex-1 pr-8">
+              <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-3xl font-medium text-black tracking-tight">{tool.title}</h3>
-                  <span className="text-[10px] font-mono tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded uppercase">Internal</span>
+                  <h3 className="text-2xl font-semibold text-black tracking-tight">{tool.title}</h3>
+                  <span className="text-[10px] font-semibold tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded-full uppercase">Internal</span>
                 </div>
                 <p className="text-black/60 text-base max-w-2xl">
                   {tool.description}
                 </p>
               </div>
               
-              <div className="mt-6 md:mt-0 flex items-center justify-between md:justify-end gap-6 md:w-1/3">
-                <div className="flex flex-wrap gap-2 md:justify-end">
+              <div className="flex items-center justify-between gap-6 w-full pt-4 border-t border-black/[0.04]">
+                <div className="flex flex-wrap gap-2">
                   {tool.tags.map((tag, j) => (
-                    <span key={j} className="text-xs font-mono text-black/40">
-                      {tag}{j < tool.tags.length - 1 ? ',' : ''}
+                    <span key={j} className="text-xs font-mono text-black/50 bg-black/[0.03] px-2 py-1 rounded-md">
+                      {tag}
                     </span>
                   ))}
                 </div>

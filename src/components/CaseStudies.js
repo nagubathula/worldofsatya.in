@@ -35,23 +35,29 @@ export default function CaseStudies() {
           </p>
         </div>
         
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-6">
           {studies.map((study, i) => (
             <a
               href={study.link}
               target="_blank"
               rel="noopener noreferrer"
               key={i}
-              className="group block"
+              className="group block bg-white rounded-3xl p-6 sm:p-8 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300 relative overflow-hidden"
             >
-              <div className="flex items-baseline justify-between mb-2">
-                <h3 className="text-2xl font-medium text-black group-hover:text-black/60 transition-colors tracking-tight">
-                  {study.title}
-                </h3>
-                <ArrowUpRight size={20} className="text-black/30 group-hover:text-black transition-colors transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <div className="flex flex-col h-full justify-between">
+                <div>
+                  <p className="text-xs font-semibold text-black/40 uppercase tracking-widest mb-3">{study.type}</p>
+                  <h3 className="text-2xl font-semibold text-black tracking-tight mb-3">
+                    {study.title}
+                  </h3>
+                  <p className="text-black/60 text-base max-w-2xl leading-relaxed">{study.description}</p>
+                </div>
+                <div className="mt-6 flex justify-end">
+                  <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                    <ArrowUpRight size={18} className="text-black/60 group-hover:text-white transition-colors" />
+                  </div>
+                </div>
               </div>
-              <p className="text-black/60 text-base max-w-2xl mb-2">{study.description}</p>
-              <p className="text-sm font-mono text-black/40 uppercase tracking-wider">{study.type}</p>
             </a>
           ))}
         </div>

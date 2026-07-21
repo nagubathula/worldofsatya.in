@@ -19,18 +19,17 @@ export default function NodeVisualizer() {
           </p>
         </div>
         
-        <div className="flex flex-col gap-12 border-l border-black/5 pl-8 md:pl-12 relative">
+        <div className="flex flex-col gap-8 border-l-2 border-black/5 pl-8 md:pl-12 relative">
           <div 
-            className="absolute top-0 bottom-0 left-[-1px] w-[2px] bg-gradient-to-b from-black via-black/20 to-transparent origin-top" 
+            className="absolute top-0 bottom-0 left-[-2px] w-[2px] bg-gradient-to-b from-black via-black/20 to-transparent origin-top" 
           />
-          
           {nodes.map((node, i) => (
             <div
               key={i}
-              className="relative"
+              className="relative group flex flex-col p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300"
             >
-              <div className="absolute top-2 -left-[37px] md:-left-[69px] w-[6px] h-[6px] rounded-full bg-black" />
-              <h3 className="text-2xl font-medium text-black mb-2 tracking-tight">{node.title}</h3>
+              <div className="absolute top-1/2 -translate-y-1/2 -left-[38px] md:-left-[54px] w-3 h-3 rounded-full bg-white border-[3px] border-black/20 shadow-sm" />
+              <h3 className="text-2xl font-semibold text-black mb-2 tracking-tight">{node.title}</h3>
               <p className="text-black/60 text-base max-w-2xl">{node.desc}</p>
             </div>
           ))}

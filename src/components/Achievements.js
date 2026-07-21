@@ -42,15 +42,15 @@ export default function Achievements() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div className="flex flex-col gap-6">
           {achievements.map((item, i) => (
             <div
               key={i}
-              className="group p-6 border border-black/5 rounded-2xl bg-white/50 hover:bg-white transition-colors"
+              className="group flex flex-col p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300"
             >
               <div className="mb-4">{item.icon}</div>
-              <h3 className="text-lg font-medium text-black tracking-tight mb-2">{item.title}</h3>
-              <p className="text-black/70 text-sm leading-relaxed">{item.description}</p>
+              <h3 className="text-xl font-semibold text-black tracking-tight mb-2">{item.title}</h3>
+              <p className="text-black/60 text-sm leading-relaxed font-medium">{item.description}</p>
             </div>
           ))}
         </div>

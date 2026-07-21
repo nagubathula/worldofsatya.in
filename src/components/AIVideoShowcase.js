@@ -13,6 +13,26 @@ export default function AIVideoShowcase() {
       description: "AI Video generation experiment.",
     },
     {
+      src: "/aivideos/female_host_ai_generated.mp4",
+      title: "AI Virtual Host",
+      description: "Hyper-realistic virtual presenter generated with AI.",
+    },
+    {
+      src: "/aivideos/niat_ugc.mp4",
+      title: "NIAT UGC",
+      description: "User-generated content style AI generation.",
+    },
+    {
+      src: "/aivideos/mustang_ai_realism.mp4",
+      title: "Mustang AI Realism",
+      description: "Photorealistic automotive generation.",
+    },
+    {
+      src: "/aivideos/A_hyper_realistic_extreme_hig (1).mp4",
+      title: "Hyper-Realistic Detail",
+      description: "Extreme detail latent space manipulation.",
+    },
+    {
       src: "/aivideos/engineerudu_horizontal.mp4",
       title: "Engineerudu (Horizontal)",
       description: "Promotional AI video for FOSS community.",
@@ -35,10 +55,10 @@ export default function AIVideoShowcase() {
         </div>
         
         <div className="flex flex-col gap-12 min-w-0">
-          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 items-start scroll-smooth">
+          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 items-start scroll-smooth -mx-6 sm:-mx-12 md:-mx-[calc(50vw-384px+48px)] px-6 sm:px-12 md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {videos.map((video, i) => (
               <div key={i} className="flex flex-col items-start group w-[85vw] sm:w-auto snap-center shrink-0">
-                <div className="relative rounded-2xl overflow-hidden bg-black/5 mb-4 shadow-sm border border-black/5 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
+                <div className="relative rounded-3xl overflow-hidden bg-white mb-4 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
                     src={video.src} 
                     controls 
@@ -48,8 +68,8 @@ export default function AIVideoShowcase() {
                   />
                 </div>
                 <div className="w-full sm:max-w-xs">
-                  <h3 className="text-lg font-medium text-black tracking-tight mb-1">{video.title}</h3>
-                  <p className="text-black/60 text-sm leading-relaxed">{video.description}</p>
+                  <h3 className="text-xl font-semibold text-black tracking-tight mb-1">{video.title}</h3>
+                  <p className="text-black/60 text-sm leading-relaxed font-medium">{video.description}</p>
                 </div>
               </div>
             ))}
