@@ -35,7 +35,8 @@ export default function HeroSection() {
           I bridge the gap between creative visual direction and deep technical automation. Currently architecting multi-modal AI video pipelines and building tools that scale digital content production by 90%.
         </p>
         
-        <div className="mt-8 flex gap-6">
+        <div className="mt-8 flex gap-6 items-center">
+          <a href="/files/Resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-medium bg-black text-white px-4 py-2 rounded-full hover:bg-black/80 transition-colors">Resume</a>
           <a href="mailto:nagubathula.satyasai@gmail.com" className="text-sm font-medium hover:text-black/50 transition-colors">Email</a>
           <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-black/50 transition-colors">LinkedIn</a>
           <a href="https://hippogriff.medium.com" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-black/50 transition-colors">Medium</a>
