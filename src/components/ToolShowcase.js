@@ -8,7 +8,7 @@ export default function ToolShowcase() {
     {
       title: "AutoEdit",
       description: "AI-powered infographic and typography editor making complex animations in seconds.",
-      tags: ["Python", "React", "Video AI"],
+      tags: ["Python", "React", "Whisper","Gemini"],
     },
     {
       title: "WhatThePrompt",

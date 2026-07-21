@@ -1,5 +1,4 @@
 import HeroSection from "@/components/HeroSection";
-import NodeVisualizer from "@/components/NodeVisualizer";
 import ToolShowcase from "@/components/ToolShowcase";
 import CaseStudies from "@/components/CaseStudies";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
@@ -29,7 +28,6 @@ export default function Home() {
         <AIVideoShowcase />
         
         {/* The Process: How I build it */}
-        <NodeVisualizer />
         <ToolShowcase />
         
         {/* The Background: My Journey */}

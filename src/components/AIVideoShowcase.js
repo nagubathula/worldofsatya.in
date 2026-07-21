@@ -6,7 +6,7 @@ export default function AIVideoShowcase() {
   const videos = [
     {
       src: "/aivideos/AI_ADVERTISEMENT.mp4",
-      title: "AI Advertisement",
+      title: "STERIO HEADPHONES",
       description: "Generative AI commercial showcase.",
     },
     {
@@ -17,7 +17,7 @@ export default function AIVideoShowcase() {
     {
       src: "/aivideos/female_host_ai_generated.mp4",
       title: "AI Virtual Host",
-      description: "Hyper-realistic virtual presenter generated with AI.",
+      description: "Hyper-realistic virtual presenter generated with Gemini Omni.",
     },
     {
       src: "/aivideos/niat_ugc.mp4",
@@ -99,7 +99,7 @@ export default function AIVideoShowcase() {
         <div>
           <h2 className="text-xl font-medium text-black">AI Video Generation</h2>
           <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
-            Showcasing advanced generative AI video workflows. Combining temporal coherence, custom nodes, and latent space manipulation using tools like ComfyUI, Veo 3, and Wan 2.2.
+            Showcasing some of my works.
           </p>
         </div>
         
