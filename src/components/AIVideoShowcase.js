@@ -26,29 +26,31 @@ export default function AIVideoShowcase() {
 
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div className="md:col-span-4">
+      <div className="flex flex-col gap-10">
+        <div>
           <h2 className="text-xl font-medium text-black">AI Video Generation</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xs leading-relaxed">
+          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
             Showcasing advanced generative AI video workflows. Combining temporal coherence, custom nodes, and latent space manipulation using tools like ComfyUI, Veo 3, and Wan 2.2.
           </p>
         </div>
         
-        <div className="md:col-span-8 flex flex-col gap-12 min-w-0">
+        <div className="flex flex-col gap-12 min-w-0">
           <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 items-start scroll-smooth">
             {videos.map((video, i) => (
-              <div key={i} className="flex flex-col group min-w-[280px] w-[75vw] sm:w-[380px] snap-center shrink-0">
-                <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/5 mb-4 shadow-sm border border-black/5 flex justify-center items-center">
+              <div key={i} className="flex flex-col items-start group w-[85vw] sm:w-auto snap-center shrink-0">
+                <div className="relative rounded-2xl overflow-hidden bg-black/5 mb-4 shadow-sm border border-black/5 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
                     src={video.src} 
                     controls 
                     preload="metadata"
                     playsInline
-                    className="w-full h-full object-contain"
+                    className="w-full h-auto sm:w-auto sm:h-full"
                   />
                 </div>
-                <h3 className="text-lg font-medium text-black tracking-tight mb-1">{video.title}</h3>
-                <p className="text-black/60 text-sm leading-relaxed">{video.description}</p>
+                <div className="w-full sm:max-w-xs">
+                  <h3 className="text-lg font-medium text-black tracking-tight mb-1">{video.title}</h3>
+                  <p className="text-black/60 text-sm leading-relaxed">{video.description}</p>
+                </div>
               </div>
             ))}
           </div>

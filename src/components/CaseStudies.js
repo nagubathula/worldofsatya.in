@@ -27,15 +27,15 @@ export default function CaseStudies() {
 
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div className="md:col-span-4">
+      <div className="flex flex-col gap-10">
+        <div>
           <h2 className="text-xl font-medium text-black">Case Studies & Writing</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xs leading-relaxed">
+          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
             Technical breakdowns, engineering experiments, and thoughts on the future of generative UI.
           </p>
         </div>
         
-        <div className="md:col-span-8 flex flex-col gap-12">
+        <div className="flex flex-col gap-12">
           {studies.map((study, i) => (
             <a
               href={study.link}
@@ -50,7 +50,7 @@ export default function CaseStudies() {
                 </h3>
                 <ArrowUpRight size={20} className="text-black/30 group-hover:text-black transition-colors transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </div>
-              <p className="text-black/60 text-base max-w-lg mb-2">{study.description}</p>
+              <p className="text-black/60 text-base max-w-2xl mb-2">{study.description}</p>
               <p className="text-sm font-mono text-black/40 uppercase tracking-wider">{study.type}</p>
             </a>
           ))}

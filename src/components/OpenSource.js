@@ -18,15 +18,15 @@ export default function OpenSource() {
 
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div className="md:col-span-4">
+      <div className="flex flex-col gap-10">
+        <div>
           <h2 className="text-xl font-medium text-black">Open Source</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xs leading-relaxed">
+          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
             Giving back to the community through code, design, and education.
           </p>
         </div>
         
-        <div className="md:col-span-8 flex flex-col gap-12">
+        <div className="flex flex-col gap-12">
           {projects.map((project, i) => (
             <div
               key={i}
@@ -34,7 +34,7 @@ export default function OpenSource() {
             >
               <h3 className="text-2xl font-medium text-black tracking-tight mb-1">{project.name}</h3>
               <p className="text-sm font-mono text-black/40 mb-3">{project.role}</p>
-              <p className="text-black/70 text-base max-w-lg leading-relaxed">{project.description}</p>
+              <p className="text-black/70 text-base max-w-2xl leading-relaxed">{project.description}</p>
             </div>
           ))}
         </div>

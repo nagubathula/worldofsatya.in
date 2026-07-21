@@ -7,12 +7,12 @@ export default function HeroSection() {
     <section className="flex flex-col justify-center px-6 sm:px-12 max-w-7xl mx-auto w-full pt-24 pb-12">
       <div className="mb-8">
         <p className="text-sm md:text-base font-medium text-black/60">
-         I am <span className="font-bold"> Satya Sai Nagubathula </span> 
+         I am <span className="font-bold"> Satya Sai Nagubathula </span>, currently
         </p>
       </div>
 
       <h1 className="text-[12vw] sm:text-7xl md:text-8xl lg:text-[110px] font-medium leading-[0.9] tracking-[-0.04em] max-w-5xl text-black">
-        Currently The AI Guy.
+        The AI Guy.
       </h1>
 
       <div className="mt-10 max-w-2xl">

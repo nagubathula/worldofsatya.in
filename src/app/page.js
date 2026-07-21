@@ -11,7 +11,7 @@ import AIVideoShowcase from "@/components/AIVideoShowcase";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-foreground selection:text-background relative">
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-foreground selection:text-background relative max-w-3xl mx-auto w-full">
       {/* Noise Overlay */}
       <svg className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-difference w-full h-full">
         <filter id="noise">
@@ -22,6 +22,7 @@ export default function Home() {
 
       <main className="relative z-10 flex flex-col bg-background">
         <HeroSection />
+        <CassettePlayer />
         
         {/* The Output: What I build */}
         <CaseStudies />
@@ -37,9 +38,6 @@ export default function Home() {
         {/* Community & Recognition */}
         <OpenSource />
         <Achievements />
-        
-        {/* The Vibe: Creative Outro */}
-        <CassettePlayer />
       </main>
       
       <Footer />

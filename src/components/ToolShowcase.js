@@ -29,15 +29,15 @@ export default function ToolShowcase() {
 
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div className="md:col-span-4">
+      <div className="flex flex-col gap-10">
+        <div>
           <h2 className="text-xl font-medium text-black">Internal Tools</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xs leading-relaxed">
+          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
             Zero-cost automation suites and live web products built to scale digital content production by 90%.
           </p>
         </div>
         
-        <div className="md:col-span-8 flex flex-col">
+        <div className="flex flex-col">
           {tools.map((tool, i) => (
             <div
               key={i}
@@ -48,7 +48,7 @@ export default function ToolShowcase() {
                   <h3 className="text-3xl font-medium text-black tracking-tight">{tool.title}</h3>
                   <span className="text-[10px] font-mono tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded uppercase">Internal</span>
                 </div>
-                <p className="text-black/60 text-base max-w-md">
+                <p className="text-black/60 text-base max-w-2xl">
                   {tool.description}
                 </p>
               </div>
