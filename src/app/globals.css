@@ -1,19 +1,17 @@
-@import "tailwindcss";
-
-@theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
-  :root {
-    --background: #f2f2f2;
-    --foreground: #1a1a1a;
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Soften font rendering for that premium look */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-sans);
+::selection {
+  background: #111111;
+  color: #F5F5F5;
 }
