@@ -12,7 +12,7 @@ export function CassettePlayer() {
   // Initialize audio object
   useEffect(() => {
     // Replace with actual voice file path later
-    audioRef.current = new Audio("/audio/voice.mp3");
+    audioRef.current = new Audio("/audio/satya.wav");
     
     const updateTime = () => {
       if (audioRef.current) {
@@ -72,9 +72,16 @@ export function CassettePlayer() {
       className="flex justify-center items-center w-full"
     >
       <motion.div 
-        animate={{ y: isPlaying ? [0, -2, 0] : [0, -10, 0] }}
-        transition={{ repeat: Infinity, duration: isPlaying ? 0.3 : 4, ease: "easeInOut" }}
-        whileHover={{ scale: 1.02 }}
+        animate={{ 
+          y: isPlaying ? [0, -1, 0, 1, 0] : [0, -10, 0],
+          rotate: isPlaying ? [0, 0.2, 0, -0.2, 0] : 0
+        }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: isPlaying ? 0.2 : 4, 
+          ease: isPlaying ? "linear" : "easeInOut" 
+        }}
+        whileHover={{ scale: 1.02, rotate: isPlaying ? 0 : 1 }}
         className="relative w-full max-w-[500px] bg-[#e1dfda] rounded-[24px] shadow-[0_30px_60px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_6px_rgba(0,0,0,0.05)] p-6 pt-8 border border-[#d2d0cb] flex flex-col gap-5 scale-90 lg:scale-100"
       >
       
@@ -86,24 +93,27 @@ export function CassettePlayer() {
       </div>
 
       {/* Cassette Image Section */}
-      <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.1)]">
+      <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.1)] group">
         <Image 
           src="/images/QuOjsolNXDWvb627uFeMBpoQAqs.png"
           alt="Cassette Tape"
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
           priority
         />
         {/* Semi-transparent overlay to simulate being inside a deck */}
-        <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none" />
+        <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none transition-opacity duration-300 group-hover:opacity-50" />
       </div>
 
       {/* Digital Display Area */}
       <div className="bg-[#121411] rounded shadow-[inset_0_2px_5px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.4)] border border-[#2a2a2a] py-2 px-3 flex justify-between items-center relative overflow-hidden">
         <div className="flex items-center gap-3 relative z-10">
           <motion.div 
-            animate={{ opacity: isPlaying ? [1, 0.4, 1] : 1 }}
-            transition={{ repeat: isPlaying ? Infinity : 0, duration: 1 }}
+            animate={{ 
+              opacity: isPlaying ? [1, 0.2, 1] : 1,
+              scale: isPlaying ? [1, 1.1, 1] : 1
+            }}
+            transition={{ repeat: isPlaying ? Infinity : 0, duration: 1, ease: "easeInOut" }}
             className={`w-2.5 h-2.5 rounded-full ${isPlaying ? 'bg-[#4ada5a] shadow-[0_0_8px_#4ada5a]' : 'bg-[#a3a19c]'}`} 
           />
           <div className="flex items-center">
@@ -119,16 +129,22 @@ export function CassettePlayer() {
         <div className="flex items-center gap-4">
            {/* Animated Equalizer */}
            {isPlaying && (
-             <div className="flex gap-0.5 items-end h-3">
-               {[1, 2, 3, 4, 5].map((bar) => (
+             <div className="flex gap-0.5 items-end h-4">
+               {[
+                 ["20%", "60%", "30%", "100%", "40%", "80%", "20%"],
+                 ["40%", "100%", "20%", "80%", "30%", "90%", "40%"],
+                 ["10%", "80%", "40%", "90%", "20%", "70%", "10%"],
+                 ["30%", "90%", "20%", "100%", "50%", "80%", "30%"],
+                 ["50%", "20%", "80%", "30%", "100%", "40%", "50%"]
+               ].map((heights, i) => (
                  <motion.div
-                   key={bar}
-                   className="w-1 bg-[#4ada5a]"
-                   animate={{ height: ["20%", "100%", "40%", "80%", "20%"] }}
+                   key={i}
+                   className="w-[3px] bg-[#4ada5a] rounded-t-sm shadow-[0_0_4px_#4ada5a]"
+                   animate={{ height: heights }}
                    transition={{
                      repeat: Infinity,
-                     duration: 0.5 + Math.random() * 0.5,
-                     ease: "easeInOut",
+                     duration: 0.4 + (i * 0.1),
+                     ease: "linear",
                    }}
                  />
                ))}
