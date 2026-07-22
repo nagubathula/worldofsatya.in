@@ -12,16 +12,22 @@ export default function CaseStudies() {
       link: "https://hippogriff.medium.com",
     },
     {
-      title: "8-Element Prompt Framework",
-      description: "Achieving 95% character consistency across AI generated video using Shot, Subject, Style, Color, and Lighting parameters.",
-      type: "Engineering Experiment",
-      link: "#",
+      title: "How I Built My Pseudo Fullstack Portfolio",
+      description: "An in-depth breakdown of the design and development process for my portfolio website.",
+      type: "Medium Article",
+      link: "https://medium.com/@hippogriff/how-i-built-my-psuedo-fullstack-portfolio-73cd1f6aecda",
     },
     {
       title: "Zero-Cost Automation",
       description: "Building an internal productivity suite using Google Colab, Supabase, and lightweight web extensions.",
       type: "Architecture Breakdown",
       link: "#",
+    },
+    {
+      title: "Why Are You Still Confused When Turning Your Design To Code?",
+      description: "A guide on bridging the gap between design and development, avoiding common handoff pitfalls.",
+      type: "Medium Article",
+      link: "https://medium.com/design-bootcamp/why-are-you-still-confusing-when-turning-your-design-to-code-a7489d544deb",
     }
   ];
 
