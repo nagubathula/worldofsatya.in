@@ -24,18 +24,20 @@ export default function Home() {
         <CassettePlayer />
         
         {/* The Output: What I build */}
-        <CaseStudies />
-        <AIVideoShowcase />
+        
+        <AIVideoShowcase limit={3} />
+        <OpenSource limit={2} />
+        <CaseStudies limit={2} />
         
         {/* The Process: How I build it */}
-        <ToolShowcase />
+        <ToolShowcase limit={2} />
         
         {/* The Background: My Journey */}
-        <ExperienceTimeline />
+        <ExperienceTimeline limit={2} />
         
         {/* Community & Recognition */}
-        <OpenSource />
-        <Achievements />
+        
+        <Achievements limit={2} />
       </main>
       
       <Footer />

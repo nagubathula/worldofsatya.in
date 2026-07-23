@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { Briefcase } from "lucide-react";
 
-
-export default function ExperienceTimeline() {
+export default function ExperienceTimeline({ limit }) {
   const experiences = [
     {
       year: "05/2025 - Present",
@@ -39,15 +40,20 @@ export default function ExperienceTimeline() {
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
       <div className="flex flex-col gap-10">
-        <div>
-          <h2 className="text-xl font-medium text-black">Experience</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
+        <div className="mb-6 md:mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
+            <Briefcase size={14} /> Career
+          </div>
+          <h2 className="text-4xl md:text-5xl font-semibold text-black tracking-tight mb-4">
+            Experience
+          </h2>
+          <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
             A history of bridging design and engineering.
           </p>
         </div>
         
         <div className="flex flex-col gap-6">
-          {experiences.map((exp, i) => (
+          {(limit ? experiences.slice(0, limit) : experiences).map((exp, i) => (
             <div
               key={i}
               className="flex flex-col gap-4 md:gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300"
@@ -63,6 +69,14 @@ export default function ExperienceTimeline() {
             </div>
           ))}
         </div>
+        
+        {limit && experiences.length > limit && (
+          <div className="mt-8 flex justify-center">
+            <Link href="/experience" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
+              View Full Experience
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

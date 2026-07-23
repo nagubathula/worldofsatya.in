@@ -1,9 +1,10 @@
 "use client";
 
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BookOpen } from "lucide-react";
+import Link from "next/link";
 
-export default function CaseStudies() {
+export default function CaseStudies({ limit }) {
   const studies = [
     {
       title: "From Doodles to Design",
@@ -34,15 +35,20 @@ export default function CaseStudies() {
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
       <div className="flex flex-col gap-10">
-        <div>
-          <h2 className="text-xl font-medium text-black">Case Studies & Writing</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
+        <div className="mb-6 md:mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
+            <BookOpen size={14} /> Writing
+          </div>
+          <h2 className="text-4xl md:text-5xl font-semibold text-black tracking-tight mb-4">
+            Case Studies
+          </h2>
+          <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
             Technical breakdowns, engineering experiments, and thoughts on the future of generative UI.
           </p>
         </div>
         
         <div className="flex flex-col gap-6">
-          {studies.map((study, i) => {
+          {(limit ? studies.slice(0, limit) : studies).map((study, i) => {
             const isLink = study.link !== "#";
             const CardWrapper = isLink ? 'a' : 'div';
             const wrapperProps = isLink ? { href: study.link, target: "_blank", rel: "noopener noreferrer" } : {};
@@ -73,6 +79,14 @@ export default function CaseStudies() {
             );
           })}
         </div>
+        
+        {limit && studies.length > limit && (
+          <div className="mt-8 flex justify-center">
+            <Link href="/case-studies" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
+              View More Case Studies
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -2,8 +2,9 @@
 
 
 import { Trophy, Star, Award, Medal } from "lucide-react";
+import Link from "next/link";
 
-export default function Achievements() {
+export default function Achievements({ limit }) {
   const achievements = [
     {
       title: "100k+ Followers Growth",
@@ -35,15 +36,20 @@ export default function Achievements() {
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
       <div className="flex flex-col gap-10">
-        <div>
-          <h2 className="text-xl font-medium text-black">Achievements</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
+        <div className="mb-6 md:mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
+            <Trophy size={14} /> Recognition
+          </div>
+          <h2 className="text-4xl md:text-5xl font-semibold text-black tracking-tight mb-4">
+            Achievements
+          </h2>
+          <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
             Recognition across open-source, hackathons, and AI growth metrics.
           </p>
         </div>
         
         <div className="flex flex-col gap-6">
-          {achievements.map((item, i) => (
+          {(limit ? achievements.slice(0, limit) : achievements).map((item, i) => (
             <div
               key={i}
               className="group flex flex-col p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300"
@@ -54,6 +60,14 @@ export default function Achievements() {
             </div>
           ))}
         </div>
+        
+        {limit && achievements.length > limit && (
+          <div className="mt-8 flex justify-center">
+            <Link href="/achievements" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
+              View More Achievements
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

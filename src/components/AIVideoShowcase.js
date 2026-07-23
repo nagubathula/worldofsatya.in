@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { Video } from "lucide-react";
 
-export default function AIVideoShowcase() {
+export default function AIVideoShowcase({ limit }) {
   const videos = [
     {
       src: "/aivideos/AI_ADVERTISEMENT.mp4",
@@ -50,7 +52,8 @@ export default function AIVideoShowcase() {
   const [isHovered, setIsHovered] = useState(false);
 
   // Duplicate the videos to create a seamless infinite loop
-  const duplicatedVideos = [...videos, ...videos];
+  const displayedVideos = limit ? videos.slice(0, limit) : videos;
+  const duplicatedVideos = limit ? displayedVideos : [...videos, ...videos];
 
   const handlePlay = (e) => {
     const allVideos = document.querySelectorAll('video');
@@ -62,7 +65,7 @@ export default function AIVideoShowcase() {
   };
 
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || limit) return; // Disable auto-scroll if limit is set or hovered
 
     let animationFrameId;
 
@@ -91,15 +94,20 @@ export default function AIVideoShowcase() {
     animationFrameId = requestAnimationFrame(scroll);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isHovered]);
+  }, [isHovered, limit]);
 
   return (
     <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
       <div className="flex flex-col gap-10">
-        <div>
-          <h2 className="text-xl font-medium text-black">AI Video Generation</h2>
-          <p className="mt-4 text-sm text-black/60 max-w-xl leading-relaxed">
-            Showcasing some of my works.
+        <div className="mb-6 md:mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
+            <Video size={14} /> AI Experiments
+          </div>
+          <h2 className="text-4xl md:text-5xl font-semibold text-black tracking-tight mb-4">
+            Generative Video
+          </h2>
+          <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
+            Showcasing advanced generative AI works, focusing on photorealism and dynamic visual storytelling.
           </p>
         </div>
         
@@ -115,7 +123,7 @@ export default function AIVideoShowcase() {
             {duplicatedVideos.map((video, i) => (
               <div 
                 key={i} 
-                className={`flex flex-col items-start group w-full md:w-auto shrink-0 ${i >= videos.length ? 'hidden md:flex' : ''}`}
+                className={`flex flex-col items-start group w-full md:w-auto shrink-0 ${!limit && i >= videos.length ? 'hidden md:flex' : ''}`}
               >
                 <div className="relative rounded-3xl overflow-hidden bg-white mb-4 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
@@ -134,6 +142,14 @@ export default function AIVideoShowcase() {
             ))}
           </div>
         </div>
+        
+        {limit && videos.length > limit && (
+          <div className="mt-4 flex justify-center">
+            <Link href="/ai-videos" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
+              View More Videos
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
