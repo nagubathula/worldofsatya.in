@@ -1,12 +1,14 @@
 import HeroSection from "@/components/HeroSection";
-import ToolShowcase from "@/components/ToolShowcase";
-import CaseStudies from "@/components/CaseStudies";
-import ExperienceTimeline from "@/components/ExperienceTimeline";
-import OpenSource from "@/components/OpenSource";
-import Achievements from "@/components/Achievements";
-import Footer from "@/components/Footer";
-import { CassettePlayer } from "@/components/CassettePlayer";
-import AIVideoShowcase from "@/components/AIVideoShowcase";
+import dynamic from 'next/dynamic';
+
+const CassettePlayer = dynamic(() => import('@/components/CassettePlayer').then((mod) => mod.CassettePlayer));
+const ToolShowcase = dynamic(() => import('@/components/ToolShowcase'));
+const CaseStudies = dynamic(() => import('@/components/CaseStudies'));
+const ExperienceTimeline = dynamic(() => import('@/components/ExperienceTimeline'));
+const OpenSource = dynamic(() => import('@/components/OpenSource'));
+const Achievements = dynamic(() => import('@/components/Achievements'));
+const Footer = dynamic(() => import('@/components/Footer'));
+const AIVideoShowcase = dynamic(() => import('@/components/AIVideoShowcase'));
 
 export default function Home() {
   return (

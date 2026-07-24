@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Video } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function AIVideoShowcase({ limit }) {
   const videos = [
@@ -53,7 +54,7 @@ export default function AIVideoShowcase({ limit }) {
 
   // Duplicate the videos to create a seamless infinite loop
   const displayedVideos = limit ? videos.slice(0, limit) : videos;
-  const duplicatedVideos = limit ? displayedVideos : [...videos, ...videos];
+  const duplicatedVideos = [...displayedVideos, ...displayedVideos];
 
   const handlePlay = (e) => {
     const allVideos = document.querySelectorAll('video');
@@ -65,7 +66,7 @@ export default function AIVideoShowcase({ limit }) {
   };
 
   useEffect(() => {
-    if (isHovered || limit) return; // Disable auto-scroll if limit is set or hovered
+    if (isHovered) return; // Disable auto-scroll if hovered
 
     let animationFrameId;
 
@@ -96,10 +97,31 @@ export default function AIVideoShowcase({ limit }) {
     return () => cancelAnimationFrame(animationFrameId);
   }, [isHovered, limit]);
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemAnim = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.4, bounce: 0 } },
+  };
+
   return (
-    <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
+    <motion.section 
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-100px" }}
+      className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5"
+    >
       <div className="flex flex-col gap-10">
-        <div className="mb-6 md:mb-10">
+        <motion.div variants={itemAnim} className="mb-6 md:mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
             <Video size={14} /> AI Experiments
           </div>
@@ -109,7 +131,7 @@ export default function AIVideoShowcase({ limit }) {
           <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
             Showcasing advanced generative AI works, focusing on photorealism and dynamic visual storytelling.
           </p>
-        </div>
+        </motion.div>
         
         <div 
           className="flex flex-col gap-12 min-w-0"
@@ -121,9 +143,10 @@ export default function AIVideoShowcase({ limit }) {
             className="flex flex-col md:flex-row gap-12 md:gap-6 md:overflow-x-auto pb-8 items-center md:items-start md:-mx-[calc(50vw-384px+48px)] md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
             {duplicatedVideos.map((video, i) => (
-              <div 
+              <motion.div 
+                variants={itemAnim}
                 key={i} 
-                className={`flex flex-col items-start group w-full md:w-auto shrink-0 ${!limit && i >= videos.length ? 'hidden md:flex' : ''}`}
+                className={`flex flex-col items-start group w-full md:w-auto shrink-0 ${i >= displayedVideos.length ? 'hidden md:flex' : ''}`}
               >
                 <div className="relative rounded-3xl overflow-hidden bg-white mb-4 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
@@ -138,19 +161,19 @@ export default function AIVideoShowcase({ limit }) {
                 <div className="w-full sm:max-w-xs">
                   <h3 className="text-xl font-semibold text-black tracking-tight mb-1">{video.title}</h3>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
         
         {limit && videos.length > limit && (
-          <div className="mt-4 flex justify-center">
+          <motion.div variants={itemAnim} className="mt-4 flex justify-center">
             <Link href="/ai-videos" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
               View More Videos
             </Link>
-          </div>
+          </motion.div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -1,10 +1,16 @@
 "use client";
 
-
+import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="py-24 px-6 sm:px-12 max-w-7xl mx-auto w-full border-t border-black/5 flex flex-col items-center justify-center text-center">
+    <motion.footer 
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+      className="py-24 px-6 sm:px-12 max-w-7xl mx-auto w-full border-t border-black/5 flex flex-col items-center justify-center text-center"
+    >
       <div>
         <p className="text-sm font-mono text-black/40 mb-4">Open for new opportunities</p>
         <a 
@@ -23,6 +29,6 @@ export default function Footer() {
           <a href="mailto:nagubathula.satyasai@gmail.com" className="hover:text-black transition-colors">Email</a>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

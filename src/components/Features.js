@@ -38,7 +38,7 @@ export default function Features() {
                 className={`bg-blue-500 flex w-auto flex-col gap-2 rounded-[12px] border border-[#66A3FF] p-6 md:gap-6 lg:h-[600px] lg:w-1/4 ${card.rotation}`}
               >
                 <div className="flex flex-row items-start gap-2 md:flex-col">
-                  <img alt="" src={card.icon} className="h-7 md:h-[60px]" />
+                  <img alt="" src={card.icon} loading="lazy" className="h-7 md:h-[60px]" />
                   <h4 className="text-base md:text-[28px] font-semibold text-white">{card.title}</h4>
                 </div>
                 <p className="text-[12px] md:text-[18px] font-medium text-[#B3D9FF]">

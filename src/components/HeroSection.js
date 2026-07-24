@@ -1,21 +1,42 @@
 "use client";
 
-
+import { motion } from "framer-motion";
 
 export default function HeroSection() {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20, filter: "blur(10px)" },
+    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { type: "spring", duration: 0.4, bounce: 0 } },
+  };
+
   return (
-    <section className="flex flex-col justify-center px-6 sm:px-12 max-w-7xl mx-auto w-full pt-24 pb-12">
-      <div className="mb-8">
+    <motion.section 
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="flex flex-col justify-center px-6 sm:px-12 max-w-7xl mx-auto w-full pt-24 pb-12"
+    >
+      <motion.div variants={item} className="mb-8">
         <p className="text-sm md:text-base font-medium text-black/60">
           I am <span className="font-bold"> Satya Sai Nagubathula </span>, currently
         </p>
-      </div>
+      </motion.div>
 
-      <h1 className="text-[12vw] sm:text-7xl md:text-8xl lg:text-[110px] font-medium leading-[0.9] tracking-[-0.04em] max-w-5xl text-black">
+      <motion.h1 variants={item} className="text-[12vw] sm:text-7xl md:text-8xl lg:text-[110px] font-medium leading-[0.9] tracking-[-0.04em] max-w-5xl text-black">
         The AI/UI Guy.
-      </h1>
+      </motion.h1>
+      
 
-      <div className="mt-10 max-w-2xl">
+      <motion.div variants={item} className="mt-10 max-w-2xl">
         <p className="text-lg sm:text-xl text-black/70 leading-relaxed font-normal">
           I bridge the gap between creative visual direction and deep technical automation. Currently architecting multi-modal AI video pipelines and building tools that scale digital content production by 90%.
         </p>
@@ -26,7 +47,7 @@ export default function HeroSection() {
           <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-black/50 transition-colors">LinkedIn</a>
           <a href="https://hippogriff.medium.com" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-black/50 transition-colors">Medium</a>
         </div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }

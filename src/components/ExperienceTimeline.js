@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Briefcase } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ExperienceTimeline({ limit }) {
   const experiences = [
@@ -37,10 +38,31 @@ export default function ExperienceTimeline({ limit }) {
     }
   ];
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemAnim = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.4, bounce: 0 } },
+  };
+
   return (
-    <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
+    <motion.section 
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-100px" }}
+      className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5"
+    >
       <div className="flex flex-col gap-10">
-        <div className="mb-6 md:mb-10">
+        <motion.div variants={itemAnim} className="mb-6 md:mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
             <Briefcase size={14} /> Career
           </div>
@@ -50,13 +72,16 @@ export default function ExperienceTimeline({ limit }) {
           <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
             A history of bridging design and engineering.
           </p>
-        </div>
+        </motion.div>
         
         <div className="flex flex-col gap-6">
           {(limit ? experiences.slice(0, limit) : experiences).map((exp, i) => (
-            <div
+            <motion.div
+              variants={itemAnim}
               key={i}
-              className="flex flex-col gap-4 md:gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+              className="flex flex-col gap-4 md:gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300"
             >
               <div className="pt-1">
                 <span className="text-sm font-mono text-black/40 bg-black/5 px-3 py-1 rounded-full">{exp.year}</span>
@@ -66,18 +91,18 @@ export default function ExperienceTimeline({ limit }) {
                 <h4 className="text-base font-medium text-black/60 mb-4">{exp.company}</h4>
                 <p className="text-black/70 text-base max-w-2xl leading-relaxed">{exp.description}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
         
         {limit && experiences.length > limit && (
-          <div className="mt-8 flex justify-center">
+          <motion.div variants={itemAnim} className="mt-8 flex justify-center">
             <Link href="/experience" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
               View Full Experience
             </Link>
-          </div>
+          </motion.div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }

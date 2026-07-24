@@ -49,6 +49,7 @@ const ScrollGallery = () => {
               <img 
                 src={gif.src} 
                 alt={gif.alt}
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             </div>

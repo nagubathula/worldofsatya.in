@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Code, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function OpenSource({ limit }) {
   const projects = [
@@ -25,10 +26,31 @@ export default function OpenSource({ limit }) {
     }
   ];
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemAnim = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.4, bounce: 0 } },
+  };
+
   return (
-    <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5">
+    <motion.section 
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-100px" }}
+      className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5"
+    >
       <div className="flex flex-col gap-10">
-        <div className="mb-6 md:mb-10">
+        <motion.div variants={itemAnim} className="mb-6 md:mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
             <Code size={14} /> Community
           </div>
@@ -38,13 +60,15 @@ export default function OpenSource({ limit }) {
           <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
             Giving back to the community through code, design, and education.
           </p>
-        </div>
+        </motion.div>
         
         <div className="flex flex-col gap-6">
           {(limit ? projects.slice(0, limit) : projects).map((project, i) => {
             const CardContent = (
-              <div
-                className="group flex flex-col justify-between p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300 h-full"
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                className="group flex flex-col justify-between p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300 h-full"
               >
                 <div className="flex justify-between items-start mb-1">
                   <h3 className="text-2xl font-semibold text-black tracking-tight">{project.name}</h3>
@@ -54,29 +78,29 @@ export default function OpenSource({ limit }) {
                 </div>
                 <p className="text-xs font-semibold text-black/40 uppercase tracking-widest mb-4">{project.role}</p>
                 <p className="text-black/70 text-base max-w-2xl leading-relaxed">{project.description}</p>
-              </div>
+              </motion.div>
             );
 
             return project.link ? (
-              <a href={project.link} target="_blank" rel="noopener noreferrer" key={i} className="block">
+              <motion.a variants={itemAnim} href={project.link} target="_blank" rel="noopener noreferrer" key={i} className="block">
                 {CardContent}
-              </a>
+              </motion.a>
             ) : (
-              <div key={i}>
+              <motion.div variants={itemAnim} key={i}>
                 {CardContent}
-              </div>
+              </motion.div>
             );
           })}
         </div>
         
         {limit && projects.length > limit && (
-          <div className="mt-8 flex justify-center">
+          <motion.div variants={itemAnim} className="mt-8 flex justify-center">
             <Link href="/open-source" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
               View More Open Source
             </Link>
-          </div>
+          </motion.div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }

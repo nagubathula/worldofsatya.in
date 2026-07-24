@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-
+import { motion } from "framer-motion";
 
 export function CassettePlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -113,8 +113,12 @@ export function CassettePlayer() {
   };
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
+      initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ type: "spring", duration: 0.4, bounce: 0 }}
       className="flex justify-center items-center w-full py-8 overflow-hidden"
     >
       <div 
@@ -256,6 +260,6 @@ export function CassettePlayer() {
       
       </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
