@@ -34,6 +34,11 @@ export default function HeroSection() {
       <motion.h1 variants={item} className="text-[12vw] sm:text-7xl md:text-8xl lg:text-[110px] font-medium leading-[0.9] tracking-[-0.04em] max-w-5xl text-black">
         The AI/UI Guy.
       </motion.h1>
+      <motion.div variants={item} className="mt-8">
+        <p className="text-sm md:text-base font-medium text-black/60">
+          at <span className="font-bold"> NXTWAVE DISRUPTIVE TECHNOLOGIE </span>
+        </p>
+      </motion.div>
       
 
       <motion.div variants={item} className="mt-10 max-w-2xl">

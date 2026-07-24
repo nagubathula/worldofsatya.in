@@ -53,7 +53,7 @@ export default function AIVideoShowcase({ limit }) {
   const [isHovered, setIsHovered] = useState(false);
 
   // Duplicate the videos to create a seamless infinite loop
-  const displayedVideos = limit ? videos.slice(0, limit) : videos;
+  const displayedVideos = videos;
   const duplicatedVideos = [...displayedVideos, ...displayedVideos];
 
   const handlePlay = (e) => {
