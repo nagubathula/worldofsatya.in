@@ -6,6 +6,12 @@ import { Code } from "lucide-react";
 export default function OpenSource({ limit }) {
   const projects = [
     {
+      name: "Toothpaste",
+      role: "Creator",
+      description: "An open-source Adobe plugin.",
+      link: "https://github.com/nagubathula/toothpaste/releases/tag/Release",
+    },
+    {
       name: "CHAYA UI",
       role: "Core Contributor",
       description: "A modern, functional design system and component library for React built with Next.js and TailwindCSS. Collaborated directly with creators on design, development, and optimization. Authored several exclusive custom components.",
@@ -14,12 +20,6 @@ export default function OpenSource({ limit }) {
       name: "Engineerudu",
       role: "FOSS Community Builder",
       description: "Building Andhra Pradesh's first Free and Open Source Community to foster local talent and collaborative development.",
-    },
-    {
-      name: "Toothpaste",
-      role: "Creator",
-      description: "An open source project.",
-      link: "https://github.com/nagubathula/toothpaste",
     }
   ];
 
