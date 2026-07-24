@@ -1,25 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { Code } from "lucide-react";
+import { Code, ArrowUpRight } from "lucide-react";
 
 export default function OpenSource({ limit }) {
   const projects = [
     {
       name: "Toothpaste",
       role: "Creator",
-      description: "An open-source Adobe plugin.",
-      link: "https://github.com/nagubathula/toothpaste/releases/tag/Release",
+      description: "A plug-and-play Adobe CEP (Common Extensibility Platform) extension for Premiere Pro. Built to streamline workflows and provide an easy-to-use template for Adobe extension development.",
+      link: "https://github.com/nagubathula/toothpaste",
     },
     {
       name: "CHAYA UI",
       role: "Core Contributor",
       description: "A modern, functional design system and component library for React built with Next.js and TailwindCSS. Collaborated directly with creators on design, development, and optimization. Authored several exclusive custom components.",
+      link: "https://github.com/traboda/chaya",
     },
     {
       name: "Engineerudu",
       role: "FOSS Community Builder",
       description: "Building Andhra Pradesh's first Free and Open Source Community to foster local talent and collaborative development.",
+      link: "https://engineerudu.com",
     }
   ];
 
@@ -44,7 +46,12 @@ export default function OpenSource({ limit }) {
               <div
                 className="group flex flex-col justify-between p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300 h-full"
               >
-                <h3 className="text-2xl font-semibold text-black tracking-tight mb-1">{project.name}</h3>
+                <div className="flex justify-between items-start mb-1">
+                  <h3 className="text-2xl font-semibold text-black tracking-tight">{project.name}</h3>
+                  {project.link && (
+                    <ArrowUpRight size={20} className="text-black/40 group-hover:text-black transition-colors" />
+                  )}
+                </div>
                 <p className="text-xs font-semibold text-black/40 uppercase tracking-widest mb-4">{project.role}</p>
                 <p className="text-black/70 text-base max-w-2xl leading-relaxed">{project.description}</p>
               </div>

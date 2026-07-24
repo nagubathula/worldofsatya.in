@@ -1,7 +1,7 @@
 "use client";
 
 
-import { Trophy, Star, Award, Medal } from "lucide-react";
+import { Trophy, Star, Award, Medal, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Achievements({ limit }) {
@@ -19,12 +19,14 @@ export default function Achievements({ limit }) {
     {
       title: "GSOC 2024 Qualified",
       description: "Qualified for Google Summer of Code 2024.",
-      icon: <Trophy className="w-5 h-5 text-black/60" />
+      icon: <Trophy className="w-5 h-5 text-black/60" />,
+      link: "https://summerofcode.withgoogle.com/"
     },
     {
       title: "NASA Space Apps Awards",
       description: "Galactic Impact Award (2023) and Local Award for Local Impact (2022).",
-      icon: <Trophy className="w-5 h-5 text-black/60" />
+      icon: <Trophy className="w-5 h-5 text-black/60" />,
+      link: "https://www.spaceappschallenge.org/"
     },
     {
       title: "Hackathon Highlights",
@@ -49,16 +51,28 @@ export default function Achievements({ limit }) {
         </div>
         
         <div className="flex flex-col gap-6">
-          {(limit ? achievements.slice(0, limit) : achievements).map((item, i) => (
-            <div
-              key={i}
-              className="group flex flex-col p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300"
-            >
-              <div className="mb-4">{item.icon}</div>
-              <h3 className="text-xl font-semibold text-black tracking-tight mb-2">{item.title}</h3>
-              <p className="text-black/60 text-sm leading-relaxed font-medium">{item.description}</p>
-            </div>
-          ))}
+          {(limit ? achievements.slice(0, limit) : achievements).map((item, i) => {
+            const isLink = !!item.link;
+            const CardWrapper = isLink ? 'a' : 'div';
+            const wrapperProps = isLink ? { href: item.link, target: "_blank", rel: "noopener noreferrer" } : {};
+            
+            return (
+              <CardWrapper
+                key={i}
+                {...wrapperProps}
+                className={`group flex flex-col p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300 ${isLink ? 'cursor-pointer block block' : ''}`}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>{item.icon}</div>
+                  {isLink && (
+                    <ArrowUpRight size={20} className="text-black/40 group-hover:text-black transition-colors" />
+                  )}
+                </div>
+                <h3 className="text-xl font-semibold text-black tracking-tight mb-2">{item.title}</h3>
+                <p className="text-black/60 text-sm leading-relaxed font-medium">{item.description}</p>
+              </CardWrapper>
+            );
+          })}
         </div>
         
         {limit && achievements.length > limit && (
