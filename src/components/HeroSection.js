@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import MagneticElement from "@/components/MagneticElement";
 import TextReveal from "@/components/TextReveal";
+import AnimatedButton from "@/components/AnimatedButton";
 import dynamic from 'next/dynamic';
 
 const CassettePlayer = dynamic(() => import('@/components/CassettePlayer').then((mod) => mod.CassettePlayer));
@@ -18,7 +19,7 @@ export default function HeroSection() {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
-        delayChildren: 2.2, // Wait for preloader
+        delayChildren: 1.8, // Wait for preloader
       },
     },
   };
@@ -36,7 +37,7 @@ export default function HeroSection() {
       className="flex flex-col lg:flex-row items-center justify-between px-6 sm:px-12 max-w-7xl mx-auto w-full pt-24 pb-12 gap-12 lg:gap-8 min-h-[90vh]"
     >
       <div className="flex-1 w-full lg:w-1/2 flex flex-col justify-center">
-        <TextReveal delay={2.2}>
+        <TextReveal delay={1.8}>
           <div className="mb-8">
             <p className="text-sm md:text-base font-medium text-black/60">
               I am <span className="font-bold"> Satya Sai Nagubathula </span>, currently
@@ -44,13 +45,13 @@ export default function HeroSection() {
           </div>
         </TextReveal>
 
-        <TextReveal delay={2.3}>
+        <TextReveal delay={1.9}>
           <h1 className="text-[12vw] sm:text-7xl lg:text-7xl xl:text-[90px] font-medium leading-[0.9] tracking-[-0.04em] max-w-5xl text-black">
             The AI/UI Guy.
           </h1>
         </TextReveal>
         
-        <TextReveal delay={2.4}>
+        <TextReveal delay={2.0}>
           <div className="mt-8">
             <p className="text-sm md:text-base font-medium text-black/60">
               at <span className="font-bold"> NXTWAVE DISRUPTIVE TECHNOLOGIES </span>
@@ -64,23 +65,18 @@ export default function HeroSection() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4 sm:gap-6 items-center">
-            <MagneticElement>
-              <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-amber-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse"></div>
-                <a href="/files/Resume.pdf" target="_blank" rel="noopener noreferrer" className="relative block text-sm font-medium bg-black text-white px-6 py-2.5 rounded-full border border-black/10 hover:bg-black/90 transition-colors">
-                  Resume
-                </a>
-              </div>
-            </MagneticElement>
-            <MagneticElement>
-              <a href="mailto:nagubathula.satyasai@gmail.com" className="block text-sm font-medium px-5 py-2.5 rounded-full border border-black/10 hover:border-black/30 hover:bg-black/5 transition-colors">Email</a>
-            </MagneticElement>
-            <MagneticElement>
-              <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer" className="block text-sm font-medium px-5 py-2.5 rounded-full border border-black/10 hover:border-black/30 hover:bg-black/5 transition-colors">LinkedIn</a>
-            </MagneticElement>
-            <MagneticElement>
-              <a href="https://hippogriff.medium.com" target="_blank" rel="noopener noreferrer" className="block text-sm font-medium px-5 py-2.5 rounded-full border border-black/10 hover:border-black/30 hover:bg-black/5 transition-colors">Medium</a>
-            </MagneticElement>
+            <AnimatedButton href="/files/Resume.pdf" isPrimary={true}>
+              Resume
+            </AnimatedButton>
+            <AnimatedButton href="mailto:nagubathula.satyasai@gmail.com">
+              Email
+            </AnimatedButton>
+            <AnimatedButton href="https://www.linkedin.com/in/satyasainagubathula">
+              LinkedIn
+            </AnimatedButton>
+            <AnimatedButton href="https://hippogriff.medium.com">
+              Medium
+            </AnimatedButton>
           </div>
         </motion.div>
       </div>

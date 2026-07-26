@@ -21,7 +21,7 @@ function DockItem({ item, isActive, mouseX }) {
   const iconScale = useTransform(width, [44, 70], [1, 1.4]);
 
   return (
-    <Link href={item.href} title={item.name}>
+    <Link href={item.href} title={item.name} suppressHydrationWarning>
       <motion.div
         ref={ref}
         style={{ width, height: width }}

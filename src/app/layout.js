@@ -4,6 +4,7 @@ import BottomNav from "@/components/BottomNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import Preloader from "@/components/Preloader";
+import ParallaxBackground from "@/components/ParallaxBackground";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -23,7 +24,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} ${jetbrainsMono.variable} font-sans bg-background text-foreground tracking-tight pb-24`} suppressHydrationWarning>
+      <body className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-transparent tracking-tight pb-24`} suppressHydrationWarning>
+        <ParallaxBackground />
         <Preloader />
         <CustomCursor />
         <SmoothScroll>

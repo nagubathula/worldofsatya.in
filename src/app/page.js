@@ -12,7 +12,7 @@ const AIVideoShowcase = dynamic(() => import('@/components/AIVideoShowcase'));
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-foreground selection:text-background relative w-full">
+    <div className="min-h-screen text-foreground font-sans selection:bg-foreground selection:text-background relative w-full">
       {/* Noise Overlay */}
       <svg className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-difference w-full h-full">
         <filter id="noise">
@@ -21,7 +21,7 @@ export default function Home() {
         <rect width="100%" height="100%" filter="url(#noise)" />
       </svg>
 
-      <main className="relative z-10 flex flex-col bg-background">
+      <main className="relative z-10 flex flex-col">
         <HeroSection />
         
         {/* Instant Skill Recognition for Hireability */}

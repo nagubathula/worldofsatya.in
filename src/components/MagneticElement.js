@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function MagneticElement({ children, className }) {
   const ref = useRef(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0, rotateX: 0, rotateY: 0 });
 
   const handleMouse = (e) => {
     const { clientX, clientY } = e;
@@ -13,22 +13,29 @@ export default function MagneticElement({ children, className }) {
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
     
-    // Magnetic pull strength
-    setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
+    // Calculate pull strength and 3D tilt for elastic distortion
+    setPosition({ 
+      x: middleX * 0.4, 
+      y: middleY * 0.4,
+      rotateX: -(middleY * 0.15), // Tilt based on vertical pull
+      rotateY: middleX * 0.15 // Tilt based on horizontal pull
+    });
   };
 
   const reset = () => {
-    setPosition({ x: 0, y: 0 });
+    setPosition({ x: 0, y: 0, rotateX: 0, rotateY: 0 });
   };
 
-  const { x, y } = position;
+  const { x, y, rotateX, rotateY } = position;
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      animate={{ x, y, rotateX, rotateY, z: 10 }}
+      // Snappier spring physics: higher stiffness, appropriate damping
+      transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.5 }}
+      style={{ transformStyle: "preserve-3d" }}
       className={className}
       data-magnetic="true"
     >

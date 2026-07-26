@@ -14,58 +14,81 @@ const greetings = [
 
 export default function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    // 30 words in ~1000ms = 33ms per word. Let's use 35ms to be safe.
-    const interval = 35; 
-    let currentIndex = 0;
-
-    const timer = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= greetings.length) {
-        clearInterval(timer);
-        // Small pause on the final word before sliding up
-        setTimeout(() => setIsLoading(false), 400); 
-      } else {
-        setIndex(currentIndex);
-      }
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, []);
+  const [showFinalIntro, setShowFinalIntro] = useState(false);
 
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
           key="preloader"
-          initial={{ y: 0 }}
-          exit={{ y: "-100vh", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-          className="fixed inset-0 z-[9999] bg-[#111111] flex flex-col justify-between p-8 md:p-16 text-white"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
+          className="fixed inset-0 z-[9999] bg-black flex flex-col justify-center items-center text-white overflow-hidden"
         >
-          <div className="overflow-hidden">
-             <motion.div
-               initial={{ y: 50, opacity: 0 }}
-               animate={{ y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2 } }}
-               exit={{ y: -50, opacity: 0, transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } }}
-               className="flex flex-col gap-1"
-             >
-               <span className="text-xs md:text-sm text-white/50 tracking-widest uppercase font-mono">Portfolio</span>
-               <span className="text-lg md:text-2xl font-medium tracking-tight">Satya Sai Nagubathula</span>
-             </motion.div>
-          </div>
-          
-          <div className="flex justify-end overflow-hidden">
-             <motion.h1 
-               initial={{ y: 100 }}
-               animate={{ y: 0, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-               exit={{ y: -100, transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } }}
-               className="text-[12vw] md:text-[8vw] leading-none font-semibold tracking-tighter"
-             >
-               {greetings[index]}
-             </motion.h1>
-          </div>
+          {/* Background Video */}
+          <video
+            autoPlay
+            playsInline
+            onTimeUpdate={(e) => {
+              if (e.target.duration && e.target.duration - e.target.currentTime <= 1.0) {
+                setShowFinalIntro(true);
+              }
+            }}
+            onEnded={() => setIsLoading(false)}
+            className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
+            src="/videos/intro.mp4"
+          />
+
+          <AnimatePresence>
+            {showFinalIntro && (
+              <motion.div
+                key="final-intro"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3 } }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 flex flex-col justify-center items-center z-10"
+              >
+                {/* Physical Clouds for Fly-Through Effect */}
+                <motion.img 
+                  src="/images/cloud.png"
+                  alt=""
+                  initial={{ scale: 1, x: "-50%", y: "-50%", opacity: 0.6 }}
+                  exit={{ scale: 10, opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+                  className="absolute top-1/4 left-1/4 w-[150vw] md:w-[60vw] max-w-[1200px] pointer-events-none drop-shadow-2xl object-contain"
+                />
+                
+                <motion.img 
+                  src="/images/cloud.png"
+                  alt=""
+                  initial={{ scale: 1.5, x: "-50%", y: "-50%", opacity: 0.8 }}
+                  exit={{ scale: 15, opacity: 0, transition: { duration: 0.9, ease: "easeInOut", delay: 0.05 } }}
+                  className="absolute top-[70%] left-[80%] w-[200vw] md:w-[80vw] max-w-[1600px] pointer-events-none drop-shadow-2xl object-contain z-10"
+                />
+
+                <motion.img 
+                  src="/images/cloud.png"
+                  alt=""
+                  initial={{ scale: 0.8, x: "-50%", y: "-50%", opacity: 0.4 }}
+                  exit={{ scale: 6, opacity: 0, transition: { duration: 0.7, ease: "easeInOut" } }}
+                  className="absolute top-[80%] left-[20%] w-[100vw] md:w-[40vw] max-w-[800px] pointer-events-none object-contain"
+                />
+
+                {/* Subtle dark overlay */}
+                <div className="absolute inset-0 bg-black/10 z-0"></div>
+
+                <div className="relative z-20 flex flex-col items-center justify-center w-full px-4">
+                  <motion.h1 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1, transition: { type: "spring", duration: 0.8 } }}
+                    exit={{ opacity: 0, scale: 1.5, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
+                    className="text-[15vw] md:text-[10vw] leading-none font-bold tracking-tighter text-center drop-shadow-2xl"
+                  >
+                    Welcome
+                  </motion.h1>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 
-export default function TiltCard({ children, className = "", tiltIntensity = 10 }) {
+export default function TiltCard({ children, className = "", tiltIntensity = 3 }) {
   const ref = useRef(null);
 
   // Mouse position relative to center of the card, mapped from -0.5 to 0.5
@@ -62,7 +62,7 @@ export default function TiltCard({ children, className = "", tiltIntensity = 10 
       {/* Content wrapper with perspective translation to push it off the backplate */}
       <div 
         className="w-full h-full"
-        style={{ transform: "translateZ(30px)" }}
+        style={{ transform: "translateZ(10px)" }}
       >
         {children}
       </div>

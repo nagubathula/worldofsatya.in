@@ -22,33 +22,32 @@ export default function TechStackMarquee() {
   const marqueeItems = [...TECH_STACK, ...TECH_STACK];
 
   return (
-    <div className="w-full overflow-hidden bg-black py-4 md:py-6 border-y border-black/10 flex items-center relative">
-      <motion.div
-        className="flex whitespace-nowrap"
-        animate={{
-          x: ["0%", "-50%"],
-        }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: 30,
-            ease: "linear",
-          },
-        }}
+    <div className="w-full py-12 overflow-hidden relative z-10 flex flex-col gap-6">
+      <div className="px-6 sm:px-12 max-w-7xl mx-auto w-full text-center">
+        <p className="text-sm font-semibold uppercase tracking-widest text-black/60">Core Arsenal</p>
+      </div>
+      
+      {/* Use CSS mask-image to perfectly fade out the edges over the sky background */}
+      <div 
+        className="relative w-full flex overflow-hidden py-4"
+        style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
       >
-        {marqueeItems.map((tech, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-center px-8"
-          >
-            <span className="text-white/80 text-sm md:text-base font-mono uppercase tracking-widest font-semibold">
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 35, ease: "linear", repeat: Infinity }}
+          className="flex whitespace-nowrap items-center gap-4 sm:gap-6 px-4 shrink-0"
+        >
+          {marqueeItems.map((tech, i) => (
+            <div 
+              key={i} 
+              className="px-6 py-3 rounded-full border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm text-black/80 font-medium text-lg flex items-center gap-3 hover:bg-white/60 hover:scale-105 transition-all duration-300 cursor-default"
+            >
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-sky-400"></div>
               {tech}
-            </span>
-            <span className="ml-8 text-white/30">•</span>
-          </div>
-        ))}
-      </motion.div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 }
