@@ -1,4 +1,5 @@
 import HeroSection from "@/components/HeroSection";
+import TechStackMarquee from "@/components/TechStackMarquee";
 import dynamic from 'next/dynamic';
 
 const ToolShowcase = dynamic(() => import('@/components/ToolShowcase'));
@@ -23,6 +24,10 @@ export default function Home() {
       <main className="relative z-10 flex flex-col bg-background">
         <HeroSection />
         
+        {/* Instant Skill Recognition for Hireability */}
+        <TechStackMarquee />
+        
+
         
         {/* The Output: What I build */}
         

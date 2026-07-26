@@ -160,7 +160,7 @@ export default function AIVideoShowcase({ limit }) {
                     className="w-full h-auto sm:w-auto sm:h-full object-cover"
                   />
                 </div>
-                <div className="w-full sm:max-w-xs">
+                <div className="w-full sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
                   <h3 className="text-xl font-semibold text-black tracking-tight mb-1">{video.title}</h3>
                 </div>
               </motion.div>

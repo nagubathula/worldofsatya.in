@@ -53,7 +53,18 @@ export function CassettePlayer() {
     audioRef.current.addEventListener("timeupdate", updateTime);
     audioRef.current.addEventListener("ended", handleEnded);
 
+    // Auto-play the tape recorder
+    // We add a slight delay to allow the Preloader to finish before playing audio
+    const autoPlayTimer = setTimeout(() => {
+      if (audioRef.current && !isPlaying) {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(e => console.log("Auto-play blocked by browser or missing file:", e));
+      }
+    }, 2500);
+
     return () => {
+      clearTimeout(autoPlayTimer);
       if (audioRef.current) {
         audioRef.current.removeEventListener("timeupdate", updateTime);
         audioRef.current.removeEventListener("ended", handleEnded);

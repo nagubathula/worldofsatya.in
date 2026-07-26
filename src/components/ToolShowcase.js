@@ -93,7 +93,7 @@ export default function ToolShowcase({ limit }) {
           <div className="flex flex-col gap-6">
             {(limit ? tools.slice(0, limit) : tools).map((tool, i) => (
               <motion.div variants={itemAnim} key={i}>
-                <TiltCard tiltIntensity={5}>
+                <TiltCard tiltIntensity={2}>
                   <motion.div
                     onClick={() => handleToolClick(tool)}
                     whileHover={{ scale: 1.02 }}

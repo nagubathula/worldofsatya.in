@@ -65,7 +65,12 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-wrap gap-4 sm:gap-6 items-center">
             <MagneticElement>
-              <a href="/files/Resume.pdf" target="_blank" rel="noopener noreferrer" className="block text-sm font-medium bg-black text-white px-5 py-2.5 rounded-full hover:bg-black/80 transition-colors shadow-sm shadow-black/10">Resume</a>
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-amber-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse"></div>
+                <a href="/files/Resume.pdf" target="_blank" rel="noopener noreferrer" className="relative block text-sm font-medium bg-black text-white px-6 py-2.5 rounded-full border border-black/10 hover:bg-black/90 transition-colors">
+                  Resume
+                </a>
+              </div>
             </MagneticElement>
             <MagneticElement>
               <a href="mailto:nagubathula.satyasai@gmail.com" className="block text-sm font-medium px-5 py-2.5 rounded-full border border-black/10 hover:border-black/30 hover:bg-black/5 transition-colors">Email</a>

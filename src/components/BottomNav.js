@@ -30,8 +30,9 @@ function DockItem({ item, isActive, mouseX }) {
             ? "bg-black text-white shadow-md" 
             : "text-black/60 hover:bg-black/10 hover:text-black"
         }`}
+        suppressHydrationWarning
       >
-        <motion.div style={{ scale: iconScale }} className="flex items-center justify-center">
+        <motion.div style={{ scale: iconScale }} className="flex items-center justify-center" suppressHydrationWarning>
           {item.icon}
         </motion.div>
       </motion.div>
@@ -54,7 +55,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" suppressHydrationWarning>
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
