@@ -137,10 +137,12 @@ export default function AIVideoShowcase({ limit }) {
           className="flex flex-col gap-12 min-w-0"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onTouchStart={() => setIsHovered(true)}
+          onTouchEnd={() => setIsHovered(false)}
         >
           <div 
             ref={scrollContainerRef}
-            className="flex flex-col md:flex-row gap-12 md:gap-6 md:overflow-x-auto pb-8 items-center md:items-start md:-mx-[calc(50vw-384px+48px)] md:px-[calc(50vw-384px+48px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            className="flex flex-col md:flex-row gap-12 md:gap-6 md:overflow-x-auto pb-8 items-center md:items-start [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
             {duplicatedVideos.map((video, i) => (
               <motion.div 
@@ -150,12 +152,12 @@ export default function AIVideoShowcase({ limit }) {
               >
                 <div className="relative rounded-3xl overflow-hidden bg-white mb-4 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-auto sm:w-auto sm:h-[320px]">
                   <video 
-                    src={`${video.src}#t=1`} 
-                    controls 
-                    preload="metadata"
+                    src={video.src} 
+                    autoPlay
+                    loop
+                    muted
                     playsInline
-                    onPlay={handlePlay}
-                    className="w-full h-auto sm:w-auto sm:h-full"
+                    className="w-full h-auto sm:w-auto sm:h-full object-cover"
                   />
                 </div>
                 <div className="w-full sm:max-w-xs">
@@ -167,7 +169,7 @@ export default function AIVideoShowcase({ limit }) {
         </div>
         
         {limit && videos.length > limit && (
-          <motion.div variants={itemAnim} className="mt-4 flex justify-center">
+          <motion.div variants={itemAnim} className="mt-8 flex w-full justify-center">
             <Link href="/ai-videos" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
               View More Videos
             </Link>

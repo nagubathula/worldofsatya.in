@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Lock, X, Wrench } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import TiltCard from "@/components/TiltCard";
 
 export default function ToolShowcase({ limit }) {
   const [lockedTool, setLockedTool] = useState(null);
@@ -91,36 +92,38 @@ export default function ToolShowcase({ limit }) {
           
           <div className="flex flex-col gap-6">
             {(limit ? tools.slice(0, limit) : tools).map((tool, i) => (
-              <motion.div
-                variants={itemAnim}
-                key={i}
-                onClick={() => handleToolClick(tool)}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className="group flex flex-col gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] cursor-pointer"
-              >
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <h3 className="text-2xl font-semibold text-black tracking-tight">{tool.title}</h3>
-                    <span className="text-[10px] font-semibold tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded-full uppercase">Internal</span>
-                  </div>
-                  <p className="text-black/60 text-base max-w-2xl">
-                    {tool.description}
-                  </p>
-                </div>
-                
-                <div className="flex items-center justify-between gap-6 w-full pt-4 border-t border-black/[0.04]">
-                  <div className="flex flex-wrap gap-2">
-                    {tool.tags.map((tag, j) => (
-                      <span key={j} className="text-xs font-mono text-black/50 bg-black/[0.03] px-2 py-1 rounded-md">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center text-black/30 bg-black/5 flex-shrink-0" title="Internal Tool - Confidential">
-                    <Lock size={16} />
-                  </div>
-                </div>
+              <motion.div variants={itemAnim} key={i}>
+                <TiltCard tiltIntensity={5}>
+                  <motion.div
+                    onClick={() => handleToolClick(tool)}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                    className="group flex flex-col gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] cursor-pointer h-full"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3 className="text-2xl font-semibold text-black tracking-tight">{tool.title}</h3>
+                        <span className="text-[10px] font-semibold tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded-full uppercase">Internal</span>
+                      </div>
+                      <p className="text-black/60 text-base max-w-2xl">
+                        {tool.description}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between gap-6 w-full pt-4 border-t border-black/[0.04]">
+                      <div className="flex flex-wrap gap-2">
+                        {tool.tags.map((tag, j) => (
+                          <span key={j} className="text-xs font-mono text-black/50 bg-black/[0.03] px-2 py-1 rounded-md">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center text-black/30 bg-black/5 flex-shrink-0" title="Internal Tool - Confidential">
+                        <Lock size={16} />
+                      </div>
+                    </div>
+                  </motion.div>
+                </TiltCard>
               </motion.div>
             ))}
           </div>

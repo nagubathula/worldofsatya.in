@@ -3,6 +3,7 @@
 import { ArrowUpRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import TiltCard from "@/components/TiltCard";
 
 export default function CaseStudies({ limit }) {
   const studies = [
@@ -22,7 +23,7 @@ export default function CaseStudies({ limit }) {
       title: "Zero-Cost Automation",
       description: "Building an internal productivity suite using Google Colab, Supabase, and lightweight web extensions.",
       type: "Architecture Breakdown",
-      link: "#",
+      link: "/case-studies/zero-cost-automation",
     },
     {
       title: "Why Are You Still Confused When Turning Your Design To Code?",
@@ -73,28 +74,30 @@ export default function CaseStudies({ limit }) {
             const isLink = study.link !== "#";
             
             const CardContent = (
-              <motion.div
-                whileHover={isLink ? { scale: 1.02 } : {}}
-                transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className={`group block bg-white rounded-3xl p-6 sm:p-8 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${isLink ? 'hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden`}
-              >
-                <div className="flex flex-col h-full justify-between">
-                  <div>
-                    <p className="text-xs font-semibold text-black/40 uppercase tracking-widest mb-3">{study.type}</p>
-                    <h3 className="text-2xl font-semibold text-black tracking-tight mb-3">
-                      {study.title}
-                    </h3>
-                    <p className="text-black/60 text-base max-w-2xl leading-relaxed">{study.description}</p>
-                  </div>
-                  {isLink && (
-                    <div className="mt-6 flex justify-end">
-                      <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
-                        <ArrowUpRight size={18} className="text-black/60 group-hover:text-white transition-colors" />
-                      </div>
+              <TiltCard tiltIntensity={5}>
+                <motion.div
+                  whileHover={isLink ? { scale: 1.02 } : {}}
+                  transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                  className={`group block bg-white rounded-3xl p-6 sm:p-8 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${isLink ? 'hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden h-full`}
+                >
+                  <div className="flex flex-col h-full justify-between">
+                    <div>
+                      <p className="text-xs font-semibold text-black/40 uppercase tracking-widest mb-3">{study.type}</p>
+                      <h3 className="text-2xl font-semibold text-black tracking-tight mb-3">
+                        {study.title}
+                      </h3>
+                      <p className="text-black/60 text-base max-w-2xl leading-relaxed">{study.description}</p>
                     </div>
-                  )}
-                </div>
-              </motion.div>
+                    {isLink && (
+                      <div className="mt-6 flex justify-end">
+                        <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                          <ArrowUpRight size={18} className="text-black/60 group-hover:text-white transition-colors" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              </TiltCard>
             );
 
             return isLink ? (

@@ -150,6 +150,7 @@ export function CassettePlayer() {
           src="/images/QuOjsolNXDWvb627uFeMBpoQAqs.png"
           alt="Cassette Tape"
           fill
+          sizes="(max-width: 768px) 100vw, 700px"
           className="object-cover"
           priority
         />

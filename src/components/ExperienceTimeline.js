@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
+import TiltCard from "@/components/TiltCard";
 
 export default function ExperienceTimeline({ limit }) {
   const experiences = [
@@ -14,13 +15,13 @@ export default function ExperienceTimeline({ limit }) {
     },
     {
       year: "11/2024 - 03/2025",
-      role: "Freelance",
+      role: "Product Engineer",
       company: "CrestLogic Systems",
       description: "Branding, User Interface Design, and marketing funnel development for billjot.",
     },
     {
       year: "07/2024 - 10/2024",
-      role: "Product Design Engineer (Consultant)",
+      role: "Product & Design Engineer (Consultant)",
       company: "Andhra Pradesh Solar Power Corporation",
       description: "UI Design, Web Design, and Fullstack Web development.",
     },
@@ -76,21 +77,23 @@ export default function ExperienceTimeline({ limit }) {
         
         <div className="flex flex-col gap-6">
           {(limit ? experiences.slice(0, limit) : experiences).map((exp, i) => (
-            <motion.div
-              variants={itemAnim}
-              key={i}
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-              className="flex flex-col gap-4 md:gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300"
-            >
-              <div className="pt-1">
-                <span className="text-sm font-mono text-black/40 bg-black/5 px-3 py-1 rounded-full">{exp.year}</span>
-              </div>
-              <div className="w-full">
-                <h3 className="text-2xl font-semibold text-black tracking-tight mb-1">{exp.role}</h3>
-                <h4 className="text-base font-medium text-black/60 mb-4">{exp.company}</h4>
-                <p className="text-black/70 text-base max-w-2xl leading-relaxed">{exp.description}</p>
-              </div>
+            <motion.div variants={itemAnim} key={i}>
+              <TiltCard tiltIntensity={4}>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                  className="flex flex-col gap-4 md:gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 h-full"
+                >
+                  <div className="pt-1">
+                    <span className="text-sm font-mono text-black/40 bg-black/5 px-3 py-1 rounded-full">{exp.year}</span>
+                  </div>
+                  <div className="w-full">
+                    <h3 className="text-2xl font-semibold text-black tracking-tight mb-1">{exp.role}</h3>
+                    <h4 className="text-base font-medium text-black/60 mb-4">{exp.company}</h4>
+                    <p className="text-black/70 text-base max-w-2xl leading-relaxed">{exp.description}</p>
+                  </div>
+                </motion.div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
