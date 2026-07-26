@@ -15,3 +15,21 @@
   background: #111111;
   color: #F5F5F5;
 }
+
+@keyframes driftRight {
+  from { transform: translateX(-150vw); }
+  to { transform: translateX(150vw); }
+}
+
+@keyframes driftLeft {
+  from { transform: translateX(150vw); }
+  to { transform: translateX(-150vw); }
+}
+
+.cloud-drifting-right {
+  animation: driftRight linear infinite;
+}
+
+.cloud-drifting-left {
+  animation: driftLeft linear infinite;
+}
