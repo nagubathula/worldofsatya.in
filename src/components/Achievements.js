@@ -60,8 +60,8 @@ export default function Achievements({ limit }) {
       className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5"
     >
       <div className="flex flex-col gap-10" suppressHydrationWarning>
-        <motion.div variants={itemAnim} className="mb-6 md:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
+        <motion.div variants={itemAnim} className="mb-6 md:mb-10" suppressHydrationWarning>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest" suppressHydrationWarning>
             <Trophy size={14} /> Recognition
           </div>
           <h2 className="text-4xl md:text-5xl font-semibold text-black tracking-tight mb-4">
@@ -72,18 +72,19 @@ export default function Achievements({ limit }) {
           </p>
         </motion.div>
         
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6" suppressHydrationWarning>
           {(limit ? achievements.slice(0, limit) : achievements).map((item, i) => {
             const isLink = !!item.link;
             
             const CardContent = (
               <motion.div
+                suppressHydrationWarning
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
                 className={`group flex flex-col p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 ${isLink ? 'cursor-pointer block block' : ''}`}
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div>{item.icon}</div>
+                <div className="flex justify-between items-start mb-4" suppressHydrationWarning>
+                  <div suppressHydrationWarning>{item.icon}</div>
                   {isLink && (
                     <ArrowUpRight size={20} className="text-black/40 group-hover:text-black transition-colors" />
                   )}
@@ -98,7 +99,7 @@ export default function Achievements({ limit }) {
                 {CardContent}
               </motion.a>
             ) : (
-              <motion.div variants={itemAnim} key={i}>
+              <motion.div variants={itemAnim} key={i} suppressHydrationWarning>
                 {CardContent}
               </motion.div>
             );
@@ -106,7 +107,7 @@ export default function Achievements({ limit }) {
         </div>
         
         {limit && achievements.length > limit && (
-          <motion.div variants={itemAnim} className="mt-8 flex justify-center">
+          <motion.div variants={itemAnim} className="mt-8 flex justify-center" suppressHydrationWarning>
             <Link href="/achievements" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
               View More Achievements
             </Link>

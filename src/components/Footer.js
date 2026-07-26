@@ -11,7 +11,7 @@ export default function Footer() {
       transition={{ type: "spring", duration: 0.4, bounce: 0 }}
       className="py-24 px-6 sm:px-12 max-w-7xl mx-auto w-full border-t border-black/5 flex flex-col items-center justify-center text-center"
     >
-      <div>
+      <div suppressHydrationWarning>
         <p className="text-sm font-mono text-black/40 mb-4">Open for new opportunities</p>
         <a 
           href="mailto:nagubathula.satyasai@gmail.com"
@@ -21,9 +21,9 @@ export default function Footer() {
         </a>
       </div>
       
-      <div className="mt-32 w-full flex flex-col md:flex-row justify-between items-center text-sm text-black/40">
+      <div className="mt-32 w-full flex flex-col md:flex-row justify-between items-center text-sm text-black/40" suppressHydrationWarning>
         <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>
-        <div className="flex gap-6 mt-4 md:mt-0">
+        <div className="flex gap-6 mt-4 md:mt-0" suppressHydrationWarning>
           <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">LinkedIn</a>
           <a href="https://hippogriff.medium.com" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Medium</a>
           <a href="mailto:nagubathula.satyasai@gmail.com" className="hover:text-black transition-colors">Email</a>

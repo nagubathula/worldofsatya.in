@@ -28,6 +28,7 @@ export default function Preloader() {
           {/* Background Video */}
           <video
             autoPlay
+            muted
             playsInline
             onTimeUpdate={(e) => {
               if (e.target.duration && e.target.duration - e.target.currentTime <= 1.0) {
