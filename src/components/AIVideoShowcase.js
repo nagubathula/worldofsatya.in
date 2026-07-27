@@ -59,9 +59,18 @@ export default function AIVideoShowcase({ limit }) {
 
   const scrollContainerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [aspectRatios, setAspectRatios] = useState({});
 
   // Duplicate the video array for a seamless infinite scroll loop
   const duplicatedVideos = [...videos, ...videos];
+
+  const handleLoadedMetadata = (index, e) => {
+    const { videoWidth, videoHeight } = e.target;
+    if (videoWidth && videoHeight) {
+      const ratio = videoWidth / videoHeight;
+      setAspectRatios(prev => ({ ...prev, [index]: ratio }));
+    }
+  };
 
   const handlePlay = (e) => {
     const allVideos = document.querySelectorAll('video');
@@ -149,7 +158,11 @@ export default function AIVideoShowcase({ limit }) {
           className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 w-full max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
           {duplicatedVideos.map((video, i) => {
-            const isVert = video.isVertical;
+            const rawIdx = i % videos.length;
+            const ratio = aspectRatios[rawIdx] || (video.isVertical ? 0.5625 : 1.7778);
+            const isVert = ratio < 0.9;
+            const isSquare = ratio >= 0.9 && ratio <= 1.1;
+
             return (
               <motion.div 
                 variants={itemAnim}
@@ -157,6 +170,8 @@ export default function AIVideoShowcase({ limit }) {
                 className={`flex flex-col group shrink-0 ${
                   isVert 
                     ? "w-[180px] sm:w-[220px] lg:w-[240px]" 
+                    : isSquare
+                    ? "w-[260px] sm:w-[320px] lg:w-[340px]"
                     : "w-[420px] sm:w-[540px] lg:w-[620px]"
                 }`}
               >
@@ -168,6 +183,7 @@ export default function AIVideoShowcase({ limit }) {
                     muted
                     playsInline
                     preload="metadata"
+                    onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
                     onPlay={handlePlay}
                     className="w-full h-full object-cover bg-black/10"
                   />
