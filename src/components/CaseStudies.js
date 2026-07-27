@@ -44,15 +44,16 @@ export default function CaseStudies({ limit }) {
   };
 
   const itemAnim = {
-    hidden: { opacity: 0, scale: 0.85, y: 20 },
+    hidden: { opacity: 0, scale: 0.85, y: 40, filter: "blur(10px)" },
     show: { 
       opacity: 1, 
       scale: 1, 
       y: 0, 
+      filter: "blur(0px)",
       transition: { 
         type: "spring", 
-        stiffness: 400, 
-        damping: 25, 
+        stiffness: 350, 
+        damping: 22, 
         mass: 0.8 
       } 
     },
