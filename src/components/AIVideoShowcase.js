@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import AnimatedButton from "./AnimatedButton";
 import { Video } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -85,11 +86,11 @@ export default function AIVideoShowcase({ limit }) {
     if (isHovered) return;
 
     let animationFrameId;
+    let currentScroll = scrollContainerRef.current?.scrollLeft || 0;
 
     const scroll = () => {
       const container = scrollContainerRef.current;
       if (container) {
-        let currentScroll = container.scrollLeft;
         currentScroll += 0.8; // Smooth 0.8px per frame auto-scroll
         
         // Reset seamlessly when reaching half of the duplicated scroll track
@@ -128,9 +129,9 @@ export default function AIVideoShowcase({ limit }) {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full border-t border-black/5"
+      className="w-full border-t border-black/5 py-16 sm:py-32"
     >
-      <div className="py-16 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto w-full flex flex-col gap-8 sm:gap-12 min-w-0">
+      <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col min-w-0">
         <motion.div variants={itemAnim} className="sticky top-20 sm:top-24 z-10 bg-transparent flex flex-col justify-start gap-4 w-full min-w-0">
           <div className="min-w-0">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest backdrop-blur-md">
@@ -144,64 +145,57 @@ export default function AIVideoShowcase({ limit }) {
             </p>
           </div>
         </motion.div>
+      </div>
         
-        <div 
-          ref={scrollContainerRef}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onTouchStart={() => setIsHovered(true)}
-          onTouchEnd={() => setIsHovered(false)}
-          style={{ 
-            maskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)', 
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)' 
-          }}
-          className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 w-full max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-        >
-          {duplicatedVideos.map((video, i) => {
-            const rawIdx = i % videos.length;
-            const ratio = aspectRatios[rawIdx] || (video.isVertical ? 0.5625 : 1.7778);
-            const isVert = ratio < 0.9;
-            const isSquare = ratio >= 0.9 && ratio <= 1.1;
-
-            return (
-              <motion.div 
-                variants={itemAnim}
-                key={i} 
-                className={`flex flex-col group shrink-0 ${
-                  isVert 
-                    ? "w-[180px] sm:w-[220px] lg:w-[240px]" 
-                    : isSquare
-                    ? "w-[260px] sm:w-[320px] lg:w-[340px]"
-                    : "w-[420px] sm:w-[540px] lg:w-[620px]"
-                }`}
-              >
-                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 mb-3 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 w-full h-[260px] sm:h-[320px] lg:h-[340px]">
-                  <video 
-                    src={`${video.src}#t=0.001`} 
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
-                    onPlay={handlePlay}
-                    className="w-full h-full object-cover bg-black/10"
-                  />
-                </div>
-                <div className="w-full px-1">
-                  <h3 className="text-base sm:text-lg font-semibold text-black tracking-tight mb-0.5 truncate">{video.title}</h3>
-                  <p className="text-xs sm:text-sm text-black/50 line-clamp-1">{video.description}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+      <div 
+        ref={scrollContainerRef}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={() => setIsHovered(false)}
+        style={{ 
+          maskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)', 
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)' 
+        }}
+        className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 px-4 sm:px-8 w-full mt-8 sm:mt-12 max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      >
+        {duplicatedVideos.map((video, i) => {
+          const rawIdx = i % videos.length;
+          
+          return (
+            <motion.div 
+              variants={itemAnim}
+              key={i} 
+              className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
+            >
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 mb-3 border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px]">
+                <video 
+                  src={`${video.src}#t=0.001`} 
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
+                  onPlay={handlePlay}
+                  className="w-full sm:w-auto h-full object-cover sm:object-contain bg-black/10"
+                />
+              </div>
+              <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
+                <h3 className="text-base sm:text-lg font-semibold text-black tracking-tight mb-0.5 truncate">{video.title}</h3>
+                <p className="text-xs sm:text-sm text-black/50 line-clamp-1">{video.description}</p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
         
+      <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex justify-center">
         {limit && videos.length > limit && (
           <motion.div variants={itemAnim} className="mt-2 sm:mt-4 flex w-full justify-center">
-            <Link href="/ai-videos" className="px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-black/90 transition-colors">
+            <AnimatedButton href="/ai-videos" isPrimary={true}>
               View More Videos
-            </Link>
+            </AnimatedButton>
           </motion.div>
         )}
       </div>

@@ -22,8 +22,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className="overflow-x-hidden max-w-full">
-      <body className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-transparent tracking-tight pb-24 overflow-x-hidden w-full max-w-full relative`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="overflow-x-clip max-w-full">
+      <body className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-transparent tracking-tight pb-24 overflow-x-clip w-full max-w-full relative`} suppressHydrationWarning>
         <ParallaxBackground />
         <CustomCursor />
         <SmoothScroll>

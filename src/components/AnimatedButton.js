@@ -8,10 +8,10 @@ export default function AnimatedButton({ href, children, isPrimary = false, clas
   const content = (
     <motion.div
       whileTap={{ scale: 0.95 }}
-      className={`relative overflow-hidden flex items-center justify-center px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-full transition-colors ${
+      className={`relative overflow-hidden flex items-center justify-center px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-full transition-all duration-300 ${
         isPrimary 
-          ? "bg-black text-white hover:bg-black/90" 
-          : "bg-transparent text-black border border-black/10 hover:border-black/30 hover:bg-black/5"
+          ? "bg-gradient-to-b from-[#2a2a2a] to-black text-white shadow-[0_4px_10px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-2px_4px_rgba(0,0,0,0.5)] hover:shadow-[0_6px_15px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.5)] hover:-translate-y-0.5 border border-[#333]" 
+          : "bg-gradient-to-b from-white to-[#f5f5f5] text-black border border-black/10 shadow-[0_4px_10px_rgba(0,0,0,0.05),inset_0_1px_1px_rgba(255,255,255,1),inset_0_-2px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_6px_15px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1),inset_0_-2px_4px_rgba(0,0,0,0.05)] hover:-translate-y-0.5"
       } ${className}`}
     >
       <div className="relative flex flex-col h-5 overflow-hidden">
