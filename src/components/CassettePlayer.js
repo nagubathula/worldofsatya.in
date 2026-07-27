@@ -154,7 +154,7 @@ export function CassettePlayer() {
                 ))}
               </div>
             )}
-            <div className="text-[8px] sm:text-[10px] text-[#4ada5a] font-mono font-bold tracking-[0.05em] relative z-10 w-7 sm:w-8 text-right">
+            <div suppressHydrationWarning className="text-[8px] sm:text-[10px] text-[#4ada5a] font-mono font-bold tracking-[0.05em] relative z-10 w-7 sm:w-8 text-right">
               {formatTime(time)}
             </div>
           </div>
