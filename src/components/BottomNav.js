@@ -14,21 +14,20 @@ function DockItem({ item, isActive, mouseX }) {
     return val - bounds.x - bounds.width / 2;
   });
 
-  // Base width is roughly 44px (p-3 + 20px icon)
-  const widthSync = useTransform(distance, [-100, 0, 100], [44, 70, 44]);
+  const widthSync = useTransform(distance, [-100, 0, 100], [40, 60, 40]);
   const width = useSpring(widthSync, { mass: 0.1, stiffness: 150, damping: 12 });
-  
-  const iconScale = useTransform(width, [44, 70], [1, 1.4]);
+  const iconScale = useTransform(width, [40, 60], [1, 1.25]);
 
   return (
-    <Link href={item.href} title={item.name} suppressHydrationWarning>
+    <Link href={item.href} title={item.name} suppressHydrationWarning className="relative group shrink-0">
       <motion.div
         ref={ref}
         style={{ width, height: width }}
+        whileTap={{ scale: 0.88 }}
         className={`rounded-full flex items-center justify-center transition-colors duration-200 ${
           isActive 
             ? "bg-black text-white shadow-md" 
-            : "text-black/60 hover:bg-black/10 hover:text-black"
+            : "text-black/70 hover:bg-black/10 hover:text-black active:bg-black/10"
         }`}
         suppressHydrationWarning
       >
@@ -36,6 +35,17 @@ function DockItem({ item, isActive, mouseX }) {
           {item.icon}
         </motion.div>
       </motion.div>
+
+      {/* Floating label badge */}
+      <span 
+        className={`absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-black/90 text-white text-[10px] sm:text-[11px] font-medium rounded-full shadow-lg pointer-events-none whitespace-nowrap transition-all duration-200 ${
+          isActive 
+            ? "opacity-100 translate-y-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-y-0" 
+            : "opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"
+        }`}
+      >
+        {item.name}
+      </span>
     </Link>
   );
 }
@@ -45,21 +55,21 @@ export default function BottomNav() {
   const mouseX = useMotionValue(Infinity);
 
   const navItems = [
-    { name: "Home", href: "/", icon: <Home size={20} /> },
-    { name: "AI Videos", href: "/ai-videos", icon: <Video size={20} /> },
-    { name: "Open Source", href: "/open-source", icon: <Code size={20} /> },
-    { name: "Case Studies", href: "/case-studies", icon: <BookOpen size={20} /> },
-    { name: "Internal Tools", href: "/internal-tools", icon: <Wrench size={20} /> },
-    { name: "Experience", href: "/experience", icon: <Briefcase size={20} /> },
-    { name: "Achievements", href: "/achievements", icon: <Trophy size={20} /> },
+    { name: "Home", href: "/", icon: <Home size={18} /> },
+    { name: "AI Videos", href: "/ai-videos", icon: <Video size={18} /> },
+    { name: "Open Source", href: "/open-source", icon: <Code size={18} /> },
+    { name: "Case Studies", href: "/case-studies", icon: <BookOpen size={18} /> },
+    { name: "Internal Tools", href: "/internal-tools", icon: <Wrench size={18} /> },
+    { name: "Experience", href: "/experience", icon: <Briefcase size={18} /> },
+    { name: "Achievements", href: "/achievements", icon: <Trophy size={18} /> },
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" suppressHydrationWarning>
+    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 px-2 w-full max-w-fit" suppressHydrationWarning>
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="flex items-center gap-1 sm:gap-2 px-3 h-[68px] bg-white/40 backdrop-blur-xl border border-black/5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-x-auto max-w-[90vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center"
+        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 h-[58px] sm:h-[68px] bg-white/70 backdrop-blur-2xl border border-black/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {navItems.map((item) => (
           <DockItem 
@@ -73,3 +83,4 @@ export default function BottomNav() {
     </div>
   );
 }
+

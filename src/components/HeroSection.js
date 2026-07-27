@@ -19,7 +19,7 @@ export default function HeroSection() {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
-        delayChildren: 1.8, // Wait for preloader
+        delayChildren: 0.1,
       },
     },
   };
@@ -34,37 +34,37 @@ export default function HeroSection() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="flex flex-col lg:flex-row items-center justify-between px-6 sm:px-12 max-w-7xl mx-auto w-full pt-24 pb-12 gap-12 lg:gap-8 min-h-[90vh]"
+      className="flex flex-col items-start justify-center px-4 sm:px-8 max-w-3xl mx-auto w-full pt-16 sm:pt-24 pb-12 gap-8 min-h-[85vh]"
     >
-      <div className="flex-1 w-full lg:w-1/2 flex flex-col justify-center">
-        <TextReveal delay={1.8}>
-          <div className="mb-8">
-            <p className="text-sm md:text-base font-medium text-black/60">
-              I am <span className="font-bold"> Satya Sai Nagubathula </span>, currently
+      <div className="w-full flex flex-col justify-center items-start text-left">
+        <TextReveal delay={0.1}>
+          <div className="mb-3 sm:mb-6">
+            <p className="text-sm sm:text-base font-medium text-black/60">
+              I am <span className="font-bold text-black"> Satya Sai Nagubathula </span>, currently
             </p>
           </div>
         </TextReveal>
 
-        <TextReveal delay={1.9}>
-          <h1 className="text-[12vw] sm:text-7xl lg:text-7xl xl:text-[90px] font-medium leading-[0.9] tracking-[-0.04em] max-w-5xl text-black">
+        <TextReveal delay={0.2}>
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold leading-[0.96] tracking-[-0.04em] text-black">
             The AI/UI Guy.
           </h1>
         </TextReveal>
         
-        <TextReveal delay={2.0}>
-          <div className="mt-8">
-            <p className="text-sm md:text-base font-medium text-black/60">
-              at <span className="font-bold"> NXTWAVE DISRUPTIVE TECHNOLOGIES </span>
+        <TextReveal delay={0.3}>
+          <div className="mt-3 sm:mt-6">
+            <p className="text-sm sm:text-base font-medium text-black/60">
+              at <span className="font-bold text-black"> NXTWAVE DISRUPTIVE TECHNOLOGIES </span>
             </p>
           </div>
         </TextReveal>
         
-        <motion.div variants={item} className="mt-10 max-w-2xl">
-          <p className="text-lg sm:text-xl text-black/70 leading-relaxed font-normal">
+        <motion.div variants={item} className="mt-6 sm:mt-8 w-full">
+          <p className="text-base sm:text-lg text-black/70 leading-relaxed font-normal">
             I bridge the gap between creative visual direction and deep technical automation. Currently architecting multi-modal AI video pipelines and building tools that scale digital content production by 90%.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4 sm:gap-6 items-center">
+          <div className="mt-6 sm:mt-8 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-4 overflow-x-auto max-w-full pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <AnimatedButton href="/files/Resume.pdf" isPrimary={true}>
               Resume
             </AnimatedButton>
@@ -84,7 +84,7 @@ export default function HeroSection() {
       <motion.div 
         variants={item} 
         style={{ y: yParallax }}
-        className="flex-1 w-full lg:w-1/2 flex justify-center lg:justify-end mt-12 lg:mt-0"
+        className="w-full flex justify-center mt-4 sm:mt-8"
       >
         <CassettePlayer />
       </motion.div>

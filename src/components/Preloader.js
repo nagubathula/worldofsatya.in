@@ -16,6 +16,17 @@ export default function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
   const [showFinalIntro, setShowFinalIntro] = useState(false);
 
+  useEffect(() => {
+    // Safety fallback for mobile browsers where autoplay might be blocked or delayed
+    const timer = setTimeout(() => {
+      setShowFinalIntro(true);
+      const exitTimer = setTimeout(() => setIsLoading(false), 800);
+      return () => clearTimeout(exitTimer);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <AnimatePresence>
       {isLoading && (
@@ -36,7 +47,7 @@ export default function Preloader() {
               }
             }}
             onEnded={() => setIsLoading(false)}
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
+            className="absolute inset-0 w-full h-full object-contain sm:object-cover z-0 opacity-80"
             src="/videos/intro.mp4"
           />
 

@@ -9,24 +9,26 @@ export default function Footer() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-      className="py-24 px-6 sm:px-12 max-w-7xl mx-auto w-full border-t border-black/5 flex flex-col items-center justify-center text-center"
+      className="w-full border-t border-black/5"
     >
+      <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
       <div suppressHydrationWarning>
-        <p className="text-sm font-mono text-black/40 mb-4">Open for new opportunities</p>
+        <p className="text-xs sm:text-sm font-mono text-black/40 mb-3 sm:mb-4">Open for new opportunities</p>
         <a 
           href="mailto:nagubathula.satyasai@gmail.com"
-          className="text-5xl md:text-7xl font-medium text-black hover:opacity-50 transition-opacity tracking-tight"
+          className="text-4xl sm:text-6xl md:text-7xl font-medium text-black hover:opacity-50 transition-opacity tracking-tight"
         >
           Let's Talk.
         </a>
       </div>
       
-      <div className="mt-32 w-full flex flex-col md:flex-row justify-between items-center text-sm text-black/40" suppressHydrationWarning>
+      <div className="mt-16 sm:mt-32 w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm text-black/40" suppressHydrationWarning>
         <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>
-        <div className="flex gap-6 mt-4 md:mt-0" suppressHydrationWarning>
+        <div className="flex gap-4 sm:gap-6 mt-4 md:mt-0" suppressHydrationWarning>
           <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">LinkedIn</a>
           <a href="https://hippogriff.medium.com" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Medium</a>
           <a href="mailto:nagubathula.satyasai@gmail.com" className="hover:text-black transition-colors">Email</a>
+        </div>
         </div>
       </div>
     </motion.footer>

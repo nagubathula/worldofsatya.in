@@ -75,22 +75,22 @@ export default function ToolShowcase({ limit }) {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
-        className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-black/5"
+        className="w-full border-t border-black/5"
       >
-        <div className="flex flex-col gap-10">
-          <motion.div variants={itemAnim} className="mb-6 md:mb-10">
+        <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
+          <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
               <Wrench size={14} /> Products
             </div>
-            <h2 className="text-4xl md:text-5xl font-semibold text-black tracking-tight mb-4">
+            <h2 className="text-3xl sm:text-5xl font-semibold text-black tracking-tight mb-3 sm:mb-4">
               Internal Tools
             </h2>
-            <p className="text-base md:text-lg text-black/60 max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-lg text-black/60 max-w-2xl leading-relaxed">
               Zero-cost automation suites and live web products built to scale digital content production by 90%.
             </p>
           </motion.div>
           
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 sm:gap-6">
             {(limit ? tools.slice(0, limit) : tools).map((tool, i) => (
               <motion.div variants={itemAnim} key={i}>
                 <TiltCard tiltIntensity={2}>
@@ -98,28 +98,28 @@ export default function ToolShowcase({ limit }) {
                     onClick={() => handleToolClick(tool)}
                     whileHover={{ scale: 1.02 }}
                     transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                    className="group flex flex-col gap-6 p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] cursor-pointer h-full"
+                    className="group flex flex-col gap-5 p-5 sm:p-8 bg-white rounded-2xl sm:rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] cursor-pointer h-full"
                   >
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className="text-2xl font-semibold text-black tracking-tight">{tool.title}</h3>
-                        <span className="text-[10px] font-semibold tracking-wider px-2 py-1 bg-black/5 text-black/50 rounded-full uppercase">Internal</span>
+                      <div className="flex items-center gap-3 mb-2 sm:mb-3">
+                        <h3 className="text-xl sm:text-2xl font-semibold text-black tracking-tight">{tool.title}</h3>
+                        <span className="text-[10px] font-semibold tracking-wider px-2 py-0.5 sm:py-1 bg-black/5 text-black/50 rounded-full uppercase">Internal</span>
                       </div>
-                      <p className="text-black/60 text-base max-w-2xl">
+                      <p className="text-black/60 text-sm sm:text-base max-w-2xl leading-relaxed">
                         {tool.description}
                       </p>
                     </div>
                     
-                    <div className="flex items-center justify-between gap-6 w-full pt-4 border-t border-black/[0.04]">
-                      <div className="flex flex-wrap gap-2">
+                    <div className="flex items-center justify-between gap-4 w-full pt-4 border-t border-black/[0.04]">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {tool.tags.map((tag, j) => (
-                          <span key={j} className="text-xs font-mono text-black/50 bg-black/[0.03] px-2 py-1 rounded-md">
+                          <span key={j} className="text-[11px] sm:text-xs font-mono text-black/50 bg-black/[0.03] px-2 py-0.5 sm:py-1 rounded-md">
                             {tag}
                           </span>
                         ))}
                       </div>
-                      <div className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center text-black/30 bg-black/5 flex-shrink-0" title="Internal Tool - Confidential">
-                        <Lock size={16} />
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/5 flex items-center justify-center text-black/30 bg-black/5 flex-shrink-0" title="Internal Tool - Confidential">
+                        <Lock size={15} />
                       </div>
                     </div>
                   </motion.div>
@@ -129,8 +129,8 @@ export default function ToolShowcase({ limit }) {
           </div>
           
           {limit && tools.length > limit && (
-            <motion.div variants={itemAnim} className="mt-8 flex justify-center">
-              <Link href="/internal-tools" className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors">
+            <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
+              <Link href="/internal-tools" className="px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-black/90 transition-colors">
                 View More Internal Tools
               </Link>
             </motion.div>
@@ -152,27 +152,27 @@ export default function ToolShowcase({ limit }) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-              className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative"
+              className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-[92vw] shadow-2xl relative"
             >
               <button 
                 onClick={() => setLockedTool(null)}
-                className="absolute top-6 right-6 text-black/40 hover:text-black transition-colors"
+                className="absolute top-5 right-5 text-black/40 hover:text-black transition-colors"
               >
                 <X size={20} />
               </button>
               
               <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-black/5 rounded-full flex items-center justify-center text-black/50 mb-6">
-                  <Lock size={24} />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-black/5 rounded-full flex items-center justify-center text-black/50 mb-4 sm:mb-6">
+                  <Lock size={22} />
                 </div>
-                <h3 className="text-2xl font-semibold mb-2">Restricted Access</h3>
-                <p className="text-black/60 mb-8">
+                <h3 className="text-xl sm:text-2xl font-semibold mb-2">Restricted Access</h3>
+                <p className="text-sm sm:text-base text-black/60 mb-6">
                   Enter the 6-digit access code to unlock <span className="font-medium text-black">{lockedTool.title}</span>.
                 </p>
                 
                 <form onSubmit={handleSubmit} className="w-full">
-                  <div className="flex justify-center gap-3 mb-6">
-                    <div className="relative flex gap-2 sm:gap-3 justify-center">
+                  <div className="flex justify-center mb-6">
+                    <div className="relative flex gap-1.5 sm:gap-3 justify-center">
                       <input
                         type="text"
                         inputMode="numeric"
@@ -186,7 +186,7 @@ export default function ToolShowcase({ limit }) {
                       {[...Array(6)].map((_, i) => (
                         <div 
                           key={i} 
-                          className={`w-10 h-12 sm:w-12 sm:h-14 flex items-center justify-center text-xl sm:text-2xl font-mono font-medium rounded-xl border-2 transition-colors ${
+                          className={`w-9 h-11 sm:w-12 sm:h-14 flex items-center justify-center text-lg sm:text-2xl font-mono font-medium rounded-xl border-2 transition-colors ${
                             error ? 'border-red-500 text-red-500 bg-red-50' :
                             pin.length === i ? 'border-black text-black' :
                             pin.length > i ? 'border-black/20 text-black' :
@@ -200,15 +200,15 @@ export default function ToolShowcase({ limit }) {
                   </div>
                   
                   {error ? (
-                    <p className="text-red-500 text-sm mb-6 animate-pulse">Access Denied: Incorrect authentication code.</p>
+                    <p className="text-red-500 text-xs sm:text-sm mb-4 sm:mb-6 animate-pulse">Access Denied: Incorrect authentication code.</p>
                   ) : (
-                    <p className="text-black/40 text-sm mb-6">Authorized personnel only.</p>
+                    <p className="text-black/40 text-xs sm:text-sm mb-4 sm:mb-6">Authorized personnel only.</p>
                   )}
                   
                   <button 
                     type="submit"
                     disabled={pin.length !== 6}
-                    className="w-full py-4 bg-black text-white rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/90 transition-colors"
+                    className="w-full py-3.5 sm:py-4 bg-black text-white rounded-xl text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/90 transition-colors"
                   >
                     Unlock System
                   </button>

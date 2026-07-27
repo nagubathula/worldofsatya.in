@@ -18,7 +18,7 @@ export default function CaseStudyPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-foreground selection:text-background relative max-w-4xl mx-auto w-full px-6 sm:px-12">
+    <div className="min-h-screen text-foreground font-sans selection:bg-foreground selection:text-background relative max-w-4xl mx-auto w-full px-4 sm:px-12">
       {/* Noise Overlay */}
       <svg className="pointer-events-none fixed inset-0 z-50 opacity-[0.03] mix-blend-difference w-full h-full">
         <filter id="noise">
@@ -27,15 +27,15 @@ export default function CaseStudyPage({ params }) {
         <rect width="100%" height="100%" filter="url(#noise)" />
       </svg>
 
-      <main className="relative z-10 flex flex-col bg-background pt-24 pb-16">
+      <main className="relative z-10 flex flex-col pt-12 sm:pt-24 pb-16">
         <Link 
           href="/" 
-          className="inline-flex items-center gap-2 text-black/60 hover:text-black mb-12 transition-colors w-fit font-medium text-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-md border border-black/5 text-black/70 hover:text-black hover:bg-white transition-all mb-8 sm:mb-12 w-fit font-medium text-xs sm:text-sm"
         >
           <ArrowLeft size={16} /> Back to Home
         </Link>
         
-        <header className="mb-16">
+        <header className="mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-6 uppercase tracking-widest">
             {study.type}
           </div>

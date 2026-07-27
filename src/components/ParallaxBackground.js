@@ -18,7 +18,7 @@ export default function ParallaxBackground() {
       {/* Background Clouds (Slow) */}
       <motion.div 
         style={{ y: ySlow }}
-        className="fixed top-0 left-0 right-0 h-[120vh] -z-20 opacity-40 pointer-events-none"
+        className="fixed top-0 left-0 right-0 h-[120vh] -z-20 opacity-40 pointer-events-none overflow-hidden w-full max-w-full"
       >
         <img 
           src="/images/cloud.png" 
@@ -56,7 +56,7 @@ export default function ParallaxBackground() {
       {/* Midground Clouds (Medium) */}
       <motion.div 
         style={{ y: yMedium }}
-        className="fixed top-0 left-0 right-0 h-[140vh] -z-15 opacity-60 pointer-events-none"
+        className="fixed top-0 left-0 right-0 h-[140vh] -z-15 opacity-60 pointer-events-none overflow-hidden w-full max-w-full"
       >
         <img 
           src="/images/cloud.png" 
@@ -94,7 +94,7 @@ export default function ParallaxBackground() {
       {/* Foreground Clouds (Fast) */}
       <motion.div 
         style={{ y: yFast }}
-        className="fixed top-0 left-0 right-0 h-[160vh] -z-10 opacity-30 pointer-events-none drop-shadow-xl"
+        className="fixed top-0 left-0 right-0 h-[160vh] -z-10 opacity-30 pointer-events-none drop-shadow-xl overflow-hidden w-full max-w-full"
       >
         <img 
           src="/images/cloud.png" 
@@ -126,7 +126,7 @@ export default function ParallaxBackground() {
       {/* Small Drifting Clouds (Very Fast & immersive) */}
       <motion.div 
         style={{ y: yFast }}
-        className="fixed top-0 left-0 right-0 h-[160vh] -z-5 opacity-70 pointer-events-none"
+        className="fixed top-0 left-0 right-0 h-[160vh] -z-5 opacity-70 pointer-events-none overflow-hidden w-full max-w-full"
       >
         <img 
           src="/images/cloud.png" 
