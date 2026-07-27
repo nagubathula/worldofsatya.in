@@ -11,12 +11,19 @@ function DockItem({ item, isActive, mouseX }) {
 
   const distance = useTransform(mouseX, (val) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-    return val - bounds.x - bounds.width / 2;
+    // Use clientX (which matches getBoundingClientRect) instead of pageX if possible, 
+    // but since mouseX is pageX, we should account for scrollX if necessary. 
+    // Usually window.scrollX is 0 for this app, but let's be safe.
+    const scrollX = typeof window !== 'undefined' ? window.scrollX : 0;
+    return val - (bounds.x + scrollX) - bounds.width / 2;
   });
 
-  const widthSync = useTransform(distance, [-100, 0, 100], [40, 60, 40]);
+  // Smooth out the distance into a width
+  const widthSync = useTransform(distance, [-150, 0, 150], [40, 64, 40]);
   const width = useSpring(widthSync, { mass: 0.1, stiffness: 150, damping: 12 });
-  const iconScale = useTransform(width, [40, 60], [1, 1.25]);
+  
+  // Icon scales slightly with the container
+  const iconScale = useTransform(width, [40, 64], [1, 1.3]);
 
   return (
     <Link href={item.href} title={item.name} suppressHydrationWarning className="relative group shrink-0">
@@ -69,7 +76,7 @@ export default function BottomNav() {
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 h-[58px] sm:h-[68px] bg-white/70 backdrop-blur-2xl border border-black/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-2 bg-white/70 backdrop-blur-2xl border border-black/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {navItems.map((item) => (
           <DockItem 

@@ -119,8 +119,18 @@ export default function AIVideoShowcase({ limit }) {
   };
 
   const itemAnim = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.4, bounce: 0 } },
+    hidden: { opacity: 0, scale: 0.85, y: 20 },
+    show: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0, 
+      transition: { 
+        type: "spring", 
+        stiffness: 400, 
+        damping: 25, 
+        mass: 0.8 
+      } 
+    },
   };
 
   return (
@@ -128,7 +138,7 @@ export default function AIVideoShowcase({ limit }) {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: false, margin: "-100px" }}
       className="w-full border-t border-black/5 py-16 sm:py-32"
     >
       <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col min-w-0">

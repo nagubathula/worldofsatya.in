@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 export default function TextReveal({ children, className = "", delay = 0 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-10px" });
+  const isInView = useInView(ref, { once: false, margin: "-10px" });
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>

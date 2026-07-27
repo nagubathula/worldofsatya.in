@@ -7,7 +7,7 @@ export default function Footer() {
     <motion.footer 
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: false, margin: "-100px" }}
       transition={{ type: "spring", duration: 0.4, bounce: 0 }}
       className="w-full border-t border-black/5"
     >
