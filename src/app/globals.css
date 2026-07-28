@@ -16,6 +16,15 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  /* Hide the default cursor on desktop since we have a custom one */
+  @media (min-width: 769px) {
+    *,
+    *::before,
+    *::after {
+      cursor: none !important;
+    }
+  }
 }
 
 ::selection {
