@@ -140,7 +140,7 @@ const ProjectCard = ({ project }) => {
           <div
             className={`aspect-square relative bg-gray-100 rounded-lg overflow-hidden transition-all duration-300 ${hovered ? 'scale-105 shadow-xl' : 'scale-100 shadow-none'}`}
           >
-            <div className="absolute right-4 top-4 bg-black bg-opacity-80 text-white text-xs px-3 py-1 rounded-full z-10">
+            <div className="absolute right-4 top-4 bg-foreground bg-opacity-80 text-background text-xs px-3 py-1 rounded-full z-10">
               {project.category}
             </div>
             
@@ -158,10 +158,10 @@ const ProjectCard = ({ project }) => {
             <div 
               className={`absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent transition-all duration-300 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
             >
-              <h3 className="text-white text-xl  mb-2">{project.title}</h3>
+              <h3 className="text-background text-xl  mb-2">{project.title}</h3>
               <p className="text-gray-200 text-sm">{project.description}</p>
               <div className="mt-4">
-                <span className="inline-block bg-white bg-opacity-20 text-white text-xs px-3 py-1 rounded-full">
+                <span className="inline-block bg-background bg-opacity-20 text-background text-xs px-3 py-1 rounded-full">
                   {project.text}
                 </span>
               </div>
@@ -195,8 +195,8 @@ const ProjectCard = ({ project }) => {
                     onClick={() => setFilter(category)}
                     className={`px-5 py-2 inline-flex w-64 rounded-full border ${
                       filter === category
-                      ? 'bg-black text-white border-black'
-                      : 'bg-white text-black border-gray-300 hover:border-black transition-colors'
+                      ? 'bg-foreground text-background border-foreground'
+                      : 'bg-background text-foreground border-gray-300 hover:border-foreground transition-colors'
                     }`}
                   >
                     {category}
@@ -222,7 +222,7 @@ const ProjectCard = ({ project }) => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+                  className="px-8 py-3 bg-foreground text-background rounded-full hover:bg-gray-800 transition-colors"
                 >
                   View All Projects
                 </motion.button>

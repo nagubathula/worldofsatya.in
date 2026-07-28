@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Features() {
   return (
-    <div className="min-h-screen p-8 text-white">
+    <div className="min-h-screen p-8 text-background">
     <div className="container  mx-auto relative rounded-xl bg-[url(/images/tortoise-shell.svg)] bg-cover ">
     
 
@@ -39,7 +39,7 @@ export default function Features() {
               >
                 <div className="flex flex-row items-start gap-2 md:flex-col">
                   <img alt="" src={card.icon} loading="lazy" className="h-7 md:h-[60px]" />
-                  <h4 className="text-base md:text-[28px] font-semibold text-white">{card.title}</h4>
+                  <h4 className="text-base md:text-[28px] font-semibold text-background">{card.title}</h4>
                 </div>
                 <p className="text-[12px] md:text-[18px] font-medium text-[#B3D9FF]">
                   {card.description}

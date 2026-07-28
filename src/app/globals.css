@@ -10,11 +10,23 @@ body {
 }
 
 @layer base {
+  :root {
+    --foreground: #111111;
+    --background: #F5F5F5;
+  }
+  
+  :root.theme-dark {
+    --foreground: #F5F5F5;
+    --background: #111111;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
     /* Soften font rendering for that premium look */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Smooth transitions for theme changes */
+    transition: color 2s ease-in-out, background-color 2s ease-in-out, border-color 2s ease-in-out, fill 2s ease-in-out;
   }
   
   /* Hide the default cursor on desktop since we have a custom one */

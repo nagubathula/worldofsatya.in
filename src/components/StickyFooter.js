@@ -11,7 +11,7 @@ export default function StickyFooter() {
         <div className="flex flex-col space-y-4 mb-32">
           <Link
             href="mailto:nagubathula.satyasai@gmail.com"
-            className="inline-flex items-center bg-violet-400 text-black text-xl md:text-2xl rounded-full py-3 px-6 w-fit hover:bg-violet-300 transition-colors"
+            className="inline-flex items-center bg-violet-400 text-foreground text-xl md:text-2xl rounded-full py-3 px-6 w-fit hover:bg-violet-300 transition-colors"
           >
             <span className="mr-2">You can Email me</span>
             <Mail className="w-5 h-5" />
@@ -19,7 +19,7 @@ export default function StickyFooter() {
 
           <Link
             href="https://www.linkedin.com/in/satyasainagubathula/"
-            className="inline-flex items-center bg-violet-400 text-black text-xl md:text-2xl rounded-full py-3 px-6 w-fit hover:bg-violet-300 transition-colors"
+            className="inline-flex items-center bg-violet-400 text-foreground text-xl md:text-2xl rounded-full py-3 px-6 w-fit hover:bg-violet-300 transition-colors"
           >
             <span className="mr-2">Find me on LinkedIn</span>
             <MessageCircle className="w-5 h-5" />
@@ -27,7 +27,7 @@ export default function StickyFooter() {
 
           {/* <Link
             href="#"
-            className="inline-flex items-center bg-violet-400 text-black text-xl md:text-2xl rounded-full py-3 px-6 w-fit hover:bg-violet-300 transition-colors"
+            className="inline-flex items-center bg-violet-400 text-foreground text-xl md:text-2xl rounded-full py-3 px-6 w-fit hover:bg-violet-300 transition-colors"
           >
             <span className="mr-2">or Reset for round two</span>
             <RefreshCw className="w-5 h-5" />

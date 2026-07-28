@@ -8,10 +8,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#F5F5F5",
-        foreground: "#111111",
-        canvas: "#F5F5F5",
-        offwhite: "#111111", // Inverting these semantics for the light theme to minimize refactoring
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        canvas: "var(--background)",
+        offwhite: "var(--foreground)",
       },
       fontFamily: {
         sans: ["var(--font-geist)", "Inter", "sans-serif"],

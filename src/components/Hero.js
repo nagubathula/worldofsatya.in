@@ -9,13 +9,13 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <div className="min-h-screen overflow-hidden bg-white">
+    <div className="min-h-screen overflow-hidden bg-background">
       {/* <Navbar /> */}
 
       <div className="relative flex pb-16">
         <div className="w-[90%] flex flex-col min-h-screen justify-around mx-auto relative z-10">
           {/* "N" Button */}
-          <div className="w-16 bg-black text-white text-center rotate-[-10deg] hover:rotate-0 ease-in duration-300 cursor-pointer transition-all rounded px-4 py-2 text-4xl">
+          <div className="w-16 bg-foreground text-background text-center rotate-[-10deg] hover:rotate-0 ease-in duration-300 cursor-pointer transition-all rounded px-4 py-2 text-4xl">
             N
           </div>
 
@@ -37,7 +37,7 @@ export default function Hero() {
 
             <Link
               href="https://hippogriff.medium.com"
-              className="text-lg sm:text-xl w-full sm:w-64 bg-black text-white text-center rounded-full ease-in duration-300 cursor-pointer transition-all px-4 py-2"
+              className="text-lg sm:text-xl w-full sm:w-64 bg-foreground text-background text-center rounded-full ease-in duration-300 cursor-pointer transition-all px-4 py-2"
             >
               Visit My Blog
             </Link>

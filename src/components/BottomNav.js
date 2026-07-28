@@ -33,8 +33,8 @@ function DockItem({ item, isActive, mouseX }) {
         whileTap={{ scale: 0.88 }}
         className={`rounded-full flex items-center justify-center transition-colors duration-200 ${
           isActive 
-            ? "bg-black text-white shadow-md" 
-            : "text-black/70 hover:bg-black/10 hover:text-black active:bg-black/10"
+            ? "bg-foreground text-background shadow-md" 
+            : "text-foreground/70 hover:bg-foreground/10 hover:text-foreground active:bg-foreground/10"
         }`}
         suppressHydrationWarning
       >
@@ -45,7 +45,7 @@ function DockItem({ item, isActive, mouseX }) {
 
       {/* Floating label badge */}
       <span 
-        className={`absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-black/90 text-white text-[10px] sm:text-[11px] font-medium rounded-full shadow-lg pointer-events-none whitespace-nowrap transition-all duration-200 ${
+        className={`absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-foreground/90 text-background text-[10px] sm:text-[11px] font-medium rounded-full shadow-lg pointer-events-none whitespace-nowrap transition-all duration-200 ${
           isActive 
             ? "opacity-100 translate-y-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-y-0" 
             : "opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"
@@ -76,7 +76,7 @@ export default function BottomNav() {
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-2 bg-white/70 backdrop-blur-2xl border border-black/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-2 bg-background/70 backdrop-blur-2xl border border-foreground/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {navItems.map((item) => (
           <DockItem 

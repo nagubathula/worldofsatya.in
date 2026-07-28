@@ -10,8 +10,8 @@ export default function AnimatedButton({ href, children, isPrimary = false, clas
       whileTap={{ scale: 0.95 }}
       className={`relative overflow-hidden flex items-center justify-center px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-full transition-all duration-300 ${
         isPrimary 
-          ? "bg-gradient-to-b from-[#2a2a2a] to-black text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_-1px_1px_rgba(0,0,0,1)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-1px_1px_rgba(0,0,0,1)]" 
-          : "bg-gradient-to-b from-white to-[#f5f5f5] text-black shadow-[inset_0_1px_1px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.1)] border border-black/5 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.1)] hover:border-black/10"
+          ? "bg-gradient-to-b from-foreground to-foreground text-background shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_-1px_1px_rgba(0,0,0,1)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-1px_1px_rgba(0,0,0,1)]" 
+          : "bg-gradient-to-b from-background to-background text-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.1)] border border-foreground/5 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.1)] hover:border-foreground/10"
       } ${className}`}
     >
       <div className="relative flex flex-col h-5 overflow-hidden">

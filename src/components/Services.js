@@ -85,7 +85,7 @@ export default function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((feature, index) => (
-            <div key={index} className="bg-white p-8 rounded-lg shadow-sm flex flex-col justify-between">
+            <div key={index} className="bg-background p-8 rounded-lg shadow-sm flex flex-col justify-between">
               <div>
                 <div className={`mb-6 ${feature.iconColor}`}>{feature.icon}</div>
                 <h2 className="text-2xl font-medium text-gray-800 mb-6">{feature.title}</h2>

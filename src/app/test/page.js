@@ -14,9 +14,9 @@ export default function ProfileCard() {
       {/* Tab Indicators */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[10vw]">
         <div className="w-8 h-[8vw] bg-[#3B3BFF] mx-auto  mt-1 " />
-        <div className="w-10 h-[2vw] bg-black  rounded-md mx-auto" />
-        <div className="w-16 h-4 bg-white rounded-full mx-auto">
-          <div className="w-4 h-1/2 bg-black/90  rounded-b-sm mx-auto" />
+        <div className="w-10 h-[2vw] bg-foreground  rounded-md mx-auto" />
+        <div className="w-16 h-4 bg-background rounded-full mx-auto">
+          <div className="w-4 h-1/2 bg-foreground/90  rounded-b-sm mx-auto" />
         </div>
       </div>
       <div className="bg-gray-100   rounded-xl shadow-md p-2 mt-14  border">
@@ -26,7 +26,7 @@ export default function ProfileCard() {
         </div>
 
         {/* Profile Header */}
-        <div className="flex flex-col items-center  text-left p-4 rounded-xl bg-white">
+        <div className="flex flex-col items-center  text-left p-4 rounded-xl bg-background">
           <div className="flex items-center w-full justify-start  gap-3 mb-6">
             <div className="h-16 aspect-square rounded-full bg-gray-200 flex items-center justify-center object-cover">
               <Image
@@ -72,9 +72,9 @@ export default function ProfileCard() {
           <div className="flex justify-center gap-3 mt-6 text-xs">
             <a
               href="#"
-              className="flex items-center gap-2 px-5  rounded-full bg-[#3B3BFF] text-white  font-semibold shadow-md"
+              className="flex items-center gap-2 px-5  rounded-full bg-[#3B3BFF] text-background  font-semibold shadow-md"
             >
-              Contact Me  <div className="h-full aspect-square bg-black rounded-full"><ArrowUpRight size={16} /></div> 
+              Contact Me  <div className="h-full aspect-square bg-foreground rounded-full"><ArrowUpRight size={16} /></div> 
             </a>
             <a
               href="#"
@@ -93,7 +93,7 @@ export default function ProfileCard() {
 
         {/* Footer */}
         <p className="mt-2 text-xs text-gray-400 text-center">
-           Based in <span className="font-semibold text-black">India</span>,
+           Based in <span className="font-semibold text-foreground">India</span>,
           available worldwide.
         </p>
       </div>

@@ -1,9 +1,62 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import useWeatherTheme, { THEMES } from "@/hooks/useWeatherTheme";
+
+const themeConfigs = {
+  [THEMES.DAY_CLEAR]: {
+    background: "linear-gradient(to bottom, #87CEEB, #e0f7fa)",
+    cloudsOpacity: 0.3,
+    cloudsBrightness: 1,
+    isDark: false,
+  },
+  [THEMES.DAY_CLOUDY]: {
+    background: "linear-gradient(to bottom, #76b5c5, #e0f7fa)",
+    cloudsOpacity: 0.8,
+    cloudsBrightness: 0.9,
+    isDark: false,
+  },
+  [THEMES.SUNSET]: {
+    background: "linear-gradient(to bottom, #ff7e5f, #feb47b)",
+    cloudsOpacity: 0.6,
+    cloudsBrightness: 0.7,
+    isDark: false, // Could be true if we want dark text, but sunset usually looks good with black text
+  },
+  [THEMES.NIGHT_CLEAR]: {
+    background: "linear-gradient(to bottom, #0b1a30, #1a365d)",
+    cloudsOpacity: 0.15,
+    cloudsBrightness: 0.2,
+    isDark: true,
+  },
+  [THEMES.NIGHT_CLOUDY]: {
+    background: "linear-gradient(to bottom, #111827, #374151)",
+    cloudsOpacity: 0.5,
+    cloudsBrightness: 0.3,
+    isDark: true,
+  },
+  [THEMES.RAIN]: {
+    background: "linear-gradient(to bottom, #4b5563, #9ca3af)",
+    cloudsOpacity: 1.0,
+    cloudsBrightness: 0.5,
+    isDark: true, // Rain theme is dark
+  },
+};
 
 export default function ParallaxBackground() {
   const { scrollYProgress } = useScroll();
+  const { theme } = useWeatherTheme();
+  
+  const themeConfig = themeConfigs[theme] || themeConfigs[THEMES.DAY_CLOUDY];
+  
+  // Toggle dark mode class on root for text colors
+  useEffect(() => {
+    if (themeConfig.isDark) {
+      document.documentElement.classList.add('theme-dark');
+    } else {
+      document.documentElement.classList.remove('theme-dark');
+    }
+  }, [themeConfig.isDark]);
   
   // Create different parallax speeds for different layers of clouds
   const yFast = useTransform(scrollYProgress, [0, 1], ["0%", "-40%"]);
@@ -13,12 +66,23 @@ export default function ParallaxBackground() {
   return (
     <>
       {/* Base Sky Color */}
-      <div className="fixed inset-0 -z-30 bg-gradient-to-b from-[#76b5c5] to-[#e0f7fa]"></div>
+      <motion.div 
+        className="fixed inset-0 -z-30"
+        initial={{ background: themeConfigs[THEMES.DAY_CLOUDY].background }}
+        animate={{ background: themeConfig.background }}
+        transition={{ duration: 2, ease: "easeInOut" }}
+      />
       
       {/* Background Clouds (Slow) */}
       <motion.div 
         style={{ y: ySlow }}
-        className="fixed top-0 left-0 right-0 h-[120vh] -z-20 opacity-40 pointer-events-none overflow-hidden w-full max-w-full"
+        className="fixed top-0 left-0 right-0 h-[120vh] -z-20 pointer-events-none overflow-hidden w-full max-w-full"
+        initial={{ opacity: 0.4, filter: "brightness(0.9)" }}
+        animate={{ 
+          opacity: 0.4 * themeConfig.cloudsOpacity,
+          filter: `brightness(${themeConfig.cloudsBrightness})` 
+        }}
+        transition={{ duration: 2 }}
       >
         <img 
           src="/images/cloud.png" 
@@ -56,7 +120,13 @@ export default function ParallaxBackground() {
       {/* Midground Clouds (Medium) */}
       <motion.div 
         style={{ y: yMedium }}
-        className="fixed top-0 left-0 right-0 h-[140vh] -z-15 opacity-60 pointer-events-none overflow-hidden w-full max-w-full"
+        className="fixed top-0 left-0 right-0 h-[140vh] -z-15 pointer-events-none overflow-hidden w-full max-w-full"
+        initial={{ opacity: 0.6, filter: "brightness(0.9)" }}
+        animate={{ 
+          opacity: 0.6 * themeConfig.cloudsOpacity,
+          filter: `brightness(${themeConfig.cloudsBrightness})` 
+        }}
+        transition={{ duration: 2 }}
       >
         <img 
           src="/images/cloud.png" 
@@ -94,7 +164,13 @@ export default function ParallaxBackground() {
       {/* Foreground Clouds (Fast) */}
       <motion.div 
         style={{ y: yFast }}
-        className="fixed top-0 left-0 right-0 h-[160vh] -z-10 opacity-30 pointer-events-none drop-shadow-xl overflow-hidden w-full max-w-full"
+        className="fixed top-0 left-0 right-0 h-[160vh] -z-10 pointer-events-none drop-shadow-xl overflow-hidden w-full max-w-full"
+        initial={{ opacity: 0.3, filter: "brightness(0.9)" }}
+        animate={{ 
+          opacity: 0.3 * themeConfig.cloudsOpacity,
+          filter: `brightness(${themeConfig.cloudsBrightness})` 
+        }}
+        transition={{ duration: 2 }}
       >
         <img 
           src="/images/cloud.png" 
@@ -126,7 +202,13 @@ export default function ParallaxBackground() {
       {/* Small Drifting Clouds (Very Fast & immersive) */}
       <motion.div 
         style={{ y: yFast }}
-        className="fixed top-0 left-0 right-0 h-[160vh] -z-5 opacity-70 pointer-events-none overflow-hidden w-full max-w-full"
+        className="fixed top-0 left-0 right-0 h-[160vh] -z-5 pointer-events-none overflow-hidden w-full max-w-full"
+        initial={{ opacity: 0.7, filter: "brightness(0.9)" }}
+        animate={{ 
+          opacity: 0.7 * themeConfig.cloudsOpacity,
+          filter: `brightness(${themeConfig.cloudsBrightness})` 
+        }}
+        transition={{ duration: 2 }}
       >
         <img 
           src="/images/cloud.png" 
@@ -192,7 +274,18 @@ export default function ParallaxBackground() {
       </motion.div>
       
       {/* Subtle white fade over everything to ensure text remains perfectly legible */}
-      <div className="fixed inset-0 -z-5 bg-gradient-to-b from-white/10 via-white/50 to-white/90 pointer-events-none"></div>
+      <motion.div 
+        className="fixed inset-0 -z-5 pointer-events-none"
+        initial={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.9))" }}
+        animate={{ 
+          background: theme === THEMES.NIGHT_CLEAR || theme === THEMES.NIGHT_CLOUDY 
+            ? "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5), rgba(0,0,0,0.8))"
+            : theme === THEMES.RAIN
+            ? "linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.6))"
+            : "linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.9))"
+        }}
+        transition={{ duration: 2, ease: "easeInOut" }}
+      />
     </>
   );
 }

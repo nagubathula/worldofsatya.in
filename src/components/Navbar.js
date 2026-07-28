@@ -11,17 +11,17 @@ const Navbar = () => {
 
   return (
     <div>
-      <header className="my-2 fixed sticky inset-x-0 top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-black/5">
+      <header className="my-2 fixed sticky inset-x-0 top-0 z-50 bg-background/90 backdrop-blur-md shadow-sm border-b border-foreground/5">
         <div className="container mx-auto">
           <div className="flex sm:px-8 md:px-12 justify-between group/row relative isolate">
             <div
               aria-hidden="true"
               className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2"
             >
-              <div className="absolute inset-x-0 top-0 border-t border-black/5" />
-              <div className="absolute inset-x-0 top-2 border-t border-black/5" />
-              <div className="absolute inset-x-0 bottom-0 hidden border-b border-black/5 group-last/row:block" />
-              <div className="absolute inset-x-0 bottom-2 hidden border-b border-black/5 group-last/row:block" />
+              <div className="absolute inset-x-0 top-0 border-t border-foreground/5" />
+              <div className="absolute inset-x-0 top-2 border-t border-foreground/5" />
+              <div className="absolute inset-x-0 bottom-0 hidden border-b border-foreground/5 group-last/row:block" />
+              <div className="absolute inset-x-0 bottom-2 hidden border-b border-foreground/5 group-last/row:block" />
             </div>
             {/* Logo and CTA section */}
             <div className="relative flex gap-6">
@@ -116,7 +116,7 @@ const Navbar = () => {
                   <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
                 </svg>
                 <a
-                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-black/5"
+                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-foreground/5"
                   href="/pricing"
                 >
                   Pricing
@@ -154,7 +154,7 @@ const Navbar = () => {
                   <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
                 </svg>
                 <a
-                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-black/5"
+                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-foreground/5"
                   href="/company"
                 >
                   Company
@@ -192,7 +192,7 @@ const Navbar = () => {
                   <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
                 </svg>
                 <a
-                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-black/5"
+                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-foreground/5"
                   href="/blog"
                 >
                   Blog
@@ -230,7 +230,7 @@ const Navbar = () => {
                   <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
                 </svg>
                 <a
-                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-black/5"
+                  className="flex items-center px-4 py-3 text-base font-medium  hover:bg-foreground/5"
                   href="/login"
                 >
                   Login
@@ -240,7 +240,7 @@ const Navbar = () => {
             
             {/* Mobile menu button */}
             <button
-              className="flex size-12 items-center justify-center self-center rounded-lg hover:bg-black/5 lg:hidden"
+              className="flex size-12 items-center justify-center self-center rounded-lg hover:bg-foreground/5 lg:hidden"
               aria-label={isMenuOpen ? "Close main menu" : "Open main menu"}
               type="button"
               aria-expanded={isMenuOpen}
@@ -281,32 +281,32 @@ const Navbar = () => {
           {/* Mobile menu (only visible when isMenuOpen is true) */}
           {isMenuOpen && (
             <div className="lg:hidden">
-              <div className="px-6 py-6 space-y-1 bg-black/5 rounded-lg mt-2">
+              <div className="px-6 py-6 space-y-1 bg-foreground/5 rounded-lg mt-2">
                 <a
                   href="/pricing"
-                  className="block px-3 py-2 text-base font-medium  hover:bg-black/10 rounded"
+                  className="block px-3 py-2 text-base font-medium  hover:bg-foreground/10 rounded"
                 >
                   Pricing
                 </a>
                 <a
                   href="/company"
-                  className="block px-3 py-2 text-base font-medium  hover:bg-black/10 rounded"
+                  className="block px-3 py-2 text-base font-medium  hover:bg-foreground/10 rounded"
                 >
                   Company
                 </a>
                 <a
                   href="/blog"
-                  className="block px-3 py-2 text-base font-medium  hover:bg-black/10 rounded"
+                  className="block px-3 py-2 text-base font-medium  hover:bg-foreground/10 rounded"
                 >
                   Blog
                 </a>
                 <a
                   href="/login"
-                  className="block px-3 py-2 text-base font-medium  hover:bg-black/10 rounded"
+                  className="block px-3 py-2 text-base font-medium  hover:bg-foreground/10 rounded"
                 >
                   Login
                 </a>
-                <div className="pt-2 mt-2 border-t border-white/10">
+                <div className="pt-2 mt-2 border-t border-background/10">
                   <a
                     className="flex items-center gap-1 px-3 py-3 text-sm font-medium  rounded bg-fuchsia-950/35 hover:bg-fuchsia-950/40"
                     href="/blog/radiant-raises-100m-series-a-from-tailwind-ventures"

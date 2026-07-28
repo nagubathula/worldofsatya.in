@@ -119,7 +119,7 @@ export function CassettePlayer() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none" />
+          <div className="absolute inset-0 bg-foreground/10 mix-blend-multiply pointer-events-none" />
         </div>
 
         {/* Digital Display Area */}
@@ -127,7 +127,7 @@ export function CassettePlayer() {
           <div className="flex items-center gap-1.5 sm:gap-3 relative z-10 min-w-0">
             <div className={`w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 ${isPlaying ? 'bg-[#4ada5a] shadow-[0_0_8px_#4ada5a]' : 'bg-[#a3a19c]'}`} />
             <div className="flex items-center truncate">
-              <span className="text-[8px] sm:text-[10px] text-white/50 font-mono tracking-[0.08em] sm:tracking-[0.2em] font-semibold">
+              <span className="text-[8px] sm:text-[10px] text-background/50 font-mono tracking-[0.08em] sm:tracking-[0.2em] font-semibold">
                 {isPlaying ? 'PLAYING \u2014 ' : 'READY \u2014 '}
               </span>
               <span className="text-[8px] sm:text-[10px] text-[#e08a3a] font-mono tracking-[0.08em] sm:tracking-[0.2em] font-semibold ml-1 sm:ml-2 truncate">

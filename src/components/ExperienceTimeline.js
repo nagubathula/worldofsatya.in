@@ -69,17 +69,17 @@ export default function ExperienceTimeline({ limit }) {
       initial="hidden"
       whileInView="show"
       viewport={{ once: false, margin: "-100px" }}
-      className="w-full border-t border-black/5"
+      className="w-full border-t border-foreground/5"
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-black/60 text-xs font-medium mb-4 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
             <Briefcase size={14} /> Career
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold text-black tracking-tight mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
             Experience
           </h2>
-          <p className="text-sm sm:text-lg text-black/60 max-w-2xl leading-relaxed">
+          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
             A history of bridging design and engineering.
           </p>
         </motion.div>
@@ -91,15 +91,15 @@ export default function ExperienceTimeline({ limit }) {
               key={i}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-              className="flex flex-col gap-3 sm:gap-6 p-5 sm:p-8 bg-white rounded-2xl sm:rounded-3xl border border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300"
+              className="flex flex-col gap-3 sm:gap-6 p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300"
             >
               <div>
-                <span className="text-xs sm:text-sm font-mono text-black/50 bg-black/5 px-2.5 py-1 rounded-full">{exp.year}</span>
+                <span className="text-xs sm:text-sm font-mono text-foreground/50 bg-foreground/5 px-2.5 py-1 rounded-full">{exp.year}</span>
               </div>
               <div className="w-full">
-                <h3 className="text-xl sm:text-2xl font-semibold text-black tracking-tight mb-1">{exp.role}</h3>
-                <h4 className="text-sm sm:text-base font-medium text-black/60 mb-2 sm:mb-4">{exp.company}</h4>
-                <p className="text-black/70 text-sm sm:text-base max-w-2xl leading-relaxed">{exp.description}</p>
+                <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight mb-1">{exp.role}</h3>
+                <h4 className="text-sm sm:text-base font-medium text-foreground/60 mb-2 sm:mb-4">{exp.company}</h4>
+                <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{exp.description}</p>
               </div>
             </motion.div>
           ))}
@@ -107,7 +107,7 @@ export default function ExperienceTimeline({ limit }) {
         
         {limit && experiences.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
-            <Link href="/experience" className="px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-black/90 transition-colors">
+            <Link href="/experience" className="px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">
               View Full Experience
             </Link>
           </motion.div>

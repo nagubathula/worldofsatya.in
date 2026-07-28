@@ -66,7 +66,7 @@ export default function DesignPrinciples() {
             {principles.map((principle, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md relative h-48"
+                className="bg-background rounded-lg p-6 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md relative h-48"
                 onMouseEnter={() => setHoveredCard(index)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
@@ -75,7 +75,7 @@ export default function DesignPrinciples() {
 
                 {/* Description that appears on hover */}
                 <div
-                  className={`absolute inset-0 bg-white bg-opacity-95 rounded-lg p-6 transition-opacity duration-300 flex items-center ${
+                  className={`absolute inset-0 bg-background bg-opacity-95 rounded-lg p-6 transition-opacity duration-300 flex items-center ${
                     hoveredCard === index
                       ? "opacity-100"
                       : "opacity-0 pointer-events-none"

@@ -39,28 +39,28 @@ export default function HeroSection() {
       <div className="w-full flex flex-col justify-center items-start text-left">
         <TextReveal delay={0.1}>
           <div className="mb-3 sm:mb-6">
-            <p className="text-sm sm:text-base font-medium text-black/60">
-              I am <span className="font-bold text-black"> Satya Sai Nagubathula </span>, currently
+            <p className="text-sm sm:text-base font-medium text-foreground/60">
+              I am <span className="font-bold text-foreground"> Satya Sai Nagubathula </span>, currently
             </p>
           </div>
         </TextReveal>
 
         <TextReveal delay={0.2}>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold leading-[0.96] tracking-[-0.04em] text-black">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold leading-[0.96] tracking-[-0.04em] text-foreground">
             The AI/UI Guy.
           </h1>
         </TextReveal>
         
         <TextReveal delay={0.3}>
           <div className="mt-3 sm:mt-6">
-            <p className="text-sm sm:text-base font-medium text-black/60">
-              at <span className="font-bold text-black"> NXTWAVE DISRUPTIVE TECHNOLOGIES </span>
+            <p className="text-sm sm:text-base font-medium text-foreground/60">
+              at <span className="font-bold text-foreground"> NXTWAVE DISRUPTIVE TECHNOLOGIES </span>
             </p>
           </div>
         </TextReveal>
         
         <motion.div variants={item} className="mt-6 sm:mt-8 w-full">
-          <p className="text-base sm:text-lg text-black/70 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-foreground/70 leading-relaxed font-normal">
             I bridge the gap between creative visual direction and deep technical automation. Currently architecting multi-modal AI video pipelines and building tools that scale digital content production by 90%.
           </p>
 

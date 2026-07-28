@@ -33,7 +33,7 @@ export default function ExperienceTable() {
   
     return (
       <div className="overflow-x-auto">
-        <table className="container mx-auto text-4xl table-auto bg-white">
+        <table className="container mx-auto text-4xl table-auto bg-background">
           <tbody>
             {experiences.map((exp, idx) => (
               <tr key={idx} className="border-b last:border-b-0 p-4">
