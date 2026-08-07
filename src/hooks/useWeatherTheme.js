@@ -77,7 +77,7 @@ export default function useWeatherTheme() {
 
         setTheme(selectedTheme);
       } catch (error) {
-        console.error("Error fetching weather/theme:", error);
+        // console.error("Error fetching weather/theme:", error);
       } finally {
         setLoading(false);
       }
