@@ -18,11 +18,22 @@ export default function useWeatherTheme() {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        // 1. Get location silently
-        const locationRes = await fetch("https://ipapi.co/json/");
-        if (!locationRes.ok) throw new Error("Location fetch failed");
-        const locationData = await locationRes.json();
-        const { latitude, longitude } = locationData;
+        // 1. Get location silently with fallback to San Francisco
+        let latitude = 37.7749;
+        let longitude = -122.4194;
+        
+        try {
+          const locationRes = await fetch("https://ipapi.co/json/");
+          if (locationRes.ok) {
+            const locationData = await locationRes.json();
+            if (locationData.latitude && locationData.longitude) {
+              latitude = locationData.latitude;
+              longitude = locationData.longitude;
+            }
+          }
+        } catch (locationError) {
+          // Silently fallback if adblockers block the request or API rate limits
+        }
 
         // 2. Get weather
         const weatherRes = await fetch(

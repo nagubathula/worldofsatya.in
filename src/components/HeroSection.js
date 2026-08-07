@@ -65,8 +65,8 @@ export default function HeroSection() {
           </p>
 
           <div className="mt-6 sm:mt-8 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-4 overflow-x-auto max-w-full pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <AnimatedButton href="/files/Resume.pdf" isPrimary={true}>
-              Resume
+            <AnimatedButton href="/works" isPrimary={true}>
+              My Works
             </AnimatedButton>
             <AnimatedButton href="mailto:nagubathula.satyasai@gmail.com">
               Email

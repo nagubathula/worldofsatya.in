@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Video, Code, BookOpen, Wrench, Briefcase, Trophy } from "lucide-react";
+import { Home, Video, Code, BookOpen, Wrench, Briefcase, Trophy, Store } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 function DockItem({ item, isActive, mouseX }) {
@@ -63,6 +63,7 @@ export default function BottomNav() {
 
   const navItems = [
     { name: "Home", href: "/", icon: <Home size={18} /> },
+    { name: "Works", href: "/works", icon: <Store size={18} /> },
     { name: "AI Videos", href: "/ai-videos", icon: <Video size={18} /> },
     { name: "Open Source", href: "/open-source", icon: <Code size={18} /> },
     { name: "Case Studies", href: "/case-studies", icon: <BookOpen size={18} /> },
