@@ -11,9 +11,23 @@ export const THEMES = {
   RAIN: "RAIN",
 };
 
+// Human-readable label for an Open-Meteo WMO weather code
+function describeWeather(code) {
+  if (code >= 95) return "Stormy";
+  if (code >= 71 && code <= 77) return "Snowy";
+  if (code >= 51) return "Rainy";
+  if (code >= 45) return "Foggy";
+  if (code === 3) return "Overcast";
+  if (code === 2) return "Cloudy";
+  if (code === 1) return "Mostly clear";
+  return "Clear skies";
+}
+
 export default function useWeatherTheme() {
   const [theme, setTheme] = useState(THEMES.DAY_CLOUDY); // Default fallback
   const [loading, setLoading] = useState(true);
+  const [city, setCity] = useState(null);
+  const [condition, setCondition] = useState(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -21,7 +35,7 @@ export default function useWeatherTheme() {
         // 1. Get location silently with fallback to San Francisco
         let latitude = 37.7749;
         let longitude = -122.4194;
-        
+
         try {
           const locationRes = await fetch("https://ipapi.co/json/");
           if (locationRes.ok) {
@@ -29,6 +43,7 @@ export default function useWeatherTheme() {
             if (locationData.latitude && locationData.longitude) {
               latitude = locationData.latitude;
               longitude = locationData.longitude;
+              if (locationData.city) setCity(locationData.city);
             }
           }
         } catch (locationError) {
@@ -76,6 +91,7 @@ export default function useWeatherTheme() {
         }
 
         setTheme(selectedTheme);
+        setCondition(describeWeather(code));
       } catch (error) {
         // console.error("Error fetching weather/theme:", error);
       } finally {
@@ -90,5 +106,5 @@ export default function useWeatherTheme() {
     return () => clearInterval(interval);
   }, []);
 
-  return { theme, loading };
+  return { theme, loading, city, condition };
 }

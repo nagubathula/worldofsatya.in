@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   title: "Satya Sai Nagubathula | Portfolio",
-  description: "AI Pipeline Architect & Creative Technologist",
+  description: "Engineering AI to build better and faster products. Frontend Engineering, Product Design & Generative AI.",
 };
 
 export default function RootLayout({ children }) {

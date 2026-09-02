@@ -43,9 +43,18 @@ const themeConfigs = {
   },
 };
 
+const themeEmojis = {
+  [THEMES.DAY_CLEAR]: "☀️",
+  [THEMES.DAY_CLOUDY]: "⛅",
+  [THEMES.SUNSET]: "🌅",
+  [THEMES.NIGHT_CLEAR]: "🌙",
+  [THEMES.NIGHT_CLOUDY]: "☁️",
+  [THEMES.RAIN]: "🌧️",
+};
+
 export default function ParallaxBackground() {
   const { scrollYProgress } = useScroll();
-  const { theme } = useWeatherTheme();
+  const { theme, city, condition } = useWeatherTheme();
   
   const themeConfig = themeConfigs[theme] || themeConfigs[THEMES.DAY_CLOUDY];
   
@@ -286,6 +295,28 @@ export default function ParallaxBackground() {
         }}
         transition={{ duration: 2, ease: "easeInOut" }}
       />
+
+      {/* Live weather badge — tells visitors the sky is real, not a random gradient */}
+      {condition && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.5 }}
+          className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40"
+          title="Not a random gradient — this site's sky mirrors your local weather and time of day, live."
+        >
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-foreground/10 shadow-sm font-mono text-[10px] sm:text-xs text-foreground/60 cursor-default select-none">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+            </span>
+            <span suppressHydrationWarning>
+              {themeEmojis[theme]} {condition}
+              {city ? ` in ${city}` : ""} — this sky is yours, live
+            </span>
+          </div>
+        </motion.div>
+      )}
     </>
   );
 }

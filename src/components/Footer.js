@@ -13,7 +13,7 @@ export default function Footer() {
     >
       <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
       <div suppressHydrationWarning>
-        <p className="text-xs sm:text-sm font-mono text-foreground/40 mb-3 sm:mb-4">Open for new opportunities</p>
+        <p className="text-xs sm:text-sm font-mono text-foreground/40 mb-3 sm:mb-4">Open for Frontend Engineering, Product Design &amp; Generative AI roles</p>
         <a 
           href="mailto:nagubathula.satyasai@gmail.com"
           className="text-4xl sm:text-6xl md:text-7xl font-medium text-foreground hover:opacity-50 transition-opacity tracking-tight"

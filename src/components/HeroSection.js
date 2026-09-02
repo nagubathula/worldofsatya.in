@@ -61,7 +61,7 @@ export default function HeroSection() {
         
         <motion.div variants={item} className="mt-6 sm:mt-8 w-full">
           <p className="text-base sm:text-lg text-foreground/70 leading-relaxed font-normal">
-            I bridge the gap between creative visual direction and deep technical automation. Currently architecting multi-modal AI video pipelines and building tools that scale digital content production by 90%.
+            Engineering AI to build better and faster products — from pixel-perfect interfaces to multi-modal generative pipelines. I work at the intersection of frontend engineering, product design, and generative AI.
           </p>
 
           <div className="mt-6 sm:mt-8 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-4 overflow-x-auto max-w-full pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

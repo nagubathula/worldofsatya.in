@@ -7,22 +7,28 @@ import { motion } from "framer-motion";
 export default function OpenSource({ limit }) {
   const projects = [
     {
+      name: "OpenWeave",
+      role: "Creator",
+      description: "An open-source design editor that opens native Figma (.fig) and Pencil (.pen) files, with built-in AI that builds designs from chat, real-time P2P collaboration, and a headless React SDK for building custom editors.",
+      link: "/works/o0",
+    },
+    {
       name: "Toothpaste",
       role: "Creator",
       description: "A plug-and-play Adobe CEP (Common Extensibility Platform) extension for Premiere Pro. Built to streamline workflows and provide an easy-to-use template for Adobe extension development.",
-      link: "https://github.com/nagubathula/toothpaste",
+      link: "/works/o1",
     },
     {
       name: "CHAYA UI",
       role: "Core Contributor",
       description: "A modern, functional design system and component library for React built with Next.js and TailwindCSS. Collaborated directly with creators on design, development, and optimization. Authored several exclusive custom components.",
-      link: "https://github.com/traboda/chaya",
+      link: "/works/o2",
     },
     {
       name: "Engineerudu",
       role: "FOSS Community Builder",
       description: "Building Andhra Pradesh's first Free and Open Source Community to foster local talent and collaborative development.",
-      link: "https://engineerudu.com",
+      link: "/works/o3",
     }
   ];
 
@@ -91,8 +97,16 @@ export default function OpenSource({ limit }) {
               </motion.div>
             );
 
+            const isExternal = project.link?.startsWith("http");
+
             return project.link ? (
-              <motion.a variants={itemAnim} href={project.link} target="_blank" rel="noopener noreferrer" key={i} className="block">
+              <motion.a
+                variants={itemAnim}
+                href={project.link}
+                {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                key={i}
+                className="block"
+              >
                 {CardContent}
               </motion.a>
             ) : (

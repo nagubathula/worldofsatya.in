@@ -10,8 +10,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function CaseStudyPage({ params }) {
-  const study = caseStudiesData.find((s) => s.slug === params.slug);
+export default async function CaseStudyPage({ params }) {
+  const { slug } = await params;
+  const study = caseStudiesData.find((s) => s.slug === slug);
 
   if (!study) {
     notFound();
