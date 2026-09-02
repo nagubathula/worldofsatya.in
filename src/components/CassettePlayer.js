@@ -97,7 +97,7 @@ export function CassettePlayer() {
     <motion.div
       initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: false, margin: "-100px" }}
+      viewport={{ once: true, margin: "-100px" }}
       transition={{ type: "spring", duration: 0.4, bounce: 0 }}
       className="flex justify-center items-center w-full py-2 sm:py-8 overflow-hidden"
     >

@@ -1,17 +1,12 @@
 "use client";
 
 
-import { Trophy, Star, Award, Medal, ArrowUpRight } from "lucide-react";
+import { Trophy, Star, Medal, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function Achievements({ limit }) {
   const achievements = [
-    {
-      title: "Google Design Scholarship",
-      description: "Awarded a full scholarship for Google's UX Design professional certification.",
-      icon: <Award className="w-5 h-5 text-foreground/60" />
-    },
     {
       title: "GSOC 2024 Qualified",
       description: "Qualified for Google Summer of Code 2024.",
@@ -66,7 +61,7 @@ export default function Achievements({ limit }) {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: false, margin: "-100px" }}
+      viewport={{ once: true, margin: "-100px" }}
       className="w-full border-t border-foreground/5"
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10" suppressHydrationWarning>

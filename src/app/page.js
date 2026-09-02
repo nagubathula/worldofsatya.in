@@ -9,6 +9,7 @@ const OpenSource = dynamic(() => import('@/components/OpenSource'));
 const Achievements = dynamic(() => import('@/components/Achievements'));
 const Footer = dynamic(() => import('@/components/Footer'));
 const AIVideoShowcase = dynamic(() => import('@/components/AIVideoShowcase'));
+const ScrollGallery = dynamic(() => import('@/components/ScrollGallery'));
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
         <AIVideoShowcase limit={3} />
         <OpenSource limit={2} />
         <CaseStudies limit={2} />
+        <ScrollGallery />
         
         {/* The Process: How I build it */}
         <ToolShowcase limit={2} />

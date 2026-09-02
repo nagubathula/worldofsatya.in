@@ -8,14 +8,26 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { allWorks } from "@/data/works";
 
+// Open Source leads; everything else follows in data order
+const CATEGORY_PRIORITY = { "Open Source": 0, "Project": 1, "Case Study": 2 };
+
 export default function WorksList() {
   const [filter, setFilter] = useState("All");
-  
-  const categories = ["All", ...new Set(allWorks.map(work => work.category))];
 
-  const filteredWorks = filter === "All" 
-    ? allWorks 
-    : allWorks.filter(work => work.category === filter);
+  const categories = [
+    "All",
+    ...[...new Set(allWorks.map(work => work.category))].sort(
+      (a, b) => (CATEGORY_PRIORITY[a] ?? 99) - (CATEGORY_PRIORITY[b] ?? 99)
+    ),
+  ];
+
+  const sortedWorks = [...allWorks].sort(
+    (a, b) => (CATEGORY_PRIORITY[a.category] ?? 99) - (CATEGORY_PRIORITY[b.category] ?? 99)
+  );
+
+  const filteredWorks = filter === "All"
+    ? sortedWorks
+    : sortedWorks.filter(work => work.category === filter);
 
   const getIcon = (category) => {
     switch(category) {

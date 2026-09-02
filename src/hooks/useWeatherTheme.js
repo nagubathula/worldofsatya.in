@@ -23,6 +23,8 @@ function describeWeather(code) {
   return "Clear skies";
 }
 
+const THEME_CACHE_KEY = "weather-theme";
+
 export default function useWeatherTheme() {
   const [theme, setTheme] = useState(THEMES.DAY_CLOUDY); // Default fallback
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,13 @@ export default function useWeatherTheme() {
   const [condition, setCondition] = useState(null);
 
   useEffect(() => {
+    // Restore the last known theme immediately to avoid a flash of the
+    // wrong sky while the weather API responds
+    try {
+      const cached = localStorage.getItem(THEME_CACHE_KEY);
+      if (cached && THEMES[cached]) setTheme(cached);
+    } catch (e) {}
+
     const fetchWeather = async () => {
       try {
         // 1. Get location silently with fallback to San Francisco
@@ -92,6 +101,9 @@ export default function useWeatherTheme() {
 
         setTheme(selectedTheme);
         setCondition(describeWeather(code));
+        try {
+          localStorage.setItem(THEME_CACHE_KEY, selectedTheme);
+        } catch (e) {}
       } catch (error) {
         // console.error("Error fetching weather/theme:", error);
       } finally {

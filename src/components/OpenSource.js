@@ -62,7 +62,7 @@ export default function OpenSource({ limit }) {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: false, margin: "-100px" }}
+      viewport={{ once: true, margin: "-100px" }}
       className="w-full border-t border-foreground/5"
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">

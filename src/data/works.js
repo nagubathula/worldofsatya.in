@@ -103,7 +103,7 @@ export const allWorks = [
         </section>
       </div>
     `,
-    image: "/videos/8.gif",
+    image: "/videos/8.webp",
   },
   {
     id: "p5",
@@ -129,7 +129,7 @@ export const allWorks = [
   },
   {
     id: "p6",
-    title: "APSPCl",
+    title: "APSPCL",
     description: "Website for APSPCL (Andhra Pradesh Solar Power Corporation Private Limited)",
     category: "Project",
     tag: "Website",
@@ -147,7 +147,7 @@ export const allWorks = [
         </section>
       </div>
     `,
-    image: "/videos/2.gif",
+    image: "/videos/2.webp",
   },
   {
     id: "p7",
@@ -169,7 +169,7 @@ export const allWorks = [
         </section>
       </div>
     `,
-    image: "/videos/1.gif",
+    image: "/videos/1.webp",
   },
   {
     id: "p8",

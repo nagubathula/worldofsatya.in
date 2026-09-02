@@ -29,11 +29,13 @@ body {
     transition: color 2s ease-in-out, background-color 2s ease-in-out, border-color 2s ease-in-out, fill 2s ease-in-out;
   }
   
-  /* Hide the default cursor on desktop since we have a custom one */
+  /* Hide the default cursor only while the custom cursor is active
+     (CustomCursor adds this class; it skips mobile and reduced-motion users,
+     who keep their native pointer) */
   @media (min-width: 769px) {
-    *,
-    *::before,
-    *::after {
+    html.custom-cursor-active *,
+    html.custom-cursor-active *::before,
+    html.custom-cursor-active *::after {
       cursor: none !important;
     }
   }

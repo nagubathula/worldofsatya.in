@@ -16,8 +16,33 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://worldofsatya.in"),
   title: "Satya Sai Nagubathula | Portfolio",
   description: "Engineering AI to build better and faster products. Frontend Engineering, Product Design & Generative AI.",
+  keywords: [
+    "Frontend Engineering",
+    "Product Design",
+    "Generative AI",
+    "AI Video Pipelines",
+    "UI Design",
+    "ComfyUI",
+    "Next.js",
+  ],
+  openGraph: {
+    title: "Satya Sai Nagubathula | The AI/UI Guy",
+    description: "Engineering AI to build better and faster products. Frontend Engineering, Product Design & Generative AI.",
+    url: "https://worldofsatya.in",
+    siteName: "World of Satya",
+    images: [{ url: "/main.jpeg", width: 800, height: 800, alt: "Satya Sai Nagubathula" }],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Satya Sai Nagubathula | The AI/UI Guy",
+    description: "Engineering AI to build better and faster products. Frontend Engineering, Product Design & Generative AI.",
+    images: ["/main.jpeg"],
+  },
 };
 
 export default function RootLayout({ children }) {

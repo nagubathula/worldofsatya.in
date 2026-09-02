@@ -6,11 +6,48 @@ import AnimatedButton from "./AnimatedButton";
 import { Video } from "lucide-react";
 import { motion } from "framer-motion";
 
+function LazyVideo({ src, poster, onLoadedMetadata }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "100px" }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={`${src}#t=0.001`}
+      poster={poster}
+      loop
+      muted
+      playsInline
+      preload="none"
+      onLoadedMetadata={onLoadedMetadata}
+      className="w-full sm:w-auto h-full object-cover sm:object-contain bg-foreground/10"
+    />
+  );
+}
+
 export default function AIVideoShowcase({ limit }) {
   const videos = [
     {
       src: "/aivideos/AI_ADVERTISEMENT.mp4",
-      title: "STERIO HEADPHONES",
+      title: "STEREO HEADPHONES",
       description: "Generative AI commercial showcase.",
       isVertical: false,
     },
@@ -39,7 +76,7 @@ export default function AIVideoShowcase({ limit }) {
       isVertical: false,
     },
     {
-      src: "/aivideos/A_hyper_realistic_extreme_hig (1).mp4",
+      src: "/aivideos/hyper_realistic_detail.mp4",
       title: "Hyper-Realistic Detail",
       description: "Extreme detail latent space manipulation.",
       isVertical: false,
@@ -73,17 +110,9 @@ export default function AIVideoShowcase({ limit }) {
     }
   };
 
-  const handlePlay = (e) => {
-    const allVideos = document.querySelectorAll('video');
-    allVideos.forEach(v => {
-      if (v !== e.target && !v.paused) {
-        v.pause();
-      }
-    });
-  };
-
   useEffect(() => {
     if (isHovered) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let animationFrameId;
     let currentScroll = scrollContainerRef.current?.scrollLeft || 0;
@@ -138,7 +167,7 @@ export default function AIVideoShowcase({ limit }) {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: false, margin: "-100px" }}
+      viewport={{ once: true, margin: "-100px" }}
       className="w-full border-t border-foreground/5 py-16 sm:py-32"
     >
       <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col min-w-0">
@@ -179,16 +208,10 @@ export default function AIVideoShowcase({ limit }) {
               className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
             >
               <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px]">
-                <video 
-                  src={`${video.src}#t=0.001`} 
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
+                <LazyVideo
+                  src={video.src}
+                  poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
                   onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
-                  onPlay={handlePlay}
-                  className="w-full sm:w-auto h-full object-cover sm:object-contain bg-foreground/10"
                 />
               </div>
               <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">

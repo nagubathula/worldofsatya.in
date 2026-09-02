@@ -15,8 +15,12 @@ export default function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Hide cursor on mobile devices
+    // Keep the native cursor on mobile devices and for users who prefer reduced motion
     if (window.matchMedia("(max-width: 768px)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Signals the CSS to hide the native cursor — only while we're active
+    document.documentElement.classList.add("custom-cursor-active");
 
     const updateMousePosition = (e) => {
       if (!isVisible) setIsVisible(true);
@@ -48,6 +52,7 @@ export default function CustomCursor() {
     document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
+      document.documentElement.classList.remove("custom-cursor-active");
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseleave", handleMouseLeave);
