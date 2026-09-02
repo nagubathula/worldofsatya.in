@@ -3,6 +3,7 @@ const BASE_URL = "https://worldofsatya.in";
 export default function sitemap() {
   const routes = [
     "",
+    "/about",
     "/works",
     "/ai-videos",
     "/open-source",
