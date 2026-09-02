@@ -30,9 +30,10 @@ export default async function WorkDetailPage({ params }) {
     }
   };
 
-  const isExternal = work.link.startsWith('http');
+  const hasLink = Boolean(work.link);
+  const isExternal = hasLink && work.link.startsWith('http');
   const LinkComponent = isExternal ? 'a' : Link;
-  const linkProps = isExternal 
+  const linkProps = isExternal
     ? { href: work.link, target: "_blank", rel: "noopener noreferrer" }
     : { href: work.link };
 
@@ -75,12 +76,14 @@ export default async function WorkDetailPage({ params }) {
             {work.description}
           </p>
 
-          <LinkComponent 
-            {...linkProps}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full font-medium hover:scale-105 transition-transform duration-300 shadow-md"
-          >
-            {work.actionText} <ArrowUpRight size={18} />
-          </LinkComponent>
+          {hasLink && (
+            <LinkComponent
+              {...linkProps}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full font-medium hover:scale-105 transition-transform duration-300 shadow-md"
+            >
+              {work.actionText} <ArrowUpRight size={18} />
+            </LinkComponent>
+          )}
         </div>
         
         {/* Detail Content Section */}

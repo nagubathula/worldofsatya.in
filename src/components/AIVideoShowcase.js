@@ -9,24 +9,39 @@ import { motion } from "framer-motion";
 function LazyVideo({ src, poster, onLoadedMetadata }) {
   const videoRef = useRef(null);
 
-  useEffect(() => {
+  // Play with sound on hover. Browsers only allow unmuted playback after the
+  // visitor has interacted with the page once — if it's blocked, fall back to
+  // playing muted rather than not playing at all.
+  const handleEnter = () => {
     const video = videoRef.current;
     if (!video) return;
+    video.muted = false;
+    video.play().catch(() => {
+      video.muted = true;
+      video.play().catch(() => {});
+    });
+  };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { rootMargin: "100px" }
-    );
+  const handleLeave = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    video.muted = true;
+  };
 
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+  // Touch devices have no hover — tap toggles playback (with sound, since a
+  // tap is a user gesture)
+  const handleClick = () => {
+    if (!window.matchMedia("(hover: none)").matches) return;
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.muted = false;
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  };
 
   return (
     <video
@@ -36,7 +51,10 @@ function LazyVideo({ src, poster, onLoadedMetadata }) {
       loop
       muted
       playsInline
-      preload="none"
+      preload="metadata"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+      onClick={handleClick}
       onLoadedMetadata={onLoadedMetadata}
       className="w-full sm:w-auto h-full object-cover sm:object-contain bg-foreground/10"
     />
@@ -110,7 +128,9 @@ export default function AIVideoShowcase({ limit }) {
     }
   };
 
+  // Auto-scroll only applies to the homepage carousel; the full page is a static grid
   useEffect(() => {
+    if (!limit) return;
     if (isHovered) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -186,42 +206,68 @@ export default function AIVideoShowcase({ limit }) {
         </motion.div>
       </div>
         
-      <div 
-        ref={scrollContainerRef}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onTouchStart={() => setIsHovered(true)}
-        onTouchEnd={() => setIsHovered(false)}
-        style={{ 
-          maskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)', 
-          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)' 
-        }}
-        className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 px-4 sm:px-8 w-full mt-8 sm:mt-12 max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-      >
-        {duplicatedVideos.map((video, i) => {
-          const rawIdx = i % videos.length;
-          
-          return (
-            <motion.div 
+      {limit ? (
+        /* Homepage teaser: auto-scrolling horizontal carousel */
+        <div
+          ref={scrollContainerRef}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onTouchStart={() => setIsHovered(true)}
+          onTouchEnd={() => setIsHovered(false)}
+          style={{
+            maskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)'
+          }}
+          className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 px-4 sm:px-8 w-full mt-8 sm:mt-12 max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        >
+          {duplicatedVideos.map((video, i) => {
+            const rawIdx = i % videos.length;
+
+            return (
+              <motion.div
+                variants={itemAnim}
+                key={i}
+                className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
+              >
+                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px]">
+                  <LazyVideo
+                    src={video.src}
+                    poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
+                    onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
+                  />
+                </div>
+                <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground tracking-tight mb-0.5 truncate">{video.title}</h3>
+                  <p className="text-xs sm:text-sm text-foreground/50 line-clamp-1">{video.description}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      ) : (
+        /* Full page: vertical grid, no horizontal scrolling */
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 px-4 sm:px-8 w-full max-w-5xl mx-auto mt-8 sm:mt-12">
+          {videos.map((video, i) => (
+            <motion.div
               variants={itemAnim}
-              key={i} 
-              className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
+              key={i}
+              className="flex flex-col group min-w-0"
             >
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px]">
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
                 <LazyVideo
                   src={video.src}
                   poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
-                  onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
+                  onLoadedMetadata={(e) => handleLoadedMetadata(i, e)}
                 />
               </div>
-              <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
+              <div className="w-full px-1">
                 <h3 className="text-base sm:text-lg font-semibold text-foreground tracking-tight mb-0.5 truncate">{video.title}</h3>
                 <p className="text-xs sm:text-sm text-foreground/50 line-clamp-1">{video.description}</p>
               </div>
             </motion.div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
         
       <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex justify-center">
         {limit && videos.length > limit && (

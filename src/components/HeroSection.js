@@ -1,18 +1,10 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import MagneticElement from "@/components/MagneticElement";
+import { motion } from "framer-motion";
 import TextReveal from "@/components/TextReveal";
 import AnimatedButton from "@/components/AnimatedButton";
-import dynamic from 'next/dynamic';
-
-const CassettePlayer = dynamic(() => import('@/components/CassettePlayer').then((mod) => mod.CassettePlayer));
 
 export default function HeroSection() {
-  // Parallax setup
-  const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 1000], [0, 150]);
-
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -79,7 +71,9 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="mt-6 sm:mt-8 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-4 overflow-x-auto max-w-full pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {/* overflow-x-auto only on mobile; on desktop the row wraps and stays
+              overflow-visible so the magnetic hover effect isn't clipped */}
+          <div className="mt-6 sm:mt-8 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-4 overflow-x-auto sm:overflow-visible max-w-full pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <AnimatedButton href="/works" isPrimary={true}>
               My Works
             </AnimatedButton>
@@ -95,14 +89,6 @@ export default function HeroSection() {
           </div>
         </motion.div>
       </div>
-
-      <motion.div 
-        variants={item} 
-        style={{ y: yParallax }}
-        className="w-full flex justify-center mt-4 sm:mt-8"
-      >
-        <CassettePlayer />
-      </motion.div>
     </motion.section>
   );
 }

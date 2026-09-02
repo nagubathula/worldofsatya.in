@@ -1,8 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Images } from "lucide-react";
-import AnimatedButton from "./AnimatedButton";
 
 const topRow = [
   { id: 1, src: "/videos/1.webp", alt: "HVAC website" },
@@ -79,34 +77,12 @@ export default function ScrollGallery() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full border-t border-foreground/5 py-16 sm:py-32"
+      className="w-full border-t border-foreground/5 py-12 sm:py-20"
     >
-      <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full">
-        <motion.div variants={itemAnim}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
-            <Images size={14} /> Gallery
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-2 sm:mb-4">
-            Selected Visuals
-          </h2>
-          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
-            Interfaces, websites, and product design from across my projects.
-          </p>
-        </motion.div>
-      </div>
-
-      <motion.div variants={itemAnim} className="flex flex-col gap-4 sm:gap-6 mt-8 sm:mt-12">
+      <motion.div variants={itemAnim} className="flex flex-col gap-4 sm:gap-6">
         <GalleryRow items={topRow} direction="left" duration={45} />
         <GalleryRow items={bottomRow} direction="right" duration={55} />
       </motion.div>
-
-      <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex justify-center">
-        <motion.div variants={itemAnim} className="mt-8 sm:mt-12 flex justify-center">
-          <AnimatedButton href="/works" isPrimary={true}>
-            View All Works
-          </AnimatedButton>
-        </motion.div>
-      </div>
     </motion.section>
   );
 }

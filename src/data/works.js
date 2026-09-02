@@ -240,6 +240,36 @@ export const allWorks = [
 
   // Case Studies
   {
+    id: "c0",
+    title: "ContentFlow",
+    description: "A role-based content operations platform with 30+ dashboards, powering multi-language content production end to end.",
+    category: "Case Study",
+    tag: "Product Engineering",
+    link: "",
+    actionText: "",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The problem</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Producing content at scale across YouTube and Instagram, in five languages — Telugu, Hindi, Tamil, Marathi, and Kannada — means dozens of people touching every video: writers, voice artists, editors, designers, managers. Spreadsheets and chat threads don't survive that. ContentFlow is the internal platform I built to run the entire operation in one place.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">30+ dashboards, one per job</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Instead of one dashboard trying to serve everyone, ContentFlow ships 30+ purpose-built views — Manager, Writer, Editor, Editing Manager, Voice Artist, Graphic Designer, Central Team, Admin, and more. Each role logs in to exactly the screens, actions, and data its job needs, enforced by a role-based access control system that also scopes everything by language and region.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The pipeline</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Every piece of content moves through an eight-stage pipeline — Script, Review, Voice Over, Audio Cut, Raw Upload, Editing, Ready, Posted — visible on a shared content calendar with per-channel and per-status filtering. Around the pipeline sit the supporting systems: channel analytics (including YouTube analytics), studio booking for recording slots, and team role management.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The impact</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">ContentFlow is the operational backbone behind the numbers on this site — 2,000+ videos orchestrated and channels scaled to 100K+ followers, with every handoff between roles tracked instead of lost in chat.</p>
+        </section>
+      </div>
+    `,
+    image: "",
+  },
+  {
     id: "c1",
     title: "From Doodles to Design",
     description: "My journey bridging creative visual direction and deep technical automation.",
