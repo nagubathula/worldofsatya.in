@@ -56,21 +56,6 @@ export default function HeroSection() {
             Engineering AI to build better and faster products — from pixel-perfect interfaces to multi-modal generative pipelines. I work at the intersection of frontend engineering, product design, and generative AI.
           </p>
 
-          <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-4 sm:gap-8 max-w-xl">
-            <div>
-              <p className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">100K+</p>
-              <p className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-foreground/50 mt-1">Followers scaled</p>
-            </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">2,000+</p>
-              <p className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-foreground/50 mt-1">Videos orchestrated</p>
-            </div>
-            <div>
-              <p className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">90%</p>
-              <p className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-foreground/50 mt-1">Faster production</p>
-            </div>
-          </div>
-
           {/* overflow-x-auto only on mobile; on desktop the row wraps and stays
               overflow-visible so the magnetic hover effect isn't clipped */}
           <div className="mt-6 sm:mt-8 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-4 overflow-x-auto sm:overflow-visible max-w-full pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

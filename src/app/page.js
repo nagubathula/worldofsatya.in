@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 const ToolShowcase = dynamic(() => import('@/components/ToolShowcase'));
 const CaseStudies = dynamic(() => import('@/components/CaseStudies'));
 const ExperienceTimeline = dynamic(() => import('@/components/ExperienceTimeline'));
-const OpenSource = dynamic(() => import('@/components/OpenSource'));
+const FeaturedWorks = dynamic(() => import('@/components/FeaturedWorks'));
 const Achievements = dynamic(() => import('@/components/Achievements'));
 const Footer = dynamic(() => import('@/components/Footer'));
 const AIVideoShowcase = dynamic(() => import('@/components/AIVideoShowcase'));
@@ -32,10 +32,10 @@ export default function Home() {
         
         {/* The Output: What I build */}
         
-        <AIVideoShowcase limit={3} />
-        <OpenSource limit={2} />
-        <CaseStudies limit={2} />
         <ScrollGallery />
+        <FeaturedWorks limit={3} />
+        <CaseStudies limit={2} />
+        <AIVideoShowcase limit={3} />
         
         {/* The Process: How I build it */}
         <ToolShowcase limit={2} />

@@ -305,14 +305,17 @@ export default function ParallaxBackground() {
           className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40"
           title="Not a random gradient — this site's sky mirrors your local weather and time of day, live."
         >
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-foreground/10 shadow-sm font-mono text-[10px] sm:text-xs text-foreground/60 cursor-default select-none">
-            <span className="relative flex h-1.5 w-1.5">
+          <div className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-foreground/10 shadow-sm font-mono text-[10px] sm:text-xs text-foreground/60 cursor-default select-none transition-colors duration-300 hover:bg-background/80 hover:text-foreground/80">
+            <span className="relative flex h-1.5 w-1.5 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
             </span>
-            <span suppressHydrationWarning>
+            <span suppressHydrationWarning className="whitespace-nowrap">
               {themeEmojis[theme]} {condition}
               {city ? ` in ${city}` : ""} — this sky is yours, live
+            </span>
+            <span className="max-w-0 opacity-0 group-hover:max-w-[340px] group-hover:opacity-100 overflow-hidden whitespace-nowrap transition-all duration-500 ease-out">
+              · not a gradient, it mirrors your real weather
             </span>
           </div>
         </motion.div>

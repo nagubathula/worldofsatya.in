@@ -63,3 +63,34 @@ body {
 .cloud-drifting-left {
   animation: driftLeft linear infinite;
 }
+
+/* Gallery marquee — CSS-driven so hover can pause it (4 copies, shift one copy width) */
+@keyframes marqueeLeft {
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
+}
+
+@keyframes marqueeRight {
+  from { transform: translateX(-25%); }
+  to { transform: translateX(0); }
+}
+
+.marquee-left {
+  animation: marqueeLeft linear infinite;
+}
+
+.marquee-right {
+  animation: marqueeRight linear infinite;
+}
+
+.marquee-row:hover .marquee-left,
+.marquee-row:hover .marquee-right {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-left,
+  .marquee-right {
+    animation: none;
+  }
+}
