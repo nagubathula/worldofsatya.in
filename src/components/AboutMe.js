@@ -154,9 +154,6 @@ export default function AboutMe() {
               className="object-cover"
             />
           </div>
-          <p className="text-xs sm:text-sm font-mono text-foreground/50">
-            Running a Gen AI training session — part of the teaching behind 36 students trained.
-          </p>
         </motion.div>
 
         {/* What I do */}
