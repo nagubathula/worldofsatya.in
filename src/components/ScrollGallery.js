@@ -89,7 +89,7 @@ export default function ScrollGallery() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full border-t border-foreground/5 py-12 sm:py-20"
+      className="w-full py-12 sm:py-20"
     >
       <motion.div variants={itemAnim} className="flex flex-col gap-4 sm:gap-6">
         <GalleryRow items={topRow} direction="left" duration={45} />

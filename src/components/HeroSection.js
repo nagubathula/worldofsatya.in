@@ -62,6 +62,9 @@ export default function HeroSection() {
             <AnimatedButton href="/works" isPrimary={true}>
               My Works
             </AnimatedButton>
+            <AnimatedButton href="/about">
+              About Me
+            </AnimatedButton>
             <AnimatedButton href="mailto:nagubathula.satyasai@gmail.com">
               Email
             </AnimatedButton>

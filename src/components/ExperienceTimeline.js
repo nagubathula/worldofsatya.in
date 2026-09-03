@@ -69,7 +69,7 @@ export default function ExperienceTimeline({ limit }) {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full border-t border-foreground/5"
+      className="w-full"
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
@@ -77,7 +77,7 @@ export default function ExperienceTimeline({ limit }) {
             <Briefcase size={14} /> Career
           </div>
           <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
-            Experience
+            Corporate Experience
           </h2>
           <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
             A history of bridging design and engineering.
@@ -105,6 +105,29 @@ export default function ExperienceTimeline({ limit }) {
           ))}
         </div>
         
+        {/* Other experiences: the numbers that don't fit a timeline */}
+        <motion.div variants={itemAnim} className="mt-2 sm:mt-6">
+          <h3 className="text-xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4 sm:mb-6">
+            Other Experiences
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { value: "280+", label: "Clients served" },
+              { value: "6", label: "Years of experience" },
+              { value: "36", label: "Students trained in engineering & design" },
+              { value: "3", label: "Movies worked on" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col gap-1 p-4 sm:p-6 bg-background rounded-2xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+              >
+                <span className="text-2xl sm:text-4xl font-semibold text-foreground tracking-tight">{stat.value}</span>
+                <span className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-foreground/50 leading-snug">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         {limit && experiences.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
             <Link href="/experience" className="px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">

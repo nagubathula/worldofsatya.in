@@ -466,5 +466,40 @@ export const allWorks = [
       </div>
     `,
     image: "",
+  },
+  {
+    id: "o4",
+    title: "CompatrIoT",
+    description: "An open-source hardware security training platform built on dual STM32 + ESP32 microcontrollers — 20 gamified labs covering UART, JTAG/SWD, I2C, SPI, and BLE exploitation on real hardware.",
+    category: "Open Source",
+    tag: "Hardware Security",
+    link: "https://drive.google.com/file/d/1e1d_eKrPW2BtSN-1nqGks1lxa6HyI7hn/view",
+    actionText: "Watch Demo",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it is</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Most people learn hardware security from slides. CompatrIoT is a physical, open-source training board you attack for real — built for security researchers, hobbyists, and students. Dual microcontrollers (an STM32 and an ESP32) give it broad protocol coverage, and the on-board targets — SPI flash, I2C EEPROM, sensors, programmable LEDs, JTAG/SWD debug ports, and a USB serial console — turn every classic hardware attack into something you can practice hands-on.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The training labs</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70 mb-4">Twenty gamified labs walk from first contact to full compromise, with progressive difficulty:</p>
+          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
+            <li><span class="font-semibold text-foreground">UART</span> — port identification two ways, then talking to the target.</li>
+            <li><span class="font-semibold text-foreground">JTAG/SWD</span> — pinout identification, firmware extraction, firmware patching, and peripheral access.</li>
+            <li><span class="font-semibold text-foreground">I2C</span> — chip reconnaissance, communication sniffing, memory dumping.</li>
+            <li><span class="font-semibold text-foreground">SPI</span> — chip recon, sniffing, and full flash firmware extraction.</li>
+            <li><span class="font-semibold text-foreground">BLE</span> — scanning, GATT enumeration, protocol sniffing, device control, and LTK cracking.</li>
+          </ul>
+          <img src="/gallery/compatriot-labs.jpg" alt="CompatrIoT training labs terminal interface" class="w-full rounded-2xl mt-6 border border-foreground/[0.05]" loading="lazy" />
+          <p class="text-xs sm:text-sm font-mono text-foreground/50 mt-3">The lab console — a terminal-native interface that walks you through each challenge.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Why it matters</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Everything is open — hardware designs, firmware, and documentation — so anyone can build, extend, or teach with it. It compresses what usually takes a shelf of dev boards and scattered CTF challenges into one board with a structured learning path: real protocols, real extraction, real exploitation, from beginner to advanced.</p>
+        </section>
+      </div>
+    `,
+    image: "/gallery/compatriot-board.jpg",
   }
 ];

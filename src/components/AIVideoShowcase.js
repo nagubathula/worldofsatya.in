@@ -188,7 +188,7 @@ export default function AIVideoShowcase({ limit }) {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full border-t border-foreground/5 py-16 sm:py-32"
+      className="w-full py-16 sm:py-32"
     >
       <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col min-w-0">
         <motion.div variants={itemAnim} className="sticky top-20 sm:top-24 z-10 bg-transparent flex flex-col justify-start gap-4 w-full min-w-0">

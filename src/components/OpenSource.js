@@ -13,6 +13,12 @@ export default function OpenSource({ limit }) {
       link: "/works/o0",
     },
     {
+      name: "CompatrIoT",
+      role: "Hardware Security",
+      description: "An open-source hardware security training platform built on dual STM32 + ESP32 microcontrollers — 20 gamified labs covering UART, JTAG/SWD, I2C, SPI, and BLE exploitation on real hardware.",
+      link: "/works/o4",
+    },
+    {
       name: "Toothpaste",
       role: "Creator",
       description: "A plug-and-play Adobe CEP (Common Extensibility Platform) extension for Premiere Pro. Built to streamline workflows and provide an easy-to-use template for Adobe extension development.",
@@ -63,7 +69,7 @@ export default function OpenSource({ limit }) {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full border-t border-foreground/5"
+      className="w-full"
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">

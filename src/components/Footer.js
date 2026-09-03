@@ -9,7 +9,7 @@ export default function Footer() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-      className="w-full border-t border-foreground/5"
+      className="w-full"
     >
       <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
       <div suppressHydrationWarning>

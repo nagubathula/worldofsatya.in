@@ -4,11 +4,27 @@ import Image from "next/image";
 import { User } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedButton from "./AnimatedButton";
+import useWeatherTheme, { THEMES } from "@/hooks/useWeatherTheme";
+
+// Portrait follows the live sky theme, like the background does
+const themePortraits = {
+  [THEMES.DAY_CLEAR]: "/portraits/sky-day.jpg",
+  [THEMES.DAY_CLOUDY]: "/portraits/sky-day.jpg",
+  [THEMES.SNOW]: "/portraits/sky-day.jpg",
+  [THEMES.RAIN]: "/portraits/sky-day.jpg",
+  [THEMES.DAWN]: "/portraits/sky-sunset.jpg",
+  [THEMES.SUNSET]: "/portraits/sky-sunset.jpg",
+  [THEMES.NIGHT_CLEAR]: "/portraits/sky-night.jpg",
+  [THEMES.NIGHT_CLOUDY]: "/portraits/sky-night.jpg",
+};
 
 const stats = [
+  { value: "6", label: "Years of experience" },
+  { value: "280+", label: "Clients served" },
   { value: "100K+", label: "Followers scaled" },
   { value: "2,000+", label: "Videos orchestrated" },
-  { value: "90%", label: "Faster production" },
+  { value: "36", label: "Students trained" },
+  { value: "3", label: "Movies worked on" },
 ];
 
 const pillars = [
@@ -48,6 +64,9 @@ const itemAnim = {
 };
 
 export default function AboutMe() {
+  const { theme } = useWeatherTheme();
+  const portrait = themePortraits[theme] ?? "/portraits/sky-day.jpg";
+
   return (
     <motion.section
       variants={container}
@@ -72,13 +91,14 @@ export default function AboutMe() {
         </motion.div>
 
         {/* Portrait + Bio */}
-        <motion.div variants={itemAnim} className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start">
-          <div className="relative w-full sm:w-64 aspect-square rounded-3xl overflow-hidden shrink-0 border border-foreground/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+        <motion.div variants={itemAnim} className="flex flex-col gap-8 sm:gap-10">
+          <div className="relative w-full max-w-sm aspect-[4/5] rounded-3xl overflow-hidden border border-foreground/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
             <Image
-              src="/main.jpeg"
+              key={portrait}
+              src={portrait}
               alt="Satya Sai Nagubathula"
               fill
-              sizes="(max-width: 640px) 100vw, 256px"
+              sizes="(max-width: 640px) 100vw, 320px"
               className="object-cover"
               priority
             />
@@ -97,6 +117,11 @@ export default function AboutMe() {
               digital content creation, and build the internal tools that make it fast.
             </p>
             <p>
+              Along the way I&apos;ve served 280+ clients across six years of design and
+              engineering work, trained 36 students in engineering and design, and worked
+              on three movies.
+            </p>
+            <p>
               Outside of work, I give back through open source — building{" "}
               <span className="font-semibold text-foreground">Engineerudu</span>, Andhra
               Pradesh&apos;s first FOSS community, and contributing to design systems like
@@ -106,13 +131,32 @@ export default function AboutMe() {
         </motion.div>
 
         {/* Stats */}
-        <motion.div variants={itemAnim} className="grid grid-cols-3 gap-4 sm:gap-8">
+        <motion.div variants={itemAnim} className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
           {stats.map((stat) => (
-            <div key={stat.label}>
+            <div
+              key={stat.label}
+              className="flex flex-col gap-1 p-4 sm:p-6 bg-background rounded-2xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+            >
               <p className="text-2xl sm:text-4xl font-semibold text-foreground tracking-tight">{stat.value}</p>
-              <p className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-foreground/50 mt-1">{stat.label}</p>
+              <p className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-foreground/50 leading-snug">{stat.label}</p>
             </div>
           ))}
+        </motion.div>
+
+        {/* Teaching */}
+        <motion.div variants={itemAnim} className="flex flex-col gap-3">
+          <div className="relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-foreground/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+            <Image
+              src="/portraits/genai-training.jpg"
+              alt="Satya Sai Nagubathula leading a Gen AI training session"
+              fill
+              sizes="(max-width: 640px) 100vw, 672px"
+              className="object-cover"
+            />
+          </div>
+          <p className="text-xs sm:text-sm font-mono text-foreground/50">
+            Running a Gen AI training session — part of the teaching behind 36 students trained.
+          </p>
         </motion.div>
 
         {/* What I do */}

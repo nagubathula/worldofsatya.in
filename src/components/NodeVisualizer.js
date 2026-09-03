@@ -10,7 +10,7 @@ export default function NodeVisualizer() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto border-t border-foreground/5 mt-20">
+    <section className="py-24 sm:py-32 px-6 sm:px-12 max-w-7xl mx-auto mt-20">
       <div className="flex flex-col gap-10">
         <div>
           <h2 className="text-xl font-medium text-foreground">Pipeline Architecture</h2>

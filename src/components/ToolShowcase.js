@@ -85,7 +85,7 @@ export default function ToolShowcase({ limit }) {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
-        className="w-full border-t border-foreground/5"
+        className="w-full"
       >
         <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
           <motion.div variants={itemAnim} className="mb-2 sm:mb-10">

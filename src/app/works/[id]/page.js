@@ -87,7 +87,7 @@ export default async function WorkDetailPage({ params }) {
         </div>
         
         {/* Detail Content Section */}
-        <div className="w-full border-t border-foreground/5 bg-foreground/[0.02]">
+        <div className="w-full bg-foreground/[0.02]">
           <div className="max-w-3xl mx-auto px-4 sm:px-8 py-16 sm:py-24">
             {work.image && (
               <div className="w-full aspect-[16/9] sm:aspect-[21/9] relative rounded-2xl overflow-hidden mb-12 bg-foreground/10">
