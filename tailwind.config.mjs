@@ -9,10 +9,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        canvas: "var(--background)",
-        offwhite: "var(--foreground)",
+        background: "rgb(var(--background-rgb) / <alpha-value>)",
+        foreground: "rgb(var(--foreground-rgb) / <alpha-value>)",
+        canvas: "rgb(var(--background-rgb) / <alpha-value>)",
+        offwhite: "rgb(var(--foreground-rgb) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-geist)", "Inter", "sans-serif"],

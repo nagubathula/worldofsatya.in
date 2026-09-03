@@ -34,7 +34,7 @@ function DockItem({ item, isActive, mouseX }) {
         className={`rounded-full flex items-center justify-center transition-colors duration-200 ${
           isActive 
             ? "bg-foreground text-background shadow-md" 
-            : "text-foreground/70 hover:bg-foreground/10 hover:text-foreground active:bg-foreground/10"
+            : "text-foreground/80 hover:bg-foreground/10 hover:text-foreground active:bg-foreground/10"
         }`}
         suppressHydrationWarning
       >
@@ -73,7 +73,7 @@ export default function BottomNav() {
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-2 bg-background/70 backdrop-blur-2xl border border-foreground/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-2 bg-background/90 backdrop-blur-2xl border border-foreground/15 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.18)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {navItems.map((item) => (
           <DockItem 

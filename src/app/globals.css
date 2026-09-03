@@ -13,11 +13,16 @@ body {
   :root {
     --foreground: #111111;
     --background: #F5F5F5;
+    /* RGB triplets so Tailwind opacity modifiers (bg-background/70, text-foreground/60, ...) work */
+    --foreground-rgb: 17 17 17;
+    --background-rgb: 245 245 245;
   }
-  
+
   :root.theme-dark {
     --foreground: #F5F5F5;
     --background: #111111;
+    --foreground-rgb: 245 245 245;
+    --background-rgb: 17 17 17;
   }
 
   body {
