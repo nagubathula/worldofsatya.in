@@ -6,7 +6,7 @@ import AnimatedButton from "./AnimatedButton";
 import { Video } from "lucide-react";
 import { motion } from "framer-motion";
 
-function LazyVideo({ src, poster, onLoadedMetadata }) {
+function LazyVideo({ src, poster, onLoadedMetadata, isVertical }) {
   const videoRef = useRef(null);
 
   // Play with sound on hover. Browsers only allow unmuted playback after the
@@ -46,7 +46,7 @@ function LazyVideo({ src, poster, onLoadedMetadata }) {
   return (
     <video
       ref={videoRef}
-      src={`${src}#t=0.001`}
+      src={src}
       poster={poster}
       loop
       muted
@@ -56,7 +56,7 @@ function LazyVideo({ src, poster, onLoadedMetadata }) {
       onMouseLeave={handleLeave}
       onClick={handleClick}
       onLoadedMetadata={onLoadedMetadata}
-      className="w-full sm:w-auto h-full object-cover sm:object-contain bg-foreground/10"
+      className={`w-full h-full object-cover bg-foreground/10 ${isVertical ? "object-top" : ""}`}
     />
   );
 }
@@ -229,11 +229,12 @@ export default function AIVideoShowcase({ limit }) {
                 key={i}
                 className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
               >
-                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px]">
+                <div className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px] ${video.isVertical ? "sm:aspect-[9/16]" : "sm:aspect-video"}`}>
                   <LazyVideo
                     src={video.src}
                     poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
                     onLoadedMetadata={(e) => handleLoadedMetadata(rawIdx, e)}
+                    isVertical={video.isVertical}
                   />
                 </div>
                 <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
@@ -258,6 +259,7 @@ export default function AIVideoShowcase({ limit }) {
                   src={video.src}
                   poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
                   onLoadedMetadata={(e) => handleLoadedMetadata(i, e)}
+                  isVertical={video.isVertical}
                 />
               </div>
               <div className="w-full px-1">

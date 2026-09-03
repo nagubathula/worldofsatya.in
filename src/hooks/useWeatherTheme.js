@@ -5,10 +5,12 @@ import { useState, useEffect } from "react";
 export const THEMES = {
   DAY_CLEAR: "DAY_CLEAR",
   DAY_CLOUDY: "DAY_CLOUDY",
+  DAWN: "DAWN",
   SUNSET: "SUNSET",
   NIGHT_CLEAR: "NIGHT_CLEAR",
   NIGHT_CLOUDY: "NIGHT_CLOUDY",
   RAIN: "RAIN",
+  SNOW: "SNOW",
 };
 
 // Human-readable label for an Open-Meteo WMO weather code
@@ -30,6 +32,7 @@ export default function useWeatherTheme() {
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState(null);
   const [condition, setCondition] = useState(null);
+  const [isStorm, setIsStorm] = useState(false);
 
   useEffect(() => {
     // Restore the last known theme immediately to avoid a flash of the
@@ -74,14 +77,22 @@ export default function useWeatherTheme() {
         const sunset = new Date(weatherData.daily.sunset[0]);
         const sunrise = new Date(weatherData.daily.sunrise[0]);
         
-        // Within 1 hour before/after sunset or sunrise
-        const isSunset = Math.abs(now - sunset) < 60 * 60 * 1000 || Math.abs(now - sunrise) < 60 * 60 * 1000;
+        // Within 1 hour before/after sunrise (dawn) or sunset (dusk)
+        const isDawn = Math.abs(now - sunrise) < 60 * 60 * 1000;
+        const isSunset = Math.abs(now - sunset) < 60 * 60 * 1000;
+
+        const isSnowCode = (code >= 71 && code <= 77) || code === 85 || code === 86;
+        const isStormCode = code >= 95;
 
         let selectedTheme = THEMES.DAY_CLEAR;
 
-        if (code >= 50) {
-          // Rain / Snow / Drizzle / Thunderstorm
+        if (isSnowCode) {
+          selectedTheme = THEMES.SNOW;
+        } else if (code >= 50) {
+          // Rain / Drizzle / Thunderstorm
           selectedTheme = THEMES.RAIN;
+        } else if (isDawn) {
+          selectedTheme = THEMES.DAWN;
         } else if (isSunset) {
           selectedTheme = THEMES.SUNSET;
         } else if (isDay) {
@@ -100,6 +111,7 @@ export default function useWeatherTheme() {
         }
 
         setTheme(selectedTheme);
+        setIsStorm(isStormCode);
         setCondition(describeWeather(code));
         try {
           localStorage.setItem(THEME_CACHE_KEY, selectedTheme);
@@ -118,5 +130,5 @@ export default function useWeatherTheme() {
     return () => clearInterval(interval);
   }, []);
 
-  return { theme, loading, city, condition };
+  return { theme, loading, city, condition, isStorm };
 }

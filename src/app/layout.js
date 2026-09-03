@@ -4,6 +4,7 @@ import BottomNav from "@/components/BottomNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import ParallaxBackground from "@/components/ParallaxBackground";
+import ClickBurst from "@/components/ClickBurst";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -51,6 +52,7 @@ export default function RootLayout({ children }) {
       <body className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-transparent tracking-tight pb-24 overflow-x-clip w-full max-w-full relative`} suppressHydrationWarning>
         <ParallaxBackground />
         <CustomCursor />
+        <ClickBurst />
         <SmoothScroll>
           {children}
           <BottomNav />
