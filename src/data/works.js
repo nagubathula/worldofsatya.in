@@ -240,6 +240,28 @@ export const allWorks = [
 
   // Case Studies
   {
+    id: "c5",
+    title: "NotBad — The Words Are the Interface",
+    description: "Designing a cross-platform Markdown writer where the chrome disappears: concealment, tokens, and the decisions behind a pure-Flutter port of a macOS-only app.",
+    category: "Case Study",
+    tag: "Product Design",
+    link: "/case-studies/notbad-design",
+    actionText: "Read Case Study",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The brief</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Port Trace — a beloved macOS-only Markdown writer built on a web engine — to every desktop as a pure-Flutter app, without losing the one thing that makes it special: an interface that gets out of the way of the words. The case study covers the full design system (color, type, motion, and layout tokens), the concealment engine's UX, the state machines behind the document trust model, and a decision log of what was chosen and why.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The condensed case study is on this site; the fully detailed version — with Mermaid diagrams, complete token tables, and the element inventory — lives in the repository's docs.</p>
+        </section>
+      </div>
+    `,
+    image: "/notbad-palette.png",
+  },
+  {
     id: "c0",
     title: "ContentFlow",
     description: "A role-based content operations platform with 30+ dashboards, powering multi-language content production end to end.",
@@ -391,6 +413,39 @@ export const allWorks = [
       </div>
     `,
     image: "/openweave-app.png",
+  },
+  {
+    id: "o5",
+    title: "NotBad",
+    description: "A lightweight, cross-platform Markdown writer for Windows, macOS, and Linux — a pure-Flutter port of the macOS-only Trace, where syntax marks conceal themselves and the words are the interface.",
+    category: "Open Source",
+    tag: "Creator",
+    link: "https://github.com/nagubathula/NotBad",
+    actionText: "View Repository",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">A quiet place to write — on every desktop</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Markdown editors make you choose: stare at raw syntax, or split the screen with a preview pane. NotBad does neither. Marks like <code class="font-mono text-sm">**</code> and <code class="font-mono text-sm">#</code> fade as you type, what remains reads like the finished piece, and every bit of chrome recedes until you reach for it. It's a from-scratch, pure-Flutter port of the macOS-only Trace — no web view, no CodeMirror — so one Dart codebase behaves identically on Windows, macOS, and Linux.</p>
+          <img src="/notbad-demo.gif" alt="NotBad demo — sidebar, command palette, view modes, live styling, focus mode, and accent colors" class="w-full rounded-2xl mt-6 border border-foreground/[0.05]" loading="lazy" />
+          <p class="text-xs sm:text-sm font-mono text-foreground/50 mt-3">The app driving itself: sidebar, command palette, three view modes, live styling, focus mode, find, and accent switching.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it does</h2>
+          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
+            <li><span class="font-semibold text-foreground">Concealed syntax with a caret-line reveal</span> — three view modes one keystroke apart: styled with marks hidden (the caret's line reveals its marks so editing stays predictable), styled with marks visible, and plain monospace source.</li>
+            <li><span class="font-semibold text-foreground">Everything within reach, nothing in view</span> — a fuzzy command palette, keyboard-driven file sidebar, hover table of contents, find &amp; replace with live highlights, and a floating toolbar that fades while you type.</li>
+            <li><span class="font-semibold text-foreground">Trustworthy with files</span> — session restore, autosave, crash-safe untitled drafts, external-change detection, CRLF/LF preservation, and single-instance document handoff. Plain .md files, no lock-in.</li>
+            <li><span class="font-semibold text-foreground">A writer's editor</span> — smart list continuation, auto-pairing, focus mode with typewriter scrolling, smart typography, Copy as Rich Text, and HTML export.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Under the hood</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The upstream app is ~28k lines of Swift wrapped around ~14.6k lines of TypeScript; NotBad re-imagines it in ~3.5k lines of Dart. A custom <code class="font-mono text-sm">TextEditingController</code> styles Markdown live with per-line span caching, concealed marks stay in the text (painted invisible) so caret math never drifts from the file, and the chrome — hidden title bar, custom caption buttons, receding toolbar — is drawn by the app itself. Ships with an Inno Setup installer, "Open with NotBad" shell integration, CI builds for all three platforms, and an in-app update check against GitHub releases.</p>
+        </section>
+      </div>
+    `,
+    image: "/notbad-editor.png",
   },
   {
     id: "o1",
