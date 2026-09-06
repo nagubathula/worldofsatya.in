@@ -382,39 +382,6 @@ export const allWorks = [
 
   // Open Source
   {
-    id: "o0",
-    title: "OpenWeave",
-    description: "An open-source design editor that opens native Figma (.fig) and Pencil (.pen) files, with built-in AI that builds designs from chat, real-time P2P collaboration, and a headless React SDK for building custom editors.",
-    category: "Open Source",
-    tag: "Creator",
-    link: "https://github.com/nagubathula/OpenWeave",
-    actionText: "View Repository",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Why I built it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Design tools are closed ecosystems: your files live in someone else's cloud, and automating anything means fighting a plugin sandbox. OpenWeave is my answer — a design editor that treats the design file as an open, inspectable document you own, and the editor itself as a programmable toolkit rather than a walled garden.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it does</h2>
-          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
-            <li><span class="font-semibold text-foreground">Opens native design files</span> — reads and writes Figma <code class="font-mono text-sm">.fig</code> and Pencil <code class="font-mono text-sm">.pen</code> documents, with copy &amp; paste between apps.</li>
-            <li><span class="font-semibold text-foreground">AI builds designs</span> — describe what you want in chat and 90+ tools create and modify nodes. Works with Anthropic, OpenAI, Google AI, OpenRouter, and compatible endpoints.</li>
-            <li><span class="font-semibold text-foreground">Fully programmable</span> — headless CLI, XPath queries over the node tree, Figma Plugin API support, and an MCP server so AI agents like Claude Code can drive the editor.</li>
-            <li><span class="font-semibold text-foreground">Design-to-code</span> — export selections as JSX/Tailwind, extract design tokens, lint naming, layout, and accessibility.</li>
-            <li><span class="font-semibold text-foreground">Real-time collaboration</span> — peer-to-peer over WebRTC with cursors, presence, and follow mode. No server, no account.</li>
-            <li><span class="font-semibold text-foreground">React SDK</span> — headless components and composables for embedding the editor into other apps or building custom editing surfaces.</li>
-          </ul>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Under the hood</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">A monorepo of focused packages — scene graph, file-format codecs, core engine, React bindings, CLI, and MCP server — built with Next.js and TypeScript. Auto layout and CSS Grid run on Yoga WASM, and the desktop app ships as a ~7&nbsp;MB Tauri v2 binary for macOS, Windows, and Linux, with the same code running in the browser as a PWA.</p>
-        </section>
-      </div>
-    `,
-    image: "/openweave-app.png",
-  },
-  {
     id: "o5",
     title: "NotBad",
     description: "A lightweight, cross-platform Markdown writer for Windows, macOS, and Linux — a pure-Flutter port of the macOS-only Trace, where syntax marks conceal themselves and the words are the interface.",
@@ -446,6 +413,39 @@ export const allWorks = [
       </div>
     `,
     image: "/notbad-editor.png",
+  },
+  {
+    id: "o0",
+    title: "OpenWeave",
+    description: "An open-source design editor that opens native Figma (.fig) and Pencil (.pen) files, with built-in AI that builds designs from chat, real-time P2P collaboration, and a headless React SDK for building custom editors.",
+    category: "Open Source",
+    tag: "Creator",
+    link: "https://github.com/nagubathula/OpenWeave",
+    actionText: "View Repository",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Why I built it</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Design tools are closed ecosystems: your files live in someone else's cloud, and automating anything means fighting a plugin sandbox. OpenWeave is my answer — a design editor that treats the design file as an open, inspectable document you own, and the editor itself as a programmable toolkit rather than a walled garden.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it does</h2>
+          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
+            <li><span class="font-semibold text-foreground">Opens native design files</span> — reads and writes Figma <code class="font-mono text-sm">.fig</code> and Pencil <code class="font-mono text-sm">.pen</code> documents, with copy &amp; paste between apps.</li>
+            <li><span class="font-semibold text-foreground">AI builds designs</span> — describe what you want in chat and 90+ tools create and modify nodes. Works with Anthropic, OpenAI, Google AI, OpenRouter, and compatible endpoints.</li>
+            <li><span class="font-semibold text-foreground">Fully programmable</span> — headless CLI, XPath queries over the node tree, Figma Plugin API support, and an MCP server so AI agents like Claude Code can drive the editor.</li>
+            <li><span class="font-semibold text-foreground">Design-to-code</span> — export selections as JSX/Tailwind, extract design tokens, lint naming, layout, and accessibility.</li>
+            <li><span class="font-semibold text-foreground">Real-time collaboration</span> — peer-to-peer over WebRTC with cursors, presence, and follow mode. No server, no account.</li>
+            <li><span class="font-semibold text-foreground">React SDK</span> — headless components and composables for embedding the editor into other apps or building custom editing surfaces.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Under the hood</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">A monorepo of focused packages — scene graph, file-format codecs, core engine, React bindings, CLI, and MCP server — built with Next.js and TypeScript. Auto layout and CSS Grid run on Yoga WASM, and the desktop app ships as a ~7&nbsp;MB Tauri v2 binary for macOS, Windows, and Linux, with the same code running in the browser as a PWA.</p>
+        </section>
+      </div>
+    `,
+    image: "/openweave-app.png",
   },
   {
     id: "o1",

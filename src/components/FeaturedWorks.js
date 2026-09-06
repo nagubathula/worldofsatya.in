@@ -8,8 +8,9 @@ import { motion } from "framer-motion";
 import { allWorks } from "@/data/works";
 
 // Flagship picks shown on the homepage — one for each target role:
-// generative AI (OpenWeave), design sprint (Redantio), product design (KLU PAS)
-const FEATURED_IDS = ["o0", "p1", "p3"];
+// product design + engineering (NotBad), generative AI (OpenWeave),
+// design sprint (Redantio), product design (KLU PAS)
+const FEATURED_IDS = ["o5", "o0", "p1", "p3"];
 
 export default function FeaturedWorks({ limit }) {
   const featured = FEATURED_IDS.map((id) => allWorks.find((w) => w.id === id)).filter(Boolean);
