@@ -68,6 +68,9 @@ export default function BottomNav() {
     { name: "Contact", href: "mailto:nagubathula.satyasai@gmail.com", icon: <Mail size={18} /> },
   ];
 
+  // The compact homepage has its own navigation and contact action.
+  if (pathname === "/") return null;
+
   return (
     <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 px-2 w-full max-w-fit" suppressHydrationWarning>
       <motion.nav

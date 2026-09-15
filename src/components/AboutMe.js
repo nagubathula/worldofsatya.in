@@ -29,19 +29,19 @@ const stats = [
 
 const pillars = [
   {
-    title: "Frontend Engineering",
+    title: "Design Technology",
     description:
-      "Pixel-perfect, motion-rich interfaces built with React, Next.js, and Tailwind — engineered to feel as good as they look.",
+      "Turning product ideas into interactive prototypes, reusable components, and production interfaces with React, Next.js, and Tailwind.",
+  },
+  {
+    title: "AI Engineering",
+    description:
+      "Building generative AI pipelines and automation tools with ComfyUI, Stable Diffusion, and structured prompting — connecting models to the workflows teams use every day.",
   },
   {
     title: "Product Design",
     description:
-      "From brand identity to design systems — I've designed for startups, government, e-commerce, and open-source communities.",
-  },
-  {
-    title: "Generative AI",
-    description:
-      "Multi-modal AI video pipelines and automation tools built on ComfyUI, Stable Diffusion, and structured prompting for models like Veo 3 and Wan 2.2.",
+      "Shaping how products look, feel, and work — from brand identity to design systems for startups, government, e-commerce, and open-source communities.",
   },
 ];
 
@@ -81,12 +81,13 @@ export default function AboutMe() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
             <User size={14} /> About
           </div>
-          <h1 className="text-4xl sm:text-6xl font-semibold text-foreground tracking-tight mb-4 sm:mb-6">
-            The AI/UI Guy.
+          <h1 className="text-4xl sm:text-6xl font-semibold leading-[1.06] text-foreground tracking-tight mb-4 sm:mb-6">
+            <span className="block">Design Technologist</span>{" "}
+            <span className="block">&amp; AI Engineer.</span>
           </h1>
           <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
-            Engineering AI to build better and faster products — from pixel-perfect
-            interfaces to multi-modal generative pipelines.
+            I connect design and code to build interfaces, interactive prototypes,
+            and AI tools people can use.
           </p>
         </motion.div>
 
@@ -106,15 +107,21 @@ export default function AboutMe() {
           <div className="flex flex-col gap-4 text-base sm:text-lg text-foreground/70 leading-relaxed">
             <p>
               I&apos;m <span className="font-semibold text-foreground">Satya Sai Nagubathula</span> —
-              a Generative AI Engineer and Creative Lead at NXTWAVE Disruptive Technologies,
-              working at the intersection of frontend engineering, product design, and
-              generative AI.
+              a Design Technologist and AI Engineer. I work across product design,
+              frontend engineering, and generative AI to take ideas from early
+              exploration to working products.
+            </p>
+            <p>
+              At NXTWAVE Disruptive Technologies, I work as a Generative AI Engineer
+              and Creative Lead, building AI production pipelines and internal tools
+              that help teams create content at scale.
             </p>
             <p>
               My journey started in design — brand identities, UI, and Figma — and grew
               through hardware security research, full-stack development, and government
-              and startup product work. Today I lead AI production pipelines that scale
-              digital content creation, and build the internal tools that make it fast.
+              and startup product work. That path shapes how I work today: exploring
+              an idea through design, testing it in code, and building the systems
+              that bring it to life.
             </p>
             <p>
               Along the way I&apos;ve served 280+ clients across six years of design and

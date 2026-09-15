@@ -13,7 +13,7 @@ export default function Footer() {
     >
       <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
       <div suppressHydrationWarning>
-        <p className="text-xs sm:text-sm font-mono text-foreground/40 mb-3 sm:mb-4">Open for Frontend Engineering, Product Design &amp; Generative AI roles</p>
+        <p className="text-xs sm:text-sm font-mono text-foreground/40 mb-3 sm:mb-4">Open for Design Technologist &amp; AI Engineer roles</p>
         <motion.a
           href="mailto:nagubathula.satyasai@gmail.com"
           initial="rest"
@@ -21,7 +21,7 @@ export default function Footer() {
           animate="rest"
           className="inline-block text-4xl sm:text-6xl md:text-7xl font-medium text-foreground tracking-tight"
         >
-          <span className="sr-only">Let's Talk.</span>
+          <span className="sr-only">Let&apos;s Talk.</span>
           <span aria-hidden="true" className="flex">
             {"Let's Talk.".split("").map((ch, i) => (
               <span key={i} className="relative inline-block overflow-hidden">

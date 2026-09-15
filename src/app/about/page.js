@@ -5,9 +5,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "About | Satya Sai Nagubathula",
+  title: "About | Satya Sai Nagubathula — Design Technologist & AI Engineer",
   description:
-    "Generative AI Engineer and Creative Lead working at the intersection of frontend engineering, product design, and generative AI.",
+    "Meet Satya Sai Nagubathula, a Design Technologist and AI Engineer connecting product design, frontend engineering, and generative AI to build working products.",
 };
 
 export default function AboutPage() {
