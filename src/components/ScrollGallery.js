@@ -31,7 +31,7 @@ const edgeFade = {
   WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
 };
 
-function GalleryRow({ items, direction = "left", duration = 45 }) {
+function GalleryRow({ items, direction = "left", duration = 45, compact }) {
   // Four copies + a one-copy-width (-25%) CSS loop = seamless infinite scroll with
   // enough track to cover wide viewports (2 copies run out past ~1300px).
   // CSS animation (vs framer) lets hover pause the row via .marquee-row.
@@ -46,7 +46,7 @@ function GalleryRow({ items, direction = "left", duration = 45 }) {
         {doubled.map((item, i) => (
           <div
             key={`${item.id}-${i}`}
-            className="relative h-44 sm:h-52 rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border border-foreground/[0.04] bg-foreground/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 ease-out hover:scale-[1.04] hover:-translate-y-1 hover:shadow-[0_16px_40px_rgb(0,0,0,0.14)] hover:z-10"
+            className={`relative ${compact ? 'h-20 sm:h-28' : 'h-44 sm:h-52'} rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border border-foreground/[0.04] bg-foreground/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 ease-out hover:scale-[1.04] hover:-translate-y-1 hover:shadow-[0_16px_40px_rgb(0,0,0,0.14)] hover:z-10`}
           >
             <img
               src={item.src}
@@ -82,18 +82,18 @@ const itemAnim = {
   },
 };
 
-export default function ScrollGallery() {
+export default function ScrollGallery({ compact = false }) {
   return (
     <motion.section
       variants={container}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full py-12 sm:py-20"
+      className={`w-full ${compact ? 'py-4 sm:py-6' : 'py-12 sm:py-20'}`}
     >
       <motion.div variants={itemAnim} className="flex flex-col gap-4 sm:gap-6">
-        <GalleryRow items={topRow} direction="left" duration={45} />
-        <GalleryRow items={bottomRow} direction="right" duration={55} />
+        <GalleryRow items={topRow} direction="left" duration={45} compact={compact} />
+        {!compact && <GalleryRow items={bottomRow} direction="right" duration={55} compact={compact} />}
       </motion.div>
     </motion.section>
   );

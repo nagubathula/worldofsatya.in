@@ -12,31 +12,30 @@ body {
 @layer base {
   :root {
     --foreground: #111111;
-    --background: #F5F5F5;
-    /* RGB triplets so Tailwind opacity modifiers (bg-background/70, text-foreground/60, ...) work */
+    --background: #ffffff;
     --foreground-rgb: 17 17 17;
-    --background-rgb: 245 245 245;
+    --background-rgb: 255 255 255;
+
+    /* Apple Frosted Glass Tokens — Light */
+    --glass-surface: rgba(255, 255, 255, 0.85);
+    --glass-surface-hover: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-border-subtle: rgba(0, 0, 0, 0.04);
+    --glass-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --glass-blur: blur(24px) saturate(180%);
   }
 
-  :root.theme-dark {
-    --foreground: #F5F5F5;
-    --background: #111111;
-    --foreground-rgb: 245 245 245;
-    --background-rgb: 17 17 17;
-  }
+
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    /* Soften font rendering for that premium look */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Smooth transitions for theme changes */
-    transition: color 2s ease-in-out, background-color 2s ease-in-out, border-color 2s ease-in-out, fill 2s ease-in-out;
+    transition: color 250ms ease, background-color 250ms ease, border-color 250ms ease;
   }
   
-  /* Hide the default cursor only while the custom cursor is active
-     (CustomCursor adds this class; it skips mobile and reduced-motion users,
-     who keep their native pointer) */
+  /* Hide the default cursor only while custom cursor is active on desktop */
   @media (min-width: 769px) {
     html.custom-cursor-active *,
     html.custom-cursor-active *::before,
@@ -46,30 +45,35 @@ body {
   }
 }
 
+@layer utilities {
+  .glass {
+    background: var(--glass-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-subtle {
+    background: var(--glass-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-subtle);
+    box-shadow: var(--glass-shadow);
+  }
+}
+
 ::selection {
   background: #111111;
-  color: #F5F5F5;
+  color: #ffffff;
 }
 
-@keyframes driftRight {
-  from { transform: translateX(-150vw); }
-  to { transform: translateX(150vw); }
+:root.theme-dark ::selection {
+  background: #ffffff;
+  color: #111111;
 }
 
-@keyframes driftLeft {
-  from { transform: translateX(150vw); }
-  to { transform: translateX(-150vw); }
-}
-
-.cloud-drifting-right {
-  animation: driftRight linear infinite;
-}
-
-.cloud-drifting-left {
-  animation: driftLeft linear infinite;
-}
-
-/* Gallery marquee — CSS-driven so hover can pause it (4 copies, shift one copy width) */
+/* Gallery marquee — CSS-driven so hover can pause it */
 @keyframes marqueeLeft {
   from { transform: translateX(0); }
   to { transform: translateX(-25%); }
@@ -97,85 +101,5 @@ body {
   .marquee-left,
   .marquee-right {
     animation: none;
-  }
-}
-
-/* ---- Sky effects (stars, shooting star, rain, snow, lightning) ---- */
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.9; }
-}
-
-.star {
-  position: absolute;
-  border-radius: 9999px;
-  background: #fff;
-  animation: twinkle ease-in-out infinite;
-}
-
-@keyframes shootingStar {
-  0% { transform: translate3d(0, 0, 0) rotate(-30deg); opacity: 0; }
-  1% { opacity: 1; }
-  5% { transform: translate3d(-55vw, 32vh, 0) rotate(-30deg); opacity: 0; }
-  100% { transform: translate3d(-55vw, 32vh, 0) rotate(-30deg); opacity: 0; }
-}
-
-.shooting-star {
-  position: absolute;
-  width: 90px;
-  height: 1.5px;
-  border-radius: 9999px;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
-  animation: shootingStar 34s linear infinite;
-}
-
-@keyframes rainFall {
-  from { transform: translate3d(1.5vw, -25vh, 0); }
-  to { transform: translate3d(-2.5vw, 115vh, 0); }
-}
-
-.rain-drop {
-  position: absolute;
-  top: 0;
-  width: 1.5px;
-  height: 13vh;
-  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.65));
-  animation: rainFall linear infinite;
-}
-
-@keyframes snowFall {
-  0% { transform: translate3d(0, -8vh, 0); }
-  50% { transform: translate3d(2.5vw, 50vh, 0); }
-  100% { transform: translate3d(-1.5vw, 108vh, 0); }
-}
-
-.snow-flake {
-  position: absolute;
-  top: 0;
-  border-radius: 9999px;
-  background: #fff;
-  filter: blur(0.5px);
-  animation: snowFall linear infinite;
-}
-
-@keyframes lightningFlash {
-  0%, 84%, 88%, 100% { opacity: 0; }
-  85% { opacity: 0.5; }
-  86% { opacity: 0.08; }
-  87% { opacity: 0.32; }
-}
-
-.lightning {
-  animation: lightningFlash 9s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .star,
-  .shooting-star,
-  .rain-drop,
-  .snow-flake,
-  .lightning {
-    animation: none !important;
   }
 }

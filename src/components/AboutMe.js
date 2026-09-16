@@ -4,19 +4,7 @@ import Image from "next/image";
 import { User } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedButton from "./AnimatedButton";
-import useWeatherTheme, { THEMES } from "@/hooks/useWeatherTheme";
-
-// Portrait follows the live sky theme, like the background does
-const themePortraits = {
-  [THEMES.DAY_CLEAR]: "/portraits/sky-day.jpg",
-  [THEMES.DAY_CLOUDY]: "/portraits/sky-day.jpg",
-  [THEMES.SNOW]: "/portraits/sky-day.jpg",
-  [THEMES.RAIN]: "/portraits/sky-day.jpg",
-  [THEMES.DAWN]: "/portraits/sky-sunset.jpg",
-  [THEMES.SUNSET]: "/portraits/sky-sunset.jpg",
-  [THEMES.NIGHT_CLEAR]: "/portraits/sky-night.jpg",
-  [THEMES.NIGHT_CLOUDY]: "/portraits/sky-night.jpg",
-};
+import { useTheme } from "@/components/ThemeProvider";
 
 const stats = [
   { value: "6", label: "Years of experience" },
@@ -64,8 +52,8 @@ const itemAnim = {
 };
 
 export default function AboutMe() {
-  const { theme } = useWeatherTheme();
-  const portrait = themePortraits[theme] ?? "/portraits/sky-day.jpg";
+  const { theme } = useTheme();
+  const portrait = theme === "dark" ? "/portraits/sky-night.jpg" : "/portraits/sky-day.jpg";
 
   return (
     <motion.section
@@ -93,7 +81,7 @@ export default function AboutMe() {
 
         {/* Portrait + Bio */}
         <motion.div variants={itemAnim} className="flex flex-col gap-8 sm:gap-10">
-          <div className="relative w-full max-w-sm aspect-[4/5] rounded-3xl overflow-hidden border border-foreground/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+          <div className="relative w-full max-w-sm aspect-[4/5] rounded-3xl overflow-hidden border border-foreground/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
             <Image
               key={portrait}
               src={portrait}
@@ -142,7 +130,7 @@ export default function AboutMe() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="flex flex-col gap-1 p-4 sm:p-6 bg-background rounded-2xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+              className="flex flex-col gap-1 p-4 sm:p-6 bg-background rounded-2xl border border-foreground/[0.06] shadow-[0_8px_30px_rgb(0,0,0,0.03)]"
             >
               <p className="text-2xl sm:text-4xl font-semibold text-foreground tracking-tight">{stat.value}</p>
               <p className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-foreground/50 leading-snug">{stat.label}</p>
@@ -152,7 +140,7 @@ export default function AboutMe() {
 
         {/* Teaching */}
         <motion.div variants={itemAnim} className="flex flex-col gap-3">
-          <div className="relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-foreground/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+          <div className="relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-foreground/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
             <Image
               src="/portraits/genai-training.jpg"
               alt="Satya Sai Nagubathula leading a Gen AI training session"
@@ -172,7 +160,7 @@ export default function AboutMe() {
             {pillars.map((pillar) => (
               <div
                 key={pillar.title}
-                className="p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+                className="p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.06] shadow-[0_8px_30px_rgb(0,0,0,0.03)]"
               >
                 <h3 className="text-lg sm:text-xl font-semibold text-foreground tracking-tight mb-2">
                   {pillar.title}

@@ -63,7 +63,7 @@ export default function CustomCursor() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -72,16 +72,17 @@ export default function CustomCursor() {
           opacity: isVisible ? 1 : 0
         }}
         animate={{
-          width: isHovering ? 64 : 32,
-          height: isHovering ? 64 : 32,
-          backgroundColor: isHovering ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)",
-          border: isHovering ? "1px solid transparent" : "1px solid rgba(255, 255, 255, 0.5)",
+          width: isHovering ? 48 : 28,
+          height: isHovering ? 48 : 28,
+          backgroundColor: isHovering ? "rgba(var(--foreground-rgb) / 0.08)" : "rgba(var(--foreground-rgb) / 0.03)",
+          border: isHovering ? "1px solid rgba(var(--foreground-rgb) / 0.2)" : "1px solid rgba(var(--foreground-rgb) / 0.15)",
+          backdropFilter: "blur(4px)",
         }}
-        transition={{ type: "tween", duration: 0.15 }}
+        transition={{ type: "spring", stiffness: 350, damping: 25 }}
       />
 
       <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[10000] hidden md:block mix-blend-difference bg-background"
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[10000] hidden md:block bg-foreground/75"
         style={{
           x: cursorX,
           y: cursorY,
@@ -90,8 +91,9 @@ export default function CustomCursor() {
           opacity: isVisible ? 1 : 0
         }}
         animate={{
-          width: isHovering ? 0 : 8,
-          height: isHovering ? 0 : 8,
+          width: isHovering ? 5 : 6,
+          height: isHovering ? 5 : 6,
+          opacity: isHovering ? 0.3 : 0.8,
         }}
         transition={{ type: "tween", duration: 0.15 }}
       />

@@ -91,10 +91,10 @@ export default function ExperienceTimeline({ limit }) {
               key={i}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-              className="flex flex-col gap-3 sm:gap-6 p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300"
+              className="flex flex-col gap-3 sm:gap-6 p-6 sm:p-8 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300"
             >
               <div>
-                <span className="text-xs sm:text-sm font-mono text-foreground/50 bg-foreground/5 px-2.5 py-1 rounded-full">{exp.year}</span>
+                <span className="text-xs sm:text-sm font-mono text-foreground/60 bg-foreground/[0.05] border border-foreground/[0.06] px-3 py-1 rounded-full">{exp.year}</span>
               </div>
               <div className="w-full">
                 <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight mb-1">{exp.role}</h3>
@@ -119,7 +119,7 @@ export default function ExperienceTimeline({ limit }) {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col gap-1 p-4 sm:p-6 bg-background rounded-2xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+                className="flex flex-col gap-1 p-4 sm:p-6 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-2xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_8px_24px_-6px_rgba(0,0,0,0.04)]"
               >
                 <span className="text-2xl sm:text-4xl font-semibold text-foreground tracking-tight">{stat.value}</span>
                 <span className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-foreground/50 leading-snug">{stat.label}</span>

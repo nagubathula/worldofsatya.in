@@ -469,7 +469,7 @@ export default function ParallaxBackground() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.5 }}
-          className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40"
+          className="fixed top-3.5 right-4 sm:top-5 sm:right-6 z-40"
           title={
             override
               ? "Previewing a sky — click to cycle. Your real sky returns shortly."
@@ -479,7 +479,7 @@ export default function ParallaxBackground() {
           <button
             type="button"
             onClick={cycleSky}
-            className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-foreground/10 shadow-sm font-mono text-[10px] sm:text-xs text-foreground/60 cursor-pointer select-none transition-colors duration-300 hover:bg-background/80 hover:text-foreground/80"
+            className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/50 backdrop-blur-xl border border-foreground/10 shadow-[0_4px_20px_rgba(0,0,0,0.06)] font-mono text-[10px] sm:text-xs text-foreground/70 cursor-pointer select-none transition-all duration-300 hover:bg-background/75 hover:text-foreground hover:scale-[1.02]"
           >
             <span className="relative flex h-1.5 w-1.5 shrink-0">
               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${override ? "bg-amber-500" : "bg-emerald-500"}`}></span>

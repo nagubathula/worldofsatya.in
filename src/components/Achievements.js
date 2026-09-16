@@ -86,12 +86,12 @@ export default function Achievements({ limit }) {
                 suppressHydrationWarning
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className={`group flex flex-col p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 ${isLink ? 'cursor-pointer block' : ''}`}
+                className={`group flex flex-col p-6 sm:p-8 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 ${isLink ? 'cursor-pointer block' : ''}`}
               >
                 <div className="flex justify-between items-start mb-3 sm:mb-4" suppressHydrationWarning>
-                  <div suppressHydrationWarning>{item.icon}</div>
+                  <div suppressHydrationWarning className="p-2 rounded-2xl bg-foreground/[0.04] border border-foreground/[0.06]">{item.icon}</div>
                   {isLink && (
-                    <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors" />
+                    <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   )}
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-foreground tracking-tight mb-1.5 sm:mb-2">{item.title}</h3>

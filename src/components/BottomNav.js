@@ -76,7 +76,7 @@ export default function BottomNav() {
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-2 bg-background/90 backdrop-blur-2xl border border-foreground/15 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.18)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 rounded-full border border-foreground/10 bg-background/70 backdrop-blur-2xl shadow-[0_16px_36px_-8px_rgba(0,0,0,0.18),0_0_0_1px_rgba(255,255,255,0.2)] overflow-x-auto max-w-[92vw] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {navItems.map((item) => (
           <DockItem 

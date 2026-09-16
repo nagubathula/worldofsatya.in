@@ -90,15 +90,22 @@ export default function OpenSource({ limit }) {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className="group flex flex-col justify-between p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300 h-full"
+                className="group flex flex-col justify-between p-6 sm:p-8 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 h-full"
               >
-                <div className="flex justify-between items-start mb-1">
+                {/* macOS Traffic Lights */}
+                <div className="flex items-center gap-1.5 mb-4 opacity-50 group-hover:opacity-90 transition-opacity">
+                  <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
+                  <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
+                  <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
+                  <span className="text-[10px] font-mono text-foreground/40 ml-2 tracking-wide uppercase">{project.role}</span>
+                </div>
+
+                <div className="flex justify-between items-start mb-2">
                   <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">{project.name}</h3>
                   {project.link && (
-                    <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors" />
+                    <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   )}
                 </div>
-                <p className="text-[11px] sm:text-xs font-semibold text-foreground/40 uppercase tracking-widest mb-3 sm:mb-4">{project.role}</p>
                 <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{project.description}</p>
               </motion.div>
             );

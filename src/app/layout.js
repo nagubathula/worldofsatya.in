@@ -3,8 +3,8 @@ import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
-import ParallaxBackground from "@/components/ParallaxBackground";
-import ClickBurst from "@/components/ClickBurst";
+import SoundEffects from "@/components/SoundEffects";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -53,14 +53,38 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="overflow-x-clip max-w-full">
-      <body className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-transparent tracking-tight pb-24 overflow-x-clip w-full max-w-full relative`} suppressHydrationWarning>
-        <ParallaxBackground />
-        <CustomCursor />
-        <ClickBurst />
-        <SmoothScroll>
-          {children}
-          <BottomNav />
-        </SmoothScroll>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('portfolio-theme');
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var isDark = stored === 'dark' || (!stored && prefersDark);
+                  if (isDark) {
+                    document.documentElement.classList.add('theme-dark');
+                  } else {
+                    document.documentElement.classList.remove('theme-dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body
+        className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-background tracking-tight pb-24 overflow-x-clip w-full max-w-full relative antialiased`}
+        suppressHydrationWarning
+      >
+        <ThemeProvider>
+          <CustomCursor />
+          <SoundEffects />
+          <SmoothScroll>
+            {children}
+            <BottomNav />
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );

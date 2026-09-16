@@ -1,155 +1,149 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check, Code2, Eye, Layers3, Lightbulb, Mail, MousePointer2, Sparkles } from "lucide-react";
-import { landingProjects } from "@/data/landingProjects";
+import { ArrowUpRight, Code2, Layers3, Mail, Moon, Sparkles, Sun } from "lucide-react";
+import { useTheme } from "@/components/ThemeProvider";
 import styles from "./LandingStory.module.css";
 
-const nodeIcons = { idea: Lightbulb, system: Layers3, output: MousePointer2 };
-
-function SystemView({ project }) {
-  return (
-    <div className={styles.systemView}>
-      <div className={styles.visualLabel}><Code2 size={13} aria-hidden="true" /> Under the surface</div>
-      <ol className={styles.systemFlow} aria-label={`${project.name} system overview`}>
-        {project.engineering.nodes.map((node, index) => {
-          const Icon = nodeIcons[node.icon];
-          return (
-            <li key={node.label}>
-              <div className={styles.nodeIcon}><Icon size={22} strokeWidth={1.5} aria-hidden="true" /></div>
-              <strong>{node.label}</strong>
-              <span>{node.detail}</span>
-              {index < 2 && <ArrowRight className={styles.connector} size={18} aria-hidden="true" />}
-            </li>
-          );
-        })}
-      </ol>
-      <p className={styles.systemNote}>{project.engineering.note}</p>
-    </div>
-  );
-}
-
-function ContentFlowView() {
-  return (
-    <div className={styles.contentFlowView}>
-      <div className={styles.visualLabel}><Layers3 size={13} aria-hidden="true" /> Workspace overview</div>
-      <div className={styles.flowHeadline}>The right view.<br /><span>For every role.</span></div>
-      <div className={styles.roles} aria-label="Connected workspaces">
-        {["Writer", "Voice artist", "Editor", "Designer", "Manager", "Reviewer"].map((role) => (
-          <span key={role}><Check size={12} aria-hidden="true" /> {role}</span>
-        ))}
-      </div>
-      <p className={styles.systemNote}>One shared production journey</p>
-    </div>
-  );
-}
-
 export default function LandingStory() {
-  const [projectIndex, setProjectIndex] = useState(0);
-  const [lens, setLens] = useState("design");
-  const project = landingProjects[projectIndex];
-  const perspective = project[lens];
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className={styles.page}>
       <div className={styles.shell}>
+        {/* Apple Floating Glass Capsule Header */}
         <header className={styles.header}>
-          <Link href="/" className={styles.wordmark} aria-label="Satya — home">satya<span>.</span></Link>
-          <nav aria-label="Main navigation" className={styles.navigation}>
-            <Link href="/about">About</Link>
-            <Link href="/works">All work <ArrowUpRight size={13} aria-hidden="true" /></Link>
-          </nav>
+          <div className={styles.capsuleNav}>
+            <Link href="/" className={styles.wordmark} aria-label="Satya — home">
+              satya<span>.</span>
+            </Link>
+            <div className={styles.navDivider} aria-hidden="true" />
+            <nav aria-label="Main navigation" className={styles.navLinks}>
+              <Link href="/works">Works</Link>
+              <Link href="/about">About</Link>
+              <Link href="/case-studies">Case Studies</Link>
+            </nav>
+            <div className={styles.navDivider} aria-hidden="true" />
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className={styles.themeBtn}
+              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+            >
+              {theme === "dark" ? <Sun size={13} aria-hidden="true" /> : <Moon size={13} aria-hidden="true" />}
+            </button>
+            <a href="mailto:nagubathula.satyasai@gmail.com" className={styles.navCta}>
+              Let’s talk <ArrowUpRight size={13} aria-hidden="true" />
+            </a>
+          </div>
         </header>
 
+        {/* Main Editorial Hero */}
         <main id="main-content" className={styles.main}>
-          <section className={styles.intro} aria-labelledby="landing-heading">
-            <div className={styles.identity}>
-              <p className={styles.name}>Satya Sai Nagubathula</p>
-              <p className={styles.role}>Design Technologist <span>&amp; AI Engineer</span></p>
+          <section className={styles.heroPanel} aria-labelledby="landing-heading">
+            {/* Live Context & Identity */}
+            <div className={styles.identityLockup}>
+              <div className={styles.statusPill}>
+                <span className={styles.statusDot} aria-hidden="true" />
+                <span className={styles.statusCompany}>Generative AI Lead @ NxtWave</span>
+                <span className={styles.statusSep}>•</span>
+                <span className={styles.statusRole}>Design Technologist</span>
+              </div>
+              <span className={styles.authorName}>Satya Sai Nagubathula</span>
             </div>
+
+            {/* Exact Desired Headline */}
             <h1 id="landing-heading" className={styles.headline}>
-              I shape the<br />experience.<br />
-              <span>I build what<br />powers it.</span>
+              Design + Engineering.
+              <span>Currently building OpenWeave &amp; NotBad.</span>
             </h1>
-            <p className={styles.bio}>
-              From a sketch to a working product,<br className={styles.desktopBreak} /> I connect design, code, and AI.
-            </p>
-            <a href="mailto:nagubathula.satyasai@gmail.com" className={styles.contact}>
-              Let’s build something <ArrowUpRight size={17} aria-hidden="true" />
-            </a>
-            <p className={styles.experience}>6 years of making ideas real.</p>
-          </section>
 
-          <section className={styles.work} aria-label="Selected projects, through two perspectives">
-            <div className={styles.workHeading}>
-              <span>Selected work</span>
-              <span>Two lenses. One builder.</span>
+            {/* Narrative Story Bio */}
+            <p className={styles.bio}>
+              I’m Satya — operating at the boundary where interface craft, typography, and deep systems engineering converge. Leading Generative AI at NxtWave (2,000+ productions orchestrated) while building sovereign open tools for creators.
+            </p>
+
+            {/* Featured Builds: OpenWeave & NotBad */}
+            <div className={styles.buildCards}>
+              <Link href="/works/o0" className={styles.buildCard} title="Explore OpenWeave">
+                <div className={styles.buildCardHeader}>
+                  <div className={styles.buildBadge}>
+                    <Sparkles size={12} className={styles.badgeIcon} aria-hidden="true" />
+                    Open Canvas + AI
+                  </div>
+                  <span className={styles.cardArrow}>
+                    Explore <ArrowUpRight size={13} aria-hidden="true" />
+                  </span>
+                </div>
+                <h2 className={styles.cardTitle}>OpenWeave</h2>
+                <p className={styles.cardTagline}>Why should designs remain locked in proprietary clouds?</p>
+                <p className={styles.cardDesc}>
+                  An open-source Figma alternative that decodes raw .fig binaries into an open JSON scene graph connected to 90+ MCP tools for AI agents.
+                </p>
+                <div className={styles.cardTokens}>
+                  <span>Figma binary parser</span>
+                  <span className={styles.tokenDot}>•</span>
+                  <span>MCP Server</span>
+                  <span className={styles.tokenDot}>•</span>
+                  <span>React primitives</span>
+                </div>
+              </Link>
+
+              <Link href="/case-studies/notbad-design" className={styles.buildCard} title="Read NotBad case study">
+                <div className={styles.buildCardHeader}>
+                  <div className={styles.buildBadge}>
+                    <Code2 size={12} className={styles.badgeIcon} aria-hidden="true" />
+                    Native Markdown Writer
+                  </div>
+                  <span className={styles.cardArrow}>
+                    Case Study <ArrowUpRight size={13} aria-hidden="true" />
+                  </span>
+                </div>
+                <h2 className={styles.cardTitle}>NotBad</h2>
+                <p className={styles.cardTagline}>When modern writing apps became noisy notification centers.</p>
+                <p className={styles.cardDesc}>
+                  A distraction-free desktop editor built with 3,500 lines of pure Dart in Flutter, concealing Markdown syntax until your caret touches it.
+                </p>
+                <div className={styles.cardTokens}>
+                  <span>1.0s cold start</span>
+                  <span className={styles.tokenDot}>•</span>
+                  <span>10.8 MB installer</span>
+                  <span className={styles.tokenDot}>•</span>
+                  <span>Pure Flutter</span>
+                </div>
+              </Link>
             </div>
 
-            <article id="featured-project" className={styles.project} aria-label={project.name}>
-              <div className={styles.projectToolbar}>
-                <h2 className={styles.projectName}>{project.name}</h2>
-                <div className={styles.lenses} role="group" aria-label="Project perspective">
-                  <button type="button" aria-pressed={lens === "design"} aria-controls="project-perspective" onClick={() => setLens("design")}>
-                    <Eye size={14} aria-hidden="true" /> Design
-                  </button>
-                  <button type="button" aria-pressed={lens === "engineering"} aria-controls="project-perspective" onClick={() => setLens("engineering")}>
-                    <Code2 size={14} aria-hidden="true" /> Engineering
-                  </button>
-                </div>
+            {/* Bottom Actions & Quick Proof Anchors */}
+            <div className={styles.actionRow}>
+              <div className={styles.ctaGroup}>
+                <a href="mailto:nagubathula.satyasai@gmail.com" className={styles.primaryPill}>
+                  Let’s talk <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
+                <Link href="/works" className={styles.secondaryPill}>
+                  <Sparkles size={14} aria-hidden="true" /> All Works &amp; Archive
+                </Link>
               </div>
 
-              <div id="project-perspective" aria-live="polite" aria-atomic="true">
-                <div className={styles.visual} key={`${project.id}-${lens}`}>
-                  {lens === "engineering" ? (
-                    <SystemView project={project} />
-                  ) : project.image ? (
-                    <div className={styles.screenshotStage}>
-                      <Image
-                        src={project.image}
-                        alt={project.imageAlt}
-                        fill
-                        sizes="(min-width: 1100px) 600px, (min-width: 900px) 52vw, 92vw"
-                        className={styles.screenshot}
-                        priority={projectIndex === 0}
-                      />
-                    </div>
-                  ) : <ContentFlowView />}
-                </div>
-
-                <div className={styles.projectStory}>
-                  <h3>{perspective.title}</h3>
-                  <p>{perspective.description}</p>
-                  <div className={styles.storyBottom}>
-                    <span className={styles.evidence}><Sparkles size={12} aria-hidden="true" />{perspective.evidence}</span>
-                    <Link href={project.href} className={styles.projectLink}>
-                      Read the story <ArrowUpRight size={14} aria-hidden="true" />
-                      <span className="sr-only"> of {project.name}</span>
-                    </Link>
-                  </div>
-                </div>
+              <div className={styles.metaChips}>
+                <Link href="/ai-videos" className={styles.metaChip} title="View AI Video Orchestration">
+                  <Layers3 size={12} className={styles.chipIcon} aria-hidden="true" />
+                  2,000+ AI Video Pipelines
+                </Link>
+                <Link href="/about" className={styles.metaChip} title="About Satya">
+                  6y Craft · 280+ Clients
+                </Link>
               </div>
-            </article>
+            </div>
 
-            <div className={styles.projectPicker} role="group" aria-label="Choose a project">
-              {landingProjects.map((item, index) => (
-                <button
-                  type="button"
-                  key={item.id}
-                  aria-pressed={index === projectIndex}
-                  aria-controls="featured-project"
-                  onClick={() => setProjectIndex(index)}
-                >
-                  <span className={styles.projectNumber}>0{index + 1}</span>
-                  <span><strong>{item.name}</strong><span className={styles.category}>{item.category}</span></span>
-                </button>
-              ))}
+            <div className={styles.experienceStatus}>
+              <span className={styles.subtleText}>Available for select advisory &amp; generative engineering</span>
             </div>
           </section>
         </main>
 
+        {/* Footer: macOS / visionOS Status Bar */}
         <footer className={styles.footer}>
           <p><span className={styles.statusDot} aria-hidden="true" /> Currently at <span className={styles.employer}>NxtWave</span></p>
           <nav className={styles.footerLinks} aria-label="More about Satya">
@@ -164,8 +158,12 @@ export default function LandingStory() {
                 <Link href="/achievements">Achievements</Link>
               </nav>
             </details>
-            <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer">LinkedIn <ArrowUpRight size={12} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a>
-            <a href="mailto:nagubathula.satyasai@gmail.com" aria-label="Email Satya"><Mail size={16} aria-hidden="true" /></a>
+            <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer">
+              LinkedIn <ArrowUpRight size={11} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            <a href="mailto:nagubathula.satyasai@gmail.com" aria-label="Email Satya">
+              <Mail size={15} aria-hidden="true" />
+            </a>
           </nav>
         </footer>
       </div>

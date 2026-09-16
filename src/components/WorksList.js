@@ -41,16 +41,16 @@ export default function WorksList() {
   return (
     <div className="w-full max-w-3xl mx-auto flex flex-col gap-8 pb-20">
       
-      {/* Filters */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+      {/* Filters - Apple Segmented Control */}
+      <div className="flex flex-wrap items-center justify-center gap-1 p-1 rounded-full bg-foreground/[0.04] border border-foreground/[0.06] backdrop-blur-xl max-w-fit mx-auto mb-10">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setFilter(category)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-180 ${
               filter === category
-                ? "bg-foreground text-background shadow-md"
-                : "bg-foreground/5 text-foreground/70 hover:bg-foreground/10 hover:text-foreground"
+                ? "bg-foreground text-background shadow-sm"
+                : "text-foreground/65 hover:text-foreground hover:bg-foreground/[0.05]"
             }`}
           >
             {category}
@@ -65,47 +65,52 @@ export default function WorksList() {
             return (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                initial={{ opacity: 0, scale: 0.96, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                transition={{ duration: 0.3, type: "spring", bounce: 0.2 }}
+                exit={{ opacity: 0, scale: 0.96, y: -10 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
                 key={work.id}
               >
                 <Link href={`/works/${work.id}`} className="block group h-full">
-                  <div className="relative p-6 sm:p-10 bg-background rounded-3xl sm:rounded-[2rem] border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 group-hover:scale-[1.01] overflow-hidden">
-                    <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-center">
+                  <div className="relative p-6 sm:p-9 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 group-hover:scale-[1.008] overflow-hidden">
+                    {/* Subtle macOS Traffic Lights */}
+                    <div className="flex items-center gap-1.5 mb-5 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                      <span className="text-[11px] font-mono text-foreground/40 ml-2 tracking-wide uppercase">{work.tag}</span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center">
                       <div className="flex flex-col flex-1 h-full w-full justify-center">
-                        <div className="flex flex-wrap items-center gap-2 mb-4">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full bg-foreground/5 text-[10px] sm:text-xs font-semibold text-foreground/60 uppercase tracking-wider">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-foreground/5 text-[10px] sm:text-xs font-semibold text-foreground/70 uppercase tracking-wider border border-foreground/[0.06]">
                             {getIcon(work.category)}
                             {work.category}
                           </span>
-                          <span className="text-[10px] sm:text-xs font-semibold text-foreground/40 uppercase tracking-widest">
-                            {work.tag}
-                          </span>
                         </div>
                         
-                        <h3 className="text-2xl sm:text-4xl font-semibold text-foreground tracking-tight mb-4">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-3">
                           {work.title}
                         </h3>
                         
-                        <p className="text-foreground/70 text-base sm:text-lg max-w-2xl leading-relaxed mb-8">
+                        <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed mb-6">
                           {work.description}
                         </p>
                         
-                        <div className="inline-flex items-center gap-2 text-sm font-semibold text-foreground/50 group-hover:text-foreground transition-colors mt-auto">
-                          View Details
-                          <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                        <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-foreground/60 group-hover:text-foreground transition-colors mt-auto">
+                          View Case Study
+                          <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </div>
                       </div>
                       
                       {work.image && (
-                        <div className="w-full sm:w-[45%] md:w-[45%] aspect-video sm:aspect-[4/3] relative rounded-2xl overflow-hidden shrink-0 border border-foreground/[0.05] shadow-sm">
+                        <div className="w-full sm:w-[42%] aspect-video sm:aspect-[4/3] relative rounded-2xl overflow-hidden shrink-0 border border-foreground/[0.08] shadow-sm bg-foreground/5">
                           <Image 
                             src={work.image} 
                             alt={work.title} 
                             fill 
-                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out" 
                           />
                         </div>
                       )}
