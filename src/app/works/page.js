@@ -1,6 +1,5 @@
 import WorksList from "@/components/WorksList";
 import Footer from "@/components/Footer";
-import AppleNavbar from "@/components/AppleNavbar";
 
 export const metadata = {
   title: "Works | Satya Sai Nagubathula",
@@ -10,7 +9,6 @@ export const metadata = {
 export default function Works() {
   return (
     <div className="min-h-screen text-foreground font-sans selection:bg-foreground selection:text-background relative max-w-7xl mx-auto w-full px-4 sm:px-12">
-      <AppleNavbar />
 
       <main className="relative z-10 flex flex-col pt-8 sm:pt-14">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 mb-8 sm:mb-12 text-center flex flex-col items-center">

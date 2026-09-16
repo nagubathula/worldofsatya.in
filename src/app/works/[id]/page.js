@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowUpRight, BookOpen, Code, Briefcase } from "lucide-react";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import AppleNavbar from "@/components/AppleNavbar";
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
@@ -40,7 +39,6 @@ export default async function WorkDetailPage({ params }) {
 
   return (
     <div className="min-h-screen text-foreground font-sans selection:bg-foreground selection:text-background relative w-full">
-      <AppleNavbar />
 
       <main className="relative z-10 flex flex-col pt-8 sm:pt-14">
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-8 mb-12 sm:mb-16">

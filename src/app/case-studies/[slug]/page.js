@@ -1,7 +1,6 @@
 import { caseStudiesData } from '@/data/caseStudies';
 import { notFound } from 'next/navigation';
 import Footer from '@/components/Footer';
-import AppleNavbar from '@/components/AppleNavbar';
 
 export async function generateStaticParams() {
   return caseStudiesData.map((study) => ({
@@ -19,7 +18,6 @@ export default async function CaseStudyPage({ params }) {
 
   return (
     <div className="min-h-screen text-foreground font-sans selection:bg-foreground selection:text-background relative max-w-4xl mx-auto w-full px-4 sm:px-12">
-      <AppleNavbar />
 
       <main className="relative z-10 flex flex-col pt-8 sm:pt-14 pb-16">
         <header className="mb-10 sm:mb-16">
