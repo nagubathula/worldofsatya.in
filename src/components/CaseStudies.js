@@ -3,7 +3,7 @@
 import { ArrowUpRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import TiltCard from "@/components/TiltCard";
+
 
 export default function CaseStudies({ limit }) {
   const studies = [
@@ -85,37 +85,32 @@ export default function CaseStudies({ limit }) {
             const isLink = study.link !== "#";
             
             const CardContent = (
-              <TiltCard tiltIntensity={5}>
-                <motion.div
-                  whileHover={isLink ? { scale: 1.02 } : {}}
-                  transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                  className={`group block bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] ${isLink ? 'hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden h-full`}
-                >
-                  {/* macOS Traffic Lights */}
-                  <div className="flex items-center gap-1.5 mb-4 opacity-50 group-hover:opacity-90 transition-opacity">
-                    <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
-                    <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-                    <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
-                    <span className="text-[10px] font-mono text-foreground/40 ml-2 tracking-wide uppercase">{study.type}</span>
-                  </div>
+              <motion.div
+                whileHover={isLink ? { scale: 1.02 } : {}}
+                transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+                className={`group block bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] ${isLink ? 'hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden h-full`}
+              >
+                {/* Clean Tag */}
+                <div className="flex items-center gap-1.5 mb-4">
+                  <span className="text-[10px] font-medium text-foreground/50 tracking-wider uppercase">{study.type}</span>
+                </div>
 
-                  <div className="flex flex-col h-full justify-between">
-                    <div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight mb-2 sm:mb-3">
-                        {study.title}
-                      </h3>
-                      <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{study.description}</p>
-                    </div>
-                    {isLink && (
-                      <div className="mt-4 sm:mt-6 flex justify-end">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-foreground/5 flex items-center justify-center group-hover:bg-foreground transition-colors duration-300">
-                          <ArrowUpRight size={16} className="text-foreground/60 group-hover:text-background transition-colors" />
-                        </div>
-                      </div>
-                    )}
+                <div className="flex flex-col h-full justify-between">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight mb-2 sm:mb-3">
+                      {study.title}
+                    </h3>
+                    <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{study.description}</p>
                   </div>
-                </motion.div>
-              </TiltCard>
+                  {isLink && (
+                    <div className="mt-4 sm:mt-6 flex justify-end">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-foreground/5 flex items-center justify-center group-hover:bg-foreground transition-colors duration-300">
+                        <ArrowUpRight size={16} className="text-foreground/60 group-hover:text-background transition-colors" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
             );
 
             return isLink ? (

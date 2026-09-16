@@ -73,12 +73,9 @@ export default function WorksList() {
               >
                 <Link href={`/works/${work.id}`} className="block group h-full">
                   <div className="relative p-6 sm:p-9 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 group-hover:scale-[1.008] overflow-hidden">
-                    {/* Subtle macOS Traffic Lights */}
-                    <div className="flex items-center gap-1.5 mb-5 opacity-60 group-hover:opacity-100 transition-opacity">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                      <span className="text-[11px] font-mono text-foreground/40 ml-2 tracking-wide uppercase">{work.tag}</span>
+                    {/* Clean Tag */}
+                    <div className="flex items-center gap-1.5 mb-5">
+                      <span className="text-[11px] font-medium text-foreground/50 tracking-wider uppercase">{work.tag}</span>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center">

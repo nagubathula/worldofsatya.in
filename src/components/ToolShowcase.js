@@ -110,12 +110,9 @@ export default function ToolShowcase({ limit }) {
                     transition={{ type: "spring", duration: 0.4, bounce: 0 }}
                     className="group flex flex-col gap-5 p-6 sm:p-8 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 cursor-pointer h-full transition-all duration-300"
                   >
-                    {/* macOS Traffic Lights */}
-                    <div className="flex items-center gap-1.5 mb-1 opacity-50 group-hover:opacity-90 transition-opacity">
-                      <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
-                      <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-                      <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
-                      <span className="text-[10px] font-mono text-foreground/40 ml-2 tracking-wide uppercase">Proprietary Suite</span>
+                    {/* Clean Tag */}
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-[10px] font-medium text-foreground/50 tracking-wider uppercase">Proprietary Suite</span>
                     </div>
 
                     <div className="flex-1">

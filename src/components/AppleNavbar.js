@@ -20,7 +20,7 @@ export default function AppleNavbar() {
 
   return (
     <header className="sticky top-4 z-40 w-full flex items-center justify-center px-4 py-2 pointer-events-none">
-      <div className="pointer-events-auto inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-full bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] transition-all duration-200">
+      <div className="pointer-events-auto inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-full bg-background/80 backdrop-blur-2xl border border-foreground/[0.08] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)] transition-all duration-200">
         
         {/* If inner page, show sleek back button */}
         {!isHome && (
@@ -69,15 +69,12 @@ export default function AppleNavbar() {
 
         <div className="w-[1px] h-3.5 bg-foreground/10 mx-0.5" aria-hidden="true" />
 
-        {/* Theme Toggle */}
         <button
-          type="button"
           onClick={toggleTheme}
-          className="p-1.5 rounded-full text-foreground/60 hover:text-foreground hover:bg-foreground/[0.06] transition-colors cursor-pointer"
-          aria-label={theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance"}
-          title={theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance"}
+          className="inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-foreground/60 hover:text-foreground hover:bg-foreground/[0.06] transition-all"
+          aria-label="Toggle theme"
         >
-          {theme === "dark" ? <Sun size={13} aria-hidden="true" /> : <Moon size={13} aria-hidden="true" />}
+          {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
         </button>
 
         {/* Let's Talk CTA */}

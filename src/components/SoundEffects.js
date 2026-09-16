@@ -22,60 +22,38 @@ function getAudioContext() {
 }
 
 /**
- * Apple Haptic Click — crisp, tactile mechanical impulse
- * Similar to macOS Force Touch and iOS haptic selection
+ * Retro 8-Bit Coin Ping — Super Mario / Game Boy style
  */
-export function playClickSound() {
+export function play8BitCoinSound() {
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
     const now = ctx.currentTime;
 
-    // 1. Primary tactile sine transient (850Hz down to 120Hz)
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(850, now);
-    osc.frequency.exponentialRampToValueAtTime(120, now + 0.028);
+    osc.type = "square";
+    // B5 (987.77 Hz) to E6 (1318.51 Hz)
+    osc.frequency.setValueAtTime(987.77, now);
+    osc.frequency.setValueAtTime(1318.51, now + 0.08);
 
-    gain.gain.setValueAtTime(0.09, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.setValueAtTime(0.06, now + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.032);
-
-    // 2. Micro high-frequency noise impulse for tactile snap
-    const noiseDuration = 0.006;
-    const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * noiseDuration), ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) {
-      data[i] = (Math.random() * 2 - 1) * 0.035;
-    }
-
-    const noiseSrc = ctx.createBufferSource();
-    noiseSrc.buffer = buffer;
-
-    const noiseFilter = ctx.createBiquadFilter();
-    noiseFilter.type = "highpass";
-    noiseFilter.frequency.value = 1400;
-
-    noiseSrc.connect(noiseFilter);
-    noiseFilter.connect(ctx.destination);
-
-    noiseSrc.start(now);
-  } catch {
-    // Audio is decorative — never throw
-  }
+    osc.stop(now + 0.36);
+  } catch {}
 }
 
 /**
- * Apple Soft Pop — for theme toggles, tabs, and lens switching
+ * Retro 8-Bit Menu Blip — Game Boy / Pokémon menu selection
  */
-export function playPopSound(freq = 560) {
+export function play8BitBlipSound(freq = 587.33) {
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -84,19 +62,18 @@ export function playPopSound(freq = 560) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = "sine";
+    osc.type = "square";
     osc.frequency.setValueAtTime(freq, now);
-    osc.frequency.exponentialRampToValueAtTime(freq * 1.35, now + 0.02);
-    osc.frequency.exponentialRampToValueAtTime(freq * 0.75, now + 0.055);
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.8, now + 0.035);
 
-    gain.gain.setValueAtTime(0.07, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+    gain.gain.setValueAtTime(0.05, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.065);
+    osc.stop(now + 0.05);
   } catch {}
 }
 
@@ -104,32 +81,29 @@ export default function SoundEffects() {
   const lastPlayedRef = useRef(0);
 
   useEffect(() => {
-    // Listen for pointerdown or click on any interactive element
     const handlePointerDown = (e) => {
-      // Throttle rapid double-clicks (min 40ms interval)
       const now = Date.now();
-      if (now - lastPlayedRef.current < 40) return;
+      if (now - lastPlayedRef.current < 45) return;
 
       const target = e.target;
       if (!target || typeof target.closest !== "function") return;
 
-      // Check if clicking an interactive control
       const interactiveEl = target.closest(
-        'button, a, [role="button"], input[type="button"], input[type="submit"], .segmentedTab, .lensBtn'
+        'button, a, [role="button"], input[type="button"], input[type="submit"], .segmentedTab, .lensBtn, [data-retro-action]'
       );
 
       if (interactiveEl) {
         lastPlayedRef.current = now;
 
-        // If it's a theme button or tab, play the softer pop; otherwise play tactile click
-        const isThemeToggle = interactiveEl.getAttribute("aria-label")?.includes("appearance") ||
-                              interactiveEl.getAttribute("aria-label")?.includes("theme") ||
-                              interactiveEl.classList.contains("themeBtn");
+        const isPrimaryAction =
+          interactiveEl.classList?.contains("primaryPill") ||
+          interactiveEl.getAttribute("href")?.includes("mailto") ||
+          interactiveEl.getAttribute("data-retro-action") === "equip";
 
-        if (isThemeToggle) {
-          playPopSound(620);
+        if (isPrimaryAction) {
+          play8BitCoinSound();
         } else {
-          playClickSound();
+          play8BitBlipSound();
         }
       }
     };

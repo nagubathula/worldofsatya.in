@@ -1,20 +1,7 @@
-import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import BottomNav from "@/components/BottomNav";
 import SmoothScroll from "@/components/SmoothScroll";
-import CustomCursor from "@/components/CustomCursor";
-import SoundEffects from "@/components/SoundEffects";
 import { ThemeProvider } from "@/components/ThemeProvider";
-
-const geist = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
-});
+import AppleNavbar from "@/components/AppleNavbar";
 
 export const metadata = {
   metadataBase: new URL("https://worldofsatya.in"),
@@ -74,15 +61,13 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${geist.variable} ${jetbrainsMono.variable} font-sans text-foreground bg-background tracking-tight pb-24 overflow-x-clip w-full max-w-full relative antialiased`}
+        className={`font-sans text-foreground bg-background tracking-tight overflow-x-clip w-full max-w-full relative antialiased selection:bg-foreground selection:text-background`}
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <CustomCursor />
-          <SoundEffects />
+          <AppleNavbar />
           <SmoothScroll>
             {children}
-            <BottomNav />
           </SmoothScroll>
         </ThemeProvider>
       </body>

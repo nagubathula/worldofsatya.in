@@ -15,8 +15,8 @@ export default {
         offwhite: "rgb(var(--foreground-rgb) / <alpha-value>)",
       },
       fontFamily: {
-        sans: ["var(--font-geist)", "Inter", "sans-serif"],
-        mono: ["var(--font-jetbrains)", "monospace"],
+        sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "SF Pro Text", "system-ui", "sans-serif"],
+        mono: ["SFMono-Regular", "ui-monospace", "Menlo", "Monaco", "monospace"],
       },
     },
   },
