@@ -3,84 +3,98 @@
 import { useEffect, useState } from "react";
 
 export default function CRTDistortion() {
-  const [mapUrl, setMapUrl] = useState(null);
+  const [crtEnabled, setCrtEnabled] = useState(true);
 
   useEffect(() => {
-    const size = 256;
-    const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d");
-    const imgData = ctx.createImageData(size, size);
-    const data = imgData.data;
-
-    // Distortion amount (higher = more bulging)
-    const k = 0.2;
-
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        const nx = (x / size) * 2 - 1;
-        const ny = (y / size) * 2 - 1;
-        const r = Math.sqrt(nx * nx + ny * ny);
-        
-        let dx = 0;
-        let dy = 0;
-        
-        if (r < 1.5) {
-          const factor = 1 + k * r * r;
-          dx = nx * factor - nx;
-          dy = ny * factor - ny;
-        }
-
-        // Map to 0-255 (128 is neutral)
-        const rVal = Math.max(0, Math.min(255, 128 + dx * 128));
-        const gVal = Math.max(0, Math.min(255, 128 + dy * 128));
-
-        const idx = (y * size + x) * 4;
-        data[idx] = rVal;     // R -> X displacement
-        data[idx + 1] = gVal; // G -> Y displacement
-        data[idx + 2] = 0;    // B
-        data[idx + 3] = 255;  // A
+    try {
+      const stored = localStorage.getItem("portfolio-crt-v2");
+      if (stored === "false") {
+        setCrtEnabled(false);
       }
-    }
+    } catch {}
 
-    ctx.putImageData(imgData, 0, 0);
-    setMapUrl(canvas.toDataURL("image/png"));
-
-    // Add a class to the body that will be targeted by the global styles
-    document.body.classList.add("has-crt-distortion");
-
-    return () => {
-      document.body.classList.remove("has-crt-distortion");
+    const handleToggle = (e) => {
+      setCrtEnabled(e.detail);
     };
+
+    window.addEventListener("toggle-scanlines", handleToggle);
   }, []);
 
-  if (!mapUrl) return null;
+  useEffect(() => {
+    if (crtEnabled) {
+      document.body.classList.add("has-crt-distortion");
+    } else {
+      document.body.classList.remove("has-crt-distortion");
+    }
+  }, [crtEnabled]);
 
   return (
     <>
-      <svg style={{ position: "fixed", width: 0, height: 0, pointerEvents: "none", zIndex: -1 }}>
+      {/* Warm paper grain texture */}
+      <div className="paper-grain" aria-hidden="true" />
+
+      {/* SVG Z-Axis Spherical Lens Bulge Filter */}
+      <svg width="0" height="0" style={{ position: "fixed", top: 0, left: 0, width: 0, height: 0, pointerEvents: "none" }} aria-hidden="true">
         <defs>
-          <filter id="crt-bulge" x="-10%" y="-10%" width="120%" height="120%">
-            <feImage href={mapUrl} result="map" preserveAspectRatio="none" />
-            {/* The scale determines how strong the distortion is. Scale is based on screen pixels. */}
-            <feDisplacementMap 
-              in="SourceGraphic" 
-              in2="map" 
-              scale="40" 
-              xChannelSelector="R" 
-              yChannelSelector="G" 
-            />
+          <filter id="crt-z-bulge" x="-20%" y="-20%" width="140%" height="140%">
+            <feImage href="/crt-displacement.png" xlinkHref="/crt-displacement.png" result="displaceMap" preserveAspectRatio="none" />
+            <feDisplacementMap in="SourceGraphic" in2="displaceMap" scale="160" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </defs>
       </svg>
-      <style dangerouslySetInnerHTML={{ __html: `
-        .has-crt-distortion #crt-content {
-          filter: url(#crt-bulge);
-          transform: translateZ(0) scale(1.02); /* Force hardware acceleration and hide pulled edges */
-          min-height: 100vh;
-        }
-      `}} />
+
+      {crtEnabled && (
+        <>
+          {/* Subtle CRT scanlines */}
+          <div className="crt-scanlines" aria-hidden="true" />
+
+          {/* Gentle edge vignette - pushed to perimeter so navbar is 100% visible */}
+          <div className="crt-vignette" aria-hidden="true" />
+
+          {/* Curved Cathode Glass Glare */}
+          <div className="crt-glass-glare" aria-hidden="true" />
+
+          {/* Clean CRT Monitor Chassis Bezel with Gentle Curvature */}
+          <svg
+            className="crt-barrel-bezel"
+            viewBox="0 0 1000 600"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {/* Dark matte chassis mask with gentle curved tube opening */}
+            <path
+              fillRule="evenodd"
+              fill="#100e0c"
+              d="M 0,0 L 1000,0 L 1000,600 L 0,600 Z
+                 M 20,16
+                 Q 500,8 980,16
+                 Q 990,16 992,26
+                 Q 996,300 992,574
+                 Q 990,584 980,584
+                 Q 500,592 20,584
+                 Q 10,584 8,574
+                 Q 4,300 8,26
+                 Q 10,16 20,16 Z"
+            />
+
+            {/* Subtle natural glass edge highlight - zero harsh neon */}
+            <path
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.12)"
+              strokeWidth="1"
+              d="M 20,16
+                 Q 500,8 980,16
+                 Q 990,16 992,26
+                 Q 996,300 992,574
+                 Q 990,584 980,584
+                 Q 500,592 20,584
+                 Q 10,584 8,574
+                 Q 4,300 8,26
+                 Q 10,16 20,16 Z"
+            />
+          </svg>
+        </>
+      )}
     </>
   );
 }

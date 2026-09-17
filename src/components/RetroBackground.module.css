@@ -1,0 +1,88 @@
+.container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+/* Background Image Container */
+.imageLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.artwork {
+  object-fit: cover;
+  object-position: center 55%;
+  filter: contrast(1.02) saturate(1.04);
+}
+
+/* Warm Archival Color Grading & Sepia Tint */
+.colorGrade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 235, 216, 0.42) 0%,
+    rgba(244, 235, 216, 0.3) 35%,
+    rgba(244, 235, 216, 0.15) 65%,
+    rgba(35, 30, 24, 0.35) 100%
+  );
+  pointer-events: none;
+}
+
+/* Central Readability Halo - Soft, natural ambient diffusion */
+.readabilityHalo {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(800px, 86vw, 2800px);
+  height: clamp(420px, 54vh, 1200px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(244, 235, 216, 0.44) 0%,
+    rgba(244, 235, 216, 0.22) 50%,
+    transparent 80%
+  );
+  filter: blur(55px);
+  pointer-events: none;
+}
+
+/* Delicate Drafting Grid Overlay */
+.subtleGrid {
+  position: absolute;
+  inset: 0;
+  background-size: 40px 40px, 160px 160px;
+  background-image: 
+    linear-gradient(to right, rgba(62, 56, 50, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(62, 56, 50, 0.02) 1px, transparent 1px),
+    linear-gradient(to right, rgba(62, 56, 50, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(62, 56, 50, 0.045) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 90% 85% at 50% 50%, rgba(0,0,0,0.5) 0%, transparent 95%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 50%, rgba(0,0,0,0.5) 0%, transparent 95%);
+  opacity: 0.7;
+}
+
+/* Interactive Phosphor Beam Following Cursor */
+.cursorGlow {
+  position: absolute;
+  width: clamp(400px, 28vw, 750px);
+  height: clamp(400px, 28vw, 750px);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(245, 158, 11, 0.09) 0%,
+    rgba(194, 65, 12, 0.03) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  transition: opacity 300ms ease;
+  z-index: 1;
+}

@@ -41,16 +41,16 @@ export default function WorksList() {
   return (
     <div className="w-full max-w-3xl mx-auto flex flex-col gap-8 pb-20">
       
-      {/* Filters - Apple Segmented Control */}
-      <div className="flex flex-wrap items-center justify-center gap-1 p-1 rounded-full bg-foreground/[0.04] border border-foreground/[0.06] backdrop-blur-xl max-w-fit mx-auto mb-10">
+      {/* Filters - Retro Segmented Control */}
+      <div className="flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-sm bg-[#3e3832]/[0.05] border-2 border-[#3e3832]/25 max-w-fit mx-auto mb-10 shadow-[3px_3px_0px_rgba(62,56,50,0.1)]">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setFilter(category)}
-            className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-180 ${
+            className={`px-4 py-1.5 rounded-sm text-xs sm:text-sm font-pixel tracking-wider border transition-all duration-120 ${
               filter === category
-                ? "bg-foreground text-background shadow-sm"
-                : "text-foreground/65 hover:text-foreground hover:bg-foreground/[0.05]"
+                ? "bg-[#3e3832] text-[#f4ebd8] border-[#3e3832] shadow-[2px_2px_0px_rgba(62,56,50,0.25)]"
+                : "border-transparent text-[#3e3832]/70 hover:text-[#3e3832] hover:bg-[#3e3832]/[0.06]"
             }`}
           >
             {category}
@@ -72,42 +72,42 @@ export default function WorksList() {
                 key={work.id}
               >
                 <Link href={`/works/${work.id}`} className="block group h-full">
-                  <div className="relative p-6 sm:p-9 bg-background/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 group-hover:scale-[1.008] overflow-hidden">
+                  <div className="relative p-6 sm:p-9 retro-card group-hover:scale-[1.008] overflow-hidden">
                     {/* Clean Tag */}
                     <div className="flex items-center gap-1.5 mb-5">
-                      <span className="text-[11px] font-medium text-foreground/50 tracking-wider uppercase">{work.tag}</span>
+                      <span className="text-xs font-pixel text-[#3e3832]/60 tracking-widest uppercase">{work.tag}</span>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center">
                       <div className="flex flex-col flex-1 h-full w-full justify-center">
                         <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-foreground/5 text-[10px] sm:text-xs font-semibold text-foreground/70 uppercase tracking-wider border border-foreground/[0.06]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-sm bg-[#3e3832]/5 text-[10px] sm:text-xs font-pixel text-[#3e3832]/80 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[1px_1px_0px_rgba(62,56,50,0.12)]">
                             {getIcon(work.category)}
                             {work.category}
                           </span>
                         </div>
                         
-                        <h3 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-3">
+                        <h3 className="text-2xl sm:text-3xl font-editorial font-normal text-[#3e3832] tracking-tight mb-3">
                           {work.title}
                         </h3>
                         
-                        <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed mb-6">
+                        <p className="text-[#3e3832]/80 text-base max-w-2xl leading-relaxed font-editorial mb-6">
                           {work.description}
                         </p>
                         
-                        <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-foreground/60 group-hover:text-foreground transition-colors mt-auto">
+                        <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-pixel text-[#3e3832]/70 group-hover:text-[#3e3832] transition-colors mt-auto">
                           View Case Study
                           <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </div>
                       </div>
                       
                       {work.image && (
-                        <div className="w-full sm:w-[42%] aspect-video sm:aspect-[4/3] relative rounded-2xl overflow-hidden shrink-0 border border-foreground/[0.08] shadow-sm bg-foreground/5">
+                        <div className="w-full sm:w-[42%] aspect-video sm:aspect-[4/3] relative rounded-xl overflow-hidden shrink-0 border border-[#3e3832]/20 shadow-sm bg-foreground/5">
                           <Image 
                             src={work.image} 
                             alt={work.title} 
                             fill 
-                            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out" 
+                            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out sepia-[0.15] contrast-105" 
                           />
                         </div>
                       )}

@@ -3,6 +3,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AppleNavbar from "@/components/AppleNavbar";
 import CRTDistortion from "@/components/CRTDistortion";
+import SoundEffects from "@/components/SoundEffects";
 import { Pixelify_Sans, EB_Garamond } from "next/font/google";
 
 const pixelFont = Pixelify_Sans({ 
@@ -55,40 +56,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="overflow-x-clip max-w-full">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('portfolio-theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  var isDark = stored === 'dark' || (!stored && prefersDark);
-                  if (isDark) {
-                    document.documentElement.classList.add('theme-dark');
-                  } else {
-                    document.documentElement.classList.remove('theme-dark');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
       <body
-        className={`crt ${pixelFont.variable} ${garamondFont.variable} font-editorial text-foreground bg-background tracking-tight overflow-x-clip w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-xl`}
+        className={`${pixelFont.variable} ${garamondFont.variable} font-editorial text-foreground bg-background tracking-tight w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-lg sm:text-xl`}
         suppressHydrationWarning
       >
         <ThemeProvider>
+          <AppleNavbar />
           <div id="crt-content">
-            <AppleNavbar />
             <SmoothScroll>
               {children}
             </SmoothScroll>
           </div>
+          <SoundEffects />
+          <CRTDistortion />
         </ThemeProvider>
-        <div className="crt-overlay"></div>
-        <CRTDistortion />
       </body>
     </html>
   );

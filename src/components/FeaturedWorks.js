@@ -51,7 +51,7 @@ export default function FeaturedWorks({ limit }) {
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-foreground/5 text-foreground/80 text-xs font-pixel mb-4 uppercase tracking-widest border border-foreground/15">
             <Briefcase size={14} /> Portfolio
           </div>
           <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
@@ -69,7 +69,7 @@ export default function FeaturedWorks({ limit }) {
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300 h-full"
+                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center p-5 sm:p-8 bg-background rounded-sm border-2 border-foreground/10 shadow-[3px_3px_0px_rgba(0,0,0,0.06)] hover:shadow-[5px_5px_0px_rgba(0,0,0,0.1)] transition-shadow duration-300 h-full"
                 >
                   <div className="flex flex-col flex-1 w-full">
                     <div className="flex justify-between items-start mb-1">
@@ -80,7 +80,7 @@ export default function FeaturedWorks({ limit }) {
                     <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{work.description}</p>
                   </div>
                   {work.image && (
-                    <div className="w-full sm:w-[38%] aspect-video relative rounded-xl overflow-hidden shrink-0 border border-foreground/[0.05]">
+                    <div className="w-full sm:w-[38%] aspect-video relative rounded-sm overflow-hidden shrink-0 border border-foreground/[0.05]">
                       <Image
                         src={work.image}
                         alt={work.title}
@@ -97,7 +97,7 @@ export default function FeaturedWorks({ limit }) {
         </div>
 
         <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
-          <Link href="/works" className="px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">
+          <Link href="/works" className="px-6 py-3 bg-foreground text-background rounded-sm border-2 border-foreground text-sm font-pixel shadow-[3px_3px_0px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all">
             View All Works
           </Link>
         </motion.div>

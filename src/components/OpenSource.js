@@ -73,13 +73,13 @@ export default function OpenSource({ limit }) {
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832] text-xs font-pixel mb-4 uppercase tracking-widest border border-[#3e3832]/25 shadow-[1px_1px_0px_rgba(62,56,50,0.1)]">
             <Code size={14} /> Community
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight mb-3 sm:mb-4">
             Open Source
           </h2>
-          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl leading-relaxed font-editorial">
             Giving back to the community through code, design, and education.
           </p>
         </motion.div>
@@ -88,22 +88,22 @@ export default function OpenSource({ limit }) {
           {(limit ? projects.slice(0, limit) : projects).map((project, i) => {
             const CardContent = (
               <motion.div
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className="group flex flex-col justify-between p-6 sm:p-8 bg-background/80  backdrop-blur-2xl rounded-3xl border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)]  hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 h-full"
+                className="group flex flex-col justify-between p-6 sm:p-8 retro-card h-full"
               >
                 {/* Clean Tag */}
                 <div className="flex items-center gap-1.5 mb-4">
-                  <span className="text-[10px] font-medium text-foreground/50 tracking-wider uppercase">{project.role}</span>
+                  <span className="text-xs font-pixel text-[#3e3832]/60 tracking-widest uppercase">{project.role}</span>
                 </div>
 
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">{project.name}</h3>
+                  <h3 className="text-xl sm:text-2xl font-editorial font-normal text-[#3e3832] tracking-tight">{project.name}</h3>
                   {project.link && (
-                    <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight size={18} className="text-[#3e3832]/50 group-hover:text-[#3e3832] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   )}
                 </div>
-                <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{project.description}</p>
+                <p className="text-[#3e3832]/80 text-base max-w-2xl leading-relaxed font-editorial">{project.description}</p>
               </motion.div>
             );
 
@@ -129,7 +129,7 @@ export default function OpenSource({ limit }) {
         
         {limit && projects.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
-            <Link href="/open-source" className="px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">
+            <Link href="/open-source" className="px-6 py-3 bg-[#3e3832] text-[#f4ebd8] rounded-sm border-2 border-[#3e3832] text-xs font-pixel tracking-wider shadow-[3px_3px_0px_rgba(62,56,50,0.25)] hover:shadow-[4px_4px_0px_rgba(62,56,50,0.35)] active:translate-x-[2px] active:translate-y-[2px] hover:opacity-95 transition-all">
               View More Open Source
             </Link>
           </motion.div>

@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Code2, Layers3, Mail, Moon, Sparkles, Sun } from "lucide-react";
 import { motion } from "framer-motion";
+import RetroBackground from "./RetroBackground";
+import RetroRainbowRibbon from "./RetroRainbowRibbon";
 import styles from "./LandingStory.module.css";
 
 const container = {
@@ -26,6 +28,7 @@ const item = {
 export default function LandingStory() {
   return (
     <div className={styles.page}>
+      <RetroBackground />
       <div className={styles.shell}>
         {/* Main Editorial Hero */}
         <main id="main-content" className={styles.main}>
@@ -36,27 +39,6 @@ export default function LandingStory() {
             initial="hidden"
             animate="show"
           >
-            {/* Live Context & Identity */}
-            <motion.div variants={item} className={styles.identityLockup}>
-              <div className={styles.avatarWrapper}>
-                <Image
-                  src="/main.jpeg"
-                  alt="Satya Sai Nagubathula"
-                  width={64}
-                  height={64}
-                  className={styles.avatar}
-                  priority
-                />
-              </div>
-              <div className={styles.statusPill}>
-                <span className={styles.statusDot} aria-hidden="true" />
-                <span className={styles.statusCompany}>Generative AI Lead @ NxtWave</span>
-                <span className={styles.statusSep}>•</span>
-                <span className={styles.statusRole}>Design Technologist</span>
-              </div>
-              <span className={styles.authorName}>Satya Sai Nagubathula</span>
-            </motion.div>
-
             {/* Exact Desired Headline */}
             <motion.h1 variants={item} id="landing-heading" className={styles.headline}>
               Design + Engineering.
@@ -97,6 +79,9 @@ export default function LandingStory() {
             </motion.div>
           </motion.section>
         </main>
+
+        {/* 6-Stripe Apple / Polaroid Retro Rainbow Ribbon Divider */}
+        <RetroRainbowRibbon className={styles.rainbowDivider} />
 
         {/* Footer: macOS / visionOS Status Bar */}
         <footer className={styles.footer}>

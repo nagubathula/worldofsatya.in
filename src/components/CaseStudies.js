@@ -69,13 +69,13 @@ export default function CaseStudies({ limit }) {
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832] text-xs font-pixel mb-4 uppercase tracking-widest border border-[#3e3832]/25 shadow-[1px_1px_0px_rgba(62,56,50,0.1)]">
             <BookOpen size={14} /> Writing
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight mb-3 sm:mb-4">
             Case Studies
           </h2>
-          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl leading-relaxed font-editorial">
             Technical breakdowns, engineering experiments, and thoughts on the future of generative UI.
           </p>
         </motion.div>
@@ -86,26 +86,26 @@ export default function CaseStudies({ limit }) {
             
             const CardContent = (
               <motion.div
-                whileHover={isLink ? { scale: 1.02 } : {}}
+                whileHover={isLink ? { scale: 1.01 } : {}}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className={`group block bg-background/80  backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)]  ${isLink ? 'hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden h-full`}
+                className={`group block retro-card p-6 sm:p-8 ${isLink ? 'cursor-pointer' : ''} relative overflow-hidden h-full`}
               >
                 {/* Clean Tag */}
                 <div className="flex items-center gap-1.5 mb-4">
-                  <span className="text-[10px] font-medium text-foreground/50 tracking-wider uppercase">{study.type}</span>
+                  <span className="text-xs font-pixel text-[#3e3832]/60 tracking-widest uppercase">{study.type}</span>
                 </div>
 
                 <div className="flex flex-col h-full justify-between">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight mb-2 sm:mb-3">
+                    <h3 className="text-xl sm:text-2xl font-editorial font-normal text-[#3e3832] tracking-tight mb-2 sm:mb-3">
                       {study.title}
                     </h3>
-                    <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{study.description}</p>
+                    <p className="text-[#3e3832]/80 text-base max-w-2xl leading-relaxed font-editorial">{study.description}</p>
                   </div>
                   {isLink && (
                     <div className="mt-4 sm:mt-6 flex justify-end">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-foreground/5 flex items-center justify-center group-hover:bg-foreground transition-colors duration-300">
-                        <ArrowUpRight size={16} className="text-foreground/60 group-hover:text-background transition-colors" />
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-[#3e3832]/5 border border-[#3e3832]/20 flex items-center justify-center group-hover:bg-[#3e3832] group-hover:text-[#f4ebd8] transition-colors duration-200 shadow-[1px_1px_0px_rgba(62,56,50,0.1)]">
+                        <ArrowUpRight size={16} className="text-[#3e3832]/70 group-hover:text-[#f4ebd8] transition-colors" />
                       </div>
                     </div>
                   )}
@@ -127,7 +127,7 @@ export default function CaseStudies({ limit }) {
         
         {limit && studies.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
-            <Link href="/case-studies" className="px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">
+            <Link href="/case-studies" className="px-6 py-3 bg-[#3e3832] text-[#f4ebd8] rounded-sm border-2 border-[#3e3832] text-xs font-pixel tracking-wider shadow-[3px_3px_0px_rgba(62,56,50,0.25)] hover:shadow-[4px_4px_0px_rgba(62,56,50,0.35)] active:translate-x-[2px] active:translate-y-[2px] transition-all">
               View More Case Studies
             </Link>
           </motion.div>

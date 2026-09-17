@@ -1,18 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { User } from "lucide-react";
+import { User, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedButton from "./AnimatedButton";
+import RetroRainbowRibbon from "./RetroRainbowRibbon";
 import { useTheme } from "@/components/ThemeProvider";
 
 const stats = [
-  { value: "6", label: "Years of experience" },
-  { value: "280+", label: "Clients served" },
-  { value: "100K+", label: "Followers scaled" },
-  { value: "2,000+", label: "Videos orchestrated" },
-  { value: "36", label: "Students trained" },
-  { value: "3", label: "Movies worked on" },
+  { value: "6", label: "Years of Experience" },
+  { value: "280+", label: "Clients Served" },
+  { value: "100K+", label: "Followers Scaled" },
+  { value: "2,000+", label: "Videos Orchestrated" },
+  { value: "36", label: "Engineers Trained" },
+  { value: "3", label: "Films Contributed" },
 ];
 
 const pillars = [
@@ -37,17 +38,17 @@ const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.15 },
+    transition: { staggerChildren: 0.12 },
   },
 };
 
 const itemAnim = {
-  hidden: { opacity: 0, scale: 0.85, y: 20 },
+  hidden: { opacity: 0, scale: 0.96, y: 16 },
   show: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 400, damping: 25, mass: 0.8 },
+    transition: { type: "spring", stiffness: 350, damping: 25 },
   },
 };
 
@@ -61,122 +62,149 @@ export default function AboutMe() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="w-full py-16 sm:py-24"
+      className="w-full py-10 sm:py-16"
     >
-      <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-10 sm:gap-14">
+      <div className="px-4 sm:px-8 max-w-6xl 2xl:max-w-7xl mx-auto w-full flex flex-col gap-12 sm:gap-16">
         {/* Header */}
-        <motion.div variants={itemAnim}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest">
-            <User size={14} /> About
+        <motion.div variants={itemAnim} className="flex flex-col items-start max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel mb-4 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)]">
+            <User size={14} /> About Satya
           </div>
-          <h1 className="text-4xl sm:text-6xl font-semibold leading-[1.06] text-foreground tracking-tight mb-4 sm:mb-6">
-            <span className="block">Design Technologist</span>{" "}
-            <span className="block">&amp; AI Engineer.</span>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-editorial font-normal leading-[1.05] text-[#3e3832] tracking-tight mb-4 sm:mb-6">
+            Design Technologist <span className="italic text-[#3e3832]/70">&amp; AI Engineer.</span>
           </h1>
-          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
-            I connect design and code to build interfaces, interactive prototypes,
-            and AI tools people can use.
+          <p className="text-lg sm:text-xl text-[#3e3832]/75 max-w-3xl leading-relaxed font-editorial">
+            Connecting interface craft, typography, and deep systems engineering to build sovereign tools and scalable generative pipelines.
           </p>
         </motion.div>
 
-        {/* Portrait + Bio */}
-        <motion.div variants={itemAnim} className="flex flex-col gap-8 sm:gap-10">
-          <div className="relative w-full max-w-sm aspect-[4/5] rounded-3xl overflow-hidden border border-foreground/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
-            <Image
-              key={portrait}
-              src={portrait}
-              alt="Satya Sai Nagubathula"
-              fill
-              sizes="(max-width: 640px) 100vw, 320px"
-              className="object-cover"
-              priority
-            />
-          </div>
-          <div className="flex flex-col gap-4 text-base sm:text-lg text-foreground/70 leading-relaxed">
+        {/* Three-Column Editorial Story Grid with Portrait */}
+        <motion.div variants={itemAnim} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          {/* Column 1: Identity & Role */}
+          <div className="lg:col-span-3 flex flex-col gap-4 text-base font-editorial text-[#3e3832]/85 leading-relaxed">
             <p>
-              I&apos;m <span className="font-semibold text-foreground">Satya Sai Nagubathula</span> —
-              a Design Technologist and AI Engineer. I work across product design,
-              frontend engineering, and generative AI to take ideas from early
-              exploration to working products.
+              I&apos;m <span className="font-semibold text-[#3e3832]">Satya Sai Nagubathula</span> — a Design Technologist and AI Engineer. I operate at the boundary where interface craft, typography, and deep systems engineering converge.
             </p>
             <p>
-              At NXTWAVE Disruptive Technologies, I work as a Generative AI Engineer
-              and Creative Lead, building AI production pipelines and internal tools
-              that help teams create content at scale.
-            </p>
-            <p>
-              My journey started in design — brand identities, UI, and Figma — and grew
-              through hardware security research, full-stack development, and government
-              and startup product work. That path shapes how I work today: exploring
-              an idea through design, testing it in code, and building the systems
-              that bring it to life.
-            </p>
-            <p>
-              Along the way I&apos;ve served 280+ clients across six years of design and
-              engineering work, trained 36 students in engineering and design, and worked
-              on three movies.
-            </p>
-            <p>
-              Outside of work, I give back through open source — building{" "}
-              <span className="font-semibold text-foreground">Engineerudu</span>, Andhra
-              Pradesh&apos;s first FOSS community, and contributing to design systems like
-              Chaya UI.
+              At <span className="font-semibold text-[#3e3832]">NXTWAVE Disruptive Technologies</span>, I serve as Generative AI Engineer and Creative Lead, architecting autonomous video production pipelines and zero-cost automation suites that empower teams to scale content by 90%.
             </p>
           </div>
-        </motion.div>
 
-        {/* Stats */}
-        <motion.div variants={itemAnim} className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col gap-1 p-4 sm:p-6 bg-background rounded-2xl border border-foreground/[0.06] shadow-[0_8px_30px_rgb(0,0,0,0.03)]"
-            >
-              <p className="text-2xl sm:text-4xl font-semibold text-foreground tracking-tight">{stat.value}</p>
-              <p className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-foreground/50 leading-snug">{stat.label}</p>
+          {/* Column 2: Journey & Philosophy */}
+          <div className="lg:col-span-3 flex flex-col gap-4 text-base font-editorial text-[#3e3832]/85 leading-relaxed">
+            <p>
+              My journey began in pure visual design — brand identities, interface typography, and Figma design systems — and evolved through hardware security research, full-stack architecture, and government-scale software.
+            </p>
+            <p>
+              That multidisciplinary foundation defines my daily workflow: exploring an intuition through tactile design, verifying it in code, and engineering the robust infrastructure to bring it alive.
+            </p>
+          </div>
+
+          {/* Column 3: Impact & Open Source */}
+          <div className="lg:col-span-3 flex flex-col gap-4 text-base font-editorial text-[#3e3832]/85 leading-relaxed">
+            <p>
+              Over the past six years, I have collaborated with 280+ international clients, mentored 36 emerging designers and engineers, and contributed visual engineering to three feature films.
+            </p>
+            <p>
+              Outside commercial work, I build sovereign public goods — founding <span className="font-semibold text-[#3e3832]">Engineerudu</span> (Andhra Pradesh&apos;s first FOSS community) and developing open design systems like <span className="font-semibold text-[#3e3832]">Chaya UI</span>.
+            </p>
+          </div>
+
+          {/* Column 4: Archival Portrait Frame */}
+          <div className="lg:col-span-3 flex flex-col gap-3">
+            <div className="relative w-full aspect-[4/5] rounded-sm overflow-hidden border-2 border-[#3e3832]/30 shadow-[5px_5px_0px_rgba(62,56,50,0.2)] bg-[#fdfaf3]">
+              <Image
+                key={portrait}
+                src={portrait}
+                alt="Satya Sai Nagubathula"
+                fill
+                sizes="(max-width: 640px) 100vw, 360px"
+                className="object-cover sepia-[0.12] contrast-105"
+                priority
+              />
             </div>
-          ))}
-        </motion.div>
-
-        {/* Teaching */}
-        <motion.div variants={itemAnim} className="flex flex-col gap-3">
-          <div className="relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-foreground/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
-            <Image
-              src="/portraits/genai-training.jpg"
-              alt="Satya Sai Nagubathula leading a Gen AI training session"
-              fill
-              sizes="(max-width: 640px) 100vw, 672px"
-              className="object-cover"
-            />
+            <div className="flex items-center justify-between text-[11px] font-pixel text-[#3e3832]/60 uppercase tracking-widest px-1">
+              <span>Satya Sai N.</span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> Available</span>
+            </div>
           </div>
         </motion.div>
 
-        {/* What I do */}
-        <motion.div variants={itemAnim} className="flex flex-col gap-4 sm:gap-6">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
-            What I do
-          </h2>
-          <div className="flex flex-col gap-4">
-            {pillars.map((pillar) => (
+        {/* 6-Stripe Apple / Polaroid Retro Rainbow Ribbon Divider */}
+        <motion.div variants={itemAnim} className="w-full py-2">
+          <RetroRainbowRibbon className="rounded-sm" />
+        </motion.div>
+
+        {/* Showcase of Impact & Metrics */}
+        <motion.div variants={itemAnim} className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight">
+              A Showcase of Impact &amp; Metrics
+            </h2>
+            <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl font-editorial">
+              Proven outcomes delivered across enterprise automation, generative AI pipelines, and digital products.
+            </p>
+          </div>
+
+          {/* 6 Stats Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {stats.map((stat) => (
               <div
-                key={pillar.title}
-                className="p-5 sm:p-8 bg-background rounded-2xl sm:rounded-3xl border border-foreground/[0.06] shadow-[0_8px_30px_rgb(0,0,0,0.03)]"
+                key={stat.label}
+                className="flex flex-col justify-center gap-1 p-4 sm:p-5 retro-card group hover:-translate-y-0.5 transition-transform"
               >
-                <h3 className="text-lg sm:text-xl font-semibold text-foreground tracking-tight mb-2">
-                  {pillar.title}
-                </h3>
-                <p className="text-sm sm:text-base text-foreground/70 leading-relaxed">
-                  {pillar.description}
-                </p>
+                <p className="text-2xl sm:text-3xl lg:text-4xl font-editorial font-normal text-[#3e3832] tracking-tight">{stat.value}</p>
+                <p className="text-[10px] sm:text-[11px] font-pixel uppercase tracking-wider text-[#3e3832]/60 leading-snug">{stat.label}</p>
               </div>
             ))}
           </div>
         </motion.div>
 
-        {/* Links */}
-        <motion.div variants={itemAnim} className="flex flex-wrap items-center gap-2 sm:gap-4">
+        {/* Teaching & Visual Proof */}
+        <motion.div variants={itemAnim} className="flex flex-col gap-3">
+          <div className="relative w-full aspect-[21/9] sm:aspect-[24/9] rounded-sm overflow-hidden border-2 border-[#3e3832]/30 shadow-[4px_4px_0px_rgba(62,56,50,0.2)]">
+            <Image
+              src="/portraits/genai-training.jpg"
+              alt="Satya Sai Nagubathula leading a Gen AI training session"
+              fill
+              sizes="(max-width: 1280px) 100vw, 1200px"
+              className="object-cover sepia-[0.1] contrast-105 object-center"
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs font-pixel text-[#3e3832]/60 uppercase tracking-wider px-1">
+            <span>GenAI Engineering Session</span>
+            <span>NxtWave Campus · 36+ Engineers</span>
+          </div>
+        </motion.div>
+
+        {/* Core Competencies (3-Column Grid) */}
+        <motion.div variants={itemAnim} className="flex flex-col gap-6">
+          <h2 className="text-3xl sm:text-4xl font-editorial font-normal text-[#3e3832] tracking-tight">
+            Core Competencies
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            {pillars.map((pillar) => (
+              <div
+                key={pillar.title}
+                className="p-6 sm:p-8 retro-card flex flex-col justify-between"
+              >
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-editorial font-normal text-[#3e3832] tracking-tight mb-3">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-base text-[#3e3832]/80 font-editorial leading-relaxed">
+                    {pillar.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Retro Action CTA Row */}
+        <motion.div variants={itemAnim} className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 border-t border-[#3e3832]/15">
           <AnimatedButton href="mailto:nagubathula.satyasai@gmail.com" isPrimary={true}>
-            Get in Touch
+            <span className="mr-1">☎</span> Get in Touch
           </AnimatedButton>
           <AnimatedButton href="https://www.linkedin.com/in/satyasainagubathula">
             LinkedIn

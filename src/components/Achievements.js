@@ -66,13 +66,13 @@ export default function Achievements({ limit }) {
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10" suppressHydrationWarning>
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10" suppressHydrationWarning>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest" suppressHydrationWarning>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832] text-xs font-pixel mb-4 uppercase tracking-widest border border-[#3e3832]/25 shadow-[1px_1px_0px_rgba(62,56,50,0.1)]" suppressHydrationWarning>
             <Trophy size={14} /> Recognition
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight mb-3 sm:mb-4">
             Achievements
           </h2>
-          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl leading-relaxed font-editorial">
             Milestones and awards from my journey in design and development.
           </p>
         </motion.div>
@@ -84,18 +84,18 @@ export default function Achievements({ limit }) {
             const CardContent = (
               <motion.div
                 suppressHydrationWarning
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className={`group flex flex-col p-6 sm:p-8 bg-background/80  backdrop-blur-2xl rounded-3xl border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)]  hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 ${isLink ? 'cursor-pointer block' : ''}`}
+                className={`group flex flex-col p-6 sm:p-8 retro-card ${isLink ? 'cursor-pointer block' : ''}`}
               >
                 <div className="flex justify-between items-start mb-3 sm:mb-4" suppressHydrationWarning>
-                  <div suppressHydrationWarning className="p-2 rounded-2xl bg-foreground/[0.04] border border-foreground/[0.06]">{item.icon}</div>
+                  <div suppressHydrationWarning className="p-2 rounded-sm bg-[#3e3832]/5 border border-[#3e3832]/20 text-[#3e3832] shadow-[1px_1px_0px_rgba(62,56,50,0.1)]">{item.icon}</div>
                   {isLink && (
-                    <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight size={18} className="text-[#3e3832]/40 group-hover:text-[#3e3832] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   )}
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-foreground tracking-tight mb-1.5 sm:mb-2">{item.title}</h3>
-                <p className="text-foreground/60 text-xs sm:text-sm leading-relaxed font-medium">{item.description}</p>
+                <h3 className="text-lg sm:text-xl font-editorial font-normal text-[#3e3832] tracking-tight mb-1.5 sm:mb-2">{item.title}</h3>
+                <p className="text-[#3e3832]/75 text-sm sm:text-base leading-relaxed font-editorial">{item.description}</p>
               </motion.div>
             );
 
@@ -113,7 +113,7 @@ export default function Achievements({ limit }) {
         
         {limit && achievements.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center" suppressHydrationWarning>
-            <Link href="/achievements" className="px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">
+            <Link href="/achievements" className="px-6 py-3 bg-[#3e3832] text-[#f4ebd8] rounded-sm border-2 border-[#3e3832] text-xs font-pixel tracking-wider shadow-[3px_3px_0px_rgba(62,56,50,0.25)] hover:shadow-[4px_4px_0px_rgba(62,56,50,0.35)] active:translate-x-[2px] active:translate-y-[2px] hover:opacity-95 transition-all">
               View More Achievements
             </Link>
           </motion.div>

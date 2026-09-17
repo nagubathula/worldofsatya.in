@@ -2,36 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
+html {
   max-width: 100vw;
-  overflow-x: hidden !important;
+  overflow-x: clip;
+}
+
+body {
+  max-width: 100%;
   position: relative;
+}
+
+/* Lenis smooth scrolling rules to guarantee single scrollbar */
+html.lenis, html.lenis-smooth {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 @layer base {
   :root {
-    --foreground: #3e3832; /* Dark sepia/charcoal for text */
-    --background: #f4ebd8; /* Warm paper/beige */
+    --foreground: #3e3832; /* Vintage deep sepia charcoal */
+    --background: #f4ebd8; /* Warm archival paper/parchment */
     --foreground-rgb: 62 56 50;
     --background-rgb: 244 235 216;
 
-    /* Clean Design System Tokens - Adjusted for Retro Theme */
-    --glass-surface: rgba(244, 235, 216, 0.88);
-    --glass-surface-hover: rgba(255, 255, 255, 0.98);
-    --glass-border: rgba(62, 56, 50, 0.3);
+    --card-surface: #fcf8f0;
+    --card-surface-hover: #ffffff;
+    --retro-ink: #3e3832;
+    --retro-amber: #c2410c;
+    --retro-teal: #0f766e;
+
+    /* Clean Design System Tokens - Adjusted for Retro Paper Theme */
+    --glass-surface: rgba(244, 235, 216, 0.92);
+    --glass-surface-hover: rgba(255, 255, 255, 0.96);
+    --glass-border: rgba(62, 56, 50, 0.22);
     --glass-border-subtle: rgba(62, 56, 50, 0.1);
-    --glass-shadow: 0 4px 20px -2px rgba(62, 56, 50, 0.1), 0 1px 2px rgba(62, 56, 50, 0.05);
-    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    --glass-blur: blur(20px);
+    --glass-shadow: 0 8px 24px -4px rgba(62, 56, 50, 0.08), 2px 2px 0px rgba(62, 56, 50, 0.06);
+    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    --glass-blur: blur(16px);
   }
 
   body {
     @apply bg-background text-foreground font-editorial antialiased;
-    /* Disable anti-aliasing to make the pixel font look sharper and authentic */
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
-    transition: color 250ms ease, background-color 250ms ease, border-color 250ms ease;
+    transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
   }
 }
 
@@ -40,7 +65,7 @@ body {
     background: var(--glass-surface);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
+    border: 1.5px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
   }
 
@@ -50,6 +75,50 @@ body {
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-subtle);
     box-shadow: var(--glass-shadow);
+  }
+
+  /* Tactile Retro Components */
+  .retro-card {
+    background-color: var(--card-surface);
+    border: 1.5px solid rgba(62, 56, 50, 0.18);
+    box-shadow: 3px 3px 0px rgba(62, 56, 50, 0.08);
+    border-radius: 1.25rem;
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  }
+
+  .retro-card:hover {
+    border-color: rgba(62, 56, 50, 0.38);
+    box-shadow: 5px 5px 0px rgba(62, 56, 50, 0.13);
+    transform: translateY(-2px);
+  }
+
+  .retro-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-pixel), sans-serif;
+    border-radius: 4px;
+    border: 2px solid #3e3832;
+    box-shadow: 3px 3px 0px rgba(62, 56, 50, 0.25);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+    user-select: none;
+  }
+
+  .retro-btn:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: 1px 1px 0px rgba(62, 56, 50, 0.2) !important;
+  }
+
+  .retro-pill {
+    background: rgba(244, 235, 216, 0.92);
+    border: 1.5px solid rgba(62, 56, 50, 0.22);
+    border-radius: 4px;
+    box-shadow: 2px 2px 0px rgba(62, 56, 50, 0.12);
+  }
+
+  .font-pixel-accent {
+    font-family: var(--font-pixel), sans-serif;
+    letter-spacing: 0.05em;
   }
 }
 
@@ -94,78 +163,94 @@ body {
   }
 }
 
-/* CRT Effect */
-@keyframes crt-flicker {
-  0% { opacity: 0.98; }
-  5% { opacity: 0.95; }
-  10% { opacity: 0.98; }
-  15% { opacity: 1; }
-  100% { opacity: 1; }
-}
 
-@keyframes crt-text-flicker {
-  0% { 
-    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
-    color: rgb(var(--foreground-rgb) / 1);
-  }
-  2% { 
-    text-shadow: 0 0 2px rgba(26,26,26,0.5); 
-    color: rgb(var(--foreground-rgb) / 0.95);
-  }
-  4% { 
-    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
-    color: rgb(var(--foreground-rgb) / 1);
-  }
-  50% { 
-    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
-    color: rgb(var(--foreground-rgb) / 1);
-  }
-  52% {
-    text-shadow: 0 0 2px rgba(26,26,26,0.5); 
-    color: rgb(var(--foreground-rgb) / 0.98);
-  }
-  54% {
-    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
-    color: rgb(var(--foreground-rgb) / 1);
-  }
-  100% { 
-    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
-    color: rgb(var(--foreground-rgb) / 1);
-  }
-}
-
-.crt {
-  animation: crt-text-flicker 4s infinite;
-}
-
-.crt::before {
-  content: " ";
-  display: block;
+/* Paper Grain Texture */
+.paper-grain {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  /* Scanlines and RGB sub-pixel simulation - heavily reduced for light theme */
+  inset: 0;
+  pointer-events: none;
+  z-index: 92;
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* Authentic Hardware-Accelerated CRT Curved Monitor & Lens Distortion */
+.has-crt-distortion {
+  background-color: #100e0c !important;
+}
+
+.has-crt-distortion #crt-content {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--background, #f4ebd8) !important;
+  color: #3e3832 !important;
+  filter: url(#crt-z-bulge);
+}
+
+/* Arched Navbar Curvature when CRT Mode is active */
+.has-crt-distortion header {
+  z-index: 60 !important;
+}
+
+.has-crt-distortion header .nav-left {
+  transform: translateY(5px) rotate(-0.5deg);
+}
+
+.has-crt-distortion header .nav-center {
+  transform: translateY(-2px);
+}
+
+.has-crt-distortion header .nav-right {
+  transform: translateY(5px) rotate(0.5deg);
+}
+
+/* Fixed Barrel CRT Monitor Chassis Bezel */
+.crt-barrel-bezel {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 45;
+}
+
+/* CRT Scanlines */
+.crt-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 38;
+  background: linear-gradient(rgba(62, 56, 50, 0) 50%, rgba(62, 56, 50, 0.07) 50%);
+  background-size: 100% 4px;
+}
+
+/* Authentic CRT Cathode Tube Vignette - Present on every page */
+.crt-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 39;
+  background: radial-gradient(
+    ellipse 75% 70% at 50% 50%,
+    transparent 45%,
+    rgba(50, 40, 30, 0.08) 62%,
+    rgba(40, 30, 20, 0.25) 78%,
+    rgba(25, 18, 12, 0.55) 90%,
+    rgba(12, 8, 5, 0.85) 100%
+  );
+  box-shadow: 
+    inset 0 0 clamp(60px, 10vw, 150px) rgba(15, 10, 6, 0.55),
+    inset 0 0 clamp(20px, 3vw, 50px) rgba(0, 0, 0, 0.7);
+}
+
+/* Curved Cathode Glass Specular Glare */
+.crt-glass-glare {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
   background: 
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.03) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
-  background-size: 100% 4px, 6px 100%;
-  z-index: 9999;
-  pointer-events: none;
-}
-
-/* We need a third layer for the physical screen curvature / vignette so it sits above the blur */
-.crt-overlay {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  /* Physical rounding of the CRT tube */
-  border: 1vmin solid rgba(0,0,0,1);
-  z-index: 9998;
-  pointer-events: none;
-  animation: crt-flicker 0.15s infinite;
+    radial-gradient(ellipse 95% 18% at 50% 0%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 40%, transparent 70%);
 }

@@ -193,13 +193,13 @@ export default function AIVideoShowcase({ limit }) {
       <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col min-w-0">
         <motion.div variants={itemAnim} className="sticky top-20 sm:top-24 z-10 bg-transparent flex flex-col justify-start gap-4 w-full min-w-0">
           <div className="min-w-0">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 text-foreground/60 text-xs font-medium mb-4 uppercase tracking-widest backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel mb-4 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)]">
               <Video size={14} /> AI Experiments
             </div>
-            <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-2 sm:mb-4">
+            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight mb-2 sm:mb-4">
               Generative Video
             </h2>
-            <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed break-words w-full">
+            <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl leading-relaxed font-editorial break-words w-full">
               Showcasing advanced generative AI works, focusing on photorealism and dynamic visual storytelling.
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function AIVideoShowcase({ limit }) {
                 key={i}
                 className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
               >
-                <div className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-foreground/5 mb-3 border border-foreground/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px] ${video.isVertical ? "sm:aspect-[9/16]" : "sm:aspect-video"}`}>
+                <div className={`relative rounded-sm overflow-hidden bg-foreground/5 mb-3 border-2 border-[#3e3832]/25 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px] ${video.isVertical ? "sm:aspect-[9/16]" : "sm:aspect-video"}`}>
                   <LazyVideo
                     src={video.src}
                     poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
@@ -238,8 +238,8 @@ export default function AIVideoShowcase({ limit }) {
                   />
                 </div>
                 <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
-                  <h3 className="text-base sm:text-lg font-semibold text-foreground tracking-tight mb-0.5 truncate">{video.title}</h3>
-                  <p className="text-xs sm:text-sm text-foreground/50 line-clamp-1">{video.description}</p>
+                  <h3 className="text-base sm:text-lg font-editorial font-normal text-[#3e3832] tracking-tight mb-0.5 truncate">{video.title}</h3>
+                  <p className="text-xs sm:text-sm text-[#3e3832]/70 font-editorial line-clamp-1">{video.description}</p>
                 </div>
               </motion.div>
             );
@@ -254,7 +254,7 @@ export default function AIVideoShowcase({ limit }) {
               key={i}
               className="flex flex-col group min-w-0"
             >
-              <div className="relative rounded-3xl overflow-hidden bg-background/80  backdrop-blur-2xl mb-3 border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)]  hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.14)] hover:border-foreground/20 hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
+              <div className="relative rounded-sm overflow-hidden bg-[#fdfaf3] mb-3 border-2 border-[#3e3832]/25 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
                 <LazyVideo
                   src={video.src}
                   poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
@@ -263,8 +263,8 @@ export default function AIVideoShowcase({ limit }) {
                 />
               </div>
               <div className="w-full px-1">
-                <h3 className="text-base sm:text-lg font-semibold text-foreground tracking-tight mb-0.5 truncate">{video.title}</h3>
-                <p className="text-xs sm:text-sm text-foreground/50 line-clamp-1">{video.description}</p>
+                <h3 className="text-base sm:text-lg font-editorial font-normal text-[#3e3832] tracking-tight mb-0.5 truncate">{video.title}</h3>
+                <p className="text-xs sm:text-sm text-[#3e3832]/70 font-editorial line-clamp-1">{video.description}</p>
               </div>
             </motion.div>
           ))}

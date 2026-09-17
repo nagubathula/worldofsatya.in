@@ -43,7 +43,7 @@ export default async function WorkDetailPage({ params }) {
       <main className="relative z-10 flex flex-col pt-16 sm:pt-24 pb-20">
         <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 mb-16 sm:mb-20">
           <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#3e3832]/5 text-sm font-semibold text-[#3e3832]/70 uppercase tracking-widest border border-[#3e3832]/10 font-pixel">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-sm bg-[#3e3832]/5 text-sm font-semibold text-[#3e3832]/80 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)] font-pixel">
               {getIcon(work.category)}
               {work.category}
             </span>
@@ -57,7 +57,7 @@ export default async function WorkDetailPage({ params }) {
             {hasLink && (
               <LinkComponent
                 {...linkProps}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-[#3e3832] text-[#f4ebd8] rounded-full font-pixel hover:scale-105 transition-transform duration-300 shadow-md text-base"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[#3e3832] text-[#f4ebd8] rounded-sm border-2 border-[#3e3832] font-pixel shadow-[4px_4px_0px_rgba(62,56,50,0.35)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_rgba(62,56,50,0.4)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(62,56,50,0.4)] transition-all duration-150 text-base"
               >
                 {work.actionText} <ArrowUpRight size={18} />
               </LinkComponent>
