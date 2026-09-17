@@ -33,20 +33,20 @@ export default function CRTDistortion() {
       {/* Warm paper grain texture */}
       <div className="paper-grain" aria-hidden="true" />
 
-      {/* SVG Z-Axis Spherical Lens Bulge Filter */}
+      {/* SVG Screen-Width Curvature Lens Filter */}
       <svg width="0" height="0" style={{ position: "fixed", top: 0, left: 0, width: 0, height: 0, pointerEvents: "none" }} aria-hidden="true">
         <defs>
-          <filter id="crt-z-bulge" x="-20%" y="-20%" width="140%" height="140%">
+          <filter id="crt-z-bulge" x="-10%" y="0%" width="120%" height="100%">
             <feImage href="/crt-displacement.png" xlinkHref="/crt-displacement.png" result="displaceMap" preserveAspectRatio="none" />
-            <feDisplacementMap in="SourceGraphic" in2="displaceMap" scale="160" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap in="SourceGraphic" in2="displaceMap" scale="110" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </defs>
       </svg>
 
       {crtEnabled && (
         <>
-          {/* Subtle CRT scanlines */}
-          <div className="crt-scanlines" aria-hidden="true" />
+          {/* CRT Analog Noise Filter (replaces harsh horizontal scanlines) */}
+          <div className="crt-noise" aria-hidden="true" />
 
           {/* Gentle edge vignette - pushed to perimeter so navbar is 100% visible */}
           <div className="crt-vignette" aria-hidden="true" />

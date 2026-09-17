@@ -70,10 +70,10 @@ export default function AboutMe() {
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel mb-4 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)]">
             <User size={14} /> About Satya
           </div>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-editorial font-normal leading-[1.05] text-[#3e3832] tracking-tight mb-4 sm:mb-6">
+          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-editorial font-normal leading-[1.08] text-[#3e3832] tracking-tight mb-4 sm:mb-6">
             Design Technologist <span className="italic text-[#3e3832]/70">&amp; AI Engineer.</span>
           </h1>
-          <p className="text-lg sm:text-xl text-[#3e3832]/75 max-w-3xl leading-relaxed font-editorial">
+          <p className="text-base sm:text-xl text-[#3e3832]/75 max-w-3xl leading-relaxed font-editorial">
             Connecting interface craft, typography, and deep systems engineering to build sovereign tools and scalable generative pipelines.
           </p>
         </motion.div>
@@ -111,7 +111,7 @@ export default function AboutMe() {
           </div>
 
           {/* Column 4: Archival Portrait Frame */}
-          <div className="lg:col-span-3 flex flex-col gap-3">
+          <div className="lg:col-span-3 flex flex-col gap-3 max-w-sm mx-auto w-full lg:max-w-none">
             <div className="relative w-full aspect-[4/5] rounded-sm overflow-hidden border-2 border-[#3e3832]/30 shadow-[5px_5px_0px_rgba(62,56,50,0.2)] bg-[#fdfaf3]">
               <Image
                 key={portrait}
@@ -138,23 +138,37 @@ export default function AboutMe() {
         {/* Showcase of Impact & Metrics */}
         <motion.div variants={itemAnim} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight">
               A Showcase of Impact &amp; Metrics
             </h2>
-            <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl font-editorial">
+            <p className="text-sm sm:text-lg text-[#3e3832]/75 max-w-2xl font-editorial">
               Proven outcomes delivered across enterprise automation, generative AI pipelines, and digital products.
             </p>
           </div>
 
-          {/* 6 Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            {stats.map((stat) => (
+          {/* 6 Stats Grid - Tactile Retro Hardware Blocks */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
+            {stats.map((stat, idx) => (
               <div
                 key={stat.label}
-                className="flex flex-col justify-center gap-1 p-4 sm:p-5 retro-card group hover:-translate-y-0.5 transition-transform"
+                className="relative flex flex-col justify-between p-3.5 sm:p-5 rounded-sm bg-[#fcf8f0] border-2 border-[#3e3832]/35 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 hover:border-[#3e3832] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(62,56,50,0.3)] transition-all duration-150 group"
               >
-                <p className="text-2xl sm:text-3xl lg:text-4xl font-editorial font-normal text-[#3e3832] tracking-tight">{stat.value}</p>
-                <p className="text-[10px] sm:text-[11px] font-pixel uppercase tracking-wider text-[#3e3832]/60 leading-snug">{stat.label}</p>
+                {/* Hardware header / status indicator */}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[9px] font-pixel text-[#3e3832]/45 tracking-wider">
+                    {`[0${idx + 1}]`}
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3e3832]/25 group-hover:bg-[#c2410c] group-hover:shadow-[0_0_4px_#c2410c] transition-all" />
+                </div>
+
+                <div className="flex flex-col gap-0.5 sm:gap-1">
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-editorial font-normal text-[#3e3832] tracking-tight group-hover:text-[#c2410c] transition-colors">
+                    {stat.value}
+                  </p>
+                  <p className="text-[9px] sm:text-[11px] font-pixel uppercase tracking-wider text-[#3e3832]/70 leading-snug">
+                    {stat.label}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -162,7 +176,7 @@ export default function AboutMe() {
 
         {/* Teaching & Visual Proof */}
         <motion.div variants={itemAnim} className="flex flex-col gap-3">
-          <div className="relative w-full aspect-[21/9] sm:aspect-[24/9] rounded-sm overflow-hidden border-2 border-[#3e3832]/30 shadow-[4px_4px_0px_rgba(62,56,50,0.2)]">
+          <div className="relative w-full aspect-[16/9] sm:aspect-[24/9] rounded-sm overflow-hidden border-2 border-[#3e3832]/30 shadow-[4px_4px_0px_rgba(62,56,50,0.2)]">
             <Image
               src="/portraits/genai-training.jpg"
               alt="Satya Sai Nagubathula leading a Gen AI training session"

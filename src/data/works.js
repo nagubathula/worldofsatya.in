@@ -7,7 +7,7 @@ export const allWorks = [
     category: "Project",
     tag: "Brand Design",
     link: "https://hippogriff.medium.com/redantio-designing-a-startup-in-6-hours-4e24a593950f",
-    actionText: "Case Study",
+    actionText: "Read Story",
     content: `
       <div class="flex flex-col gap-12">
         <section>
@@ -60,7 +60,7 @@ export const allWorks = [
     category: "Project",
     tag: "Product Design",
     link: "https://hippogriff.medium.com/ux-case-study-of-public-adressing-system-for-hoste-a84ce1583288",
-    actionText: "Case Study",
+    actionText: "Read Story",
     content: `
       <div class="flex flex-col gap-12">
         <section>
@@ -90,7 +90,7 @@ export const allWorks = [
     category: "Project",
     tag: "Product Design",
     link: "https://www.figma.com/board/iZoO9T4W3C4RwIUWZRbZsV/Case-Study?node-id=0-1&t=OAdZQYVAwiFOnSA7-1",
-    actionText: "Case Study",
+    actionText: "View Board",
     content: `
       <div class="flex flex-col gap-12">
         <section>
@@ -112,7 +112,7 @@ export const allWorks = [
     category: "Project",
     tag: "Design System",
     link: "https://www.behance.net/gallery/210333091/Tailus-Ui-Case-Study",
-    actionText: "Case Study",
+    actionText: "View Project",
     content: `
       <div class="flex flex-col gap-12">
         <section>
@@ -156,7 +156,7 @@ export const allWorks = [
     category: "Project",
     tag: "Website",
     link: "https://www.behance.net/gallery/195847337/RWDY-Store-Revamping",
-    actionText: "View Case Study",
+    actionText: "View Project",
     content: `
       <div class="flex flex-col gap-12">
         <section>
@@ -265,7 +265,7 @@ export const allWorks = [
     id: "c0",
     title: "ContentFlow",
     description: "A role-based content operations platform with 30+ dashboards, powering multi-language content production end to end.",
-    category: "Case Study",
+    category: "Project",
     tag: "Product Engineering",
     link: "",
     actionText: "",

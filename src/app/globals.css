@@ -80,15 +80,15 @@ html.lenis, html.lenis-smooth {
   /* Tactile Retro Components */
   .retro-card {
     background-color: var(--card-surface);
-    border: 1.5px solid rgba(62, 56, 50, 0.18);
-    box-shadow: 3px 3px 0px rgba(62, 56, 50, 0.08);
-    border-radius: 1.25rem;
-    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    border: 2px solid rgba(62, 56, 50, 0.25);
+    box-shadow: 3px 3px 0px rgba(62, 56, 50, 0.15);
+    border-radius: 4px;
+    transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
   }
 
   .retro-card:hover {
-    border-color: rgba(62, 56, 50, 0.38);
-    box-shadow: 5px 5px 0px rgba(62, 56, 50, 0.13);
+    border-color: rgba(62, 56, 50, 0.45);
+    box-shadow: 5px 5px 0px rgba(62, 56, 50, 0.22);
     transform: translateY(-2px);
   }
 
@@ -191,39 +191,63 @@ html.lenis, html.lenis-smooth {
 
 /* Arched Navbar Curvature when CRT Mode is active */
 .has-crt-distortion header {
-  z-index: 60 !important;
+  z-index: 50 !important;
 }
 
 .has-crt-distortion header .nav-left {
-  transform: translateY(5px) rotate(-0.5deg);
+  transform: translateY(4px) rotate(-0.5deg);
 }
 
 .has-crt-distortion header .nav-center {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .has-crt-distortion header .nav-right {
-  transform: translateY(5px) rotate(0.5deg);
+  transform: translateY(4px) rotate(0.5deg);
 }
 
-/* Fixed Barrel CRT Monitor Chassis Bezel */
+/* Fixed Barrel CRT Monitor Chassis Bezel - Frames top of solid navbar */
 .crt-barrel-bezel {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 45;
+  z-index: 65;
 }
 
-/* CRT Scanlines */
-.crt-scanlines {
+/* CRT Analog Noise & Grain Filter - Replaces harsh horizontal scanlines */
+@keyframes crtNoiseJitter {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -2px); }
+  80% { transform: translate(2px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.crt-noise {
   position: fixed;
-  inset: 0;
+  inset: -20px;
+  width: calc(100vw + 40px);
+  height: calc(100vh + 40px);
   pointer-events: none;
   z-index: 38;
-  background: linear-gradient(rgba(62, 56, 50, 0) 50%, rgba(62, 56, 50, 0.07) 50%);
-  background-size: 100% 4px;
+  opacity: 0.14;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='crtNoiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23crtNoiseFilter)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  animation: crtNoiseJitter 0.35s steps(5) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-noise {
+    animation: none;
+  }
+}
+
+.crt-scanlines {
+  display: none;
 }
 
 /* Authentic CRT Cathode Tube Vignette - Present on every page */
@@ -253,4 +277,34 @@ html.lenis, html.lenis-smooth {
   z-index: 40;
   background: 
     radial-gradient(ellipse 95% 18% at 50% 0%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 40%, transparent 70%);
+}
+
+/* Mobile Responsive Optimizations for Handheld Devices */
+@media (max-width: 640px) {
+  /* On narrow phone screens, hide the outer chassis bezel so screen width is 100% usable */
+  .crt-barrel-bezel {
+    display: none !important;
+  }
+
+  /* Keep mobile text razor-sharp without warping */
+  .has-crt-distortion #crt-content {
+    filter: none !important;
+  }
+
+  /* Soften vignette for portrait phone aspect ratios */
+  .crt-vignette {
+    background: radial-gradient(
+      ellipse 92% 88% at 50% 50%,
+      transparent 65%,
+      rgba(50, 40, 30, 0.05) 82%,
+      rgba(25, 18, 12, 0.22) 94%,
+      rgba(12, 8, 5, 0.45) 100%
+    ) !important;
+    box-shadow: inset 0 0 16px rgba(15, 10, 6, 0.35) !important;
+  }
+
+  /* Subtle glass glare on mobile */
+  .crt-glass-glare {
+    background: radial-gradient(ellipse 95% 12% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 60%) !important;
+  }
 }

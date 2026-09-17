@@ -152,16 +152,17 @@
   color: var(--foreground);
 }
 
-.headline > span {
+.headline > span,
+.subheadline {
   display: block;
-  font-family: var(--font-garamond), serif;
-  font-size: clamp(22px, min(3.6vw, 4.4vh), 46px);
-  color: rgba(62, 56, 50, 0.6);
+  font-family: var(--font-editorial), var(--font-garamond), serif;
+  font-size: clamp(16px, min(2.1vw, 2.7vh), 26px);
+  color: rgba(62, 56, 50, 0.7);
   font-weight: 400;
   font-style: italic;
   letter-spacing: -0.01em;
-  margin-top: clamp(4px, 0.8vh, 8px);
-  line-height: 1.16;
+  margin-top: clamp(6px, 1.1vh, 12px);
+  line-height: 1.28;
 }
 
 .bio {
@@ -181,7 +182,7 @@
 .actionRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: clamp(10px, 1.8vh, 18px);
   margin-top: clamp(14px, 2.2vh, 28px);
   flex-wrap: wrap;
