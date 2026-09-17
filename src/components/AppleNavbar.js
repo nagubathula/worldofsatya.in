@@ -61,10 +61,10 @@ export default function AppleNavbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 w-full transition-colors duration-200 ${
+      className={`fixed top-0 left-0 right-0 z-50 w-full pt-2.5 sm:pt-3 2xl:pt-4 transition-colors duration-200 ${
         isHome
-          ? "bg-transparent border-b border-transparent shadow-none pointer-events-none"
-          : "bg-[#f4ebd8] border-b-2 border-[#3e3832]/20 shadow-[0_2px_8px_rgba(62,56,50,0.08)] pointer-events-auto"
+          ? "nav-home bg-transparent border-b border-transparent shadow-none pointer-events-none"
+          : "nav-solid bg-[#f4ebd8] border-b-2 border-[#3e3832]/20 shadow-[0_2px_8px_rgba(62,56,50,0.08)] pointer-events-auto"
       }`}
     >
       <div className={`w-full px-3 sm:px-10 lg:px-14 2xl:px-24 py-2.5 sm:py-3.5 2xl:py-5 flex items-center justify-between gap-2 sm:gap-4 ${isHome ? "pointer-events-auto" : ""}`}>

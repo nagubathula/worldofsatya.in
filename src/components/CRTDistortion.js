@@ -36,9 +36,9 @@ export default function CRTDistortion() {
       {/* SVG Screen-Width Curvature Lens Filter */}
       <svg width="0" height="0" style={{ position: "fixed", top: 0, left: 0, width: 0, height: 0, pointerEvents: "none" }} aria-hidden="true">
         <defs>
-          <filter id="crt-z-bulge" x="-10%" y="0%" width="120%" height="100%">
+          <filter id="crt-z-bulge" x="-10%" y="-10%" width="120%" height="120%">
             <feImage href="/crt-displacement.png" xlinkHref="/crt-displacement.png" result="displaceMap" preserveAspectRatio="none" />
-            <feDisplacementMap in="SourceGraphic" in2="displaceMap" scale="110" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap in="SourceGraphic" in2="displaceMap" scale="55" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </defs>
       </svg>

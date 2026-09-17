@@ -195,15 +195,21 @@ html.lenis, html.lenis-smooth {
 }
 
 .has-crt-distortion header .nav-left {
-  transform: translateY(4px) rotate(-0.5deg);
+  transform: translateY(6px);
 }
 
 .has-crt-distortion header .nav-center {
-  transform: translateY(-1px);
+  transform: translateY(1px);
 }
 
 .has-crt-distortion header .nav-right {
-  transform: translateY(4px) rotate(0.5deg);
+  transform: translateY(6px);
+}
+
+/* Subtle curved bottom contour for solid navbar on subpages */
+.has-crt-distortion header.nav-solid {
+  border-bottom-left-radius: clamp(14px, 2.5vw, 24px);
+  border-bottom-right-radius: clamp(14px, 2.5vw, 24px);
 }
 
 /* Fixed Barrel CRT Monitor Chassis Bezel - Frames top of solid navbar */
@@ -289,6 +295,18 @@ html.lenis, html.lenis-smooth {
   /* Keep mobile text razor-sharp without warping */
   .has-crt-distortion #crt-content {
     filter: none !important;
+  }
+
+  /* Reset navbar arch transforms on mobile */
+  .has-crt-distortion header .nav-left,
+  .has-crt-distortion header .nav-center,
+  .has-crt-distortion header .nav-center > a,
+  .has-crt-distortion header .nav-right {
+    transform: none !important;
+  }
+
+  .has-crt-distortion header.nav-solid {
+    border-radius: 0 !important;
   }
 
   /* Soften vignette for portrait phone aspect ratios */
