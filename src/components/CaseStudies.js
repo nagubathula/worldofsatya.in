@@ -88,7 +88,7 @@ export default function CaseStudies({ limit }) {
               <motion.div
                 whileHover={isLink ? { scale: 1.02 } : {}}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className={`group block bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] ${isLink ? 'hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden h-full`}
+                className={`group block bg-background/80  backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)]  ${isLink ? 'hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 cursor-pointer' : ''} transition-all duration-300 relative overflow-hidden h-full`}
               >
                 {/* Clean Tag */}
                 <div className="flex items-center gap-1.5 mb-4">

@@ -90,7 +90,7 @@ export default function OpenSource({ limit }) {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                className="group flex flex-col justify-between p-6 sm:p-8 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 h-full"
+                className="group flex flex-col justify-between p-6 sm:p-8 bg-background/80  backdrop-blur-2xl rounded-3xl border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)]  hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 h-full"
               >
                 {/* Clean Tag */}
                 <div className="flex items-center gap-1.5 mb-4">

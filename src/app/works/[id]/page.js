@@ -38,59 +38,55 @@ export default async function WorkDetailPage({ params }) {
     : { href: work.link };
 
   return (
-    <div className="min-h-screen text-foreground font-sans selection:bg-foreground selection:text-background relative w-full">
+    <div className="min-h-screen relative w-full">
 
-      <main className="relative z-10 flex flex-col pt-8 sm:pt-14">
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-8 mb-12 sm:mb-16">
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-foreground/5 text-xs font-semibold text-foreground/60 uppercase tracking-wider border border-foreground/[0.06]">
+      <main className="relative z-10 flex flex-col pt-16 sm:pt-24 pb-20">
+        <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 mb-16 sm:mb-20">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#3e3832]/5 text-sm font-semibold text-[#3e3832]/70 uppercase tracking-widest border border-[#3e3832]/10 font-pixel">
               {getIcon(work.category)}
               {work.category}
             </span>
-            <span className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
-              {work.tag}
-            </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight text-foreground mb-6">
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-[#3e3832] mb-12 text-center leading-[1.1] max-w-5xl mx-auto">
             {work.title}
           </h1>
           
-          <p className="text-lg sm:text-xl text-foreground/70 leading-relaxed mb-8 max-w-3xl">
-            {work.description}
-          </p>
-
-          {hasLink && (
-            <LinkComponent
-              {...linkProps}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full font-medium hover:scale-105 transition-transform duration-300 shadow-md text-sm"
-            >
-              {work.actionText} <ArrowUpRight size={16} />
-            </LinkComponent>
-          )}
+          <div className="flex justify-center mb-16">
+            {hasLink && (
+              <LinkComponent
+                {...linkProps}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[#3e3832] text-[#f4ebd8] rounded-full font-pixel hover:scale-105 transition-transform duration-300 shadow-md text-base"
+              >
+                {work.actionText} <ArrowUpRight size={18} />
+              </LinkComponent>
+            )}
+          </div>
         </div>
         
         {/* Detail Content Section */}
-        <div className="w-full bg-foreground/[0.02] border-t border-foreground/[0.06]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-8 py-14 sm:py-20">
+        <div className="w-full">
+          <div className="max-w-7xl mx-auto px-6 sm:px-12">
             {work.image && (
-              <div className="w-full aspect-[16/9] sm:aspect-[21/9] relative rounded-3xl overflow-hidden mb-12 bg-foreground/5 border border-foreground/[0.08] shadow-[0_12px_36px_-10px_rgba(0,0,0,0.06)]">
+              <div className="w-full relative rounded-lg overflow-hidden mb-20 bg-foreground/5 shadow-2xl flex items-center justify-center">
                 <Image 
                   src={work.image} 
                   alt={work.title} 
-                  fill
-                  className="object-cover" 
+                  width={1920}
+                  height={1080}
+                  className="w-full h-auto object-contain sepia-[0.2] contrast-125" 
                 />
               </div>
             )}
             
-            <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/80 space-y-6">
+            <div className="prose prose-xl prose-p:leading-relaxed prose-headings:font-editorial prose-headings:font-normal prose-a:text-foreground max-w-none text-foreground/90 sm:columns-2 lg:columns-3 gap-12 mt-12">
               {work.content ? (
                 <div dangerouslySetInnerHTML={{ __html: work.content }} />
               ) : (
-                <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
+                <div className="flex flex-col items-center justify-center py-20 text-center opacity-60 col-span-full">
                   <BookOpen size={44} className="mb-4 text-foreground/40" />
-                  <p className="text-base text-foreground/60">Detailed case study notes and process breakdown coming soon.</p>
+                  <p className="text-xl">Detailed case study notes and process breakdown coming soon.</p>
                 </div>
               )}
             </div>
@@ -98,7 +94,9 @@ export default async function WorkDetailPage({ params }) {
         </div>
       </main>
 
-      <Footer />
+      <div className="border-t border-foreground/10">
+        <Footer />
+      </div>
     </div>
   );
 }

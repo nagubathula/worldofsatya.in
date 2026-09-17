@@ -2,6 +2,21 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AppleNavbar from "@/components/AppleNavbar";
+import CRTDistortion from "@/components/CRTDistortion";
+import { Pixelify_Sans, EB_Garamond } from "next/font/google";
+
+const pixelFont = Pixelify_Sans({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-pixel',
+});
+
+const garamondFont = EB_Garamond({
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-garamond',
+});
 
 export const metadata = {
   metadataBase: new URL("https://worldofsatya.in"),
@@ -61,15 +76,19 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`font-sans text-foreground bg-background tracking-tight overflow-x-clip w-full max-w-full relative antialiased selection:bg-foreground selection:text-background`}
+        className={`crt ${pixelFont.variable} ${garamondFont.variable} font-editorial text-foreground bg-background tracking-tight overflow-x-clip w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-xl`}
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <AppleNavbar />
-          <SmoothScroll>
-            {children}
-          </SmoothScroll>
+          <div id="crt-content">
+            <AppleNavbar />
+            <SmoothScroll>
+              {children}
+            </SmoothScroll>
+          </div>
         </ThemeProvider>
+        <div className="crt-overlay"></div>
+        <CRTDistortion />
       </body>
     </html>
   );

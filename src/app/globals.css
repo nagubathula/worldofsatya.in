@@ -11,25 +11,26 @@ body {
 
 @layer base {
   :root {
-    --foreground: #111111;
-    --background: #ffffff;
-    --foreground-rgb: 17 17 17;
-    --background-rgb: 255 255 255;
+    --foreground: #3e3832; /* Dark sepia/charcoal for text */
+    --background: #f4ebd8; /* Warm paper/beige */
+    --foreground-rgb: 62 56 50;
+    --background-rgb: 244 235 216;
 
-    /* Clean Design System Tokens */
-    --glass-surface: rgba(255, 255, 255, 0.88);
+    /* Clean Design System Tokens - Adjusted for Retro Theme */
+    --glass-surface: rgba(244, 235, 216, 0.88);
     --glass-surface-hover: rgba(255, 255, 255, 0.98);
-    --glass-border: rgba(0, 0, 0, 0.07);
-    --glass-border-subtle: rgba(0, 0, 0, 0.04);
-    --glass-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(62, 56, 50, 0.3);
+    --glass-border-subtle: rgba(62, 56, 50, 0.1);
+    --glass-shadow: 0 4px 20px -2px rgba(62, 56, 50, 0.1), 0 1px 2px rgba(62, 56, 50, 0.05);
+    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
     --glass-blur: blur(20px);
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-foreground font-editorial antialiased;
+    /* Disable anti-aliasing to make the pixel font look sharper and authentic */
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
     transition: color 250ms ease, background-color 250ms ease, border-color 250ms ease;
   }
 }
@@ -53,13 +54,13 @@ body {
 }
 
 ::selection {
-  background: #111111;
-  color: #ffffff;
+  background: #3e3832;
+  color: #f4ebd8;
 }
 
 :root.theme-dark ::selection {
-  background: #ffffff;
-  color: #111111;
+  background: #3e3832;
+  color: #f4ebd8;
 }
 
 /* Gallery marquee — CSS-driven so hover can pause it */
@@ -91,4 +92,80 @@ body {
   .marquee-right {
     animation: none;
   }
+}
+
+/* CRT Effect */
+@keyframes crt-flicker {
+  0% { opacity: 0.98; }
+  5% { opacity: 0.95; }
+  10% { opacity: 0.98; }
+  15% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes crt-text-flicker {
+  0% { 
+    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
+    color: rgb(var(--foreground-rgb) / 1);
+  }
+  2% { 
+    text-shadow: 0 0 2px rgba(26,26,26,0.5); 
+    color: rgb(var(--foreground-rgb) / 0.95);
+  }
+  4% { 
+    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
+    color: rgb(var(--foreground-rgb) / 1);
+  }
+  50% { 
+    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
+    color: rgb(var(--foreground-rgb) / 1);
+  }
+  52% {
+    text-shadow: 0 0 2px rgba(26,26,26,0.5); 
+    color: rgb(var(--foreground-rgb) / 0.98);
+  }
+  54% {
+    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
+    color: rgb(var(--foreground-rgb) / 1);
+  }
+  100% { 
+    text-shadow: 0 0 1px rgba(26,26,26,0.3); 
+    color: rgb(var(--foreground-rgb) / 1);
+  }
+}
+
+.crt {
+  animation: crt-text-flicker 4s infinite;
+}
+
+.crt::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  /* Scanlines and RGB sub-pixel simulation - heavily reduced for light theme */
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.03) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* We need a third layer for the physical screen curvature / vignette so it sits above the blur */
+.crt-overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  /* Physical rounding of the CRT tube */
+  border: 1vmin solid rgba(0,0,0,1);
+  z-index: 9998;
+  pointer-events: none;
+  animation: crt-flicker 0.15s infinite;
 }

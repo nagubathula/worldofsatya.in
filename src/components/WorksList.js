@@ -72,7 +72,7 @@ export default function WorksList() {
                 key={work.id}
               >
                 <Link href={`/works/${work.id}`} className="block group h-full">
-                  <div className="relative p-6 sm:p-9 bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 group-hover:scale-[1.008] overflow-hidden">
+                  <div className="relative p-6 sm:p-9 bg-background/80 backdrop-blur-2xl rounded-3xl border border-foreground/[0.08] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.12)] hover:border-foreground/20 transition-all duration-300 group-hover:scale-[1.008] overflow-hidden">
                     {/* Clean Tag */}
                     <div className="flex items-center gap-1.5 mb-5">
                       <span className="text-[11px] font-medium text-foreground/50 tracking-wider uppercase">{work.tag}</span>

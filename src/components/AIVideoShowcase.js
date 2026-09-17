@@ -254,7 +254,7 @@ export default function AIVideoShowcase({ limit }) {
               key={i}
               className="flex flex-col group min-w-0"
             >
-              <div className="relative rounded-3xl overflow-hidden bg-background/80 dark:bg-[#141416]/80 backdrop-blur-2xl mb-3 border border-foreground/[0.08] dark:border-white/[0.09] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.14)] hover:border-foreground/20 hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
+              <div className="relative rounded-3xl overflow-hidden bg-background/80  backdrop-blur-2xl mb-3 border border-foreground/[0.08]  shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)]  hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.14)] hover:border-foreground/20 hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
                 <LazyVideo
                   src={video.src}
                   poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
