@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function ExperienceTimeline({ limit }) {
+export default function ExperienceTimeline({ limit, showStats = false }) {
   const experiences = [
     {
       year: "05/2025 - Present",
@@ -68,7 +68,7 @@ export default function ExperienceTimeline({ limit }) {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true }}
       className="w-full"
     >
       <div className="py-12 sm:py-20 px-4 sm:px-8 max-w-6xl 2xl:max-w-7xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
@@ -105,28 +105,30 @@ export default function ExperienceTimeline({ limit }) {
           ))}
         </div>
         
-        {/* Other experiences: the numbers that don't fit a timeline */}
-        <motion.div variants={itemAnim} className="mt-2 sm:mt-6">
-          <h3 className="text-xl sm:text-3xl font-editorial font-normal text-[#3e3832] tracking-tight mb-4 sm:mb-6">
-            Other Experiences
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {[
-              { value: "280+", label: "Clients served" },
-              { value: "6", label: "Years of experience" },
-              { value: "36", label: "Students trained in engineering & design" },
-              { value: "3", label: "Movies worked on" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col gap-1 p-4 sm:p-6 retro-card"
-              >
-                <span className="text-2xl sm:text-4xl font-editorial font-normal text-[#3e3832] tracking-tight">{stat.value}</span>
-                <span className="text-[11px] sm:text-xs font-pixel uppercase tracking-wider text-[#3e3832]/60 leading-snug">{stat.label}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        {/* Other experiences: the numbers that don't fit a timeline (optional to avoid duplication) */}
+        {showStats && (
+          <motion.div variants={itemAnim} className="mt-2 sm:mt-6">
+            <h3 className="text-xl sm:text-3xl font-editorial font-normal text-[#3e3832] tracking-tight mb-4 sm:mb-6">
+              Other Experiences
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              {[
+                { value: "280+", label: "Clients served" },
+                { value: "6", label: "Years of experience" },
+                { value: "36", label: "Students trained in engineering & design" },
+                { value: "3", label: "Movies worked on" },
+              ].map((stat) => (
+                <div
+                  key={stat.label}
+                  className="flex flex-col gap-1 p-4 sm:p-6 retro-card"
+                >
+                  <span className="text-2xl sm:text-4xl font-editorial font-normal text-[#3e3832] tracking-tight">{stat.value}</span>
+                  <span className="text-[11px] sm:text-xs font-pixel uppercase tracking-wider text-[#3e3832]/60 leading-snug">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {limit && experiences.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
