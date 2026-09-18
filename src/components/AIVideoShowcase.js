@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import AnimatedButton from "./AnimatedButton";
 import { Video } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import RetroVideoPlayer from "./RetroVideoPlayer";
 
 function LazyVideo({ src, poster, onLoadedMetadata, isVertical }) {
   const videoRef = useRef(null);
@@ -116,6 +117,7 @@ export default function AIVideoShowcase({ limit }) {
   const scrollContainerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [aspectRatios, setAspectRatios] = useState({});
+  const [activeVideo, setActiveVideo] = useState(null);
 
   // Duplicate the video array for a seamless infinite scroll loop
   const duplicatedVideos = [...videos, ...videos];
@@ -227,7 +229,8 @@ export default function AIVideoShowcase({ limit }) {
               <motion.div
                 variants={itemAnim}
                 key={i}
-                className="flex flex-col group shrink-0 w-[80vw] sm:w-auto"
+                className="flex flex-col group shrink-0 w-[80vw] sm:w-auto cursor-pointer"
+                onClick={() => setActiveVideo(video)}
               >
                 <div className={`relative rounded-sm overflow-hidden bg-foreground/5 mb-3 border-2 border-[#3e3832]/25 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px] ${video.isVertical ? "sm:aspect-[9/16]" : "sm:aspect-video"}`}>
                   <LazyVideo
@@ -252,7 +255,8 @@ export default function AIVideoShowcase({ limit }) {
             <motion.div
               variants={itemAnim}
               key={i}
-              className="flex flex-col group min-w-0"
+              className="flex flex-col group min-w-0 cursor-pointer"
+              onClick={() => setActiveVideo(video)}
             >
               <div className="relative rounded-sm overflow-hidden bg-[#fdfaf3] mb-3 border-2 border-[#3e3832]/25 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
                 <LazyVideo
@@ -280,6 +284,17 @@ export default function AIVideoShowcase({ limit }) {
           </motion.div>
         )}
       </div>
+
+      <AnimatePresence>
+        {activeVideo && (
+          <RetroVideoPlayer 
+            src={activeVideo.src} 
+            poster={`/aivideos/posters/${activeVideo.src.split("/").pop().replace(".mp4", ".jpg")}`}
+            title={activeVideo.title}
+            onClose={() => setActiveVideo(null)} 
+          />
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 }
