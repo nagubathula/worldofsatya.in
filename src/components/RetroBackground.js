@@ -32,7 +32,7 @@ export default function RetroBackground() {
       {/* Cinematic Retro Landscape Artwork Layer */}
       <div className={styles.imageLayer}>
         <Image
-          src="/images/retro-sky-field.jpg"
+          src="/images/sky_bg.png"
           alt=""
           fill
           priority

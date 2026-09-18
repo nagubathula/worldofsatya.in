@@ -7,6 +7,18 @@
   user-select: none;
 }
 
+/* Animation keyframes */
+@keyframes slowFadeIn {
+  0% { opacity: 0; filter: blur(8px); }
+  100% { opacity: 1; filter: blur(0); }
+}
+
+@keyframes soothingBreathe {
+  0% { transform: scale(1.02); }
+  50% { transform: scale(1.07); }
+  100% { transform: scale(1.02); }
+}
+
 /* Background Image Container */
 .imageLayer {
   position: absolute;
@@ -14,12 +26,17 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  opacity: 0; /* Starts hidden for fade in */
+  animation: slowFadeIn 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .artwork {
   object-fit: cover;
   object-position: center 55%;
   filter: contrast(1.02) saturate(1.04);
+  /* Apply a very slow, subtle breathing animation */
+  animation: soothingBreathe 120s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* Warm Archival Color Grading & Sepia Tint */
