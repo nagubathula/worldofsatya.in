@@ -5,7 +5,6 @@ import { User, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedButton from "./AnimatedButton";
 import RetroRainbowRibbon from "./RetroRainbowRibbon";
-import { useTheme } from "@/components/ThemeProvider";
 
 const stats = [
   { value: "6", label: "Years of Experience" },
@@ -43,96 +42,93 @@ const container = {
 };
 
 const itemAnim = {
-  hidden: { opacity: 0, scale: 0.96, y: 16 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
-    scale: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 350, damping: 25 },
+    transition: { duration: 0.35, ease: "easeOut" },
   },
 };
 
 export default function AboutMe() {
-  const { theme } = useTheme();
-  const portrait = theme === "dark" ? "/portraits/sky-night.jpg" : "/portraits/sky-day.jpg";
-
   return (
     <motion.section
       variants={container}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-100px" }}
+      animate="show"
       className="w-full py-10 sm:py-16"
     >
-      <div className="px-4 sm:px-8 max-w-6xl 2xl:max-w-7xl mx-auto w-full flex flex-col gap-12 sm:gap-16">
-        {/* Header */}
-        <motion.div variants={itemAnim} className="flex flex-col items-start max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel mb-4 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)]">
+      <div className="px-4 sm:px-8 max-w-6xl xl:max-w-7xl mx-auto w-full flex flex-col gap-12 sm:gap-16">
+        {/* Section Header (Centered Editorial Headline matching reference) */}
+        <motion.div variants={itemAnim} className="flex flex-col items-center text-center gap-4 max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)] w-fit">
             <User size={14} /> About Satya
           </div>
-          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-editorial font-normal leading-[1.08] text-[#3e3832] tracking-tight mb-4 sm:mb-6">
-            Design Technologist <span className="italic text-[#3e3832]/70">&amp; AI Engineer.</span>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl 2xl:text-7xl font-editorial font-normal leading-[1.12] text-[#3e3832] tracking-tight">
+            Design Technologist <span className="italic text-[#3e3832]/75">&amp; AI Engineer</span>
           </h1>
-          <p className="text-base sm:text-xl text-[#3e3832]/75 max-w-3xl leading-relaxed font-editorial">
+          <p className="text-base sm:text-xl text-[#3e3832]/75 font-editorial max-w-2xl leading-relaxed">
             Connecting interface craft, typography, and deep systems engineering to build sovereign tools and scalable generative pipelines.
           </p>
         </motion.div>
 
-        {/* Three-Column Editorial Story Grid with Portrait */}
-        <motion.div variants={itemAnim} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          {/* Column 1: Identity & Role */}
-          <div className="lg:col-span-3 flex flex-col gap-4 text-base font-editorial text-[#3e3832]/85 leading-relaxed">
-            <p>
-              I&apos;m <span className="font-semibold text-[#3e3832]">Satya Sai Nagubathula</span> — a Design Technologist and AI Engineer. I operate at the boundary where interface craft, typography, and deep systems engineering converge.
-            </p>
-            <p>
-              At <span className="font-semibold text-[#3e3832]">NXTWAVE Disruptive Technologies</span>, I serve as Generative AI Engineer and Creative Lead, architecting autonomous video production pipelines and zero-cost automation suites that empower teams to scale content by 90%.
-            </p>
-          </div>
+        {/* Three-Column Editorial Spread with Cutout Figure Grounded on Rainbow Ribbon */}
+        <motion.div variants={itemAnim} className="flex flex-col">
+          <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1.85fr] gap-6 lg:gap-8 items-end">
+            {/* Column 1: Identity & Role */}
+            <div className="flex flex-col justify-between h-full min-h-[275px] text-sm sm:text-base lg:text-[15px] font-editorial text-[#3e3832]/85 leading-[1.62] relative z-10">
+              <p className="mb-3.5">
+                I&apos;m <span className="font-semibold text-[#3e3832]">Satya Sai Nagubathula</span> — a Design Technologist and AI Engineer operating at the boundary where interface craft, typography, and deep systems engineering converge.
+              </p>
+              <p className="mb-0">
+                At <span className="font-semibold text-[#3e3832]">NXTWAVE Disruptive Technologies</span>, I serve as Generative AI Engineer and Creative Lead, architecting autonomous video production pipelines and zero-cost automation suites that empower teams to scale content by 90%.
+              </p>
+            </div>
 
-          {/* Column 2: Journey & Philosophy */}
-          <div className="lg:col-span-3 flex flex-col gap-4 text-base font-editorial text-[#3e3832]/85 leading-relaxed">
-            <p>
-              My journey began in pure visual design — brand identities, interface typography, and Figma design systems — and evolved through hardware security research, full-stack architecture, and government-scale software.
-            </p>
-            <p>
-              That multidisciplinary foundation defines my daily workflow: exploring an intuition through tactile design, verifying it in code, and engineering the robust infrastructure to bring it alive.
-            </p>
-          </div>
+            {/* Column 2: Journey & Workflow */}
+            <div className="flex flex-col justify-between h-full min-h-[275px] text-sm sm:text-base lg:text-[15px] font-editorial text-[#3e3832]/85 leading-[1.62] relative z-10">
+              <p className="mb-3.5">
+                My journey began in pure visual design — brand identities, interface typography, and Figma design systems — and evolved through hardware security research, full-stack architecture, and government-scale software.
+              </p>
+              <p className="mb-0">
+                That multidisciplinary foundation defines my daily workflow: exploring an intuition through tactile design, verifying it in code, and engineering the robust infrastructure to bring it alive.
+              </p>
+            </div>
 
-          {/* Column 3: Impact & Open Source */}
-          <div className="lg:col-span-3 flex flex-col gap-4 text-base font-editorial text-[#3e3832]/85 leading-relaxed">
-            <p>
-              Over the past six years, I have collaborated with 280+ international clients, mentored 36 emerging designers and engineers, and contributed visual engineering to three feature films.
-            </p>
-            <p>
-              Outside commercial work, I build sovereign public goods — founding <span className="font-semibold text-[#3e3832]">Engineerudu</span> (Andhra Pradesh&apos;s first FOSS community) and developing open design systems like <span className="font-semibold text-[#3e3832]">Chaya UI</span>.
-            </p>
-          </div>
-
-          {/* Column 4: Archival Portrait Frame */}
-          <div className="lg:col-span-3 flex flex-col gap-3 max-w-sm mx-auto w-full lg:max-w-none">
-            <div className="relative w-full aspect-[4/5] rounded-sm overflow-hidden border-2 border-[#3e3832]/30 shadow-[5px_5px_0px_rgba(62,56,50,0.2)] bg-[#fdfaf3]">
-              <Image
-                key={portrait}
-                src={portrait}
-                alt="Satya Sai Nagubathula"
-                fill
-                sizes="(max-width: 640px) 100vw, 360px"
-                className="object-cover sepia-[0.12] contrast-105"
-                priority
+            {/* Column 3: Impact & Open Source with Integrated Floated Cutout */}
+            <div className="md:col-span-2 lg:col-span-1 block text-sm sm:text-base lg:text-[15px] font-editorial text-[#3e3832]/85 leading-[1.62] relative z-10 min-h-[275px]">
+              <img
+                src="/images/about/about_col3_image.png"
+                alt="Satya Sai Nagubathula with cat"
+                width={486}
+                height={359}
+                className="hidden lg:block float-right w-[365px] xl:w-[395px] h-auto ml-3 -mb-[3px] select-none pointer-events-none drop-shadow-[0_10px_20px_rgba(62,56,50,0.12)] filter contrast-104"
+                style={{
+                  shapeOutside:
+                    "polygon(41.2% 0%, 36.2% 7%, 34% 14.2%, 35.4% 21.2%, 19.3% 28.4%, 16.3% 35.4%, 14% 42.6%, 13.6% 49.9%, 11.9% 56.8%, 11.7% 64.1%, 0% 71%, 0% 78.3%, 0% 85.2%, 0% 92.5%, 0% 100%, 100% 100%, 100% 0%)",
+                }}
               />
-            </div>
-            <div className="flex items-center justify-between text-[11px] font-pixel text-[#3e3832]/60 uppercase tracking-widest px-1">
-              <span>Satya Sai N.</span>
-              <span className="inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> Available</span>
+              <p className="mb-0">
+                Over the past six years, I have collaborated with 280+ international clients, mentored 36 emerging designers and engineers, and built sovereign public goods — founding <span className="font-semibold text-[#3e3832]">Engineerudu</span> (Andhra Pradesh&apos;s first FOSS community) and developing open design systems like <span className="font-semibold text-[#3e3832]">Chaya UI</span>.
+              </p>
             </div>
           </div>
-        </motion.div>
 
-        {/* 6-Stripe Apple / Polaroid Retro Rainbow Ribbon Divider */}
-        <motion.div variants={itemAnim} className="w-full py-2">
-          <RetroRainbowRibbon className="rounded-sm" />
+          {/* Mobile/Tablet Fallback Cutout Figure */}
+          <div className="block lg:hidden flex justify-center -mt-2 -mb-1">
+            <img
+              src="/images/about/about_main_image.png"
+              alt="Satya Sai Nagubathula with cat"
+              width={596}
+              height={359}
+              className="w-[300px] sm:w-[360px] h-auto object-contain -mb-[3px]"
+            />
+          </div>
+
+          {/* 6-Stripe Apple / Polaroid Retro Rainbow Ribbon Divider */}
+          <div className="w-full">
+            <RetroRainbowRibbon className="rounded-sm" />
+          </div>
         </motion.div>
 
         {/* Showcase of Impact & Metrics */}

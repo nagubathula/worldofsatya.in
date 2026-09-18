@@ -32,8 +32,8 @@ export default function RetroBackground() {
       {/* Cinematic Retro Landscape Artwork Layer */}
       <div className={styles.imageLayer}>
         <Image
-          src="/images/sky_bg.png"
-          alt=""
+          src="/images/hero.jpg"
+          alt="Satya in landscape"
           fill
           priority
           sizes="100vw"
