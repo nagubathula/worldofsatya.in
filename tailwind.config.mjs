@@ -15,10 +15,10 @@ export default {
         offwhite: "rgb(var(--foreground-rgb) / <alpha-value>)",
       },
       fontFamily: {
-        sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "SF Pro Text", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "SF Pro Display", "SF Pro Text", "system-ui", "sans-serif"],
         mono: ["SFMono-Regular", "ui-monospace", "Menlo", "Monaco", "monospace"],
-        pixel: ["var(--font-pixel)", "sans-serif"],
-        editorial: ["var(--font-garamond)", "serif"],
+        pixel: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        editorial: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "SF Pro Display", "system-ui", "sans-serif"],
       },
     },
   },

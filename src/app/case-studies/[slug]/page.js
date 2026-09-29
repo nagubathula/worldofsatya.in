@@ -18,34 +18,33 @@ export default async function CaseStudyPage({ params }) {
 
   return (
     <div className="min-h-screen relative max-w-4xl mx-auto w-full px-4 sm:px-12">
-
-      <main className="relative z-10 flex flex-col pt-8 sm:pt-14 pb-16">
+      <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-16">
         <header className="mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel mb-6 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#86868b] text-xs font-sans mb-6 uppercase tracking-wider font-medium border border-black/[0.04]">
             {study.type}
           </div>
-          <h1 className="text-4xl md:text-6xl font-editorial font-normal text-[#3e3832] tracking-tight leading-[1.1] mb-6">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.03em] leading-[1.08] mb-5">
             {study.title}
           </h1>
-          <p className="text-lg md:text-xl text-[#3e3832]/70 max-w-3xl leading-relaxed font-editorial">
+          <p className="text-base md:text-lg text-[#86868b] max-w-3xl leading-relaxed font-sans">
             {study.heroDescription}
           </p>
         </header>
 
-        <article className="flex flex-col gap-10 md:gap-14">
+        <article className="flex flex-col gap-6 md:gap-8">
           {study.content.map((section, idx) => (
             <section
               key={idx}
-              className="p-6 sm:p-8 retro-card"
+              className="p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
             >
-              <h2 className="text-2xl md:text-3xl font-editorial font-normal text-[#3e3832] mb-4 tracking-tight">
+              <h2 className="text-xl md:text-2xl font-sans font-semibold text-[#1d1d1f] mb-4 tracking-tight">
                 {section.section}
               </h2>
               <div 
-                className="text-base md:text-lg text-[#3e3832]/85 font-editorial leading-relaxed whitespace-pre-wrap max-w-3xl space-y-4"
+                className="text-base text-[#515154] font-sans leading-relaxed whitespace-pre-wrap max-w-3xl space-y-4"
                 dangerouslySetInnerHTML={{ 
                   __html: section.body
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-[#3e3832]">$1</strong>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-[#1d1d1f]">$1</strong>')
                     .replace(/\n\n/g, '<br/><br/>')
                 }}
               />

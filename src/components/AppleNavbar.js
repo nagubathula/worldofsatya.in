@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Volume2, VolumeX, Tv } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { isSoundEnabled, toggleSound, play8BitBlipSound } from "@/components/SoundEffects";
-import RetroRainbowRibbon from "@/components/RetroRainbowRibbon";
 
 const navLinks = [
   { href: "/works", label: "Works" },
@@ -25,14 +23,22 @@ const secondaryLinks = [
 export default function AppleNavbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const [soundOn, setSoundOn] = useState(true);
-  const [scanlinesOn, setScanlinesOn] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Close mobile menu on route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
+
+  // Track window scroll for blur background
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -69,109 +75,62 @@ export default function AppleNavbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    setSoundOn(isSoundEnabled());
-
-    try {
-      const storedScanlines = localStorage.getItem("portfolio-crt-v2");
-      if (storedScanlines === "false") {
-        setScanlinesOn(false);
-      }
-    } catch {}
-
-    const handleSoundChange = (e) => {
-      setSoundOn(e.detail);
-    };
-
-    window.addEventListener("portfolio-sound-change", handleSoundChange);
-    return () => window.removeEventListener("portfolio-sound-change", handleSoundChange);
-  }, []);
-
-  const handleToggleSound = () => {
-    const next = toggleSound();
-    setSoundOn(next);
-  };
-
-  const handleToggleScanlines = () => {
-    const next = !scanlinesOn;
-    setScanlinesOn(next);
-    try {
-      localStorage.setItem("portfolio-crt-v2", next ? "true" : "false");
-    } catch {}
-    window.dispatchEvent(new CustomEvent("toggle-scanlines", { detail: next }));
-    play8BitBlipSound(440);
-  };
-
-  const handleToggleMenu = () => {
-    const next = !mobileMenuOpen;
-    setMobileMenuOpen(next);
-    play8BitBlipSound(next ? 520 : 380);
-  };
-
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 w-full pt-2.5 sm:pt-3 2xl:pt-4 transition-colors duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-200 ${
           mobileMenuOpen
-            ? "bg-[#f4ebd8] border-b border-[#3e3832]/20 shadow-none pointer-events-auto"
-            : isHome
-            ? "nav-home bg-transparent border-b border-transparent shadow-none pointer-events-none"
-            : "nav-solid bg-[#f4ebd8] border-b-2 border-[#3e3832]/20 shadow-[0_2px_8px_rgba(62,56,50,0.08)] pointer-events-auto"
+            ? "bg-[#fbfbfd]/90 backdrop-blur-2xl border-b border-black/[0.06] shadow-none pointer-events-auto"
+            : isHome && !scrolled
+            ? "bg-transparent border-b border-transparent shadow-none pointer-events-none"
+            : "bg-[#fbfbfd]/80 backdrop-blur-2xl border-b border-black/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.02)] pointer-events-auto"
         }`}
       >
-        <div className={`w-full px-3 sm:px-10 lg:px-14 2xl:px-24 py-2.5 sm:py-3.5 2xl:py-5 flex items-center justify-between gap-2 sm:gap-4 ${isHome || mobileMenuOpen ? "pointer-events-auto" : ""}`}>
+        <div className={`w-full max-w-6xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between gap-4 ${isHome && !scrolled && !mobileMenuOpen ? "pointer-events-auto" : ""}`}>
           
           {/* Left Side: Brand & Context */}
-          <div className="nav-left flex items-center gap-1.5 sm:gap-2 shrink-0 transition-transform duration-300">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {!isHome && (
               <>
                 <Link
                   href="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1 2xl:px-4 2xl:py-1.5 rounded-sm text-xs 2xl:text-sm font-pixel tracking-wider text-[#3e3832] hover:bg-[#3e3832]/[0.08] transition-all border-2 border-[#3e3832]/30 shadow-[2px_2px_0px_rgba(62,56,50,0.15)] active:translate-x-[1px] active:translate-y-[1px]"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] bg-[#f5f5f7] hover:bg-[#e8e8ed] transition-all active:scale-95"
                   title="Return to Home"
                 >
                   <ArrowLeft size={13} aria-hidden="true" />
-                  <span className="hidden xs:inline">HOME</span>
+                  <span className="hidden xs:inline">Home</span>
                 </Link>
-                <div className="w-[1px] h-3.5 2xl:h-5 bg-[#3e3832]/20" aria-hidden="true" />
+                <div className="w-[1px] h-3.5 bg-black/[0.08]" aria-hidden="true" />
               </>
             )}
 
-            {/* Wordmark with Apple 6-stripe Rainbow Badge */}
+            {/* Modern Wordmark */}
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-[16px] sm:text-[19px] 2xl:text-2xl font-editorial font-semibold tracking-tight text-[#3e3832] hover:opacity-80 transition-opacity flex items-center gap-1.5"
+              className="text-base sm:text-lg font-sans font-semibold tracking-tight text-[#1d1d1f] hover:opacity-75 transition-opacity flex items-center"
             >
-              <div className="flex flex-col w-3.5 h-3.5 2xl:w-4 2xl:h-4 rounded-[2px] overflow-hidden border border-[#3e3832]/30 shadow-[1px_1px_0px_rgba(62,56,50,0.15)] shrink-0" aria-hidden="true">
-                <span className="w-full flex-1 bg-[#4aa3df]" />
-                <span className="w-full flex-1 bg-[#5cb88f]" />
-                <span className="w-full flex-1 bg-[#f2c14e]" />
-                <span className="w-full flex-1 bg-[#f28e2b]" />
-                <span className="w-full flex-1 bg-[#e54b4b]" />
-                <span className="w-full flex-1 bg-[#8e5ba5]" />
-              </div>
-              <span>satya<span className="text-[#c2410c] font-pixel text-xl 2xl:text-2xl font-bold">.</span></span>
+              <span>satya</span>
             </Link>
 
-            <span className="hidden md:inline font-pixel text-xs 2xl:text-sm text-[#3e3832]/50 tracking-wider ml-1 pl-2.5 2xl:pl-3.5 border-l border-[#3e3832]/20">
-              DESIGN TECHNOLOGIST
+            <span className="hidden md:inline font-sans text-[11px] font-medium text-[#86868b] tracking-wider ml-1 pl-3 border-l border-black/[0.08] uppercase">
+              Design Technologist
             </span>
           </div>
 
-          {/* Center: Desktop Navigation Links */}
-          <nav className="nav-center hidden lg:flex items-center gap-1 sm:gap-1.5 2xl:gap-3 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transition-transform duration-300">
+          {/* Center: Desktop Navigation Links (macOS style segmented pill) */}
+          <nav className="hidden lg:flex items-center gap-0.5 p-1 rounded-full bg-[#f5f5f7]/90 border border-black/[0.05] shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)] backdrop-blur-md">
             {navLinks.map((item) => {
               const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 2xl:px-5 py-1 2xl:py-2 rounded-sm text-xs sm:text-[13px] 2xl:text-base whitespace-nowrap font-pixel tracking-wider transition-all duration-100 ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-sans font-medium whitespace-nowrap transition-all duration-150 ${
                     isActive
-                      ? "bg-[#3e3832] text-[#f4ebd8] border-2 border-[#3e3832] shadow-[2px_2px_0px_rgba(62,56,50,0.3)]"
-                      : "text-[#3e3832]/75 hover:text-[#3e3832] hover:bg-[#3e3832]/[0.08] border-2 border-transparent hover:border-[#3e3832]/20"
+                      ? "bg-white text-[#1d1d1f] shadow-sm"
+                      : "text-[#86868b] hover:text-[#1d1d1f] hover:bg-white/60"
                   }`}
                 >
                   {item.label}
@@ -180,108 +139,70 @@ export default function AppleNavbar() {
             })}
           </nav>
 
-          {/* Right Side: Retro Controls & Mobile Toggle */}
-          <div className="nav-right flex items-center gap-1.5 sm:gap-2 2xl:gap-3 shrink-0 transition-transform duration-300">
-            {/* Sound Effects Toggle */}
-            <button
-              onClick={handleToggleSound}
-              className={`inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 2xl:w-11 2xl:h-11 rounded-sm border-2 transition-all active:translate-x-[1px] active:translate-y-[1px] ${
-                soundOn
-                  ? "text-[#c2410c] bg-[#c2410c]/10 border-[#c2410c] shadow-[2px_2px_0px_rgba(194,65,12,0.25)] hover:bg-[#c2410c]/20"
-                  : "text-[#3e3832]/40 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.12)] hover:text-[#3e3832] hover:bg-[#3e3832]/[0.06]"
-              }`}
-              aria-label={soundOn ? "Mute 8-bit sound effects" : "Enable 8-bit sound effects"}
-              title={soundOn ? "8-Bit Sound: Enabled" : "8-Bit Sound: Muted"}
-            >
-              {soundOn ? <Volume2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 2xl:w-5 2xl:h-5" /> : <VolumeX className="w-3 h-3 sm:w-3.5 sm:h-3.5 2xl:w-5 2xl:h-5" />}
-            </button>
-
-            {/* CRT Noise / Curved Screen Toggle */}
-            <button
-              onClick={handleToggleScanlines}
-              className={`relative inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 2xl:w-11 2xl:h-11 rounded-sm border-2 transition-all active:translate-x-[1px] active:translate-y-[1px] ${
-                scanlinesOn
-                  ? "text-[#0f766e] bg-[#0f766e]/10 border-[#0f766e] shadow-[2px_2px_0px_rgba(15,118,110,0.25)] hover:bg-[#0f766e]/20"
-                  : "text-[#3e3832]/40 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.12)] hover:text-[#3e3832] hover:bg-[#3e3832]/[0.06]"
-              }`}
-              aria-label={scanlinesOn ? "CRT Curved Screen: Enabled" : "CRT Curved Screen: Disabled"}
-              title={scanlinesOn ? "CRT Curved Screen: ON (Click to toggle)" : "CRT Curved Screen: OFF (Click to toggle)"}
-            >
-              <Tv className="w-3 h-3 sm:w-3.5 sm:h-3.5 2xl:w-5 2xl:h-5" />
-              {scanlinesOn && (
-                <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-1.5 h-1.5 rounded-full bg-[#22c55e] shadow-[0_0_4px_#22c55e]" aria-hidden="true" />
-              )}
-            </button>
-
+          {/* Right Side: Talk CTA & Mobile Toggle */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Desktop Let's Talk CTA */}
             <a
               href="mailto:nagubathula.satyasai@gmail.com"
-              className="hidden sm:inline-flex items-center gap-1.5 2xl:gap-2 px-3 sm:px-3.5 2xl:px-6 py-1 sm:py-1.5 2xl:py-2.5 rounded-sm border-2 border-[#3e3832] bg-[#3e3832] text-[#f4ebd8] text-xs 2xl:text-sm font-pixel tracking-wider hover:opacity-95 transition-all shadow-[3px_3px_0px_rgba(62,56,50,0.3)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(62,56,50,0.3)]"
+              className="hidden sm:inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-[#1d1d1f] text-white text-xs font-sans font-medium hover:bg-[#333336] transition-all shadow-sm active:scale-95"
             >
-              <span className="text-[13px] 2xl:text-base leading-none">☎</span> TALK <ArrowUpRight className="w-3 h-3 2xl:w-4 2xl:h-4" aria-hidden="true" />
+              <span>Let&apos;s Talk</span>
+              <ArrowUpRight className="w-3 h-3 opacity-70" aria-hidden="true" />
             </a>
 
-            {/* Retro Mobile Menu Toggle Button */}
+            {/* Mobile Menu Toggle Button */}
             <button
-              onClick={handleToggleMenu}
-              className={`lg:hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-sm border-2 font-pixel text-xs tracking-wider transition-all active:translate-x-[1px] active:translate-y-[1px] ${
-                mobileMenuOpen
-                  ? "bg-[#3e3832] text-[#f4ebd8] border-[#3e3832] shadow-[2px_2px_0px_rgba(62,56,50,0.3)]"
-                  : "bg-[#3e3832]/5 text-[#3e3832] border-[#3e3832]/30 shadow-[2px_2px_0px_rgba(62,56,50,0.15)] hover:bg-[#3e3832]/10"
-              }`}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden inline-flex items-center justify-center w-8 h-8 rounded-full border border-black/[0.08] bg-white text-[#1d1d1f] hover:bg-[#f5f5f7] transition-all active:scale-95"
               aria-expanded={mobileMenuOpen}
               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             >
-              {mobileMenuOpen ? "✕" : "☰ MENU"}
+              {mobileMenuOpen ? <X size={15} /> : <Menu size={15} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Retro Full-Screen Mobile Menu Drawer */}
+      {/* Modern Full-Screen Mobile Menu Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed inset-0 z-40 lg:hidden w-full h-[100dvh] bg-[#f4ebd8] flex flex-col pointer-events-auto pt-[62px] sm:pt-[72px] overflow-hidden"
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="fixed inset-0 z-40 lg:hidden w-full h-[100dvh] bg-[#fbfbfd]/95 backdrop-blur-2xl flex flex-col pointer-events-auto pt-16 overflow-hidden"
           >
-            <div className="flex-1 w-full flex flex-col justify-between px-4 sm:px-8 py-3 pb-8 overflow-y-auto overscroll-contain">
-              {/* Directory Status Header */}
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between pb-2 border-b border-[#3e3832]/15 text-[11px] font-pixel text-[#3e3832]/60 tracking-wider">
-                  <span>// SYSTEM DIRECTORY</span>
-                  <span className="flex items-center gap-1.5 text-[#0f766e]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
-                    <span>ONLINE</span>
+            <div className="flex-1 w-full flex flex-col justify-between px-6 py-6 overflow-y-auto">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between pb-3 border-b border-black/[0.06] text-xs font-sans text-[#86868b] uppercase tracking-wider">
+                  <span>Navigation</span>
+                  <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Available</span>
                   </span>
                 </div>
 
                 {/* Primary Nav Links */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5">
                   {navLinks.map((item) => {
                     const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          play8BitBlipSound(480);
-                        }}
-                        className={`flex items-center justify-between px-4 py-3 rounded-sm text-sm sm:text-base font-pixel tracking-wider border-2 transition-all active:translate-x-[1px] active:translate-y-[1px] ${
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center justify-between px-4 py-3 rounded-2xl text-base font-sans font-medium transition-all ${
                           isActive
-                            ? "bg-[#3e3832] text-[#f4ebd8] border-[#3e3832] shadow-[2px_2px_0px_rgba(62,56,50,0.3)]"
-                            : "bg-[#fcf8f0] text-[#3e3832] border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.12)] hover:bg-[#3e3832]/[0.06]"
+                            ? "bg-[#1d1d1f] text-white shadow-sm"
+                            : "bg-[#f5f5f7] text-[#1d1d1f] hover:bg-[#e8e8ed]"
                         }`}
                       >
                         <span>{item.label}</span>
                         {isActive ? (
-                          <span className="text-[10px] text-[#f2c14e] font-bold">● ACTIVE</span>
+                          <span className="text-xs text-neutral-300 font-normal">Active</span>
                         ) : (
-                          <ArrowUpRight size={15} className="opacity-45" />
+                          <ArrowUpRight size={16} className="opacity-40" />
                         )}
                       </Link>
                     );
@@ -289,25 +210,22 @@ export default function AppleNavbar() {
                 </div>
 
                 {/* Secondary Explore Links */}
-                <div className="pt-2 border-t border-[#3e3832]/15 mt-0.5">
-                  <div className="text-[10px] font-pixel text-[#3e3832]/50 tracking-wider uppercase mb-1.5">
-                    More Sections
+                <div className="pt-3 border-t border-black/[0.06]">
+                  <div className="text-xs font-sans text-[#86868b] uppercase tracking-wider mb-2">
+                    More
                   </div>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-3 gap-2">
                     {secondaryLinks.map((sec) => {
                       const isActive = pathname === sec.href;
                       return (
                         <Link
                           key={sec.href}
                           href={sec.href}
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            play8BitBlipSound(480);
-                          }}
-                          className={`text-center py-2 px-1 rounded-sm text-[11px] font-pixel tracking-wider border transition-all active:translate-x-[1px] active:translate-y-[1px] ${
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`text-center py-2.5 px-2 rounded-xl text-xs font-sans font-medium transition-all ${
                             isActive
-                              ? "bg-[#3e3832] text-[#f4ebd8] border-[#3e3832]"
-                              : "bg-[#fcf8f0] text-[#3e3832]/80 border-[#3e3832]/20 hover:border-[#3e3832]/40"
+                              ? "bg-[#1d1d1f] text-white"
+                              : "bg-[#f5f5f7] text-[#1d1d1f] hover:bg-[#e8e8ed] border border-black/[0.04]"
                           }`}
                         >
                           {sec.label}
@@ -321,43 +239,38 @@ export default function AppleNavbar() {
                 <div className="pt-2">
                   <a
                     href="mailto:nagubathula.satyasai@gmail.com"
-                    onClick={() => play8BitBlipSound(580)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-sm border-2 border-[#3e3832] bg-[#3e3832] text-[#f4ebd8] text-sm font-pixel tracking-wider shadow-[3px_3px_0px_rgba(62,56,50,0.3)] active:translate-x-[1px] active:translate-y-[1px]"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-full bg-[#1d1d1f] text-white text-sm font-sans font-medium shadow-sm active:scale-[0.99]"
                   >
-                    <span>☎ LET&apos;S TALK</span>
-                    <ArrowUpRight size={15} />
+                    <span>Let&apos;s Talk</span>
+                    <ArrowUpRight size={16} />
                   </a>
                 </div>
               </div>
 
               {/* Bottom Footer Section */}
-              <div className="mt-6 pt-3 flex flex-col gap-3">
-                {/* 6-Stripe Apple / Polaroid Retro Rainbow Ribbon */}
-                <RetroRainbowRibbon className="w-full rounded-[2px]" />
-
-                {/* Social Links */}
-                <div className="flex items-center justify-center gap-6 text-xs font-pixel text-[#3e3832]/75 px-0.5">
+              <div className="pt-6 border-t border-neutral-100 flex flex-col gap-3">
+                <div className="flex items-center justify-center gap-6 text-xs font-sans text-neutral-500">
                   <a
                     href="https://www.linkedin.com/in/satyasainagubathula"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#3e3832] flex items-center gap-1"
+                    className="hover:text-neutral-900 transition-colors flex items-center gap-1"
                   >
-                    LinkedIn <ArrowUpRight size={11} className="opacity-50" />
+                    LinkedIn <ArrowUpRight size={12} className="opacity-60" />
                   </a>
-                  <span className="text-[#3e3832]/30" aria-hidden="true">•</span>
+                  <span>•</span>
                   <a
                     href="https://hippogriff.medium.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#3e3832] flex items-center gap-1"
+                    className="hover:text-neutral-900 transition-colors flex items-center gap-1"
                   >
-                    Medium <ArrowUpRight size={11} className="opacity-50" />
+                    Medium <ArrowUpRight size={12} className="opacity-60" />
                   </a>
                 </div>
 
-                <div className="text-[10px] font-pixel text-[#3e3832]/45 text-center tracking-wider">
-                  DESIGN TECHNOLOGIST &amp; AI ENGINEER
+                <div className="text-[11px] font-sans text-neutral-400 text-center tracking-wider uppercase">
+                  Design Technologist &amp; AI Engineer
                 </div>
               </div>
             </div>

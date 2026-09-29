@@ -6,7 +6,7 @@ import Image from "next/image";
 import { ArrowUpRight, Sparkles, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import RetroBackground from "./RetroBackground";
-import RetroRainbowRibbon from "./RetroRainbowRibbon";
+import ChibiAvatar from "./ChibiAvatar";
 import styles from "./LandingStory.module.css";
 
 const container = {
@@ -14,17 +14,16 @@ const container = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
+      staggerChildren: 0.12,
+      delayChildren: 0.08,
     }
   }
 };
 
 const item = {
-  hidden: { opacity: 0, y: 15 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 20 } }
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } }
 };
-
 
 export default function LandingStory() {
   const [hoveredProject, setHoveredProject] = useState(null);
@@ -41,114 +40,161 @@ export default function LandingStory() {
             variants={container}
             initial="hidden"
             animate="show"
+            onMouseMove={handleHeroMouseMove}
+            onMouseLeave={handleHeroMouseLeave}
           >
-            {/* Exact Desired Headline with interactive project hover previews */}
-            <motion.h1 variants={item} id="landing-heading" className={styles.headline}>
-              Design + Engineering.
-              <span className={styles.subheadline}>
-                Currently building{" "}
-                <span className="relative inline-block">
-                  <Link
-                    href="/works/o0"
-                    className="inline-block text-[#3e3832] font-medium underline decoration-[#3e3832]/35 underline-offset-4 hover:decoration-[#c2410c] hover:text-[#c2410c] transition-colors cursor-pointer"
-                    onMouseEnter={() => setHoveredProject("openweave")}
-                    onMouseLeave={() => setHoveredProject(null)}
-                  >
-                    OpenWeave
-                  </Link>
-                  <AnimatePresence>
-                    {hoveredProject === "openweave" && (
-                      <motion.span
-                        initial={{ opacity: 0, y: 12, scale: 0.94 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.94 }}
-                        transition={{ duration: 0.18, ease: "easeOut" }}
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-60 sm:w-72 p-2 rounded-sm bg-[#fcf8f0] border-2 border-[#3e3832] shadow-[4px_4px_0px_rgba(62,56,50,0.3)] pointer-events-none z-50 not-italic block"
-                      >
-                        <span className="relative block w-full aspect-[16/10] rounded-[2px] overflow-hidden border border-[#3e3832]/20 bg-[#3e3832]/5">
-                          <Image
-                            src="/openweave-app.png"
-                            alt="OpenWeave Interface Preview"
-                            fill
-                            sizes="300px"
-                            className="object-cover sepia-[0.08] contrast-105"
-                          />
-                        </span>
-                        <span className="pt-2 px-1 flex items-center justify-between text-[10px] font-pixel text-[#3e3832]/85 uppercase tracking-wider">
-                          <span>OpenWeave</span>
-                          <span className="text-[#c2410c] font-bold">Design Canvas + AI</span>
-                        </span>
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
+            {/* Left Content Column */}
+            <div className={styles.heroContent}>
+              {/* Headline with interactive project hover previews */}
+              <motion.h1 variants={item} id="landing-heading" className={styles.headline}>
+                Design + Engineering.
+                <span className={styles.subheadline}>
+                  Currently building{" "}
+                  <span className="relative inline-block">
+                    <Link
+                      href="/works/o0"
+                      className="inline-block text-[#1d1d1f] font-medium underline decoration-black/20 underline-offset-4 hover:decoration-[#1d1d1f] transition-colors cursor-pointer"
+                      onMouseEnter={() => setHoveredProject("openweave")}
+                      onMouseLeave={() => setHoveredProject(null)}
+                    >
+                      OpenWeave
+                    </Link>
+                    <AnimatePresence>
+                      {hoveredProject === "openweave" && (
+                        <motion.span
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 sm:w-76 p-2 rounded-2xl bg-white border border-black/[0.08] shadow-[0_16px_40px_rgba(0,0,0,0.08)] pointer-events-none z-50 not-italic block"
+                        >
+                          <span className="relative block w-full aspect-[16/10] rounded-xl overflow-hidden border border-black/[0.04] bg-[#f5f5f7]">
+                            <Image
+                              src="/openweave-app.png"
+                              alt="OpenWeave Interface Preview"
+                              fill
+                              sizes="320px"
+                              className="object-cover"
+                            />
+                          </span>
+                          <span className="pt-2 px-1 flex items-center justify-between text-xs font-sans text-[#1d1d1f]">
+                            <span className="font-medium">OpenWeave</span>
+                            <span className="text-[#86868b] text-[11px]">Design Canvas + AI</span>
+                          </span>
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </span>
+                  {" "}&amp;{" "}
+                  <span className="relative inline-block">
+                    <Link
+                      href="/case-studies/notbad-design"
+                      className="inline-block text-[#1d1d1f] font-medium underline decoration-black/20 underline-offset-4 hover:decoration-[#1d1d1f] transition-colors cursor-pointer"
+                      onMouseEnter={() => setHoveredProject("notbad")}
+                      onMouseLeave={() => setHoveredProject(null)}
+                    >
+                      NotBad
+                    </Link>
+                    <AnimatePresence>
+                      {hoveredProject === "notbad" && (
+                        <motion.span
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 sm:w-76 p-2 rounded-2xl bg-white border border-black/[0.08] shadow-[0_16px_40px_rgba(0,0,0,0.08)] pointer-events-none z-50 not-italic block"
+                        >
+                          <span className="relative block w-full aspect-[16/10] rounded-xl overflow-hidden border border-black/[0.04] bg-[#f5f5f7]">
+                            <Image
+                              src="/notbad-demo.gif"
+                              alt="NotBad Demo Preview"
+                              fill
+                              unoptimized
+                              sizes="320px"
+                              className="object-cover"
+                            />
+                          </span>
+                          <span className="pt-2 px-1 flex items-center justify-between text-xs font-sans text-[#1d1d1f]">
+                            <span className="font-medium">NotBad</span>
+                            <span className="text-[#86868b] text-[11px]">Flutter Markdown</span>
+                          </span>
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </span>
+                  .
                 </span>
-                {" "}&amp;{" "}
-                <span className="relative inline-block">
-                  <Link
-                    href="/case-studies/notbad-design"
-                    className="inline-block text-[#3e3832] font-medium underline decoration-[#3e3832]/35 underline-offset-4 hover:decoration-[#0f766e] hover:text-[#0f766e] transition-colors cursor-pointer"
-                    onMouseEnter={() => setHoveredProject("notbad")}
-                    onMouseLeave={() => setHoveredProject(null)}
-                  >
-                    NotBad
+              </motion.h1>
+
+              {/* Narrative Story Bio */}
+              <motion.p variants={item} className={styles.bio}>
+                I’m Satya — operating at the boundary where interface craft, typography, and deep systems engineering converge. Leading Generative AI at NxtWave (2,000+ productions orchestrated) while building sovereign open tools for creators.
+              </motion.p>
+
+              {/* Bottom Actions */}
+              <motion.div variants={item} className={styles.actionRow}>
+                <div className={styles.ctaGroup}>
+                  <a href="mailto:nagubathula.satyasai@gmail.com" className={styles.primaryPill}>
+                    Let’s talk <ArrowUpRight size={15} aria-hidden="true" />
+                  </a>
+                  <Link href="/works" className={styles.secondaryPill}>
+                    <Sparkles size={14} aria-hidden="true" /> All Works &amp; Archive
                   </Link>
-                  <AnimatePresence>
-                    {hoveredProject === "notbad" && (
-                      <motion.span
-                        initial={{ opacity: 0, y: 12, scale: 0.94 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.94 }}
-                        transition={{ duration: 0.18, ease: "easeOut" }}
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-60 sm:w-72 p-2 rounded-sm bg-[#fcf8f0] border-2 border-[#3e3832] shadow-[4px_4px_0px_rgba(62,56,50,0.3)] pointer-events-none z-50 not-italic block"
-                      >
-                        <span className="relative block w-full aspect-[16/10] rounded-[2px] overflow-hidden border border-[#3e3832]/20 bg-[#3e3832]/5">
-                          <Image
-                            src="/notbad-demo.gif"
-                            alt="NotBad Demo Preview"
-                            fill
-                            unoptimized
-                            className="object-cover sepia-[0.05] contrast-105"
-                          />
-                        </span>
-                        <span className="pt-2 px-1 flex items-center justify-between text-[10px] font-pixel text-[#3e3832]/85 uppercase tracking-wider">
-                          <span>NotBad</span>
-                          <span className="text-[#0f766e] font-bold">Flutter Markdown</span>
-                        </span>
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </span>
-                .
-              </span>
-            </motion.h1>
+                </div>
+              </motion.div>
 
-            {/* Narrative Story Bio */}
-            <motion.p variants={item} className={styles.bio}>
-              I’m Satya — operating at the boundary where interface craft, typography, and deep systems engineering converge. Leading Generative AI at NxtWave (2,000+ productions orchestrated) while building sovereign open tools for creators.
-            </motion.p>
+              <motion.div variants={item} className={styles.experienceStatus}>
+                <span className={styles.statusDot} aria-hidden="true" />
+                <span className={styles.subtleText}>Available for select advisory &amp; generative engineering</span>
+              </motion.div>
+            </div>
 
-            {/* Bottom Actions */}
-            <motion.div variants={item} className={styles.actionRow}>
-              <div className={styles.ctaGroup}>
-                <a href="mailto:nagubathula.satyasai@gmail.com" className={styles.primaryPill}>
-                  Let’s talk <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-                <Link href="/works" className={styles.secondaryPill}>
-                  <Sparkles size={14} aria-hidden="true" /> All Works &amp; Archive
-                </Link>
-              </div>
-            </motion.div>
+            {/* Right Illustration Column with 3D Tilt & Gentle Float */}
+            <motion.div 
+              variants={item} 
+              className={styles.heroIllustration}
+              onMouseMove={handleHeroMouseMove}
+              onMouseLeave={handleHeroMouseLeave}
+              style={{ perspective: 1000 }}
+            >
+              {/* Soft Ambient Studio Aura */}
+              <motion.div 
+                className={styles.avatarAura}
+                animate={{ opacity: [0.4, 0.65, 0.4], scale: [0.95, 1.05, 0.95] }}
+                transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden="true"
+              />
 
-            <motion.div variants={item} className={styles.experienceStatus}>
-              <span className={styles.subtleText}>Available for select advisory &amp; generative engineering</span>
+              {/* 3D Tilt Shell */}
+              <motion.div
+                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                className="relative flex flex-col items-center justify-center"
+              >
+                {/* Continuous Organic Floating Motion */}
+                <motion.div
+                  animate={{ y: [-5, 5, -5], rotate: [-0.4, 0.4, -0.4] }}
+                  transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative w-44 sm:w-56 md:w-64 lg:w-72 xl:w-80 aspect-[9/16] max-h-[46vh]"
+                >
+                  <ChibiAvatar className={styles.avatarImage} />
+                </motion.div>
+
+                {/* Ground Contact Breathing Shadow */}
+                <motion.div 
+                  className={styles.avatarShadow}
+                  animate={{ scaleX: [1, 0.88, 1], opacity: [0.32, 0.16, 0.32] }}
+                  transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+                  aria-hidden="true"
+                />
+              </motion.div>
             </motion.div>
           </motion.section>
         </main>
 
-        {/* 6-Stripe Apple / Polaroid Retro Rainbow Ribbon Divider */}
-        <RetroRainbowRibbon className={styles.rainbowDivider} />
+        {/* Minimal Clean Divider */}
+        <div className={styles.divider} />
 
-        {/* Footer: macOS / visionOS Status Bar */}
+        {/* Footer: Modern Clean Status Bar */}
         <footer className={styles.footer}>
           <p><span className={styles.statusDot} aria-hidden="true" /> Currently at <span className={styles.employer}>NxtWave</span></p>
           <nav className={styles.footerLinks} aria-label="More about Satya">

@@ -51,42 +51,42 @@ export default function FeaturedWorks({ limit }) {
     >
       <div className="py-16 sm:py-32 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10">
         <motion.div variants={itemAnim} className="mb-2 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-foreground/5 text-foreground/80 text-xs font-pixel mb-4 uppercase tracking-widest border border-foreground/15">
-            <Briefcase size={14} /> Portfolio
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#86868b] text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]">
+            <Briefcase size={13} /> Portfolio
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold text-foreground tracking-tight mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-5xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.03em] mb-3 sm:mb-4">
             Works
           </h2>
-          <p className="text-sm sm:text-lg text-foreground/60 max-w-2xl leading-relaxed">
+          <p className="text-sm sm:text-base text-[#86868b] max-w-2xl leading-relaxed font-sans">
             Selected projects across generative AI, product design, and the web.
           </p>
         </motion.div>
 
-        <div className="flex flex-col gap-4 sm:gap-6">
+        <div className="flex flex-col gap-4 sm:gap-5">
           {works.map((work) => (
             <motion.div variants={itemAnim} key={work.id}>
               <Link href={`/works/${work.id}`} className="block group h-full">
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center p-5 sm:p-8 bg-background rounded-sm border-2 border-foreground/10 shadow-[3px_3px_0px_rgba(0,0,0,0.06)] hover:shadow-[5px_5px_0px_rgba(0,0,0,0.1)] transition-shadow duration-300 h-full"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-200 h-full"
                 >
                   <div className="flex flex-col flex-1 w-full">
                     <div className="flex justify-between items-start mb-1">
-                      <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">{work.title}</h3>
-                      <ArrowUpRight size={18} className="text-foreground/40 group-hover:text-foreground transition-colors" />
+                      <h3 className="text-xl sm:text-2xl font-sans font-semibold text-[#1d1d1f] tracking-tight group-hover:text-black transition-colors">{work.title}</h3>
+                      <ArrowUpRight size={17} className="text-[#86868b] group-hover:text-[#1d1d1f] transition-colors" />
                     </div>
-                    <p className="text-[11px] sm:text-xs font-semibold text-foreground/40 uppercase tracking-widest mb-3 sm:mb-4">{work.tag}</p>
-                    <p className="text-foreground/70 text-sm sm:text-base max-w-2xl leading-relaxed">{work.description}</p>
+                    <p className="text-[11px] font-sans font-medium text-[#86868b] uppercase tracking-wider mb-3 sm:mb-4">{work.tag}</p>
+                    <p className="text-[#515154] text-sm sm:text-base max-w-2xl leading-relaxed font-sans">{work.description}</p>
                   </div>
                   {work.image && (
-                    <div className="w-full sm:w-[38%] aspect-video relative rounded-sm overflow-hidden shrink-0 border border-foreground/[0.05]">
+                    <div className="w-full sm:w-[38%] aspect-video relative rounded-2xl overflow-hidden shrink-0 border border-black/[0.06] bg-[#f5f5f7]">
                       <Image
                         src={work.image}
                         alt={work.title}
                         fill
                         sizes="(max-width: 640px) 100vw, 300px"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
                     </div>
                   )}
@@ -97,7 +97,7 @@ export default function FeaturedWorks({ limit }) {
         </div>
 
         <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center">
-          <Link href="/works" className="px-6 py-3 bg-foreground text-background rounded-sm border-2 border-foreground text-sm font-pixel shadow-[3px_3px_0px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all">
+          <Link href="/works" className="px-6 py-2.5 bg-[#1d1d1f] text-white rounded-full text-xs sm:text-sm font-sans font-medium hover:bg-[#333336] transition-all shadow-sm">
             View All Works
           </Link>
         </motion.div>

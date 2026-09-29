@@ -10,9 +10,6 @@ import RetroVideoPlayer from "./RetroVideoPlayer";
 function LazyVideo({ src, poster, onLoadedMetadata, isVertical }) {
   const videoRef = useRef(null);
 
-  // Play with sound on hover. Browsers only allow unmuted playback after the
-  // visitor has interacted with the page once — if it's blocked, fall back to
-  // playing muted rather than not playing at all.
   const handleEnter = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -30,8 +27,6 @@ function LazyVideo({ src, poster, onLoadedMetadata, isVertical }) {
     video.muted = true;
   };
 
-  // Touch devices have no hover — tap toggles playback (with sound, since a
-  // tap is a user gesture)
   const handleClick = () => {
     if (!window.matchMedia("(hover: none)").matches) return;
     const video = videoRef.current;
@@ -57,7 +52,7 @@ function LazyVideo({ src, poster, onLoadedMetadata, isVertical }) {
       onMouseLeave={handleLeave}
       onClick={handleClick}
       onLoadedMetadata={onLoadedMetadata}
-      className={`w-full h-full object-cover bg-foreground/10 ${isVertical ? "object-top" : ""}`}
+      className={`w-full h-full object-cover bg-neutral-900 ${isVertical ? "object-top" : ""}`}
     />
   );
 }
@@ -130,7 +125,6 @@ export default function AIVideoShowcase({ limit }) {
     }
   };
 
-  // Auto-scroll only applies to the homepage carousel; the full page is a static grid
   useEffect(() => {
     if (!limit) return;
     if (isHovered) return;
@@ -142,45 +136,35 @@ export default function AIVideoShowcase({ limit }) {
     const scroll = () => {
       const container = scrollContainerRef.current;
       if (container) {
-        currentScroll += 0.8; // Smooth 0.8px per frame auto-scroll
-        
-        // Reset seamlessly when reaching half of the duplicated scroll track
+        currentScroll += 0.8;
         if (currentScroll >= container.scrollWidth / 2) {
           currentScroll = 0;
         }
-        
         container.scrollLeft = currentScroll;
       }
       animationFrameId = requestAnimationFrame(scroll);
     };
 
     animationFrameId = requestAnimationFrame(scroll);
-
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isHovered]);
+  }, [isHovered, limit]);
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.1,
       },
     },
   };
 
   const itemAnim = {
-    hidden: { opacity: 0, scale: 0.85, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     show: { 
       opacity: 1, 
-      scale: 1, 
       y: 0, 
-      transition: { 
-        type: "spring", 
-        stiffness: 400, 
-        damping: 25, 
-        mass: 0.8 
-      } 
+      transition: { duration: 0.35, ease: "easeOut" } 
     },
   };
 
@@ -189,19 +173,19 @@ export default function AIVideoShowcase({ limit }) {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-100px" }}
-      className="w-full py-16 sm:py-32"
+      viewport={{ once: true, margin: "-80px" }}
+      className="w-full py-16 sm:py-24"
     >
-      <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col min-w-0">
-        <motion.div variants={itemAnim} className="sticky top-20 sm:top-24 z-10 bg-transparent flex flex-col justify-start gap-4 w-full min-w-0">
+      <div className="px-4 sm:px-8 max-w-5xl mx-auto w-full flex flex-col min-w-0">
+        <motion.div variants={itemAnim} className="flex flex-col justify-start gap-4 w-full min-w-0 mb-6">
           <div className="min-w-0">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#3e3832]/5 text-[#3e3832]/80 text-xs font-pixel mb-4 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[2px_2px_0px_rgba(62,56,50,0.15)]">
-              <Video size={14} /> AI Experiments
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#86868b] text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]">
+              <Video size={13} /> AI Experiments
             </div>
-            <h2 className="text-3xl sm:text-5xl font-editorial font-normal text-[#3e3832] tracking-tight mb-2 sm:mb-4">
+            <h2 className="text-3xl sm:text-5xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.03em] mb-2 sm:mb-4">
               Generative Video
             </h2>
-            <p className="text-base sm:text-lg text-[#3e3832]/75 max-w-2xl leading-relaxed font-editorial break-words w-full">
+            <p className="text-base sm:text-lg text-[#86868b] max-w-2xl leading-relaxed font-sans break-words w-full">
               Showcasing advanced generative AI works, focusing on photorealism and dynamic visual storytelling.
             </p>
           </div>
@@ -209,7 +193,6 @@ export default function AIVideoShowcase({ limit }) {
       </div>
         
       {limit ? (
-        /* Homepage teaser: auto-scrolling horizontal carousel */
         <div
           ref={scrollContainerRef}
           onMouseEnter={() => setIsHovered(true)}
@@ -217,10 +200,10 @@ export default function AIVideoShowcase({ limit }) {
           onTouchStart={() => setIsHovered(true)}
           onTouchEnd={() => setIsHovered(false)}
           style={{
-            maskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)'
+            maskImage: 'linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%)'
           }}
-          className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 px-4 sm:px-8 w-full mt-8 sm:mt-12 max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex flex-row items-start overflow-x-auto gap-4 sm:gap-6 pb-6 pt-2 px-4 sm:px-8 w-full mt-6 sm:mt-10 max-w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
           {duplicatedVideos.map((video, i) => {
             const rawIdx = i % videos.length;
@@ -232,7 +215,7 @@ export default function AIVideoShowcase({ limit }) {
                 className="flex flex-col group shrink-0 w-[80vw] sm:w-auto cursor-pointer"
                 onClick={() => setActiveVideo(video)}
               >
-                <div className={`relative rounded-sm overflow-hidden bg-foreground/5 mb-3 border-2 border-[#3e3832]/25 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px] ${video.isVertical ? "sm:aspect-[9/16]" : "sm:aspect-video"}`}>
+                <div className={`relative rounded-3xl overflow-hidden bg-neutral-900 mb-3 border border-black/[0.08] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto h-[260px] sm:h-[320px] lg:h-[340px] ${video.isVertical ? "sm:aspect-[9/16]" : "sm:aspect-video"}`}>
                   <LazyVideo
                     src={video.src}
                     poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
@@ -240,17 +223,16 @@ export default function AIVideoShowcase({ limit }) {
                     isVertical={video.isVertical}
                   />
                 </div>
-                <div className="w-full px-1 sm:max-w-xs sticky left-0 z-10 transition-transform duration-75">
-                  <h3 className="text-base sm:text-lg font-editorial font-normal text-[#3e3832] tracking-tight mb-0.5 truncate">{video.title}</h3>
-                  <p className="text-xs sm:text-sm text-[#3e3832]/70 font-editorial line-clamp-1">{video.description}</p>
+                <div className="w-full px-1 sm:max-w-xs">
+                  <h3 className="text-base font-sans font-semibold text-[#1d1d1f] tracking-tight mb-0.5 truncate">{video.title}</h3>
+                  <p className="text-xs sm:text-sm text-[#86868b] font-sans line-clamp-1">{video.description}</p>
                 </div>
               </motion.div>
             );
           })}
         </div>
       ) : (
-        /* Full page: vertical grid, no horizontal scrolling */
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 px-4 sm:px-8 w-full max-w-5xl mx-auto mt-8 sm:mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 px-4 sm:px-8 w-full max-w-5xl mx-auto mt-6 sm:mt-10">
           {videos.map((video, i) => (
             <motion.div
               variants={itemAnim}
@@ -258,7 +240,7 @@ export default function AIVideoShowcase({ limit }) {
               className="flex flex-col group min-w-0 cursor-pointer"
               onClick={() => setActiveVideo(video)}
             >
-              <div className="relative rounded-sm overflow-hidden bg-[#fdfaf3] mb-3 border-2 border-[#3e3832]/25 shadow-[3px_3px_0px_rgba(62,56,50,0.2)] hover:shadow-[5px_5px_0px_rgba(62,56,50,0.3)] hover:-translate-y-0.5 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
+              <div className="relative rounded-3xl overflow-hidden bg-neutral-900 mb-3 border border-black/[0.08] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex justify-center items-center w-full h-[300px] sm:h-[360px]">
                 <LazyVideo
                   src={video.src}
                   poster={`/aivideos/posters/${video.src.split("/").pop().replace(".mp4", ".jpg")}`}
@@ -267,8 +249,8 @@ export default function AIVideoShowcase({ limit }) {
                 />
               </div>
               <div className="w-full px-1">
-                <h3 className="text-base sm:text-lg font-editorial font-normal text-[#3e3832] tracking-tight mb-0.5 truncate">{video.title}</h3>
-                <p className="text-xs sm:text-sm text-[#3e3832]/70 font-editorial line-clamp-1">{video.description}</p>
+                <h3 className="text-base font-sans font-semibold text-[#1d1d1f] tracking-tight mb-0.5 truncate">{video.title}</h3>
+                <p className="text-xs sm:text-sm text-[#86868b] font-sans line-clamp-1">{video.description}</p>
               </div>
             </motion.div>
           ))}
@@ -277,7 +259,7 @@ export default function AIVideoShowcase({ limit }) {
         
       <div className="px-4 sm:px-8 max-w-3xl mx-auto w-full flex justify-center">
         {limit && videos.length > limit && (
-          <motion.div variants={itemAnim} className="mt-2 sm:mt-4 flex w-full justify-center">
+          <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex w-full justify-center">
             <AnimatedButton href="/ai-videos" isPrimary={true}>
               View More Videos
             </AnimatedButton>

@@ -2,21 +2,18 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AppleNavbar from "@/components/AppleNavbar";
-import CRTDistortion from "@/components/CRTDistortion";
-import SoundEffects from "@/components/SoundEffects";
-import { Pixelify_Sans, EB_Garamond } from "next/font/google";
+import { Inter, EB_Garamond } from "next/font/google";
 
-const pixelFont = Pixelify_Sans({ 
-  weight: ['400', '500', '700'],
+const sansFont = Inter({ 
   subsets: ['latin'],
-  variable: '--font-pixel',
+  variable: '--font-sans',
 });
 
 const garamondFont = EB_Garamond({
   weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
   subsets: ['latin'],
-  variable: '--font-garamond',
+  variable: '--font-editorial',
 });
 
 export const metadata = {
@@ -57,18 +54,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="overflow-x-clip max-w-full">
       <body
-        className={`${pixelFont.variable} ${garamondFont.variable} font-editorial text-foreground bg-background tracking-tight w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-lg sm:text-xl`}
+        className={`${sansFont.variable} ${garamondFont.variable} font-sans text-foreground bg-background tracking-normal w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-base`}
         suppressHydrationWarning
       >
         <ThemeProvider>
           <AppleNavbar />
-          <div id="crt-content">
-            <SmoothScroll>
-              {children}
-            </SmoothScroll>
-          </div>
-          <SoundEffects />
-          <CRTDistortion />
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

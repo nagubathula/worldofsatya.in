@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KIRA VOLT — Issue #27 | Comic Portfolio</title>
+  <meta name="description" content="The official comic-book portfolio of Kira Volt — visual designer and front-end developer. Code. Create. Conquer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bungee&family=Comic+Neue:ital,wght@0,400;0,700;1,700&family=Oswald:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  <div class="halftone-overlay" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="logo" href="#cover">
+        <span class="logo-badge">ATLAS</span>
+        <span class="logo-title">VOLT COMICS</span>
+        <span class="logo-issue">No. 27</span>
+      </a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="main-nav">
+        <a href="#origin">Origin</a>
+        <a href="#powers">Powers</a>
+        <a href="#missions">Missions</a>
+        <a href="#league">League</a>
+        <a href="#signal" class="nav-cta">Send Signal</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- COVER -->
+    <section class="page cover" id="cover">
+      <div class="cover-grid">
+        <div class="cover-copy">
+          <p class="issue-meta">
+            <span>Atlas Comics</span>
+            <span>•</span>
+            <span>May 1963 reprint</span>
+            <span>•</span>
+            <span>10¢</span>
+          </p>
+          <p class="kicker">Code. Create. Conquer.</p>
+          <h1 class="splash-title">
+            <span class="word-kira">KIRA</span>
+            <span class="word-volt">VOLT</span>
+          </h1>
+          <p class="alias-banner">WEB DESIGNER. SUPERHERO.</p>
+          <p class="speech speech-hero">
+            Building beautiful websites is my superpower. I swing through grids, punch bad UX, and leave every brand looking print-ready.
+          </p>
+          <div class="cover-actions">
+            <a class="btn btn-pow" href="#missions">See the Missions</a>
+            <a class="btn btn-ghost" href="#signal">Hire the Hero</a>
+          </div>
+          <ul class="stat-strip">
+            <li><strong>48</strong><span>Sites shipped</span></li>
+            <li><strong>6</strong><span>Years in the field</span></li>
+            <li><strong>12</strong><span>Awards claimed</span></li>
+          </ul>
+        </div>
+        <figure class="cover-art panel-frame tilt-right">
+          <img src="assets/images/cover.jpg" alt="Comic cover of Kira Volt standing on a rooftop above a city of websites" />
+          <figcaption class="burst burst-tr">KRAK!</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ORIGIN -->
+    <section class="page origin" id="origin">
+      <header class="page-head">
+        <p class="page-kicker">Chapter One</p>
+        <h2>The Origin Story</h2>
+        <p class="page-sub">How a kid with a sketchbook became the city’s layout league.</p>
+      </header>
+
+      <div class="origin-grid">
+        <figure class="panel-frame portrait-frame tilt-left">
+          <img src="assets/images/portrait.jpg" alt="Comic portrait of Kira Volt in a red bomber jacket" />
+          <span class="caption-box">KIRA VOLT — CIVILIAN ID</span>
+        </figure>
+
+        <div class="origin-panels">
+          <article class="panel ink-panel">
+            <h3>Issue Zero</h3>
+            <p>Grew up in Hyderabad tracing newspaper strips and stealing the Sunday color pages. Learned that a thick black line can hold a whole world together.</p>
+          </article>
+          <article class="panel ink-panel">
+            <h3>The Bite</h3>
+            <p>A late-night HTML class went sideways. One broken layout later, I was hooked — grids felt like panel gutters, type like sound effects.</p>
+          </article>
+          <article class="panel ink-panel span-2">
+            <h3>The Creed</h3>
+            <p>I design like a penciler and ship like an inker. Every site gets a cover, a splash page, and a last-panel punchline. No muddy midtones. No limp hierarchy. If it does not read at arm’s length, it goes back to the board.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- POWERS -->
+    <section class="page powers" id="powers">
+      <header class="page-head">
+        <p class="page-kicker">Chapter Two</p>
+        <h2>Superpowers</h2>
+        <p class="page-sub">Rated by the League. Tested in production.</p>
+      </header>
+
+      <div class="powers-grid">
+        <article class="power-card" data-burst="ZAP">
+          <div class="power-icon" aria-hidden="true">//</div>
+          <h3>Front-End Combat</h3>
+          <p>HTML, CSS, JS, React. Clean markup that still slams when it needs to.</p>
+          <div class="meter"><span style="--lvl:94%"></span></div>
+        </article>
+        <article class="power-card" data-burst="POW">
+          <div class="power-icon" aria-hidden="true">Aa</div>
+          <h3>Type & Hierarchy</h3>
+          <p>Display type that shouts. Body type that whispers. Nothing in between that mumbles.</p>
+          <div class="meter"><span style="--lvl:96%"></span></div>
+        </article>
+        <article class="power-card" data-burst="BAM">
+          <div class="power-icon" aria-hidden="true">▣</div>
+          <h3>Layout Grids</h3>
+          <p>12-column discipline with comic-gutters energy. Responsive without going soft.</p>
+          <div class="meter"><span style="--lvl:92%"></span></div>
+        </article>
+        <article class="power-card" data-burst="WHAM">
+          <div class="power-icon" aria-hidden="true">✦</div>
+          <h3>Motion Direction</h3>
+          <p>Timing charts, not decoration. Panels that enter like a splash page.</p>
+          <div class="meter"><span style="--lvl:88%"></span></div>
+        </article>
+        <article class="power-card" data-burst="SNAP">
+          <div class="power-icon" aria-hidden="true">◎</div>
+          <h3>Brand Systems</h3>
+          <p>Tokens, type ramps, component kits that survive handoff and still look printed.</p>
+          <div class="meter"><span style="--lvl:90%"></span></div>
+        </article>
+        <article class="power-card" data-burst="KRAK">
+          <div class="power-icon" aria-hidden="true">⌘</div>
+          <h3>Figma to Ship</h3>
+          <p>From thumbnail to production in one swing. Designers and engineers stay in the same panel.</p>
+          <div class="meter"><span style="--lvl:93%"></span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- MISSIONS -->
+    <section class="page missions" id="missions">
+      <header class="page-head">
+        <p class="page-kicker">Chapter Three</p>
+        <h2>Completed Missions</h2>
+        <p class="page-sub">Four cases. Four covers. Zero civilian casualties.</p>
+      </header>
+
+      <div class="mission-stack">
+        <article class="mission panel-frame">
+          <div class="mission-art">
+            <img src="assets/images/mission-neon.jpg" alt="Neon Noir music site bursting from a laptop" />
+            <span class="issue-sticker">ISSUE 23</span>
+          </div>
+          <div class="mission-copy">
+            <p class="mission-tag">Music label • 2025</p>
+            <h3>Neon Noir Records</h3>
+            <p>A night-city label site that plays like a splash page. Vinyl-spin hero, issue-style release archive, and a cart that slams shut with a sound effect.</p>
+            <ul class="mission-meta">
+              <li>Art direction</li>
+              <li>Front-end</li>
+              <li>Motion</li>
+            </ul>
+            <a class="btn btn-mini" href="#signal">Request the file</a>
+          </div>
+        </article>
+
+        <article class="mission panel-frame reverse">
+          <div class="mission-art">
+            <img src="assets/images/mission-galaxy.jpg" alt="Astronaut reaching for floating space game cards" />
+            <span class="issue-sticker">ISSUE 24</span>
+          </div>
+          <div class="mission-copy">
+            <p class="mission-tag">Mobile game • 2025</p>
+            <h3>Pocket Galaxy</h3>
+            <p>Landing page for an indie space deck-builder. Cards fly in like sound-effect bursts. The waitlist form sits inside a speech balloon so signing up feels like joining the crew.</p>
+            <ul class="mission-meta">
+              <li>Campaign site</li>
+              <li>Illustration system</li>
+              <li>Waitlist UX</li>
+            </ul>
+            <a class="btn btn-mini" href="#signal">Request the file</a>
+          </div>
+        </article>
+
+        <article class="mission panel-frame">
+          <div class="mission-art">
+            <img src="assets/images/mission-forge.jpg" alt="Design system components exploding off a grid" />
+            <span class="issue-sticker">ISSUE 25</span>
+          </div>
+          <div class="mission-copy">
+            <p class="mission-tag">Design system • 2026</p>
+            <h3>Frame Forge</h3>
+            <p>A component kit that still looks hand-inked after a hundred screens. Tokens named like ink wells. Documentation written like a letterer’s guide.</p>
+            <ul class="mission-meta">
+              <li>Design tokens</li>
+              <li>React kit</li>
+              <li>Docs site</li>
+            </ul>
+            <a class="btn btn-mini" href="#signal">Request the file</a>
+          </div>
+        </article>
+
+        <article class="mission panel-frame reverse">
+          <div class="mission-art">
+            <img src="assets/images/mission-signal.jpg" alt="Control room wall of comic-panel dashboards" />
+            <span class="issue-sticker">ISSUE 26</span>
+          </div>
+          <div class="mission-copy">
+            <p class="mission-tag">Civic dashboard • 2026</p>
+            <h3>Signal City</h3>
+            <p>Ops dashboard for a transit agency. Dense data drawn as comic panels so a night-shift dispatcher can read the city at a glance.</p>
+            <ul class="mission-meta">
+              <li>Information design</li>
+              <li>Dark UI</li>
+              <li>Live charts</li>
+            </ul>
+            <a class="btn btn-mini" href="#signal">Request the file</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- LEAGUE / TESTIMONIALS -->
+    <section class="page league" id="league">
+      <header class="page-head">
+        <p class="page-kicker">Chapter Four</p>
+        <h2>The League Speaks</h2>
+        <p class="page-sub">Eyewitness accounts. Unedited. Inked in their own balloons.</p>
+      </header>
+
+      <div class="balloon-grid">
+        <blockquote class="balloon">
+          <p>She turned our soggy brand book into a cover that actually sells. The site launched and the inbox caught fire.</p>
+          <footer>— Rhea Kane, Neon Noir</footer>
+        </blockquote>
+        <blockquote class="balloon balloon-thought">
+          <p>I thought “comic portfolio” would be a gimmick. It is a system. Every page has a punchline and a next issue.</p>
+          <footer>— Omar Finch, Pocket Galaxy</footer>
+        </blockquote>
+        <blockquote class="balloon">
+          <p>Handed her a pile of tokens. Got back a kit the engineers stopped arguing about. That never happens.</p>
+          <footer>— Priya Sen, Frame Forge</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- SIGNAL / CONTACT -->
+    <section class="page signal" id="signal">
+      <header class="page-head">
+        <p class="page-kicker">Final Panel</p>
+        <h2>Send the Signal</h2>
+        <p class="page-sub">Got a villain of a brief? Flash the bat-light. Or just the form.</p>
+      </header>
+
+      <div class="signal-grid">
+        <div class="signal-copy">
+          <div class="speech speech-aside">
+            New missions start at a discovery call. I take on two covers a quarter so the inks stay sharp.
+          </div>
+          <ul class="contact-list">
+            <li><span>HQ</span> Hyderabad • remote worldwide</li>
+            <li><span>Wire</span> hello@kiravolt.comics</li>
+            <li><span>Hours</span> Mon–Fri, 10:00–18:00 IST</li>
+          </ul>
+          <div class="burst burst-static">NEXT ISSUE!</div>
+        </div>
+
+        <form class="comic-form" id="signal-form" novalidate>
+          <label>
+            <span>Your civilian name</span>
+            <input type="text" name="name" required placeholder="Clark, Diana, you…" />
+          </label>
+          <label>
+            <span>Transmission address</span>
+            <input type="email" name="email" required placeholder="you@dailyplanet.com" />
+          </label>
+          <label>
+            <span>The brief</span>
+            <textarea name="mission" rows="5" required placeholder="What needs saving?"></textarea>
+          </label>
+          <button type="submit" class="btn btn-pow btn-block">Transmit</button>
+          <p class="form-note" id="form-note" hidden>Signal received. The League is on it.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <p class="colophon-title">VOLT COMICS</p>
+    <p>© 2026 Kira Volt. All panels reserved. Printed on imaginary newsprint.</p>
+    <p class="tiny">This is a portfolio template. Swap the name, missions, and art — keep the gutters.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

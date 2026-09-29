@@ -33,8 +33,8 @@ export default function WorksList() {
 
   const getIcon = (category) => {
     switch(category) {
-      case "Project": return <Briefcase size={14} className="mr-1" />;
-      case "Open Source": return <Code size={14} className="mr-1" />;
+      case "Project": return <Briefcase size={13} className="mr-1" />;
+      case "Open Source": return <Code size={13} className="mr-1" />;
       default: return null;
     }
   };
@@ -42,16 +42,16 @@ export default function WorksList() {
   return (
     <div className="w-full max-w-3xl mx-auto flex flex-col gap-8 pb-20">
       
-      {/* Filters - Retro Segmented Control */}
-      <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-sm bg-[#3e3832]/[0.05] border-2 border-[#3e3832]/25 max-w-fit mx-auto mb-6 sm:mb-10 shadow-[3px_3px_0px_rgba(62,56,50,0.1)]">
+      {/* Filters - Apple Segmented Control */}
+      <div className="flex flex-wrap items-center justify-center gap-1 p-1 rounded-full bg-[#f5f5f7] border border-black/[0.04] max-w-fit mx-auto mb-6 sm:mb-10 shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setFilter(category)}
-            className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-sm text-xs sm:text-sm font-pixel tracking-wider border transition-all duration-120 ${
+            className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-all duration-150 ${
               filter === category
-                ? "bg-[#3e3832] text-[#f4ebd8] border-[#3e3832] shadow-[2px_2px_0px_rgba(62,56,50,0.25)]"
-                : "border-transparent text-[#3e3832]/70 hover:text-[#3e3832] hover:bg-[#3e3832]/[0.06]"
+                ? "bg-white text-[#1d1d1f] shadow-sm"
+                : "text-[#86868b] hover:text-[#1d1d1f] hover:bg-white/60"
             }`}
           >
             {category}
@@ -60,56 +60,56 @@ export default function WorksList() {
       </div>
 
       {/* List */}
-      <div className="flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-4 sm:gap-5">
         <AnimatePresence mode="popLayout">
           {filteredWorks.map((work) => {
             return (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                initial={{ opacity: 0, scale: 0.98, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96, y: -10 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
+                exit={{ opacity: 0, scale: 0.98, y: -10 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
                 key={work.id}
               >
                 <Link href={`/works/${work.id}`} className="block group h-full">
-                  <div className="relative p-4 sm:p-9 retro-card group-hover:scale-[1.008] overflow-hidden">
+                  <div className="relative p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-200 overflow-hidden">
                     {/* Clean Tag */}
-                    <div className="flex items-center gap-1.5 mb-3 sm:mb-5">
-                      <span className="text-[11px] sm:text-xs font-pixel text-[#3e3832]/60 tracking-widest uppercase">{work.tag}</span>
+                    <div className="flex items-center gap-1.5 mb-3 sm:mb-4">
+                      <span className="text-[11px] font-sans text-[#86868b] tracking-wider uppercase font-medium">{work.tag}</span>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-center">
+                    <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center">
                       <div className="flex flex-col flex-1 h-full w-full justify-center">
                         <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-sm bg-[#3e3832]/5 text-[10px] sm:text-xs font-pixel text-[#3e3832]/80 uppercase tracking-widest border-2 border-[#3e3832]/25 shadow-[1px_1px_0px_rgba(62,56,50,0.12)]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#f5f5f7] text-[11px] font-sans text-[#86868b] uppercase tracking-wider font-medium border border-black/[0.04]">
                             {getIcon(work.category)}
                             {work.category}
                           </span>
                         </div>
                         
-                        <h3 className="text-xl sm:text-3xl font-editorial font-normal text-[#3e3832] tracking-tight mb-2 sm:mb-3">
+                        <h3 className="text-xl sm:text-2xl font-sans font-semibold text-[#1d1d1f] tracking-tight mb-2 sm:mb-3 group-hover:text-black transition-colors">
                           {work.title}
                         </h3>
                         
-                        <p className="text-[#3e3832]/80 text-sm sm:text-base max-w-2xl leading-relaxed font-editorial mb-4 sm:mb-6">
+                        <p className="text-[#515154] text-sm sm:text-base max-w-2xl leading-relaxed font-sans mb-4 sm:mb-6">
                           {work.description}
                         </p>
                         
-                        <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-pixel text-[#3e3832]/70 group-hover:text-[#3e3832] transition-colors mt-auto">
+                        <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-sans font-medium text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors mt-auto">
                           View Project
-                          <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </div>
                       </div>
                       
                       {work.image && (
-                        <div className="w-full sm:w-[42%] aspect-video sm:aspect-[4/3] relative rounded-sm overflow-hidden shrink-0 border border-[#3e3832]/20 shadow-sm bg-foreground/5">
+                        <div className="w-full sm:w-[42%] aspect-video sm:aspect-[4/3] relative rounded-2xl overflow-hidden shrink-0 border border-black/[0.06] bg-[#f5f5f7]">
                           <Image 
                             src={work.image} 
                             alt={work.title} 
                             fill 
                             sizes="(max-width: 640px) 100vw, 400px"
-                            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out sepia-[0.15] contrast-105" 
+                            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out" 
                           />
                         </div>
                       )}

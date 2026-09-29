@@ -48,31 +48,32 @@ html.lenis, html.lenis-smooth {
 
 @layer base {
   :root {
-    --foreground: #3e3832; /* Vintage deep sepia charcoal */
-    --background: #f4ebd8; /* Warm archival paper/parchment */
-    --foreground-rgb: 62 56 50;
-    --background-rgb: 244 235 216;
+    --foreground: #1d1d1f; /* Apple primary text */
+    --background: #fbfbfd; /* Apple pure canvas */
+    --foreground-rgb: 29 29 31;
+    --background-rgb: 251 251 253;
 
-    --card-surface: #fcf8f0;
-    --card-surface-hover: #ffffff;
-    --retro-ink: #3e3832;
-    --retro-amber: #c2410c;
-    --retro-teal: #0f766e;
+    --card-surface: #ffffff;
+    --card-surface-hover: #f5f5f7;
+    --retro-ink: #1d1d1f;
+    --retro-amber: #0071e3; /* Apple signature system blue */
+    --retro-teal: #06c;
 
-    /* Clean Design System Tokens - Adjusted for Retro Paper Theme */
-    --glass-surface: rgba(244, 235, 216, 0.92);
-    --glass-surface-hover: rgba(255, 255, 255, 0.96);
-    --glass-border: rgba(62, 56, 50, 0.22);
-    --glass-border-subtle: rgba(62, 56, 50, 0.1);
-    --glass-shadow: 0 8px 24px -4px rgba(62, 56, 50, 0.08), 2px 2px 0px rgba(62, 56, 50, 0.06);
-    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    --glass-blur: blur(16px);
+    /* Apple Frosted Glass Tokens */
+    --glass-surface: rgba(255, 255, 255, 0.72);
+    --glass-surface-hover: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(0, 0, 0, 0.06);
+    --glass-border-subtle: rgba(0, 0, 0, 0.04);
+    --glass-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.04);
+    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    --glass-blur: blur(20px);
   }
 
   body {
-    @apply bg-background text-foreground font-editorial antialiased;
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
+    @apply bg-background text-foreground font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.011em;
     transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
   }
 }
@@ -82,7 +83,7 @@ html.lenis, html.lenis-smooth {
     background: var(--glass-surface);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border: 1.5px solid var(--glass-border);
+    border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
   }
 
@@ -94,18 +95,18 @@ html.lenis, html.lenis-smooth {
     box-shadow: var(--glass-shadow);
   }
 
-  /* Tactile Retro Components */
+  /* Apple Minimalism Components */
   .retro-card {
     background-color: var(--card-surface);
-    border: 2px solid rgba(62, 56, 50, 0.25);
-    box-shadow: 3px 3px 0px rgba(62, 56, 50, 0.15);
-    border-radius: 4px;
-    transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    border-radius: 18px;
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease;
   }
 
   .retro-card:hover {
-    border-color: rgba(62, 56, 50, 0.45);
-    box-shadow: 5px 5px 0px rgba(62, 56, 50, 0.22);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05);
     transform: translateY(-2px);
   }
 
@@ -113,40 +114,48 @@ html.lenis, html.lenis-smooth {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-pixel), sans-serif;
-    border-radius: 4px;
-    border: 2px solid #3e3832;
-    box-shadow: 3px 3px 0px rgba(62, 56, 50, 0.25);
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    color: #1d1d1f;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: all 180ms ease;
     user-select: none;
   }
 
+  .retro-btn:hover {
+    background-color: #f5f5f7;
+    border-color: rgba(0, 0, 0, 0.14);
+  }
+
   .retro-btn:active {
-    transform: translate(2px, 2px) !important;
-    box-shadow: 1px 1px 0px rgba(62, 56, 50, 0.2) !important;
+    transform: scale(0.98);
   }
 
   .retro-pill {
-    background: rgba(244, 235, 216, 0.92);
-    border: 1.5px solid rgba(62, 56, 50, 0.22);
-    border-radius: 4px;
-    box-shadow: 2px 2px 0px rgba(62, 56, 50, 0.12);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   }
 
   .font-pixel-accent {
-    font-family: var(--font-pixel), sans-serif;
-    letter-spacing: 0.05em;
+    font-family: var(--font-sans), sans-serif;
+    letter-spacing: -0.01em;
   }
 }
 
 ::selection {
-  background: #3e3832;
-  color: #f4ebd8;
+  background: #18181b;
+  color: #ffffff;
 }
 
 :root.theme-dark ::selection {
-  background: #3e3832;
-  color: #f4ebd8;
+  background: #f4f4f5;
+  color: #18181b;
 }
 
 /* Gallery marquee — CSS-driven so hover can pause it */
@@ -178,168 +187,4 @@ html.lenis, html.lenis-smooth {
   .marquee-right {
     animation: none;
   }
-}
-
-
-/* Paper Grain Texture */
-.paper-grain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 92;
-  opacity: 0.25;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
-}
-
-/* Authentic Hardware-Accelerated CRT Curved Monitor & Lens Distortion */
-.has-crt-distortion {
-  background-color: #100e0c !important;
-}
-
-.has-crt-distortion #crt-content {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--background, #f4ebd8) !important;
-  color: #3e3832 !important;
-  filter: url(#crt-z-bulge);
-}
-
-/* Arched Navbar Curvature when CRT Mode is active */
-.has-crt-distortion header {
-  z-index: 50 !important;
-}
-
-.has-crt-distortion header .nav-left {
-  transform: translateY(6px);
-}
-
-.has-crt-distortion header .nav-center {
-  transform: translateY(1px);
-}
-
-.has-crt-distortion header .nav-right {
-  transform: translateY(6px);
-}
-
-/* Subtle curved bottom contour for solid navbar on subpages */
-.has-crt-distortion header.nav-solid {
-  border-bottom-left-radius: clamp(14px, 2.5vw, 24px);
-  border-bottom-right-radius: clamp(14px, 2.5vw, 24px);
-}
-
-/* Fixed Barrel CRT Monitor Chassis Bezel - Frames top of solid navbar */
-.crt-barrel-bezel {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 65;
-}
-
-/* CRT Analog Noise & Grain Filter - Replaces harsh horizontal scanlines */
-@keyframes crtNoiseJitter {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -1px); }
-  60% { transform: translate(-1px, -2px); }
-  80% { transform: translate(2px, 1px); }
-  100% { transform: translate(0, 0); }
-}
-
-.crt-noise {
-  position: fixed;
-  inset: -20px;
-  width: calc(100vw + 40px);
-  height: calc(100vh + 40px);
-  pointer-events: none;
-  z-index: 38;
-  opacity: 0.14;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='crtNoiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23crtNoiseFilter)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  animation: crtNoiseJitter 0.35s steps(5) infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .crt-noise {
-    animation: none;
-  }
-}
-
-.crt-scanlines {
-  display: none;
-}
-
-/* Authentic CRT Cathode Tube Vignette - Present on every page */
-.crt-vignette {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 39;
-  background: radial-gradient(
-    ellipse 75% 70% at 50% 50%,
-    transparent 45%,
-    rgba(50, 40, 30, 0.08) 62%,
-    rgba(40, 30, 20, 0.25) 78%,
-    rgba(25, 18, 12, 0.55) 90%,
-    rgba(12, 8, 5, 0.85) 100%
-  );
-  box-shadow: 
-    inset 0 0 clamp(60px, 10vw, 150px) rgba(15, 10, 6, 0.55),
-    inset 0 0 clamp(20px, 3vw, 50px) rgba(0, 0, 0, 0.7);
-}
-
-/* Curved Cathode Glass Specular Glare */
-.crt-glass-glare {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 40;
-  background: 
-    radial-gradient(ellipse 95% 18% at 50% 0%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 40%, transparent 70%);
-}
-
-/* Mobile Responsive Optimizations for Handheld Devices */
-@media (max-width: 640px) {
-  /* On narrow phone screens, hide the outer chassis bezel so screen width is 100% usable */
-  .crt-barrel-bezel {
-    display: none !important;
-  }
-
-  /* Keep mobile text razor-sharp without warping */
-  .has-crt-distortion #crt-content {
-    filter: none !important;
-  }
-
-  /* Reset navbar arch transforms on mobile */
-  .has-crt-distortion header .nav-left,
-  .has-crt-distortion header .nav-center,
-  .has-crt-distortion header .nav-center > a,
-  .has-crt-distortion header .nav-right {
-    transform: none !important;
-  }
-
-  .has-crt-distortion header.nav-solid {
-    border-radius: 0 !important;
-  }
-
-  /* Soften vignette for portrait phone aspect ratios */
-  .crt-vignette {
-    background: radial-gradient(
-      ellipse 92% 88% at 50% 50%,
-      transparent 65%,
-      rgba(50, 40, 30, 0.05) 82%,
-      rgba(25, 18, 12, 0.22) 94%,
-      rgba(12, 8, 5, 0.45) 100%
-    ) !important;
-    box-shadow: inset 0 0 16px rgba(15, 10, 6, 0.35) !important;
-  }
-
-  /* Subtle glass glare on mobile */
-  .crt-glass-glare {
-    background: radial-gradient(ellipse 95% 12% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 60%) !important;
-  }
-}
+}

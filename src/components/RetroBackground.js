@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import styles from "./RetroBackground.module.css";
 
 export default function RetroBackground() {
@@ -29,28 +28,10 @@ export default function RetroBackground() {
 
   return (
     <div className={styles.container} aria-hidden="true">
-      {/* Cinematic Retro Landscape Artwork Layer */}
-      <div className={styles.imageLayer}>
-        <Image
-          src="/images/hero.jpg"
-          alt="Satya in landscape"
-          fill
-          priority
-          sizes="100vw"
-          className={styles.artwork}
-        />
-      </div>
+      {/* Minimal Apple Soft Ambient Canvas */}
+      <div className={styles.ambientWash} />
 
-      {/* Warm Archival Sepia Color Grade */}
-      <div className={styles.colorGrade} />
-
-      {/* Central Luminous Readability Halo */}
-      <div className={styles.readabilityHalo} />
-
-      {/* Subtle Blueprint Drafting Grid Overlay */}
-      <div className={styles.subtleGrid} />
-
-      {/* Interactive Cursor Warmth */}
+      {/* Interactive Cursor Soft Luminous Touch */}
       <div
         className={styles.cursorGlow}
         style={{
