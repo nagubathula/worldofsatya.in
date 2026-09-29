@@ -9,21 +9,38 @@ import RetroBackground from "./RetroBackground";
 import ChibiAvatar from "./ChibiAvatar";
 import styles from "./LandingStory.module.css";
 
-const container = {
+// Word-by-word blur-in entrance animation variants
+const wordContainer = (stagger = 0.04, delay = 0) => ({
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.08,
-    }
-  }
+      staggerChildren: stagger,
+      delayChildren: delay,
+    },
+  },
+});
+
+const wordBlur = {
+  hidden: {
+    opacity: 0,
+    filter: "blur(12px)",
+    y: 8,
+  },
+  show: {
+    opacity: 1,
+    filter: "blur(0px)",
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1], // Smooth Apple-style fluid easeOut
+    },
+  },
 };
 
-const item = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } }
-};
+const bioText =
+  "I’m Satya — operating at the boundary where interface craft, typography, and deep systems engineering converge. Leading Generative AI at NxtWave (2,000+ productions orchestrated) while building sovereign open tools for creators.";
+const bioWords = bioText.split(" ");
 
 export default function LandingStory() {
   const [hoveredProject, setHoveredProject] = useState(null);
@@ -34,23 +51,41 @@ export default function LandingStory() {
       <div className={styles.shell}>
         {/* Main Editorial Hero */}
         <main id="main-content" className={styles.main}>
-          <motion.section 
-            className={styles.heroPanel} 
-            aria-labelledby="landing-heading"
-            variants={container}
-            initial="hidden"
-            animate="show"
-            onMouseMove={handleHeroMouseMove}
-            onMouseLeave={handleHeroMouseLeave}
-          >
+          <section className={styles.heroPanel} aria-labelledby="landing-heading">
             {/* Left Content Column */}
             <div className={styles.heroContent}>
-              {/* Headline with interactive project hover previews */}
-              <motion.h1 variants={item} id="landing-heading" className={styles.headline}>
-                Design + Engineering.
-                <span className={styles.subheadline}>
-                  Currently building{" "}
-                  <span className="relative inline-block">
+              {/* Headline with word-by-word blur animation & interactive project previews */}
+              <h1 id="landing-heading" className={styles.headline}>
+                <motion.span
+                  className="block"
+                  variants={wordContainer(0.06, 0.05)}
+                  initial="hidden"
+                  animate="show"
+                >
+                  <motion.span variants={wordBlur} className="inline-block mr-[0.25em]">
+                    Design
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="inline-block mr-[0.25em]">
+                    +
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="inline-block">
+                    Engineering.
+                  </motion.span>
+                </motion.span>
+
+                <motion.span
+                  className={styles.subheadline}
+                  variants={wordContainer(0.045, 0.22)}
+                  initial="hidden"
+                  animate="show"
+                >
+                  <motion.span variants={wordBlur} className="inline-block mr-[0.25em]">
+                    Currently
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="inline-block mr-[0.25em]">
+                    building
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="relative inline-block mr-[0.25em]">
                     <Link
                       href="/works/o0"
                       className="inline-block text-[#1d1d1f] font-medium underline decoration-black/20 underline-offset-4 hover:decoration-[#1d1d1f] transition-colors cursor-pointer"
@@ -84,9 +119,11 @@ export default function LandingStory() {
                         </motion.span>
                       )}
                     </AnimatePresence>
-                  </span>
-                  {" "}&amp;{" "}
-                  <span className="relative inline-block">
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="inline-block mr-[0.25em]">
+                    &amp;
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="relative inline-block">
                     <Link
                       href="/case-studies/notbad-design"
                       className="inline-block text-[#1d1d1f] font-medium underline decoration-black/20 underline-offset-4 hover:decoration-[#1d1d1f] transition-colors cursor-pointer"
@@ -121,18 +158,38 @@ export default function LandingStory() {
                         </motion.span>
                       )}
                     </AnimatePresence>
-                  </span>
-                  .
-                </span>
-              </motion.h1>
+                  </motion.span>
+                  <motion.span variants={wordBlur} className="inline-block">
+                    .
+                  </motion.span>
+                </motion.span>
+              </h1>
 
-              {/* Narrative Story Bio */}
-              <motion.p variants={item} className={styles.bio}>
-                I’m Satya — operating at the boundary where interface craft, typography, and deep systems engineering converge. Leading Generative AI at NxtWave (2,000+ productions orchestrated) while building sovereign open tools for creators.
+              {/* Narrative Story Bio with word-by-word blur reveal */}
+              <motion.p
+                variants={wordContainer(0.018, 0.42)}
+                initial="hidden"
+                animate="show"
+                className={styles.bio}
+              >
+                {bioWords.map((word, i) => (
+                  <motion.span
+                    key={`${word}-${i}`}
+                    variants={wordBlur}
+                    className="inline-block mr-[0.28em]"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
               </motion.p>
 
               {/* Bottom Actions */}
-              <motion.div variants={item} className={styles.actionRow}>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.95 }}
+                className={styles.actionRow}
+              >
                 <div className={styles.ctaGroup}>
                   <a href="mailto:nagubathula.satyasai@gmail.com" className={styles.primaryPill}>
                     Let’s talk <ArrowUpRight size={15} aria-hidden="true" />
@@ -143,52 +200,38 @@ export default function LandingStory() {
                 </div>
               </motion.div>
 
-              <motion.div variants={item} className={styles.experienceStatus}>
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 1.05 }}
+                className={styles.experienceStatus}
+              >
                 <span className={styles.statusDot} aria-hidden="true" />
                 <span className={styles.subtleText}>Available for select advisory &amp; generative engineering</span>
               </motion.div>
             </div>
 
-            {/* Right Illustration Column with 3D Tilt & Gentle Float */}
-            <motion.div 
-              variants={item} 
+            {/* Right Illustration Column - Fixed in place, Eyes follow cursor */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
               className={styles.heroIllustration}
-              onMouseMove={handleHeroMouseMove}
-              onMouseLeave={handleHeroMouseLeave}
-              style={{ perspective: 1000 }}
             >
               {/* Soft Ambient Studio Aura */}
-              <motion.div 
-                className={styles.avatarAura}
-                animate={{ opacity: [0.4, 0.65, 0.4], scale: [0.95, 1.05, 0.95] }}
-                transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
-                aria-hidden="true"
-              />
+              <div className={styles.avatarAura} aria-hidden="true" />
 
-              {/* 3D Tilt Shell */}
-              <motion.div
-                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                className="relative flex flex-col items-center justify-center"
-              >
-                {/* Continuous Organic Floating Motion */}
-                <motion.div
-                  animate={{ y: [-5, 5, -5], rotate: [-0.4, 0.4, -0.4] }}
-                  transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative w-44 sm:w-56 md:w-64 lg:w-72 xl:w-80 aspect-[9/16] max-h-[46vh]"
-                >
+              {/* Character Shell - Fixed Stationary Body */}
+              <div className="relative flex flex-col items-center justify-center">
+                <div className="relative w-44 sm:w-56 md:w-64 lg:w-72 xl:w-80 aspect-[9/16] max-h-[46vh]">
                   <ChibiAvatar className={styles.avatarImage} />
-                </motion.div>
+                </div>
 
-                {/* Ground Contact Breathing Shadow */}
-                <motion.div 
-                  className={styles.avatarShadow}
-                  animate={{ scaleX: [1, 0.88, 1], opacity: [0.32, 0.16, 0.32] }}
-                  transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
-                  aria-hidden="true"
-                />
-              </motion.div>
+                {/* Ground Contact Shadow */}
+                <div className={styles.avatarShadow} aria-hidden="true" />
+              </div>
             </motion.div>
-          </motion.section>
+          </section>
         </main>
 
         {/* Minimal Clean Divider */}

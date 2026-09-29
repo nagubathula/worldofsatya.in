@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function ChibiAvatar({ className = "" }) {
   const containerRef = useRef(null);
+  const [isAstonished, setIsAstonished] = useState(false);
 
   // Eye movement physics (silky spring with responsive tracking)
   const rawEyeX = useMotionValue(0);
@@ -19,19 +20,21 @@ export default function ChibiAvatar({ className = "" }) {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
 
-      // Avatar eye anchor in viewport coords (around 54% width, 27% height)
-      const eyeAnchorX = rect.left + rect.width * 0.54;
-      const eyeAnchorY = rect.top + rect.height * 0.27;
+      // Avatar head center in viewport coords (around 54% width, 28% height)
+      const headAnchorX = rect.left + rect.width * 0.54;
+      const headAnchorY = rect.top + rect.height * 0.28;
 
-      const dx = e.clientX - eyeAnchorX;
-      const dy = e.clientY - eyeAnchorY;
+      const dx = e.clientX - headAnchorX;
+      const dy = e.clientY - headAnchorY;
       const dist = Math.hypot(dx, dy);
 
-      // Max eye deflection in SVG coordinate units
-      // Horizontal range is slightly wider than vertical range
-      const maxEyeX = 10.0;
-      const maxEyeY = 6.5;
-      const influence = Math.min(dist / 280, 1);
+      // Astonished mouth trigger: when cursor is near the chibi (within 240px)
+      setIsAstonished(dist < 240);
+
+      // Max eyeball deflection inside eye socket
+      const maxEyeX = 8.0;
+      const maxEyeY = 5.2;
+      const influence = Math.min(dist / 260, 1);
       const angle = Math.atan2(dy, dx);
 
       rawEyeX.set(Math.cos(angle) * maxEyeX * influence);
@@ -39,9 +42,10 @@ export default function ChibiAvatar({ className = "" }) {
     };
 
     const handlePointerLeave = () => {
-      // Return eyes smoothly to neutral center gaze
+      // Return eyes smoothly to neutral center gaze and close astonished mouth
       rawEyeX.set(0);
       rawEyeY.set(0);
+      setIsAstonished(false);
     };
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
@@ -562,68 +566,8 @@ export default function ChibiAvatar({ className = "" }) {
         fill: #ebebea;
       }
 
-      @keyframes heroSparkle1 {
-        0%, 100% {
-          opacity: 0.15;
-          transform: translate(0, 0) scale(0.65);
-        }
-        50% {
-          opacity: 0.95;
-          transform: translate(2px, -8px) scale(1.15);
-        }
-      }
-
-      @keyframes heroSparkle2 {
-        0%, 100% {
-          opacity: 0.85;
-          transform: translate(0, 0) scale(1.05);
-        }
-        50% {
-          opacity: 0.2;
-          transform: translate(-3px, -6px) scale(0.6);
-        }
-      }
-
-      @keyframes heroSparkle3 {
-        0%, 100% {
-          opacity: 0.3;
-          transform: translate(0, 0) scale(0.7);
-        }
-        50% {
-          opacity: 0.9;
-          transform: translate(3px, -5px) scale(1.1);
-        }
-      }
-
-      @keyframes heroSparkleDot {
-        0%, 100% {
-          opacity: 0.25;
-          transform: scale(0.85);
-        }
-        50% {
-          opacity: 0.85;
-          transform: scale(1.3);
-        }
-      }
-
-      .hero-sparkle-1 {
-        transform-origin: 688px 455px;
-        animation: heroSparkle1 3.2s ease-in-out infinite;
-      }
-
-      .hero-sparkle-2 {
-        transform-origin: 708px 478.5px;
-        animation: heroSparkle2 2.7s ease-in-out infinite 0.6s;
-      }
-
-      .hero-sparkle-3 {
-        transform-origin: 660px 463.2px;
-        animation: heroSparkle3 3.6s ease-in-out infinite 1.2s;
-      }
-
       .hero-sparkle-dot {
-        transform-origin: 678px 480px;
-        animation: heroSparkleDot 2.4s ease-in-out infinite;
+        opacity: 0.7;
       }
     ` }} />
   </defs>
@@ -739,10 +683,50 @@ export default function ChibiAvatar({ className = "" }) {
               <path className="cls-108" d="M449.68,136.62c-1.31,1.88-2.46,3.52-3.07,5.79,7.83-2.95,15.41-4.99,23.31-3.71-2.26,2.06-4.43,2.59-5.86,5.17,11.97,3.21,22.05,7.85,31.28,15.12-2.46,1.07-4.17.91-6.17,2.56,3.68,3.63,6.88,6.19,9.09,10.43-1.6.03-2.61-.31-4.4.47,3.88,3.1,5.42,7.46,6.54,12.33,3.1,13.55,3.64,27.12,5.3,41.04l-.23,9.04c-.05,1.97.88,4.76.41,6.69l12.9,16.4c5.65,7.18,9.93,14.33,11.79,23.23l8.71,41.72c8.82-18.29,25.58-30.19,45.38-29.17,27.06,1.4,45.7,45.66,25.96,81.5-6.6,11.98-14.55,22.15-23.31,32.53-12.33,17.01-34.03,18.05-51.08,5.79-4.38,11.92-8.62,23.32-16.5,33.18-10.55,13.21-23.27,23.14-38.02,31.72-31.06,18.07-64.59,30.5-99.79,37.99-11.42,2.43-22.29,2.08-33.61-.37-32.49-7.04-74.93-21.41-100.81-41.46-27.47-21.29-25.27-54.26-28.09-87.35l-5.3-62.14c-3.27-38.36,12.62-57.39,12.38-66.96-.49-20.12-.91-39.76,4.03-59.45,3.21-12.8,12.64-19.8,24.5-24.11-5.03,7.72-9.68,13.62-12.12,21.92l10.24-7.97c12.65-8.07,25.87-14.21,39.68-19.22-5.35,7.57-10.52,13.18-13.76,21.56,19.03-4.63,36.16-13.88,55.16-22.47-5.8,9.6-13.24,16.04-17.77,26.08,23.32-7.4,46.34-24.29,65.92-38.37,1.71-.83,1.79-.17.81,1.43l-8.27,11.42c.13.96.26,1.47,1.22,1.11,14.77-7.67,27.19-17.16,41.01-26.87l-4.35,12.92c10.93-8.14,22.61-14.71,35.04-21.1,2.22-1.45,3.22-.77,1.84,1.59Z"/>
               <g>
                 <path className="cls-85" d="M376.13,170.09c-.84.44-1.09,2.91-3.51,1.81l2.3-2.91c.27.48.63.82,1.22,1.11Z"/>
-                <path className="cls-84" d="M453.89,267.55c-20.79,3.82-39.95,8.57-60.31,14.23,1.85-6.65,3.88-13.13,8.07-18.64,5.39-7.09,41.4-15.66,56.19-18.64,9.56-1.93,18.51.41,26.25,6.15,9.84,7.17,18.48,15.97,21.95,28.67-16.31-11.04-33.14-15.25-52.15-11.76Z"/>
-                <path className="cls-84" d="M316.06,293.26c-19.04-1.24-36.51-3.42-55.09-3.49-13.09-.05-25.02,3.31-34.98,12.44,4.1-18.49,15.1-39.42,33.76-35.94,14.57,2.72,29.46,4.88,43.22,10.54,6.51,2.68,9.55,10.83,13.09,16.45Z"/>
+                {/* Right Eyebrow (Raises slightly in astonishment) */}
+                <motion.path
+                  className="cls-84"
+                  fill="#010100"
+                  d="M453.89,267.55c-20.79,3.82-39.95,8.57-60.31,14.23,1.85-6.65,3.88-13.13,8.07-18.64,5.39-7.09,41.4-15.66,56.19-18.64,9.56-1.93,18.51.41,26.25,6.15,9.84,7.17,18.48,15.97,21.95,28.67-16.31-11.04-33.14-15.25-52.15-11.76Z"
+                  animate={isAstonished ? { y: -7 } : { y: 0 }}
+                  transition={{ type: "spring", stiffness: 380, damping: 22 }}
+                />
+                {/* Left Eyebrow (Raises slightly in astonishment) */}
+                <motion.path
+                  className="cls-84"
+                  fill="#010100"
+                  d="M316.06,293.26c-19.04-1.24-36.51-3.42-55.09-3.49-13.09-.05-25.02,3.31-34.98,12.44,4.1-18.49,15.1-39.42,33.76-35.94,14.57,2.72,29.46,4.88,43.22,10.54,6.51,2.68,9.55,10.83,13.09,16.45Z"
+                  animate={isAstonished ? { y: -7 } : { y: 0 }}
+                  transition={{ type: "spring", stiffness: 380, damping: 22 }}
+                />
                 <path className="cls-31" d="M337.33,363.43c-4.3,8.14,4.02,13.96,8.32,22.8-7.08-3.32-12.2-8.45-16.72-14.13-2.87-3.61-2.06-7.88.28-11.51,6.89-10.67,12.6-21.47,15.78-33.5,4.63,10.24-2.29,26.14-7.67,36.34Z"/>
-                <path className="cls-86" d="M327.5,435.8c-7.22,1.83-15.22-5.39-12.13-7.61,1.67-1.2,4.93,5.96,12.1,4.56,26.31-5.12,52.17-9.27,78.67-13.01,8.8-1.24,18.37-4.1,21.62-11.27,2.13.85,2.92,2.69,2.55,4.4-1.39,6.39-13.67,8.64-23.26,9.69-26.98,2.97-53.22,6.56-79.55,13.25Z"/>
+
+                {/* Normal Smirk Smile Mouth */}
+                <motion.path
+                  className="cls-86"
+                  fill="#010100"
+                  d="M327.5,435.8c-7.22,1.83-15.22-5.39-12.13-7.61,1.67-1.2,4.93,5.96,12.1,4.56,26.31-5.12,52.17-9.27,78.67-13.01,8.8-1.24,18.37-4.1,21.62-11.27,2.13.85,2.92,2.69,2.55,4.4-1.39,6.39-13.67,8.64-23.26,9.69-26.98,2.97-53.22,6.56-79.55,13.25Z"
+                  animate={isAstonished ? { opacity: 0, scale: 0.3 } : { opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.16 }}
+                  style={{ transformOrigin: "372px 435px" }}
+                />
+
+                {/* Astonished Big Oval Mouth (:O when mouse is near) */}
+                <motion.g
+                  id="heroMouthAstonished"
+                  initial={false}
+                  animate={isAstonished ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.2 }}
+                  transition={{ type: "spring", stiffness: 420, damping: 22 }}
+                  style={{ transformOrigin: "372px 438px" }}
+                >
+                  {/* Outer dark mouth cavity */}
+                  <ellipse cx="372" cy="438" rx="19" ry="27" fill="#141414" stroke="#010100" strokeWidth="3.2" />
+                  {/* Inner cute tongue depth */}
+                  <path d="M360,450 c6,8 18,8 24,0 c2,8 -4,14 -12,14 c-8,0 -14,-6 -12,-14 Z" fill="#e06c75" />
+                  {/* Top tooth / light reflection */}
+                  <path d="M365,413 c4,2.5 10,2.5 14,0 c1,3.2 -2,4.8 -7,4.8 c-5,0 -8,-1.6 -7,-4.8 Z" fill="#ffffff" />
+                </motion.g>
+
                 <path className="cls-93" d="M295.08,368.7c-10.83,3.7-28.25,9.9-33.27,2.62,4.31.91,7.52,1.89,11.43.89l16.87-4.28c.59-.15.71-1.47.58-1.63,1.65.33,2.9,1.31,4.38,2.39Z"/>
                 <path className="cls-5" d="M446.29,355.04l3.97-2.36c7.7,2.26,15.33.24,23.89-1.28-6.38,5.2-19.76,5.4-27.87,3.64Z"/>
                 <path className="cls-118" d="M389.15,284.19c-.76-8.58,2.29-16.06,6.74-22.21-2.09,8.25-3.79,14.71-6.74,22.21Z"/>
@@ -757,14 +741,30 @@ export default function ChibiAvatar({ className = "" }) {
                 <path className="cls-121" d="M265.23,400.91c.88-3.97,2.98-7.04,6.36-9.55-1.33,3.77-3.18,6.55-6.36,9.55Z"/>
                 <path className="cls-36" d="M493.02,328.23c-1.27,2.14-1.53,4.71-4.3,6.44l3.05-9.89c.04,1.52-.01,2.77,1.25,3.45Z"/>
                 <path className="cls-16" d="M402.43,306.99c-.56.43-1.26,1.93-2.64,2.06-1.14-1.58,1.06-2.96,1.61-4.04l.11,1.43c-.02.32.21.73.93.56Z"/>
+
+                {/* --- RIGHT EYE --- */}
+                {/* Sclera backing */}
+                <ellipse cx="458" cy="322" rx="26" ry="29" fill="#ffffff" />
+                {/* Moving Eyeball (Pupil + Highlights ONLY) */}
                 <motion.g id="heroEyeRight" style={{ x: eyeX, y: eyeY }}>
-              <path className="cls-84" d="M493.02,328.23c-1.65,1.34-2.06.19-1.25-3.45-.11-3.91,2.25-10.75-1-14.37-7.05-7.85-17.16-11.45-27.71-14.13,13.69,19.15,6.88,49.99-12.8,56.39,1.25,1.53-.07,2.32-3.97,2.36l-14.83-3.23,5.9-.83c-16.34-12.43-19.8-39.27-7.49-56.65-10.48,1.24-19.98,6.86-27.44,12.65-2.29,1.96-2.08.15-1.03-1.99,2.08-4.08,5.3-7.65,8.57-11.56l-11.2,3.93c9.63-9.34,22.75-13.04,36.2-13.7,18.99-.93,37.57,2.14,53.66,11.86,5.99,3.61,10.47,8.16,12.67,14.68-3.53,4.69-4.03,10.87-8.28,18.03Z"/>
-                  <path className="cls-87" d="M456.69,307.36c-1.44,3.73-6.1,4.75-9.23,3.62s-6.06-4.93-4.8-8.77c1.33-4.05,5.88-5.18,9.25-4.15s6.54,4.7,4.77,9.3Z"/>
-            </motion.g>
+                  <ellipse cx="458" cy="322" rx="20.5" ry="26.5" fill="#010100" transform="rotate(3 458 322)" />
+                  <path fill="#ffffff" d="M456.69,307.36c-1.44,3.73-6.1,4.75-9.23,3.62s-6.06-4.93-4.8-8.77c1.33-4.05,5.88-5.18,9.25-4.15s6.54,4.7,4.77,9.3Z"/>
+                  <circle cx="468" cy="336" r="3.2" fill="#ffffff" opacity="0.65" />
+                </motion.g>
+                {/* Fixed Upper Eyelash / Lid (STATIONARY - NEVER MOVES) */}
+                <path fill="#010100" d="M414,296 c9.63-9.34,22.75-13.04,36.2-13.7,18.99-.93,37.57,2.14,53.66,11.86,5.99,3.61,10.47,8.16,12.67,14.68-3.53,4.69-4.03,10.87-8.28,18.03-1.65,1.34-2.06.19-1.25-3.45-.11-3.91,2.25-10.75-1-14.37-7.05-7.85-17.16-11.45-27.71-14.13-11.8-3.2-31,2.4-44.2,11.5-6.8,4.7-13.5,9.8-18.88,8.88-2.29,1.96-2.08.15-1.03-1.99,2.08-4.08,5.3-7.65,8.57-11.56l-11.2,3.93Z" />
+
+                {/* --- LEFT EYE --- */}
+                {/* Sclera backing */}
+                <ellipse cx="286.5" cy="336.5" rx="25" ry="29" fill="#ffffff" />
+                {/* Moving Eyeball (Pupil + Highlights ONLY) */}
                 <motion.g id="heroEyeLeft" style={{ x: eyeX, y: eyeY }}>
-              <path className="cls-10" d="M295.08,368.7c-2.91.49-4.37-.3-4.38-2.39-17.26-3.42-25.39-35.91-11.37-54.94-13.72,2.1-36.04,14.26-36.41,24.17-.27,7.18,2.27,13.2,4.31,20.94-5.81-6.08-10.08-14.15-12.95-22.89,1.3-7.49,5.53-13.16,11.07-17.87,7.43-5.91,15.94-9.35,25.21-11.7,23.41-5.93,39.28-8.22,59.51,8.28-1.02.95-2.65.31-2.7.94-.07.86.79,2.61.93,4.35-6.56-2.7-12.59-6.93-19.89-7.14,12.44,13.21,9.52,36.01-.7,49.57-3.49,4.63-7.87,7.06-12.63,8.68Z"/>
-                  <path className="cls-42" d="M295.67,324.65c-2.49-2.12-3.17-4.75-2.48-6.98.76-2.48,2.82-4.06,5.74-4.43,3.54-.45,6.35.89,7.67,3.64,1.29,2.69.48,5.89-1.39,7.7-2.55,2.47-6.6,2.57-9.54.07Z"/>
-            </motion.g>
+                  <ellipse cx="286.5" cy="337" rx="20" ry="26.5" fill="#010100" transform="rotate(-3 286.5 337)" />
+                  <path fill="#ffffff" d="M295.67,324.65c-2.49-2.12-3.17-4.75-2.48-6.98.76-2.48,2.82-4.06,5.74-4.43,3.54-.45,6.35.89,7.67,3.64,1.29,2.69.48,5.89-1.39,7.7-2.55,2.47-6.6,2.57-9.54.07Z"/>
+                  <circle cx="276" cy="351" r="3.2" fill="#ffffff" opacity="0.65" />
+                </motion.g>
+                {/* Fixed Upper Eyelash / Lid (STATIONARY - NEVER MOVES) */}
+                <path fill="#010100" d="M218.4,324.7 c4.31,20.94-5.81-6.08-10.08-14.15-12.95-22.89,1.3-7.49,5.53-13.16,11.07-17.87,7.43-5.91,15.94-9.35,25.21-11.7,23.41-5.93,39.28-8.22,59.51,8.28-1.02.95-2.65.31-2.7.94-.07.86.79,2.61.93,4.35-6.56-2.7-12.59-6.93-19.89-7.14-12.5-.4-26.5,8-37.5,16-11.8,8.6-19.6,21.8-26.4,23.8Z" />
                 <g>
                   <path className="cls-102" d="M580.7,372.58c-9.59,18.06-30.15,25.08-34.04,19.5-1-1.44-1.16-3.44-.17-5.16l7.65-13.31c7.58-13.2-9.78-17.55-4.75-27.05,6.41-12.11,15.71-23.46,27.9-29.63,6.24-3.16,13.92-3.47,18.29,1.8-15.7-4.8-26.78,6.49-36.79,18.65,5.83-.99,10.1-.45,14.37,2.51,10.61,7.36,13.6,21.29,7.54,32.7Z"/>
                   <path className="cls-14" d="M548.65,391.11c4.48-13.2,17.58-24.44,4.79-35.82-3.01-2.68-2.68-5.3-.88-8.63,2.97-5.51,8.66-9.39,15.08-6.62,12.83,5.55,16.85,20.66,9.88,32.57-6.16,10.52-16.25,18.34-28.87,18.49Z"/>
