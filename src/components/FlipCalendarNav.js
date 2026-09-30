@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Mail, ArrowUpRight, Smartphone } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
 import { play8BitBlipSound } from "./SoundEffects";
@@ -28,14 +28,29 @@ export const calendarSections = [
     code: "WORKS",
     title: "Works",
     href: "/works",
-    image: "/openweave-app.png",
-  },
-  {
-    id: "case-studies",
-    code: "STUDY",
-    title: "Case Studies",
-    href: "/case-studies",
-    image: "/notbad-editor.png",
+    isWorks: true,
+    previewItems: [
+      {
+        id: "openweave",
+        title: "OpenWeave",
+        image: "/openweave-app.png",
+      },
+      {
+        id: "notbad",
+        title: "NotBad",
+        image: "/notbad-editor.png",
+      },
+      {
+        id: "toothpaste",
+        title: "Toothpaste",
+        image: "/toothpaste-panel.png",
+      },
+      {
+        id: "tailus",
+        title: "Tailus",
+        image: "/tailus.png",
+      },
+    ],
   },
   {
     id: "contact",
@@ -46,16 +61,10 @@ export const calendarSections = [
   },
 ];
 
-// Helper to render the inner content of a flap (either top half or bottom half)
-function FlapHalf({ section, half }) {
-  const isTop = half === "top";
-
+// Renders the complete, uncut card face for each section
+function CardFace({ section, onExpandWorks }) {
   return (
-    <div
-      className={`relative w-full h-[200%] bg-white text-[#111111] flex flex-col justify-between p-4 sm:p-6 lg:p-7 select-none ${
-        isTop ? "translate-y-0" : "-translate-y-1/2"
-      }`}
-    >
+    <div className="relative w-full h-full bg-white text-[#111111] flex flex-col justify-between p-4 sm:p-6 lg:p-7 select-none overflow-hidden">
       {section.isAvatar ? (
         <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
           {/* Subtle soft studio lighting */}
@@ -102,6 +111,54 @@ function FlapHalf({ section, half }) {
             </span>
           </div>
         </div>
+      ) : section.isWorks ? (
+        <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
+          {/* Top code badge */}
+          <div className="w-full flex items-center justify-between z-10">
+            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
+              {section.code}
+            </span>
+          </div>
+
+          {/* 2x2 Bento Preview Grid of 4 Works */}
+          <div
+            onClick={(e) => {
+              if (onExpandWorks) {
+                e.stopPropagation();
+                onExpandWorks();
+              }
+            }}
+            className="relative flex-1 w-full my-1.5 sm:my-2 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2.5 cursor-pointer"
+          >
+            {section.previewItems.map((item, idx) => (
+              <div
+                key={idx}
+                className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] border border-black/[0.06] shadow-2xs group/tile hover:border-black/20 hover:scale-[1.02] transition-all duration-200"
+              >
+                <motion.div layoutId={`work-image-${item.id}`} style={{ borderRadius: 12 }} className="relative w-full h-full overflow-hidden">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 45vw, 220px"
+                    className="object-cover object-top"
+                  />
+                </motion.div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Title */}
+          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
+            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
+              {section.title}
+            </span>
+            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1">
+              <span>Click to view</span>
+              <ArrowUpRight size={12} />
+            </span>
+          </div>
+        </div>
       ) : (
         <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
           {/* Top code badge */}
@@ -137,16 +194,16 @@ function FlapHalf({ section, half }) {
   );
 }
 
-export default function FlipCalendarNav() {
+export default function FlipCalendarNav({ onExpandWorks, initialSection = "avatar" }) {
+  const reduceMotion = useReducedMotion();
+  const initialIndex = Math.max(0, calendarSections.findIndex(section => section.id === initialSection));
   const router = useRouter();
-  const [currIndex, setCurrIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState(0);
+  const [currIndex, setCurrIndex] = useState(initialIndex);
   const [isFlipping, setIsFlipping] = useState(false);
   const [direction, setDirection] = useState("down"); // "down" or "up"
 
   const total = calendarSections.length;
-  const currIndexRef = useRef(0);
-  const nextIndexRef = useRef(0);
+  const currIndexRef = useRef(initialIndex);
   const isFlippingRef = useRef(false);
   const flipTimerRef = useRef(null);
   const touchStartY = useRef(0);
@@ -156,10 +213,10 @@ export default function FlipCalendarNav() {
     if (isFlippingRef.current) return;
     isFlippingRef.current = true;
     const target = (currIndexRef.current + 1) % total;
-    nextIndexRef.current = target;
-    setNextIndex(target);
+    currIndexRef.current = target;
     setDirection("down");
     setIsFlipping(true);
+    setCurrIndex(target);
 
     try {
       play8BitBlipSound(620);
@@ -172,21 +229,19 @@ export default function FlipCalendarNav() {
 
     if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
     flipTimerRef.current = setTimeout(() => {
-      currIndexRef.current = target;
-      setCurrIndex(target);
       setIsFlipping(false);
       isFlippingRef.current = false;
-    }, 440);
+    }, 380);
   }, [total]);
 
   const flipToPrev = useCallback(() => {
     if (isFlippingRef.current) return;
     isFlippingRef.current = true;
     const target = (currIndexRef.current - 1 + total) % total;
-    nextIndexRef.current = target;
-    setNextIndex(target);
+    currIndexRef.current = target;
     setDirection("up");
     setIsFlipping(true);
+    setCurrIndex(target);
 
     try {
       play8BitBlipSound(520);
@@ -199,18 +254,20 @@ export default function FlipCalendarNav() {
 
     if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
     flipTimerRef.current = setTimeout(() => {
-      currIndexRef.current = target;
-      setCurrIndex(target);
       setIsFlipping(false);
       isFlippingRef.current = false;
-    }, 440);
+    }, 380);
   }, [total]);
 
-  // Global window wheel listener so scrolling ANYWHERE turns the calendar
+  // Wheel listener: Flips calendar when hovering over the widget, allows normal page scroll elsewhere
   useEffect(() => {
     const handleGlobalWheel = (e) => {
+      const overCalendar = e.target?.closest?.("[data-flip-calendar='true']");
+      if (!overCalendar) return;
+
       if (Math.abs(e.deltaY) < 14) return;
       if (isFlippingRef.current) return;
+      if (e.cancelable) e.preventDefault();
 
       if (e.deltaY > 0) {
         flipToNext();
@@ -225,7 +282,7 @@ export default function FlipCalendarNav() {
     };
   }, [flipToNext, flipToPrev]);
 
-  // Global touch swipe support (supports both vertical and horizontal swipes)
+  // Touch swipe support: swiping on the calendar flips cards, swiping elsewhere scrolls the page
   useEffect(() => {
     const handleGlobalTouchStart = (e) => {
       touchStartY.current = e.touches[0].clientY;
@@ -233,8 +290,8 @@ export default function FlipCalendarNav() {
     };
 
     const handleGlobalTouchMove = (e) => {
-      // Prevent browser bounce / page scroll while swiping on mobile
-      if (e.cancelable) {
+      const overCalendar = e.target?.closest?.("[data-flip-calendar='true']");
+      if (overCalendar && e.cancelable) {
         e.preventDefault();
       }
     };
@@ -433,7 +490,16 @@ export default function FlipCalendarNav() {
         if (e.cancelable) e.preventDefault();
         flipToPrev();
       } else if (e.key === "Enter") {
+        if (e.target instanceof Element && e.target.closest("button, a, input, textarea, select")) return;
         const item = calendarSections[currIndexRef.current];
+        if (item.isWorks && onExpandWorks) { onExpandWorks(); return; }
+        if (item.id === "works") {
+          const worksEl = document.getElementById("works-section");
+          if (worksEl) {
+            worksEl.scrollIntoView({ behavior: "smooth" });
+            return;
+          }
+        }
         if (item.href.startsWith("mailto:")) {
           window.location.href = item.href;
         } else {
@@ -468,14 +534,13 @@ export default function FlipCalendarNav() {
       delete window.flipCalendarNext;
       delete window.flipCalendarPrev;
     };
-  }, [flipToNext, flipToPrev, router]);
+  }, [flipToNext, flipToPrev, router, onExpandWorks]);
 
   const currSection = calendarSections[currIndex];
-  const nextSection = calendarSections[nextIndex];
-
   return (
     <div
       data-lenis-prevent="true"
+      data-flip-calendar="true"
       className="relative w-full h-full flex flex-col items-center justify-center select-none"
     >
       {/* Clean Flip Housing with fluid responsive sizing */}
@@ -485,6 +550,17 @@ export default function FlipCalendarNav() {
         <div
           onClick={() => {
             if (!isFlippingRef.current) {
+              if (currSection.id === "works") {
+                if (onExpandWorks) {
+                  onExpandWorks();
+                  return;
+                }
+                const worksEl = document.getElementById("works-section");
+                if (worksEl) {
+                  worksEl.scrollIntoView({ behavior: "smooth" });
+                  return;
+                }
+              }
               if (currSection.href.startsWith("mailto:")) {
                 window.location.href = currSection.href;
               } else {
@@ -492,136 +568,56 @@ export default function FlipCalendarNav() {
               }
             }
           }}
-          className="relative w-[min(320px,84vw)] sm:w-[min(390px,86vw)] lg:w-[440px] aspect-[4/4.2] max-h-[40vh] sm:max-h-[46vh] lg:max-h-[460px] rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] overflow-hidden bg-white shadow-[0_12px_28px_rgba(0,0,0,0.06)] cursor-pointer group"
-          style={{ perspective: "1400px" }}
+          className="relative w-[min(320px,84vw)] sm:w-[min(390px,86vw)] lg:w-[440px] aspect-[4/4.2] max-h-[40vh] sm:max-h-[46vh] lg:max-h-[460px] rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] bg-white shadow-[0_12px_28px_rgba(0,0,0,0.06)] cursor-pointer group"
+          style={{ perspective: "1000px" }}
         >
-          {/* ============================================================
-              1. STATIC BACKGROUND FLAPS (Clean, no black lines)
-             ============================================================ */}
-          
-          {/* Static Top Half */}
-          <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[22px] sm:rounded-t-[26px] lg:rounded-t-[30px]">
-            <FlapHalf
-              section={isFlipping && direction === "down" ? nextSection : currSection}
-              half="top"
-            />
-          </div>
-
-          {/* Static Bottom Half */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[22px] sm:rounded-b-[26px] lg:rounded-b-[30px]">
-            <FlapHalf
-              section={isFlipping && direction === "up" ? nextSection : currSection}
-              half="bottom"
-            />
-            {/* Subtle shadow that deepens as the top flap falls */}
-            {isFlipping && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.25 }}
-                transition={{ duration: 0.2 }}
-                className="absolute inset-0 bg-black pointer-events-none"
-              />
-            )}
-          </div>
-
-          {/* ============================================================
-              2. 3D FLIPPING FLAPS (Seamless, no black lines)
-             ============================================================ */}
-          <AnimatePresence>
-            {isFlipping && direction === "down" && (
-              <>
-                {/* Flap A: Top Half flips DOWN from 0deg to -90deg */}
-                <motion.div
-                  key={`top-down-${currIndex}-${nextIndex}`}
-                  initial={{ rotateX: 0 }}
-                  animate={{ rotateX: -90 }}
-                  transition={{ duration: 0.2, ease: [0.4, 0, 0.7, 1] }}
-                  style={{
-                    transformOrigin: "bottom center",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                  }}
-                  className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[22px] sm:rounded-t-[26px] lg:rounded-t-[30px] z-20"
-                >
-                  <FlapHalf section={currSection} half="top" />
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.35 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute inset-0 bg-black pointer-events-none"
-                  />
-                </motion.div>
-
-                {/* Flap B: Bottom Half flips DOWN from 90deg to 0deg */}
-                <motion.div
-                  key={`bottom-down-${currIndex}-${nextIndex}`}
-                  initial={{ rotateX: 90 }}
-                  animate={{ rotateX: 0 }}
-                  transition={{ duration: 0.22, delay: 0.19, ease: [0.15, 0.9, 0.3, 1] }}
-                  style={{
-                    transformOrigin: "top center",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                  }}
-                  className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[22px] sm:rounded-b-[26px] lg:rounded-b-[30px] z-20"
-                >
-                  <FlapHalf section={nextSection} half="bottom" />
-                  <motion.div
-                    initial={{ opacity: 0.25 }}
-                    animate={{ opacity: 0 }}
-                    transition={{ duration: 0.22, delay: 0.19 }}
-                    className="absolute inset-0 bg-black pointer-events-none"
-                  />
-                </motion.div>
-              </>
-            )}
-
-            {isFlipping && direction === "up" && (
-              <>
-                {/* Reverse Flip (Scrolling Up) */}
-                <motion.div
-                  key={`bottom-up-${currIndex}-${nextIndex}`}
-                  initial={{ rotateX: 0 }}
-                  animate={{ rotateX: 90 }}
-                  transition={{ duration: 0.2, ease: [0.4, 0, 0.7, 1] }}
-                  style={{
-                    transformOrigin: "top center",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                  }}
-                  className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[22px] sm:rounded-b-[26px] lg:rounded-b-[30px] z-20"
-                >
-                  <FlapHalf section={currSection} half="bottom" />
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.35 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute inset-0 bg-black pointer-events-none"
-                  />
-                </motion.div>
-
-                <motion.div
-                  key={`top-up-${currIndex}-${nextIndex}`}
-                  initial={{ rotateX: -90 }}
-                  animate={{ rotateX: 0 }}
-                  transition={{ duration: 0.22, delay: 0.19, ease: [0.15, 0.9, 0.3, 1] }}
-                  style={{
-                    transformOrigin: "bottom center",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                  }}
-                  className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[22px] sm:rounded-t-[26px] lg:rounded-t-[30px] z-20"
-                >
-                  <FlapHalf section={nextSection} half="top" />
-                  <motion.div
-                    initial={{ opacity: 0.25 }}
-                    animate={{ opacity: 0 }}
-                    transition={{ duration: 0.22, delay: 0.19 }}
-                    className="absolute inset-0 bg-black pointer-events-none"
-                  />
-                </motion.div>
-              </>
-            )}
+          {/* Apple iOS Level Smooth 3D Perspective Card Turn */}
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={currIndex}
+              custom={direction}
+              variants={{
+                enter: (dir) => ({
+                  rotateX: reduceMotion ? 0 : dir === "down" ? 50 : -50,
+                  y: dir === "down" ? 26 : -26,
+                  scale: 0.96,
+                  opacity: 0,
+                }),
+                center: {
+                  rotateX: 0,
+                  y: 0,
+                  scale: 1,
+                  opacity: 1,
+                  transition: {
+                    duration: 0.38,
+                    ease: [0.16, 1, 0.3, 1],
+                  },
+                },
+                exit: (dir) => ({
+                  rotateX: reduceMotion ? 0 : dir === "down" ? -50 : 50,
+                  y: dir === "down" ? -26 : 26,
+                  scale: 0.96,
+                  opacity: 0,
+                  transition: {
+                    duration: 0.38,
+                    ease: [0.16, 1, 0.3, 1],
+                  },
+                }),
+              }}
+              initial={false}
+              animate="center"
+              exit="exit"
+              style={{
+                transformOrigin: "50% 50%",
+                transformStyle: "preserve-3d",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                willChange: "transform, opacity",
+              }}
+              className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] overflow-hidden bg-white"
+            >
+              <CardFace section={currSection} onExpandWorks={onExpandWorks} />
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>

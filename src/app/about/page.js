@@ -13,7 +13,7 @@ export default function AboutPage() {
     <div className="min-h-screen relative max-w-7xl mx-auto w-full px-4 sm:px-12">
       <main className="relative z-10 flex flex-col pt-16 sm:pt-14">
         <AboutMe />
-        <ExperienceTimeline />
+        <ExperienceTimeline bento />
       </main>
       <Footer />
     </div>

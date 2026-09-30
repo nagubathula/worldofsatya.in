@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function ExperienceTimeline({ limit, showStats = false }) {
+export default function ExperienceTimeline({ limit, showStats = false, bento = false }) {
   const experiences = [
     {
       year: "05/2025 - Present",
@@ -57,6 +57,24 @@ export default function ExperienceTimeline({ limit, showStats = false }) {
     },
   };
 
+  if (bento) {
+    return (
+      <section aria-labelledby="career-heading" className="mx-auto mb-12 grid w-full max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col justify-between rounded-[28px] border border-black/[0.06] bg-[#eeeee8] p-7 sm:p-8">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#62625b]">Along the way</p>
+          <div className="mt-10"><h2 id="career-heading" className="text-3xl font-semibold tracking-tight text-[#1d1d1f]">A little of<br />my journey.</h2><p className="mt-4 text-sm leading-7 text-[#515154]">Working across design and engineering, from hardware to creative software.</p></div>
+        </div>
+        {experiences.map((exp) => (
+          <article key={exp.company} className="rounded-[28px] border border-black/[0.06] bg-white p-7 sm:p-8">
+            <p className="text-xs font-medium text-[#626267]">{exp.year}</p>
+            <h3 className="mt-6 text-xl font-semibold leading-snug tracking-tight text-[#1d1d1f]">{exp.role}</h3>
+            <p className="mt-3 text-[11px] font-medium uppercase tracking-wider text-[#626267]">{exp.company}</p>
+            <p className="mt-4 text-sm leading-7 text-[#515154]">{exp.description}</p>
+          </article>
+        ))}
+      </section>
+    );
+  }
   return (
     <motion.section 
       variants={container}

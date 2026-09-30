@@ -2,31 +2,70 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { User, MessageSquare, X, Linkedin, Instagram, Mail } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { User, ArrowUpRight, ArrowLeft } from "lucide-react";
+import { motion, LayoutGroup, MotionConfig, useReducedMotion } from "framer-motion";
+import SocialBurst from "./SocialBurst";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { play8BitBlipSound, play8BitTapSound } from "./SoundEffects";
 
+// The 4 featured works matching Frame 1 (2x2 grid) & Frame 2 (Bento stack)
+const bentoWorks = [
+  {
+    id: "openweave",
+    title: "OpenWeave",
+    category: "Open Source",
+    tag: "Design Canvas + AI",
+    description: "An open design editor that treats design files as inspectable, sovereign documents with Figma binary support and natural AI co-creation.",
+    image: "/openweave-app.png",
+    href: "/works/o0",
+  },
+  {
+    id: "notbad",
+    title: "NotBad",
+    category: "Case Study",
+    tag: "Distraction-Free Writing",
+    description: "An editorial sanctuary built in Flutter where Markdown syntax conceals on rest, delivering a 1.0s cold start and zero-distraction focus.",
+    image: "/notbad-editor.png",
+    href: "/works/case-studies/notbad-design",
+  },
+  {
+    id: "toothpaste",
+    title: "Toothpaste",
+    category: "Open Source",
+    tag: "Media Workflow Engine",
+    description: "A specialized workflow utility engineered to bridge timeline sequencing, asset generation, and automated media pipelines.",
+    image: "/toothpaste-panel.png",
+    href: "/works/o1",
+  },
+  {
+    id: "tailus",
+    title: "Tailus",
+    category: "Project",
+    tag: "Design System",
+    description: "A utility-first Tailwind CSS UI kit and component library with refined aesthetics, custom tokens, and modular interface blocks.",
+    image: "/tailus.png",
+    href: "/works/p5",
+  },
+];
+
 export default function HomeTilesLayout() {
+  const reduceMotion = useReducedMotion();
+  const [isWorksExpanded, setIsWorksExpanded] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
 
-  // Lock body/html scroll on home so mobile browsers never scroll/rubber-band the viewport
+  // Close works or contact on Escape key
   useEffect(() => {
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevTouchAction = document.body.style.touchAction;
-
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
-
-    return () => {
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      document.body.style.overflow = prevBodyOverflow;
-      document.body.style.touchAction = prevTouchAction;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (isWorksExpanded) setIsWorksExpanded(false);
+        if (isContactOpen) setIsContactOpen(false);
+      }
     };
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isWorksExpanded, isContactOpen]);
 
   // Close contact menu when clicking outside
   useEffect(() => {
@@ -53,7 +92,6 @@ export default function HomeTilesLayout() {
     const nextState = !isContactOpen;
     setIsContactOpen(nextState);
 
-    // Play click sound feedback
     try {
       if (nextState) {
         play8BitBlipSound(650);
@@ -62,7 +100,6 @@ export default function HomeTilesLayout() {
       }
     } catch {}
 
-    // Haptic feedback on mobile devices
     if (typeof navigator !== "undefined" && navigator.vibrate) {
       try {
         navigator.vibrate(18);
@@ -71,165 +108,60 @@ export default function HomeTilesLayout() {
   };
 
   return (
-    <div
-      data-lenis-prevent="true"
-      className="fixed inset-0 w-full h-[100dvh] overflow-hidden overscroll-none touch-none bg-[#f4f4f4] text-[#1d1d1f] flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-5 sm:gap-8 lg:gap-0 px-4 sm:px-8 lg:px-0 select-none"
-    >
-      {/* Top / Left Column: Author Identity & Action Buttons */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 lg:pl-24 xl:pl-32 shrink-0 z-20 lg:h-full">
-        <div>
-          <h1 className="text-2xl sm:text-4xl lg:text-[52px] font-semibold tracking-tight text-[#111111] font-sans leading-tight">
-            Satya Sai Nagubathula
-          </h1>
-          
-          <p className="text-base sm:text-2xl lg:text-3xl font-normal tracking-tight text-[#8f8f8f] mt-1 sm:mt-2 font-sans">
-            Design Technologist
-          </p>
-
-          {/* Action buttons row with animated expanding contact options */}
-          <div ref={contactContainerRef} className="mt-4 sm:mt-6 lg:mt-8 flex items-center gap-3 sm:gap-4 flex-wrap">
-            <Link
-              href="/about"
-              aria-label="About Satya"
-              title="About Satya"
-              onClick={() => {
-                try {
-                  play8BitTapSound();
-                } catch {}
-              }}
-              className="w-12 h-12 sm:w-13 sm:h-13 lg:w-14 lg:h-14 rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:bg-[#fafafa] hover:scale-105 active:scale-95 transition-all group shrink-0"
-            >
-              <User size={19} strokeWidth={1.75} className="group-hover:opacity-75 transition-opacity" />
-            </Link>
-
-            {/* Contact Toggle Button with animated SVG transition to X */}
-            <button
-              type="button"
-              onClick={toggleContact}
-              aria-label={isContactOpen ? "Close contact options" : "Contact options"}
-              aria-expanded={isContactOpen}
-              title={isContactOpen ? "Close" : "Contact"}
-              className={`w-12 h-12 sm:w-13 sm:h-13 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center transition-all duration-200 active:scale-95 shadow-[0_2px_10px_rgba(0,0,0,0.04)] shrink-0 ${
-                isContactOpen
-                  ? "bg-[#111111] text-white border border-black shadow-[0_4px_16px_rgba(0,0,0,0.18)]"
-                  : "bg-white text-[#111111] border border-black/[0.06] hover:bg-[#fafafa] hover:scale-105"
-              }`}
-            >
-              <motion.div
-                initial={false}
-                animate={{ rotate: isContactOpen ? 180 : 0 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-5 h-5 flex items-center justify-center pointer-events-none"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {isContactOpen ? (
-                    <motion.span
-                      key="close-x"
-                      initial={{ scale: 0.4, opacity: 0, rotate: -90 }}
-                      animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                      exit={{ scale: 0.4, opacity: 0, rotate: 90 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
-                      className="flex items-center justify-center"
-                    >
-                      <X size={19} strokeWidth={2} />
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="msg-sq"
-                      initial={{ scale: 0.4, opacity: 0, rotate: 90 }}
-                      animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                      exit={{ scale: 0.4, opacity: 0, rotate: -90 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
-                      className="flex items-center justify-center"
-                    >
-                      <MessageSquare size={19} strokeWidth={1.75} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            </button>
-
-            {/* Animated Social Channels: LinkedIn, Instagram, Gmail */}
-            <AnimatePresence>
-              {isContactOpen && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, x: -8 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, x: -8 }}
-                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-center gap-2.5 sm:gap-3"
-                >
-                  {/* LinkedIn */}
-                  <motion.a
-                    href="https://www.linkedin.com/in/satyasainagubathula"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                    title="LinkedIn"
-                    initial={{ opacity: 0, scale: 0.5, x: -10 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.5, x: -10 }}
-                    transition={{ type: "spring", stiffness: 450, damping: 25, delay: 0.02 }}
-                    onClick={() => {
-                      try {
-                        play8BitBlipSound(650);
-                      } catch {}
-                    }}
-                    className="w-12 h-12 sm:w-13 sm:h-13 lg:w-14 lg:h-14 rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:text-[#0077b5] hover:border-[#0077b5]/30 hover:scale-105 active:scale-95 transition-all group"
-                  >
-                    <Linkedin size={19} strokeWidth={1.75} className="group-hover:scale-110 transition-transform" />
-                  </motion.a>
-
-                  {/* Instagram */}
-                  <motion.a
-                    href="https://www.instagram.com/satyasainagubathula"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                    title="Instagram"
-                    initial={{ opacity: 0, scale: 0.5, x: -10 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.5, x: -10 }}
-                    transition={{ type: "spring", stiffness: 450, damping: 25, delay: 0.06 }}
-                    onClick={() => {
-                      try {
-                        play8BitBlipSound(700);
-                      } catch {}
-                    }}
-                    className="w-12 h-12 sm:w-13 sm:h-13 lg:w-14 lg:h-14 rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:text-[#e1306c] hover:border-[#e1306c]/30 hover:scale-105 active:scale-95 transition-all group"
-                  >
-                    <Instagram size={19} strokeWidth={1.75} className="group-hover:scale-110 transition-transform" />
-                  </motion.a>
-
-                  {/* Gmail */}
-                  <motion.a
-                    href="mailto:nagubathula.satyasai@gmail.com"
-                    aria-label="Email via Gmail"
-                    title="Gmail"
-                    initial={{ opacity: 0, scale: 0.5, x: -10 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.5, x: -10 }}
-                    transition={{ type: "spring", stiffness: 450, damping: 25, delay: 0.1 }}
-                    onClick={() => {
-                      try {
-                        play8BitBlipSound(750);
-                      } catch {}
-                    }}
-                    className="w-12 h-12 sm:w-13 sm:h-13 lg:w-14 lg:h-14 rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:text-[#ea4335] hover:border-[#ea4335]/30 hover:scale-105 active:scale-95 transition-all group"
-                  >
-                    <Mail size={19} strokeWidth={1.75} className="group-hover:scale-110 transition-transform" />
-                  </motion.a>
-                </motion.div>
-              )}
-            </AnimatePresence>
+    <MotionConfig reducedMotion="user" transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}>
+    <LayoutGroup id="home-works">
+    <div className="relative w-full min-h-screen bg-[#f4f4f4] text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white">
+      {/* ============================================================
+          IN-PLACE SMART ANIMATE: FRAME 1 (Hero) <-> FRAME 2 (Bento Works)
+         ============================================================ */}
+      <section className="relative w-full min-h-[100dvh] flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-6 sm:gap-8 lg:gap-6 px-4 sm:px-8 lg:px-20 py-8 lg:py-0 select-none">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 lg:px-0 xl:pl-8 shrink-0 z-20">
+          <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-semibold tracking-tight leading-tight text-[#111111]">Satya Sai Nagubathula</h1>
+          <p className="mt-2 text-xl sm:text-2xl lg:text-3xl tracking-tight text-[#8f8f8f]">Design Technologist</p>
+          <div ref={contactContainerRef} className="mt-6 flex flex-wrap items-center gap-3">
+            <Link href="/about" aria-label="About Satya" title="About Satya" className="flex h-14 w-14 items-center justify-center rounded-2xl border border-black/[0.06] bg-white shadow-sm transition-transform hover:scale-105"><User size={19} /></Link>
+            <SocialBurst open={isContactOpen} onToggle={toggleContact} />
           </div>
+          {isWorksExpanded && <button type="button" aria-expanded={true} aria-controls="home-work-preview"
+            onClick={() => { setIsWorksExpanded(value => !value); setIsContactOpen(false); }}
+            className="mt-8 flex w-fit items-center gap-3 rounded-full px-3 py-2 text-sm text-[#515154] transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
+            <ArrowLeft size={16} />
+            Back to preview
+          </button>}
+          <div className="h-8 pt-3">{isWorksExpanded && <Link href="/works" className="px-3 text-xs text-[#666666] underline underline-offset-4">View all works</Link>}</div>
         </div>
-      </div>
-
-      {/* Bottom / Right Column: 3D Split-Flap Mechanical Flip Calendar */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-2 sm:px-6 lg:pr-20 xl:pr-28 z-10 lg:h-full shrink-0">
-        <FlipCalendarNav />
-      </div>
+        {/* Shared thumbnails travel from the compact grid into the work list. */}
+        <div id="home-work-preview" className="relative w-full min-w-0 lg:w-1/2 flex items-center justify-center px-2 sm:px-6 lg:pr-6 z-10">
+          {!isWorksExpanded ? (
+            <motion.div key="calendar" className="w-full flex justify-center">
+              <FlipCalendarNav initialSection="works" onExpandWorks={() => { setIsWorksExpanded(true); setIsContactOpen(false); }} />
+            </motion.div>
+          ) : (
+            <motion.div key="expanded" layout className="w-full max-w-[540px] py-6 flex flex-col gap-5 sm:gap-6">
+              {bentoWorks.map((work, idx) => (
+                <motion.div layout key={work.id} className="min-w-0">
+                  <Link href={work.href} className="group flex items-center gap-4 sm:gap-6 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
+                    <motion.div layoutId={reduceMotion ? undefined : 'work-image-' + work.id}
+                      className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-white"
+                      style={{ borderRadius: 12 }}>
+                      <Image src={work.image} alt={work.title} fill sizes="112px" className="object-cover object-top" />
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, x: reduceMotion ? 0 : 16 }} animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: reduceMotion ? 0 : 0.35, delay: reduceMotion ? 0 : 0.2 + idx * 0.045 }} className="min-w-0 flex-1">
+                      <p className="text-[10px] uppercase tracking-wider text-[#727272]">{work.category}</p>
+                      <h2 className="mt-1 text-lg font-semibold tracking-tight group-hover:underline">{work.title}</h2>
+                      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#666666]">{work.description}</p>
+                      <span className="mt-2 inline-flex items-center gap-1 text-xs">Explore work <ArrowUpRight size={12} /></span>
+                    </motion.div>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </div>
+      </section>
     </div>
+    </LayoutGroup>
+    </MotionConfig>
   );
 }

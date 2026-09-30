@@ -40,6 +40,7 @@ export default async function WorkDetailPage({ params }) {
     <div className="min-h-screen relative w-full">
       <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-12 sm:pb-20">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 mb-8 sm:mb-16">
+          <Link href="/works" className="mb-8 inline-block text-sm text-[#515154] hover:text-black">← All works</Link>
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6 sm:mb-8">
             <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#f5f5f7] text-xs sm:text-[13px] font-sans font-medium text-[#86868b] uppercase tracking-wider border border-black/[0.04]">
               {getIcon(work.category)}

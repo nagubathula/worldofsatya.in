@@ -245,7 +245,7 @@ export const allWorks = [
     description: "Designing a cross-platform Markdown writer where the chrome disappears: concealment, tokens, and the decisions behind a pure-Flutter port of a macOS-only app.",
     category: "Case Study",
     tag: "Product Design",
-    link: "/case-studies/notbad-design",
+    link: "/works/case-studies/notbad-design",
     actionText: "Read Case Study",
     content: `
       <div class="flex flex-col gap-12">
@@ -341,7 +341,7 @@ export const allWorks = [
     description: "Building an internal productivity suite using Google Colab, Supabase, and lightweight web extensions.",
     category: "Case Study",
     tag: "Architecture Breakdown",
-    link: "/case-studies/zero-cost-automation",
+    link: "/works/case-studies/zero-cost-automation",
     actionText: "Read Breakdown",
     content: `
       <div class="flex flex-col gap-12">

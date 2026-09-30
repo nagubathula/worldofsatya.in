@@ -9,14 +9,10 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { href: "/works", label: "Works" },
   { href: "/about", label: "About" },
-  { href: "/case-studies", label: "Case Studies" },
-  { href: "/ai-videos", label: "AI Videos" },
-  { href: "/open-source", label: "Open Source" },
 ];
 
 const secondaryLinks = [
   { href: "/experience", label: "Experience" },
-  { href: "/internal-tools", label: "Internal Tools" },
   { href: "/achievements", label: "Achievements" },
 ];
 
