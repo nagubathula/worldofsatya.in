@@ -652,22 +652,10 @@ export default function FlipCalendarNav() {
           </button>
         </div>
 
-        {/* Mobile quick interaction hint & iOS permission trigger */}
-        <div className="flex items-center justify-center lg:hidden mt-0.5">
-          {needsMotionPermission && !motionEnabled ? (
-            <button
-              onClick={requestMotionAccess}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/[0.05] hover:bg-black/10 active:scale-95 transition-all text-[11px] font-mono text-[#111111] border border-black/[0.08] shadow-2xs cursor-pointer"
-            >
-              <Smartphone size={12} className="text-emerald-600 animate-bounce" />
-              <span>Tap to enable Shake on iOS</span>
-            </button>
-          ) : (
-            <div className="flex items-center gap-1.5 text-[10px] text-[#999999]">
-              <Smartphone size={11} className="opacity-70 animate-pulse" />
-              <span>Shake phone or swipe to flip</span>
-            </div>
-          )}
+        {/* Mobile quick interaction hint */}
+        <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#999999] lg:hidden mt-0.5">
+          <Smartphone size={11} className="opacity-70 animate-pulse" />
+          <span>Shake phone or swipe to flip</span>
         </div>
       </div>
     </div>
