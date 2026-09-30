@@ -4,8 +4,9 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight, Volume2, Smartphone } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
+import { play8BitBlipSound } from "./SoundEffects";
 
 export const calendarSections = [
   {
@@ -51,68 +52,51 @@ function FlapHalf({ section, half }) {
 
   return (
     <div
-      className={`relative w-full h-[460px] bg-white text-[#111111] flex flex-col justify-between p-7 select-none ${
+      className={`relative w-full h-[200%] bg-white text-[#111111] flex flex-col justify-between p-4 sm:p-6 lg:p-7 select-none ${
         isTop ? "translate-y-0" : "-translate-y-1/2"
       }`}
     >
       {section.isAvatar ? (
-        <div className="relative w-full h-full flex flex-col items-center justify-between overflow-hidden">
+        <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
           {/* Subtle soft studio lighting */}
-          <div className="absolute w-[80%] h-[80%] -top-[10%] left-[10%] bg-radial from-amber-100/30 via-slate-100/30 to-transparent blur-2xl pointer-events-none" />
-
-          {/* Top code badge */}
-          <div className="w-full flex items-center justify-between z-10">
-            <span className="text-xs font-mono font-bold tracking-widest text-[#888888]">
-              {section.code}
-            </span>
-          </div>
+          <div className="absolute w-[85%] h-[85%] -top-[5%] left-[7.5%] bg-radial from-amber-100/35 via-slate-100/35 to-transparent blur-2xl pointer-events-none" />
 
           {/* Interactive SVG Chibi Character */}
-          <div className="relative flex-1 w-full flex flex-col items-center justify-center z-10">
-            <div className="relative w-44 sm:w-52 aspect-[9/16] max-h-[38vh]">
-              <ChibiAvatar className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.06)]" />
+          <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+            <div className="relative w-40 sm:w-48 lg:w-56 aspect-[9/16] max-h-[30vh] sm:max-h-[36vh] lg:max-h-[42vh]">
+              <ChibiAvatar className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.07)]" />
             </div>
-            <div className="w-36 h-2 rounded-full bg-black/[0.07] blur-[3px] mt-0.5" />
-          </div>
-
-          {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-2">
-            <span className="text-xl font-semibold tracking-tight text-[#111111] font-sans">
-              {section.title}
-            </span>
-            <span className="text-xs font-mono text-[#999999] tracking-widest uppercase">
-              Click to view
-            </span>
+            <div className="w-32 sm:w-40 h-2 sm:h-2.5 rounded-full bg-black/[0.07] blur-[3px] mt-0.5" />
           </div>
         </div>
       ) : section.isContact ? (
         <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
           {/* Top code badge */}
           <div className="w-full flex items-center justify-between z-10">
-            <span className="text-xs font-mono font-bold tracking-widest text-[#888888]">
+            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
               {section.code}
             </span>
           </div>
 
           {/* Contact Graphic Frame */}
-          <div className="relative flex-1 w-full my-2 rounded-2xl overflow-hidden bg-gradient-to-br from-[#1d1d1f] to-[#2c2c2e] text-white p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center mb-3">
-              <Mail size={24} className="text-white" />
+          <div className="relative flex-1 w-full my-1.5 sm:my-2 rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-[#1d1d1f] to-[#2c2c2e] text-white p-4 sm:p-6 flex flex-col items-center justify-center text-center">
+            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center mb-2 sm:mb-3">
+              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h4 className="text-lg font-semibold tracking-tight text-white mb-1">
+            <h4 className="text-sm sm:text-lg font-semibold tracking-tight text-white mb-0.5 sm:mb-1">
               Let&apos;s Build Together
             </h4>
-            <p className="text-xs text-white/70 max-w-xs font-sans">
+            <p className="text-[11px] sm:text-xs text-white/70 max-w-xs font-sans truncate">
               nagubathula.satyasai@gmail.com
             </p>
           </div>
 
           {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-2">
-            <span className="text-xl font-semibold tracking-tight text-[#111111] font-sans">
+          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
+            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
               {section.title}
             </span>
-            <span className="text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1">
+            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1">
               <span>Send Email</span>
               <ArrowUpRight size={12} />
             </span>
@@ -122,28 +106,28 @@ function FlapHalf({ section, half }) {
         <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
           {/* Top code badge */}
           <div className="w-full flex items-center justify-between z-10">
-            <span className="text-xs font-mono font-bold tracking-widest text-[#888888]">
+            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
               {section.code}
             </span>
           </div>
 
           {/* Preview Image Frame */}
-          <div className="relative flex-1 w-full my-2 rounded-2xl overflow-hidden bg-[#f4f4f6] border border-black/[0.04]">
+          <div className="relative flex-1 w-full my-1.5 sm:my-2 rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] border border-black/[0.04]">
             <Image
               src={section.image}
               alt={section.title}
               fill
-              sizes="(max-width: 768px) 90vw, 440px"
+              sizes="(max-width: 768px) 85vw, 440px"
               className="object-cover"
             />
           </div>
 
           {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-2">
-            <span className="text-xl font-semibold tracking-tight text-[#111111] font-sans">
+          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
+            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
               {section.title}
             </span>
-            <span className="text-xs font-mono text-[#999999] tracking-widest uppercase">
+            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase">
               Click to view
             </span>
           </div>
@@ -166,6 +150,7 @@ export default function FlipCalendarNav() {
   const isFlippingRef = useRef(false);
   const flipTimerRef = useRef(null);
   const touchStartY = useRef(0);
+  const touchStartX = useRef(0);
 
   const flipToNext = useCallback(() => {
     if (isFlippingRef.current) return;
@@ -175,6 +160,15 @@ export default function FlipCalendarNav() {
     setNextIndex(target);
     setDirection("down");
     setIsFlipping(true);
+
+    try {
+      play8BitBlipSound(620);
+    } catch {}
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      try {
+        navigator.vibrate(20);
+      } catch {}
+    }
 
     if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
     flipTimerRef.current = setTimeout(() => {
@@ -193,6 +187,15 @@ export default function FlipCalendarNav() {
     setNextIndex(target);
     setDirection("up");
     setIsFlipping(true);
+
+    try {
+      play8BitBlipSound(520);
+    } catch {}
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      try {
+        navigator.vibrate(20);
+      } catch {}
+    }
 
     if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
     flipTimerRef.current = setTimeout(() => {
@@ -222,17 +225,35 @@ export default function FlipCalendarNav() {
     };
   }, [flipToNext, flipToPrev]);
 
-  // Global touch swipe support
+  // Global touch swipe support (supports both vertical and horizontal swipes)
   useEffect(() => {
     const handleGlobalTouchStart = (e) => {
       touchStartY.current = e.touches[0].clientY;
+      touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleGlobalTouchMove = (e) => {
+      // Prevent browser bounce / page scroll while swiping on mobile
+      if (e.cancelable) {
+        e.preventDefault();
+      }
     };
 
     const handleGlobalTouchEnd = (e) => {
       if (isFlippingRef.current) return;
-      const diff = touchStartY.current - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 28) {
-        if (diff > 0) {
+      const diffY = touchStartY.current - e.changedTouches[0].clientY;
+      const diffX = touchStartX.current - e.changedTouches[0].clientX;
+
+      // Check vertical swipe first
+      if (Math.abs(diffY) > 28 && Math.abs(diffY) >= Math.abs(diffX)) {
+        if (diffY > 0) {
+          flipToNext();
+        } else {
+          flipToPrev();
+        }
+      } else if (Math.abs(diffX) > 28) {
+        // Horizontal swipe (left = next, right = prev)
+        if (diffX > 0) {
           flipToNext();
         } else {
           flipToPrev();
@@ -241,21 +262,115 @@ export default function FlipCalendarNav() {
     };
 
     window.addEventListener("touchstart", handleGlobalTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleGlobalTouchMove, { passive: false });
     window.addEventListener("touchend", handleGlobalTouchEnd, { passive: true });
     return () => {
       window.removeEventListener("touchstart", handleGlobalTouchStart);
+      window.removeEventListener("touchmove", handleGlobalTouchMove);
       window.removeEventListener("touchend", handleGlobalTouchEnd);
     };
   }, [flipToNext, flipToPrev]);
 
-  // Keyboard arrow keys
+  // Shake phone to flip cards on mobile (DeviceMotion API)
+  useEffect(() => {
+    let lastX = null;
+    let lastY = null;
+    let lastZ = null;
+    let lastTime = 0;
+    const SHAKE_THRESHOLD = 14;
+    const COOLDOWN_MS = 650;
+
+    const handleDeviceMotion = (e) => {
+      const current = e.accelerationIncludingGravity || e.acceleration;
+      if (!current) return;
+
+      const now = Date.now();
+      if (now - lastTime < 75) return;
+
+      const { x, y, z } = current;
+      if (lastX !== null && lastY !== null && lastZ !== null) {
+        const deltaX = Math.abs(x - lastX);
+        const deltaY = Math.abs(y - lastY);
+        const deltaZ = Math.abs(z - lastZ);
+
+        if (
+          (deltaX > SHAKE_THRESHOLD && deltaY > SHAKE_THRESHOLD) ||
+          (deltaX > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) ||
+          (deltaY > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) ||
+          deltaX + deltaY + deltaZ > 24
+        ) {
+          if (now - lastTime > COOLDOWN_MS) {
+            lastTime = now;
+            if (typeof navigator !== "undefined" && navigator.vibrate) {
+              try {
+                navigator.vibrate([30, 40, 30]);
+              } catch {}
+            }
+            flipToNext();
+          }
+        }
+      }
+
+      lastX = x;
+      lastY = y;
+      lastZ = z;
+    };
+
+    const enableMotion = async () => {
+      if (
+        typeof DeviceMotionEvent !== "undefined" &&
+        typeof DeviceMotionEvent.requestPermission === "function"
+      ) {
+        try {
+          const res = await DeviceMotionEvent.requestPermission();
+          if (res === "granted") {
+            window.addEventListener("devicemotion", handleDeviceMotion);
+          }
+        } catch {}
+      } else if (typeof window !== "undefined") {
+        window.addEventListener("devicemotion", handleDeviceMotion);
+      }
+    };
+
+    enableMotion();
+    window.addEventListener("click", enableMotion, { once: true });
+    window.addEventListener("touchstart", enableMotion, { once: true });
+
+    return () => {
+      window.removeEventListener("devicemotion", handleDeviceMotion);
+      window.removeEventListener("click", enableMotion);
+      window.removeEventListener("touchstart", enableMotion);
+    };
+  }, [flipToNext]);
+
+  // Keyboard arrow keys, hardware volume buttons (Bluetooth / WebViews), and MediaSession
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown") {
-        e.preventDefault();
+      const isNext =
+        e.key === "ArrowDown" ||
+        e.key === "PageDown" ||
+        e.key === "AudioVolumeDown" ||
+        e.key === "VolumeDown" ||
+        e.code === "AudioVolumeDown" ||
+        e.code === "VolumeDown" ||
+        e.keyCode === 25 ||
+        e.which === 25;
+
+      const isPrev =
+        e.key === "ArrowUp" ||
+        e.key === "PageUp" ||
+        e.key === "AudioVolumeUp" ||
+        e.key === "VolumeUp" ||
+        e.code === "AudioVolumeUp" ||
+        e.code === "VolumeUp" ||
+        e.keyCode === 24 ||
+        e.which === 24;
+
+      if (isNext) {
+        if (e.cancelable) e.preventDefault();
         flipToNext();
-      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        e.preventDefault();
+      } else if (isPrev) {
+        if (e.cancelable) e.preventDefault();
         flipToPrev();
       } else if (e.key === "Enter") {
         const item = calendarSections[currIndexRef.current];
@@ -267,8 +382,32 @@ export default function FlipCalendarNav() {
       }
     };
 
+    // MediaSession handler for Bluetooth headphones / earphone volume & media keys
+    if (typeof navigator !== "undefined" && "mediaSession" in navigator) {
+      try {
+        navigator.mediaSession.setActionHandler("nexttrack", () => flipToNext());
+        navigator.mediaSession.setActionHandler("previoustrack", () => flipToPrev());
+      } catch {}
+    }
+
+    const handleCustomVolDown = () => flipToNext();
+    const handleCustomVolUp = () => flipToPrev();
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("volumedown", handleCustomVolDown);
+    window.addEventListener("volumeup", handleCustomVolUp);
+
+    // Global helpers for native WebViews / bridges
+    window.flipCalendarNext = flipToNext;
+    window.flipCalendarPrev = flipToPrev;
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("volumedown", handleCustomVolDown);
+      window.removeEventListener("volumeup", handleCustomVolUp);
+      delete window.flipCalendarNext;
+      delete window.flipCalendarPrev;
+    };
   }, [flipToNext, flipToPrev, router]);
 
   const currSection = calendarSections[currIndex];
@@ -279,8 +418,8 @@ export default function FlipCalendarNav() {
       data-lenis-prevent="true"
       className="relative w-full h-full flex flex-col items-center justify-center select-none"
     >
-      {/* Clean Flip Housing without black line or side clips */}
-      <div className="relative p-2.5 sm:p-3 rounded-[38px] bg-gradient-to-b from-[#e8e8ea] to-[#d0d0d4] shadow-[0_30px_70px_rgba(0,0,0,0.12),0_10px_24px_rgba(0,0,0,0.05),inset_0_2px_3px_rgba(255,255,255,0.7)] border border-white/60">
+      {/* Clean Flip Housing with fluid responsive sizing */}
+      <div className="relative p-2 sm:p-2.5 lg:p-3 rounded-[28px] sm:rounded-[34px] lg:rounded-[38px] bg-gradient-to-b from-[#e8e8ea] to-[#d0d0d4] shadow-[0_20px_50px_rgba(0,0,0,0.12),0_8px_18px_rgba(0,0,0,0.05),inset_0_2px_3px_rgba(255,255,255,0.7)] border border-white/60">
         
         {/* Main Display Area */}
         <div
@@ -293,7 +432,7 @@ export default function FlipCalendarNav() {
               }
             }
           }}
-          className="relative w-[min(440px,86vw)] h-[min(460px,58vh)] max-h-[460px] rounded-[30px] overflow-hidden bg-white shadow-[0_12px_28px_rgba(0,0,0,0.06)] cursor-pointer group"
+          className="relative w-[min(320px,84vw)] sm:w-[min(390px,86vw)] lg:w-[440px] aspect-[4/4.2] max-h-[40vh] sm:max-h-[46vh] lg:max-h-[460px] rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] overflow-hidden bg-white shadow-[0_12px_28px_rgba(0,0,0,0.06)] cursor-pointer group"
           style={{ perspective: "1400px" }}
         >
           {/* ============================================================
@@ -301,7 +440,7 @@ export default function FlipCalendarNav() {
              ============================================================ */}
           
           {/* Static Top Half */}
-          <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[30px]">
+          <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[22px] sm:rounded-t-[26px] lg:rounded-t-[30px]">
             <FlapHalf
               section={isFlipping && direction === "down" ? nextSection : currSection}
               half="top"
@@ -309,7 +448,7 @@ export default function FlipCalendarNav() {
           </div>
 
           {/* Static Bottom Half */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[30px]">
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[22px] sm:rounded-b-[26px] lg:rounded-b-[30px]">
             <FlapHalf
               section={isFlipping && direction === "up" ? nextSection : currSection}
               half="bottom"
@@ -342,7 +481,7 @@ export default function FlipCalendarNav() {
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
                   }}
-                  className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[30px] z-20"
+                  className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[22px] sm:rounded-t-[26px] lg:rounded-t-[30px] z-20"
                 >
                   <FlapHalf section={currSection} half="top" />
                   <motion.div
@@ -364,7 +503,7 @@ export default function FlipCalendarNav() {
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
                   }}
-                  className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[30px] z-20"
+                  className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[22px] sm:rounded-b-[26px] lg:rounded-b-[30px] z-20"
                 >
                   <FlapHalf section={nextSection} half="bottom" />
                   <motion.div
@@ -390,7 +529,7 @@ export default function FlipCalendarNav() {
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
                   }}
-                  className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[30px] z-20"
+                  className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-b-[22px] sm:rounded-b-[26px] lg:rounded-b-[30px] z-20"
                 >
                   <FlapHalf section={currSection} half="bottom" />
                   <motion.div
@@ -411,7 +550,7 @@ export default function FlipCalendarNav() {
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
                   }}
-                  className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[30px] z-20"
+                  className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden bg-white rounded-t-[22px] sm:rounded-t-[26px] lg:rounded-t-[30px] z-20"
                 >
                   <FlapHalf section={nextSection} half="top" />
                   <motion.div
@@ -427,28 +566,81 @@ export default function FlipCalendarNav() {
         </div>
       </div>
 
-      {/* Discrete flip indicator & click navigation hint */}
-      <div className="mt-6 flex items-center gap-3 text-xs font-mono text-[#86868b]">
+      {/* Discrete flip indicator & navigation hints */}
+      <div className="mt-3 sm:mt-5 flex flex-col items-center gap-1.5 text-[11px] sm:text-xs font-mono text-[#86868b]">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={flipToPrev}
+            disabled={isFlipping}
+            aria-label="Previous date"
+            className="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-black/10 active:bg-black/20 active:scale-90 flex items-center justify-center transition-all text-[#111111]"
+          >
+            ▲
+          </button>
+
+          <span className="tracking-widest font-medium">
+            {String(currIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+          </span>
+
+          <button
+            onClick={flipToNext}
+            disabled={isFlipping}
+            aria-label="Next date"
+            className="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-black/10 active:bg-black/20 active:scale-90 flex items-center justify-center transition-all text-[#111111]"
+          >
+            ▼
+          </button>
+        </div>
+
+        {/* Mobile quick interaction hint */}
+        <div className="flex items-center gap-1.5 text-[10px] text-[#999999] lg:hidden mt-0.5">
+          <Smartphone size={11} className="opacity-70 animate-pulse" />
+          <span>Shake phone or swipe to flip</span>
+        </div>
+      </div>
+
+      {/* On-screen Tactile Mobile Volume Rocker Pill */}
+      <div
+        aria-label="Mobile Volume Controls"
+        className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_8px_25px_rgba(0,0,0,0.14)] border border-black/10 p-1 lg:hidden select-none"
+      >
+        {/* Vol Up (+) */}
         <button
-          onClick={flipToPrev}
+          onClick={() => {
+            if (typeof navigator !== "undefined" && navigator.vibrate) {
+              try {
+                navigator.vibrate(20);
+              } catch {}
+            }
+            flipToPrev();
+          }}
           disabled={isFlipping}
-          aria-label="Previous date"
-          className="hover:text-[#111111] transition-colors p-1"
+          aria-label="Volume Up / Previous"
+          className="w-10 h-11 rounded-xl flex flex-col items-center justify-center text-[#222222] hover:bg-black/5 active:bg-black/10 active:scale-90 transition-all group"
         >
-          ▲
+          <span className="text-base font-bold leading-none select-none">+</span>
+          <span className="text-[8px] font-mono font-semibold text-[#888888] mt-0.5 leading-none">VOL</span>
         </button>
 
-        <span className="tracking-widest">
-          {String(currIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-        </span>
+        {/* Rocker Divider */}
+        <div className="w-5 h-[1px] bg-black/10 my-0.5" />
 
+        {/* Vol Down (-) */}
         <button
-          onClick={flipToNext}
+          onClick={() => {
+            if (typeof navigator !== "undefined" && navigator.vibrate) {
+              try {
+                navigator.vibrate(20);
+              } catch {}
+            }
+            flipToNext();
+          }}
           disabled={isFlipping}
-          aria-label="Next date"
-          className="hover:text-[#111111] transition-colors p-1"
+          aria-label="Volume Down / Next"
+          className="w-10 h-11 rounded-xl flex flex-col items-center justify-center text-[#222222] hover:bg-black/5 active:bg-black/10 active:scale-90 transition-all group"
         >
-          ▼
+          <span className="text-base font-bold leading-none select-none">-</span>
+          <span className="text-[8px] font-mono font-semibold text-[#888888] mt-0.5 leading-none">VOL</span>
         </button>
       </div>
     </div>

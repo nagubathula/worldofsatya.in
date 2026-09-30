@@ -1,51 +1,69 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { User, MessageSquare } from "lucide-react";
 import FlipCalendarNav from "./FlipCalendarNav";
 
 export default function HomeTilesLayout() {
+  // Lock body/html scroll on home so mobile browsers never scroll/rubber-band the viewport
+  useEffect(() => {
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevTouchAction = document.body.style.touchAction;
+
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+
+    return () => {
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
+      document.body.style.touchAction = prevTouchAction;
+    };
+  }, []);
+
   return (
     <div
       data-lenis-prevent="true"
-      className="relative w-full h-[100dvh] overflow-hidden bg-[#f4f4f4] text-[#1d1d1f] flex flex-col lg:flex-row items-center justify-between select-none"
+      className="fixed inset-0 w-full h-[100dvh] overflow-hidden overscroll-none touch-none bg-[#f4f4f4] text-[#1d1d1f] flex flex-col lg:flex-row items-center justify-between select-none"
     >
-      {/* Left Column: Exactly matching reference layout */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 lg:pl-24 xl:pl-32 h-full z-20">
+      {/* Top / Left Column: Author Identity & Action Buttons */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-5 sm:px-12 lg:pl-24 xl:pl-32 shrink-0 pt-4 sm:pt-8 lg:pt-0 lg:h-full z-20">
         <div>
-          <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-semibold tracking-tight text-[#111111] font-sans leading-[1.05]">
+          <h1 className="text-xl sm:text-3xl lg:text-[52px] font-semibold tracking-tight text-[#111111] font-sans leading-tight">
             Satya Sai Nagubathula
           </h1>
           
-          <p className="text-2xl sm:text-3xl font-normal tracking-tight text-[#8f8f8f] mt-2 font-sans">
+          <p className="text-sm sm:text-xl lg:text-3xl font-normal tracking-tight text-[#8f8f8f] mt-0.5 sm:mt-1 font-sans">
             Design Technologist
           </p>
 
           {/* Two prominent action buttons */}
-          <div className="mt-8 flex items-center gap-4">
+          <div className="mt-2.5 sm:mt-4 lg:mt-8 flex items-center gap-2.5 sm:gap-4">
             <Link
               href="/about"
               aria-label="About Satya"
               title="About Satya"
-              className="w-14 h-14 rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:bg-[#fafafa] hover:scale-105 active:scale-95 transition-all group"
+              className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl sm:rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:bg-[#fafafa] hover:scale-105 active:scale-95 transition-all group"
             >
-              <User size={20} strokeWidth={1.75} className="group-hover:opacity-75 transition-opacity" />
+              <User size={17} strokeWidth={1.75} className="sm:scale-110 group-hover:opacity-75 transition-opacity" />
             </Link>
 
             <a
               href="mailto:nagubathula.satyasai@gmail.com"
               aria-label="Send email"
               title="Contact"
-              className="w-14 h-14 rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:bg-[#fafafa] hover:scale-105 active:scale-95 transition-all group"
+              className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl sm:rounded-2xl bg-white border border-black/[0.06] shadow-[0_2px_10px_rgba(0,0,0,0.04)] flex items-center justify-center text-[#111111] hover:bg-[#fafafa] hover:scale-105 active:scale-95 transition-all group"
             >
-              <MessageSquare size={20} strokeWidth={1.75} className="group-hover:opacity-75 transition-opacity" />
+              <MessageSquare size={17} strokeWidth={1.75} className="sm:scale-110 group-hover:opacity-75 transition-opacity" />
             </a>
           </div>
         </div>
       </div>
 
-      {/* Right Column: 3D Split-Flap Mechanical Flip Calendar */}
-      <div className="w-full lg:w-1/2 h-full flex items-center justify-center px-4 sm:px-8 lg:pr-20 xl:pr-28 z-10">
+      {/* Bottom / Right Column: 3D Split-Flap Mechanical Flip Calendar */}
+      <div className="w-full lg:w-1/2 flex-1 lg:h-full flex items-center justify-center px-3 sm:px-8 lg:pr-20 xl:pr-28 pb-3 sm:pb-6 lg:pb-0 z-10 min-h-0">
         <FlipCalendarNav />
       </div>
     </div>
