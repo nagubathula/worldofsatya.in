@@ -75,6 +75,11 @@ export default function AppleNavbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Hide the global top navbar completely on the home page (called after all hooks to respect Rules of Hooks)
+  if (isHome) {
+    return null;
+  }
+
   return (
     <>
       <header

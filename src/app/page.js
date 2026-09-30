@@ -1,5 +1,5 @@
-import LandingStory from "@/components/LandingStory";
+import HomeTilesLayout from "@/components/HomeTilesLayout";
 
 export default function Home() {
-  return <LandingStory />;
+  return <HomeTilesLayout />;
 }
