@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, ArrowUpRight, Volume2, Smartphone } from "lucide-react";
+import { Mail, ArrowUpRight, Smartphone } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
 import { play8BitBlipSound } from "./SoundEffects";
 
@@ -271,43 +271,91 @@ export default function FlipCalendarNav() {
     };
   }, [flipToNext, flipToPrev]);
 
+  // iOS DeviceMotion permission state
+  const [needsMotionPermission, setNeedsMotionPermission] = useState(false);
+  const [motionEnabled, setMotionEnabled] = useState(false);
+
+  // Check if browser requires explicit user gesture permission for DeviceMotion (iOS 13+)
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function"
+    ) {
+      setNeedsMotionPermission(true);
+    }
+  }, []);
+
+  // Request motion permission on iOS via explicit user gesture
+  const requestMotionAccess = useCallback(async () => {
+    if (
+      typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function"
+    ) {
+      try {
+        const res = await DeviceMotionEvent.requestPermission();
+        if (res === "granted") {
+          setMotionEnabled(true);
+          setNeedsMotionPermission(false);
+          if (typeof navigator !== "undefined" && navigator.vibrate) {
+            try {
+              navigator.vibrate([25, 35, 25]);
+            } catch {}
+          }
+          return true;
+        }
+      } catch (err) {
+        console.warn("Motion permission error:", err);
+      }
+    } else {
+      setMotionEnabled(true);
+      return true;
+    }
+    return false;
+  }, []);
+
   // Shake phone to flip cards on mobile (DeviceMotion API)
   useEffect(() => {
     let lastX = null;
     let lastY = null;
     let lastZ = null;
     let lastTime = 0;
-    const SHAKE_THRESHOLD = 14;
-    const COOLDOWN_MS = 650;
+    const SHAKE_AXIS_THRESHOLD = 11;
+    const SHAKE_TOTAL_THRESHOLD = 18;
+    const COOLDOWN_MS = 600;
 
     const handleDeviceMotion = (e) => {
       const current = e.accelerationIncludingGravity || e.acceleration;
       if (!current) return;
 
       const now = Date.now();
-      if (now - lastTime < 75) return;
+      if (now - lastTime < 60) return;
 
-      const { x, y, z } = current;
+      const x = current.x ?? 0;
+      const y = current.y ?? 0;
+      const z = current.z ?? 0;
+
       if (lastX !== null && lastY !== null && lastZ !== null) {
         const deltaX = Math.abs(x - lastX);
         const deltaY = Math.abs(y - lastY);
         const deltaZ = Math.abs(z - lastZ);
+        const totalDelta = deltaX + deltaY + deltaZ;
 
-        if (
-          (deltaX > SHAKE_THRESHOLD && deltaY > SHAKE_THRESHOLD) ||
-          (deltaX > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) ||
-          (deltaY > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) ||
-          deltaX + deltaY + deltaZ > 24
-        ) {
-          if (now - lastTime > COOLDOWN_MS) {
-            lastTime = now;
-            if (typeof navigator !== "undefined" && navigator.vibrate) {
-              try {
-                navigator.vibrate([30, 40, 30]);
-              } catch {}
-            }
-            flipToNext();
+        // Triggers on horizontal, vertical, or diagonal shake
+        const isShake =
+          deltaX > SHAKE_AXIS_THRESHOLD ||
+          deltaY > SHAKE_AXIS_THRESHOLD ||
+          deltaZ > SHAKE_AXIS_THRESHOLD * 1.2 ||
+          totalDelta > SHAKE_TOTAL_THRESHOLD;
+
+        if (isShake && now - lastTime > COOLDOWN_MS) {
+          lastTime = now;
+          if (typeof navigator !== "undefined" && navigator.vibrate) {
+            try {
+              navigator.vibrate([25, 35, 25]);
+            } catch {}
           }
+          flipToNext();
         }
       }
 
@@ -316,32 +364,44 @@ export default function FlipCalendarNav() {
       lastZ = z;
     };
 
-    const enableMotion = async () => {
-      if (
-        typeof DeviceMotionEvent !== "undefined" &&
-        typeof DeviceMotionEvent.requestPermission === "function"
-      ) {
-        try {
-          const res = await DeviceMotionEvent.requestPermission();
-          if (res === "granted") {
-            window.addEventListener("devicemotion", handleDeviceMotion);
-          }
-        } catch {}
-      } else if (typeof window !== "undefined") {
+    const isIOS =
+      typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function";
+
+    if (!isIOS) {
+      // Android / browsers that do not require permission prompt
+      window.addEventListener("devicemotion", handleDeviceMotion);
+      setMotionEnabled(true);
+      return () => {
+        window.removeEventListener("devicemotion", handleDeviceMotion);
+      };
+    } else {
+      // iOS: listen to devicemotion once permission is granted
+      if (motionEnabled) {
         window.addEventListener("devicemotion", handleDeviceMotion);
+        return () => {
+          window.removeEventListener("devicemotion", handleDeviceMotion);
+        };
       }
-    };
 
-    enableMotion();
-    window.addEventListener("click", enableMotion, { once: true });
-    window.addEventListener("touchstart", enableMotion, { once: true });
+      // Automatically request permission on first user tap/click on iOS
+      const handleFirstTap = async () => {
+        const granted = await requestMotionAccess();
+        if (granted) {
+          window.addEventListener("devicemotion", handleDeviceMotion);
+        }
+      };
 
-    return () => {
-      window.removeEventListener("devicemotion", handleDeviceMotion);
-      window.removeEventListener("click", enableMotion);
-      window.removeEventListener("touchstart", enableMotion);
-    };
-  }, [flipToNext]);
+      window.addEventListener("click", handleFirstTap, { once: true });
+      window.addEventListener("touchend", handleFirstTap, { once: true });
+
+      return () => {
+        window.removeEventListener("devicemotion", handleDeviceMotion);
+        window.removeEventListener("click", handleFirstTap);
+        window.removeEventListener("touchend", handleFirstTap);
+      };
+    }
+  }, [flipToNext, motionEnabled, requestMotionAccess]);
 
   // Keyboard arrow keys, hardware volume buttons (Bluetooth / WebViews), and MediaSession
   useEffect(() => {
@@ -592,56 +652,23 @@ export default function FlipCalendarNav() {
           </button>
         </div>
 
-        {/* Mobile quick interaction hint */}
-        <div className="flex items-center gap-1.5 text-[10px] text-[#999999] lg:hidden mt-0.5">
-          <Smartphone size={11} className="opacity-70 animate-pulse" />
-          <span>Shake phone or swipe to flip</span>
+        {/* Mobile quick interaction hint & iOS permission trigger */}
+        <div className="flex items-center justify-center lg:hidden mt-0.5">
+          {needsMotionPermission && !motionEnabled ? (
+            <button
+              onClick={requestMotionAccess}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/[0.05] hover:bg-black/10 active:scale-95 transition-all text-[11px] font-mono text-[#111111] border border-black/[0.08] shadow-2xs cursor-pointer"
+            >
+              <Smartphone size={12} className="text-emerald-600 animate-bounce" />
+              <span>Tap to enable Shake on iOS</span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-1.5 text-[10px] text-[#999999]">
+              <Smartphone size={11} className="opacity-70 animate-pulse" />
+              <span>Shake phone or swipe to flip</span>
+            </div>
+          )}
         </div>
-      </div>
-
-      {/* On-screen Tactile Mobile Volume Rocker Pill */}
-      <div
-        aria-label="Mobile Volume Controls"
-        className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_8px_25px_rgba(0,0,0,0.14)] border border-black/10 p-1 lg:hidden select-none"
-      >
-        {/* Vol Up (+) */}
-        <button
-          onClick={() => {
-            if (typeof navigator !== "undefined" && navigator.vibrate) {
-              try {
-                navigator.vibrate(20);
-              } catch {}
-            }
-            flipToPrev();
-          }}
-          disabled={isFlipping}
-          aria-label="Volume Up / Previous"
-          className="w-10 h-11 rounded-xl flex flex-col items-center justify-center text-[#222222] hover:bg-black/5 active:bg-black/10 active:scale-90 transition-all group"
-        >
-          <span className="text-base font-bold leading-none select-none">+</span>
-          <span className="text-[8px] font-mono font-semibold text-[#888888] mt-0.5 leading-none">VOL</span>
-        </button>
-
-        {/* Rocker Divider */}
-        <div className="w-5 h-[1px] bg-black/10 my-0.5" />
-
-        {/* Vol Down (-) */}
-        <button
-          onClick={() => {
-            if (typeof navigator !== "undefined" && navigator.vibrate) {
-              try {
-                navigator.vibrate(20);
-              } catch {}
-            }
-            flipToNext();
-          }}
-          disabled={isFlipping}
-          aria-label="Volume Down / Next"
-          className="w-10 h-11 rounded-xl flex flex-col items-center justify-center text-[#222222] hover:bg-black/5 active:bg-black/10 active:scale-90 transition-all group"
-        >
-          <span className="text-base font-bold leading-none select-none">-</span>
-          <span className="text-[8px] font-mono font-semibold text-[#888888] mt-0.5 leading-none">VOL</span>
-        </button>
       </div>
     </div>
   );
