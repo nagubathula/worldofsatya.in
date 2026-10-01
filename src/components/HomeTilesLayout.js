@@ -7,7 +7,7 @@ import { User, ArrowUpRight, ArrowLeft } from "lucide-react";
 import { motion, LayoutGroup, MotionConfig, useReducedMotion } from "framer-motion";
 import SocialBurst from "./SocialBurst";
 import FlipCalendarNav from "./FlipCalendarNav";
-import { play8BitBlipSound, play8BitTapSound } from "./SoundEffects";
+import { play8BitTapSound } from "./SoundEffects";
 
 // The 4 featured works matching Frame 1 (2x2 grid) & Frame 2 (Bento stack)
 const bentoWorks = [
@@ -52,6 +52,7 @@ const bentoWorks = [
 export default function HomeTilesLayout() {
   const reduceMotion = useReducedMotion();
   const [isWorksExpanded, setIsWorksExpanded] = useState(false);
+  const [previewSection, setPreviewSection] = useState("avatar");
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
 
@@ -93,11 +94,7 @@ export default function HomeTilesLayout() {
     setIsContactOpen(nextState);
 
     try {
-      if (nextState) {
-        play8BitBlipSound(650);
-      } else {
-        play8BitTapSound();
-      }
+      if (!nextState) play8BitTapSound();
     } catch {}
 
     if (typeof navigator !== "undefined" && navigator.vibrate) {
@@ -118,7 +115,7 @@ export default function HomeTilesLayout() {
         <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 lg:px-0 xl:pl-8 shrink-0 z-20">
           <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-semibold tracking-tight leading-tight text-[#111111]">Satya Sai Nagubathula</h1>
           <p className="mt-2 text-xl sm:text-2xl lg:text-3xl tracking-tight text-[#8f8f8f]">Design Technologist</p>
-          <div ref={contactContainerRef} className="mt-6 flex flex-wrap items-center gap-3">
+          <div ref={contactContainerRef} className="mt-6 flex flex-wrap items-start gap-3">
             <Link href="/about" aria-label="About Satya" title="About Satya" className="flex h-14 w-14 items-center justify-center rounded-2xl border border-black/[0.06] bg-white shadow-sm transition-transform hover:scale-105"><User size={19} /></Link>
             <SocialBurst open={isContactOpen} onToggle={toggleContact} />
           </div>
@@ -134,7 +131,7 @@ export default function HomeTilesLayout() {
         <div id="home-work-preview" className="relative w-full min-w-0 lg:w-1/2 flex items-center justify-center px-2 sm:px-6 lg:pr-6 z-10">
           {!isWorksExpanded ? (
             <motion.div key="calendar" className="w-full flex justify-center">
-              <FlipCalendarNav initialSection="works" onExpandWorks={() => { setIsWorksExpanded(true); setIsContactOpen(false); }} />
+              <FlipCalendarNav initialSection={previewSection} onExpandWorks={() => { setPreviewSection("works"); setIsWorksExpanded(true); setIsContactOpen(false); }} />
             </motion.div>
           ) : (
             <motion.div key="expanded" layout className="w-full max-w-[540px] py-6 flex flex-col gap-5 sm:gap-6">

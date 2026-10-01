@@ -17,13 +17,6 @@ export const calendarSections = [
     isAvatar: true,
   },
   {
-    id: "about-me",
-    code: "ABOUT",
-    title: "About Me",
-    href: "/about",
-    image: "/main.jpeg",
-  },
-  {
     id: "works",
     code: "WORKS",
     title: "Works",

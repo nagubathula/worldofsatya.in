@@ -126,6 +126,40 @@ export function play8BitTapSound() {
   } catch {}
 }
 
+// Schedule a quiet, pitched pop for each launched social; return a cancellation handle.
+export function playSocialBurstSound({ count = 5, interval = 0.15, delay = 0.12 } = {}) {
+  const voices = [];
+  const cancel = () => voices.forEach(({ osc, gain }) => {
+    try { gain.gain.cancelScheduledValues(0); gain.gain.value = 0; osc.stop(); } catch {}
+  });
+  try {
+    if (!soundEnabled || localStorage.getItem("portfolio-sound") === "false") return cancel;
+    const ctx = getAudioContext();
+    if (!ctx) return cancel;
+    const start = ctx.currentTime + delay;
+    for (let i = 0; i < count; i++) {
+      const at = start + i * interval;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      voices.push({ osc, gain });
+      osc.type = "sine";
+      const pitch = 520 + i * 65;
+      osc.frequency.setValueAtTime(pitch, at);
+      osc.frequency.exponentialRampToValueAtTime(pitch * 0.42, at + 0.085);
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.setValueAtTime(0, at);
+      gain.gain.linearRampToValueAtTime(0.055, at + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.095);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.onended = () => { osc.disconnect(); gain.disconnect(); };
+      osc.start(at);
+      osc.stop(at + 0.1);
+    }
+  } catch { cancel(); }
+  return cancel;
+}
+
 export default function SoundEffects() {
   const lastPlayedRef = useRef(0);
 
