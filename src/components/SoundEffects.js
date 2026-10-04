@@ -126,37 +126,78 @@ export function play8BitTapSound() {
   } catch {}
 }
 
-// Schedule a quiet, pitched pop for each launched social; return a cancellation handle.
-export function playSocialBurstSound({ count = 5, interval = 0.15, delay = 0.12 } = {}) {
-  const voices = [];
-  const cancel = () => voices.forEach(({ osc, gain }) => {
-    try { gain.gain.cancelScheduledValues(0); gain.gain.value = 0; osc.stop(); } catch {}
-  });
+/**
+ * Apple Soft Pop — fluid, juicy bubble pop sound
+ */
+export function playPopSound(freq = 560, volume = 0.14) {
+  if (!soundEnabled) return;
   try {
-    if (!soundEnabled || localStorage.getItem("portfolio-sound") === "false") return cancel;
     const ctx = getAudioContext();
-    if (!ctx) return cancel;
-    const start = ctx.currentTime + delay;
-    for (let i = 0; i < count; i++) {
-      const at = start + i * interval;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      voices.push({ osc, gain });
-      osc.type = "sine";
-      const pitch = 520 + i * 65;
-      osc.frequency.setValueAtTime(pitch, at);
-      osc.frequency.exponentialRampToValueAtTime(pitch * 0.42, at + 0.085);
-      gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.setValueAtTime(0, at);
-      gain.gain.linearRampToValueAtTime(0.055, at + 0.006);
-      gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.095);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.onended = () => { osc.disconnect(); gain.disconnect(); };
-      osc.start(at);
-      osc.stop(at + 0.1);
+    if (!ctx) return;
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
     }
-  } catch { cancel(); }
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    // Pitch envelope: snappy rise, then soft buoyant drop
+    osc.frequency.setValueAtTime(freq, now);
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.35, now + 0.02);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.75, now + 0.055);
+
+    // Amplitude envelope: prevent initial click with tiny linear ramp then exponential decay
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(volume, now + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.065);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.07);
+    osc.onended = () => {
+      try {
+        osc.disconnect();
+        gain.disconnect();
+      } catch {}
+    };
+  } catch {}
+}
+
+// Play multi-pop cascade synchronized with the projectile launches
+export function playSocialBurstSound({ count = 5, interval = 0.15, delay = 0.12 } = {}) {
+  const timeouts = [];
+  const cancel = () => {
+    timeouts.forEach((t) => clearTimeout(t));
+    timeouts.length = 0;
+  };
+
+  try {
+    if (!soundEnabled) return cancel;
+    const ctx = getAudioContext();
+    if (ctx && ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
+
+    // Immediate tactile pop on trigger press
+    playPopSound(520, 0.15);
+
+    // Timed pops for each social projectile launch
+    for (let i = 0; i < count; i++) {
+      const ms = Math.max(10, Math.round((delay + i * interval) * 1000));
+      const pitch = 560 + i * 55;
+      const t = setTimeout(() => {
+        playPopSound(pitch, 0.13);
+      }, ms);
+      timeouts.push(t);
+    }
+  } catch {
+    cancel();
+  }
+
   return cancel;
 }
 

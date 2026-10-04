@@ -32,7 +32,7 @@ const wordBlur = {
     filter: "blur(0px)",
     y: 0,
     transition: {
-      duration: 0.45,
+      duration: 0.65,
       ease: [0.22, 1, 0.36, 1], // Smooth Apple-style fluid easeOut
     },
   },
@@ -100,7 +100,7 @@ export default function LandingStory() {
                           initial={{ opacity: 0, y: 8, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                           className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 sm:w-76 p-2 rounded-2xl bg-white border border-black/[0.08] shadow-[0_16px_40px_rgba(0,0,0,0.08)] pointer-events-none z-50 not-italic block"
                         >
                           <span className="relative block w-full aspect-[16/10] rounded-xl overflow-hidden border border-black/[0.04] bg-[#f5f5f7]">
@@ -138,7 +138,7 @@ export default function LandingStory() {
                           initial={{ opacity: 0, y: 8, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                           className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 sm:w-76 p-2 rounded-2xl bg-white border border-black/[0.08] shadow-[0_16px_40px_rgba(0,0,0,0.08)] pointer-events-none z-50 not-italic block"
                         >
                           <span className="relative block w-full aspect-[16/10] rounded-xl overflow-hidden border border-black/[0.04] bg-[#f5f5f7]">
@@ -187,7 +187,7 @@ export default function LandingStory() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.95 }}
+                transition={{ duration: 0.65, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className={styles.actionRow}
               >
                 <div className={styles.ctaGroup}>
@@ -203,7 +203,7 @@ export default function LandingStory() {
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 1.05 }}
+                transition={{ duration: 0.65, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className={styles.experienceStatus}
               >
                 <span className={styles.statusDot} aria-hidden="true" />
@@ -215,7 +215,7 @@ export default function LandingStory() {
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
               className={styles.heroIllustration}
             >
               {/* Soft Ambient Studio Aura */}

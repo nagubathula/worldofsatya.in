@@ -79,8 +79,8 @@ export default function CaseStudies({ limit }) {
             const CardContent = (
               <motion.div
                 whileHover={isLink ? { y: -2 } : {}}
-                transition={{ duration: 0.2 }}
-                className={`group block p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all ${isLink ? 'cursor-pointer' : ''} relative overflow-hidden h-full`}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className={`group block p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-500 ${isLink ? 'cursor-pointer' : ''} relative overflow-hidden h-full`}
               >
                 {/* Clean Tag */}
                 <div className="flex items-center gap-1.5 mb-3 sm:mb-4">

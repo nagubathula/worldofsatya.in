@@ -71,11 +71,11 @@ export default function WorksList() {
                 initial={{ opacity: 0, scale: 0.98, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: -10 }}
-                transition={{ duration: 0.22, ease: "easeOut" }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
                 key={work.id}
               >
                 <Link href={work.link?.startsWith("/works/case-studies/") ? work.link : `/works/${work.id}`} className="block group h-full">
-                  <div className="relative p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-200 overflow-hidden">
+                  <div className="relative p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-500 overflow-hidden">
                     {/* Clean Tag */}
                     <div className="flex items-center gap-1.5 mb-3 sm:mb-4">
                       <span className="text-[11px] font-sans text-[#86868b] tracking-wider uppercase font-medium">{work.tag}</span>

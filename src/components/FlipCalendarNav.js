@@ -224,7 +224,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     flipTimerRef.current = setTimeout(() => {
       setIsFlipping(false);
       isFlippingRef.current = false;
-    }, 380);
+    }, 650);
   }, [total]);
 
   const flipToPrev = useCallback(() => {
@@ -249,7 +249,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     flipTimerRef.current = setTimeout(() => {
       setIsFlipping(false);
       isFlippingRef.current = false;
-    }, 380);
+    }, 650);
   }, [total]);
 
   // Wheel listener: Flips calendar when hovering over the widget, allows normal page scroll elsewhere
@@ -571,9 +571,9 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
               custom={direction}
               variants={{
                 enter: (dir) => ({
-                  rotateX: reduceMotion ? 0 : dir === "down" ? 50 : -50,
-                  y: dir === "down" ? 26 : -26,
-                  scale: 0.96,
+                  rotateX: dir === "down" ? 50 : -50,
+                  y: dir === "down" ? 28 : -28,
+                  scale: 0.95,
                   opacity: 0,
                 }),
                 center: {
@@ -582,18 +582,18 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
                   scale: 1,
                   opacity: 1,
                   transition: {
-                    duration: 0.38,
-                    ease: [0.16, 1, 0.3, 1],
+                    duration: 0.65,
+                    ease: [0.22, 1, 0.36, 1],
                   },
                 },
                 exit: (dir) => ({
-                  rotateX: reduceMotion ? 0 : dir === "down" ? -50 : 50,
-                  y: dir === "down" ? -26 : 26,
-                  scale: 0.96,
+                  rotateX: dir === "down" ? -50 : 50,
+                  y: dir === "down" ? -28 : 28,
+                  scale: 0.95,
                   opacity: 0,
                   transition: {
-                    duration: 0.38,
-                    ease: [0.16, 1, 0.3, 1],
+                    duration: 0.65,
+                    ease: [0.22, 1, 0.36, 1],
                   },
                 }),
               }}

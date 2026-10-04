@@ -102,8 +102,8 @@ export default function ExperienceTimeline({ limit, showStats = false, bento = f
               variants={itemAnim}
               key={i}
               whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col gap-3 sm:gap-5 p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all"
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col gap-3 sm:gap-5 p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-500"
             >
               <div>
                 <span className="text-xs font-sans font-medium text-[#86868b] bg-[#f5f5f7] border border-black/[0.04] px-3 py-1 rounded-full">

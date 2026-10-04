@@ -68,8 +68,8 @@ export default function FeaturedWorks({ limit }) {
               <Link href={`/works/${work.id}`} className="block group h-full">
                 <motion.div
                   whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-200 h-full"
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center p-6 sm:p-8 bg-white rounded-3xl border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all duration-500 h-full"
                 >
                   <div className="flex flex-col flex-1 w-full">
                     <div className="flex justify-between items-start mb-1">

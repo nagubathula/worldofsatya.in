@@ -53,6 +53,45 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="overflow-x-clip max-w-full">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function clean() {
+                  var els = document.querySelectorAll('[bis_skin_checked]');
+                  for (var i = 0; i < els.length; i++) {
+                    els[i].removeAttribute('bis_skin_checked');
+                  }
+                }
+                clean();
+                if (typeof MutationObserver !== 'undefined') {
+                  var obs = new MutationObserver(function(mutations) {
+                    for (var i = 0; i < mutations.length; i++) {
+                      var m = mutations[i];
+                      if (m.type === 'attributes' && m.attributeName === 'bis_skin_checked' && m.target.hasAttribute('bis_skin_checked')) {
+                        m.target.removeAttribute('bis_skin_checked');
+                      }
+                      if (m.type === 'childList') {
+                        clean();
+                      }
+                    }
+                  });
+                  if (document.documentElement) {
+                    obs.observe(document.documentElement, {
+                      attributes: true,
+                      attributeFilter: ['bis_skin_checked'],
+                      subtree: true,
+                      childList: true
+                    });
+                  }
+                  window.addEventListener('DOMContentLoaded', clean);
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${sansFont.variable} ${garamondFont.variable} font-sans text-foreground bg-background tracking-normal w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-base`}
         suppressHydrationWarning

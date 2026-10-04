@@ -1,23 +1,26 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { ReactLenis } from 'lenis/react';
+import { ReactLenis, useLenis } from 'lenis/react';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
-export default function SmoothScroll({ children }) {
-  const [reducedMotion, setReducedMotion] = useState(false);
+function ScrollReset() {
+  const pathname = usePathname();
+  const lenis = useLenis();
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const onChange = (e) => setReducedMotion(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
+  }, [pathname, lenis]);
 
-  if (reducedMotion) return children;
+  return null;
+}
 
+export default function SmoothScroll({ children }) {
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+    <ReactLenis root options={{ lerp: 0.08, duration: 1.6, smoothWheel: true, wheelMultiplier: 0.9 }}>
+      <ScrollReset />
       {children}
     </ReactLenis>
   );

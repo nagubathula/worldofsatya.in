@@ -168,10 +168,10 @@ export default function AppleNavbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -6 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 lg:hidden w-full h-[100dvh] bg-[#fbfbfd]/95 backdrop-blur-2xl flex flex-col pointer-events-auto pt-16 overflow-hidden"
           >
             <div className="flex-1 w-full flex flex-col justify-between px-6 py-6 overflow-y-auto">
