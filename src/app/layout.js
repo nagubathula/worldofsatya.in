@@ -2,6 +2,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AppleNavbar from "@/components/AppleNavbar";
+import { BlackHoleTransitionProvider } from "@/components/BlackHoleTransition";
 import { Inter, EB_Garamond } from "next/font/google";
 
 const sansFont = Inter({ 
@@ -97,10 +98,12 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <AppleNavbar />
-          <SmoothScroll>
-            {children}
-          </SmoothScroll>
+          <BlackHoleTransitionProvider>
+            <AppleNavbar />
+            <SmoothScroll>
+              {children}
+            </SmoothScroll>
+          </BlackHoleTransitionProvider>
         </ThemeProvider>
       </body>
     </html>

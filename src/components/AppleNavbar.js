@@ -90,7 +90,7 @@ export default function AppleNavbar() {
         <div className={`w-full max-w-6xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between gap-4 ${isHome && !scrolled && !mobileMenuOpen ? "pointer-events-auto" : ""}`}>
           
           {/* Left Side: Brand & Context */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div data-nav-cluster="brand" className="flex items-center gap-2 sm:gap-3 shrink-0">
             {!isHome && (
               <>
                 <Link
@@ -121,7 +121,7 @@ export default function AppleNavbar() {
           </div>
 
           {/* Center: Desktop Navigation Links (macOS style segmented pill) */}
-          <nav className="hidden lg:flex items-center gap-0.5 p-1 rounded-full bg-[#f5f5f7]/90 border border-black/[0.05] shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)] backdrop-blur-md">
+          <nav data-nav-cluster="pill" className="hidden lg:flex items-center gap-0.5 p-1 rounded-full bg-[#f5f5f7]/90 border border-black/[0.05] shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)] backdrop-blur-md">
             {navLinks.map((item) => {
               const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               return (
@@ -141,7 +141,7 @@ export default function AppleNavbar() {
           </nav>
 
           {/* Right Side: Talk CTA & Mobile Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div data-nav-cluster="cta" className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Desktop Let's Talk CTA */}
             <a
               href="mailto:nagubathula.satyasai@gmail.com"

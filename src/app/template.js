@@ -14,32 +14,31 @@ export default function Template({ children }) {
 
   return (
     <>
-      {/* Apple-grade dynamic route progress beam */}
+      {/* Apple-grade dynamic route progress beam (600ms) */}
       <motion.div
         key={`beam-${pathname}`}
-        initial={{ scaleX: 0, opacity: 0.9 }}
+        initial={{ scaleX: 0, opacity: 0.85 }}
         animate={{ scaleX: 1, opacity: 0 }}
         transition={{
-          duration: 0.65,
-          ease: [0.22, 1, 0.36, 1],
+          duration: 0.6,
+          ease: [0.16, 1, 0.3, 1],
         }}
         style={{ transformOrigin: "0% 50%" }}
-        className="fixed top-0 left-0 right-0 h-[2px] z-[9999] pointer-events-none bg-gradient-to-r from-[#86868b] via-[#1d1d1f] to-[#86868b] shadow-[0_1px_8px_rgba(0,0,0,0.25)]"
+        className="fixed top-0 left-0 right-0 h-[2px] z-[9999] pointer-events-none bg-gradient-to-r from-transparent via-[#1d1d1f] to-transparent shadow-[0_1px_6px_rgba(0,0,0,0.25)]"
       />
 
-      {/* Ultra-smooth spatial content entrance */}
-      <motion.div
+      {/* 
+        The page host container:
+        The background stays steady, while the individual elements (cards, text, buttons, avatar, images)
+        are individually warped, stretched into funnels, and sucked into the black hole!
+      */}
+      <div
+        id="black-hole-page"
         key={`page-${pathname}`}
-        initial={{ opacity: 0, y: 16, scale: 0.992 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ 
-          duration: 0.65, 
-          ease: [0.22, 1, 0.36, 1], // Smooth Apple-style fluid easeOut
-        }}
-        className="min-h-screen"
+        className="min-h-screen w-full relative"
       >
         {children}
-      </motion.div>
+      </div>
     </>
   );
 }

@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Mail, ArrowUpRight, Smartphone } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
 import { play8BitBlipSound } from "./SoundEffects";
+import { useBlackHoleTransition } from "./BlackHoleTransition";
 
 export const calendarSections = [
   {
@@ -191,6 +192,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
   const reduceMotion = useReducedMotion();
   const initialIndex = Math.max(0, calendarSections.findIndex(section => section.id === initialSection));
   const router = useRouter();
+  const { navigate: blackHoleNavigate } = useBlackHoleTransition();
   const [currIndex, setCurrIndex] = useState(initialIndex);
   const [isFlipping, setIsFlipping] = useState(false);
   const [direction, setDirection] = useState("down"); // "down" or "up"
@@ -496,7 +498,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
         if (item.href.startsWith("mailto:")) {
           window.location.href = item.href;
         } else {
-          router.push(item.href);
+          blackHoleNavigate(item.href);
         }
       }
     };
@@ -541,7 +543,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
         
         {/* Main Display Area */}
         <div
-          onClick={() => {
+          onClick={(e) => {
             if (!isFlippingRef.current) {
               if (currSection.id === "works") {
                 if (onExpandWorks) {
@@ -557,7 +559,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
               if (currSection.href.startsWith("mailto:")) {
                 window.location.href = currSection.href;
               } else {
-                router.push(currSection.href);
+                blackHoleNavigate(currSection.href, { x: e.clientX, y: e.clientY });
               }
             }
           }}
