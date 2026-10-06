@@ -52,10 +52,25 @@ export default function Footer() {
 
         <div className="w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-sans text-[#86868b]" suppressHydrationWarning>
           <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>
-          <div className="flex gap-4 sm:gap-6 mt-4 md:mt-0" suppressHydrationWarning>
-            <a href="https://www.linkedin.com/in/satyasainagubathula" target="_blank" rel="noopener noreferrer" className="hover:text-[#1d1d1f] transition-colors">LinkedIn</a>
-            <a href="https://hippogriff.medium.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#1d1d1f] transition-colors">Medium</a>
-            <a href="mailto:nagubathula.satyasai@gmail.com" className="hover:text-[#1d1d1f] transition-colors">Email</a>
+          <div className="flex gap-2 sm:gap-3 mt-4 md:mt-0" suppressHydrationWarning>
+            {[
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/satyasainagubathula" },
+              { label: "Medium", href: "https://hippogriff.medium.com" },
+              { label: "Email", href: "mailto:nagubathula.satyasai@gmail.com" },
+            ].map((link) => (
+              <motion.a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                whileHover={{ y: -2, scale: 1.05 }}
+                whileTap={{ scale: 0.94 }}
+                transition={{ type: "spring", stiffness: 450, damping: 18 }}
+                className="px-3 py-1 rounded-full text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
+              >
+                {link.label}
+              </motion.a>
+            ))}
           </div>
         </div>
       </div>

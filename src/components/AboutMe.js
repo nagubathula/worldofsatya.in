@@ -1,23 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Code2, Compass, Layers3, Sparkles } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Sparkles } from "lucide-react";
+import RiveButton from "./RiveButton";
+import { RiveCompass, RiveLayers, RiveCode } from "./RiveIcons";
 
 const principles = [
   {
     number: "01",
-    icon: Compass,
+    icon: RiveCompass,
     title: "Start with the person.",
     description: "Understand the task, remove the friction, and make the next step feel obvious and inevitable.",
   },
   {
     number: "02",
-    icon: Layers3,
+    icon: RiveLayers,
     title: "Make it real.",
     description: "Design, build, then refine. The nuances and details that matter reveal themselves only in the working product.",
   },
   {
     number: "03",
-    icon: Code2,
+    icon: RiveCode,
     title: "Leave it open.",
     description: "Readable code, open formats, and tools people can make their own. Always share what you learn with the community.",
   },
@@ -79,13 +81,14 @@ export default function AboutMe() {
           </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-5">
-            <Link
+            <RiveButton
               href="/works"
-              className="group inline-flex items-center gap-2.5 rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white transition-all hover:bg-[#333336] hover:shadow-md"
+              className="px-6 py-3 text-sm font-medium"
+              variant="primary"
             >
-              Explore my work
+              <span>Explore my work</span>
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
+            </RiveButton>
             <Link
               href="/experience"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#626267] hover:text-[#1d1d1f] transition-colors py-3 px-2 underline decoration-black/20 underline-offset-4"

@@ -3,9 +3,10 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { User, ArrowUpRight, ArrowLeft } from "lucide-react";
+import { ArrowUpRight, ArrowLeft } from "lucide-react";
 import { motion, LayoutGroup, MotionConfig, useReducedMotion } from "framer-motion";
 import SocialBurst from "./SocialBurst";
+import RiveAboutButton from "./RiveAboutButton";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
 
@@ -124,7 +125,7 @@ export default function HomeTilesLayout() {
             .
           </p>
           <div ref={contactContainerRef} className="mt-6 flex flex-wrap items-start gap-3">
-            <Link href="/about" aria-label="About Satya" title="About Satya" className="flex h-14 w-14 items-center justify-center rounded-2xl border border-black/[0.06] bg-white shadow-sm transition-transform duration-500 hover:scale-105"><User size={19} /></Link>
+            <RiveAboutButton />
             <SocialBurst open={isContactOpen} onToggle={toggleContact} />
           </div>
           {isWorksExpanded && <button type="button" aria-expanded={true} aria-controls="home-work-preview"

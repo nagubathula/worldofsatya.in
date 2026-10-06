@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { allWorks } from "@/data/works";
 
+import { playPopSound, play8BitTapSound } from "./SoundEffects";
+
 // Keep every discipline together in one collection.
 const CATEGORY_PRIORITY = { "Open Source": 0, "Project": 1, "Case Study": 2 };
 
@@ -40,25 +42,52 @@ export default function WorksList() {
     }
   };
 
+  const handleFilterClick = (category) => {
+    if (filter !== category) {
+      try {
+        playPopSound(520, 0.08);
+      } catch {}
+      setFilter(category);
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 pb-20">
       
-      {/* Filters - Apple Segmented Control */}
+      {/* Filters - Rive-Style Spring Segmented Control */}
       <div className="flex flex-wrap items-center justify-center gap-1 p-1 rounded-full bg-[#f5f5f7] border border-black/[0.04] max-w-fit mx-auto mb-6 sm:mb-10 shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => setFilter(category)}
-            aria-pressed={filter === category}
-            className={`px-3.5 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-all duration-150 ${
-              filter === category
-                ? "bg-white text-[#1d1d1f] shadow-sm"
-                : "text-[#86868b] hover:text-[#1d1d1f] hover:bg-white/60"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
+        {categories.map((category) => {
+          const isActive = filter === category;
+          return (
+            <motion.button
+              key={category}
+              onClick={() => handleFilterClick(category)}
+              onMouseEnter={() => {
+                try {
+                  play8BitTapSound();
+                } catch {}
+              }}
+              whileHover={{ scale: 1.04, y: -0.5 }}
+              whileTap={{ scale: 0.94 }}
+              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              aria-pressed={isActive}
+              className={`relative px-4 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
+                isActive
+                  ? "text-[#1d1d1f]"
+                  : "text-[#86868b] hover:text-[#1d1d1f]"
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="activeFilterPill"
+                  className="absolute inset-0 rounded-full bg-white shadow-sm border border-black/[0.04]"
+                  transition={{ type: "spring", stiffness: 500, damping: 32 }}
+                />
+              )}
+              <span className="relative z-10">{category}</span>
+            </motion.button>
+          );
+        })}
       </div>
 
       {/* List */}

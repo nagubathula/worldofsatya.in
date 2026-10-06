@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import RiveButton from "./RiveButton";
 
 const navLinks = [
   { href: "/works", label: "Works" },
@@ -128,13 +129,16 @@ export default function AppleNavbar() {
           {/* Right Side: Talk CTA & Mobile Toggle */}
           <div data-nav-cluster="cta" className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Desktop Let's Talk CTA */}
-            <a
-              href="mailto:nagubathula.satyasai@gmail.com"
-              className="hidden sm:inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-[#1d1d1f] text-white text-xs font-sans font-medium hover:bg-[#333336] transition-all shadow-sm active:scale-95"
-            >
-              <span>Let&apos;s Talk</span>
-              <ArrowUpRight className="w-3 h-3 opacity-70" aria-hidden="true" />
-            </a>
+            <div className="hidden sm:inline-flex">
+              <RiveButton
+                href="mailto:nagubathula.satyasai@gmail.com"
+                className="px-3.5 py-1.5 text-xs font-sans"
+                variant="primary"
+              >
+                <span>Let&apos;s Talk</span>
+                <ArrowUpRight className="w-3 h-3 opacity-80" aria-hidden="true" />
+              </RiveButton>
+            </div>
 
             {/* Mobile Menu Toggle Button */}
             <button
@@ -223,13 +227,14 @@ export default function AppleNavbar() {
 
                 {/* Let's Talk CTA */}
                 <div className="pt-2">
-                  <a
+                  <RiveButton
                     href="mailto:nagubathula.satyasai@gmail.com"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-full bg-[#1d1d1f] text-white text-sm font-sans font-medium shadow-sm active:scale-[0.99]"
+                    className="w-full py-3.5 text-sm font-sans"
+                    variant="primary"
                   >
                     <span>Let&apos;s Talk</span>
                     <ArrowUpRight size={16} />
-                  </a>
+                  </RiveButton>
                 </div>
               </div>
 

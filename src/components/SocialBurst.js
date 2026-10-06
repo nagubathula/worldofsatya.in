@@ -1,10 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Github, Instagram, Linkedin, Mail, MessageSquare, X } from "lucide-react";
+import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
+import { Github, Instagram, Linkedin, Mail, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { playPopSound, playSocialBurstSound } from "./SoundEffects";
+import { play8BitTapSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
 
 function MediumIcon({ size = 20 }) {
   return (
@@ -29,6 +29,39 @@ const socials = [
 export default function SocialBurst({ open, onToggle }) {
   const trigger = useRef(null);
   const stopSound = useRef(() => {});
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+
+  // Magnetic cursor spring tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 15, stiffness: 260, mass: 0.2 };
+  const magneticX = useSpring(mouseX, springConfig);
+  const magneticY = useSpring(mouseY, springConfig);
+
+  const handleMouseMove = (e) => {
+    if (!trigger.current) return;
+    const rect = trigger.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    mouseX.set(Math.max(-10, Math.min(10, (e.clientX - centerX) * 0.25)));
+    mouseY.set(Math.max(-10, Math.min(10, (e.clientY - centerY) * 0.25)));
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    try {
+      play8BitTapSound();
+    } catch {}
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setIsPressed(false);
+    mouseX.set(0);
+    mouseY.set(0);
+  };
 
   useEffect(() => {
     if (!open) stopSound.current();
@@ -78,47 +111,125 @@ export default function SocialBurst({ open, onToggle }) {
         if (event.key === "Escape" && open) trigger.current?.focus();
       }}
     >
-      {/* Laser Cannon / Recoil Trigger Button */}
-      <motion.button
-        ref={trigger}
-        type="button"
-        onClick={handleToggle}
-        aria-label={open ? "Close contact options" : "Contact options"}
-        aria-expanded={open}
-        aria-controls="social-burst-links"
-        initial={false}
-        animate={{ scale: open ? [1, 1.08, 0.985, 1] : 1 }}
-        transition={
-          open
-            ? { duration: SHOT_INTERVAL, delay: WIND_UP, times: [0, 0.4, 0.75, 1], ease: "easeInOut", repeat: socials.length - 1 }
-            : { duration: 0.12 }
-        }
-        className={`relative z-20 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${
-          open ? "border-[#1d1d1f] bg-[#1d1d1f] text-white" : "border-black/[0.06] bg-white text-[#1d1d1f]"
-        }`}
+      {/* Rive-Style Laser Cannon Trigger Button */}
+      <motion.div
+        style={{
+          x: magneticX,
+          y: magneticY,
+        }}
+        className="relative z-20 shrink-0 select-none"
       >
-        <motion.span
-          className="flex"
+        <motion.button
+          ref={trigger}
+          type="button"
+          onClick={handleToggle}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onMouseDown={() => setIsPressed(true)}
+          onMouseUp={() => setIsPressed(false)}
+          aria-label={open ? "Close contact options" : "Contact options"}
+          aria-expanded={open}
+          aria-controls="social-burst-links"
           initial={false}
           animate={{
-            scale: open ? [1, 0.7, 1.08, 1] : 1,
-            rotate: open ? [0, -18, 6, 0] : 0,
+            scaleX: isPressed ? 1.08 : isHovered ? 1.03 : open ? [1, 1.08, 0.985, 1] : 1,
+            scaleY: isPressed ? 0.88 : isHovered ? 1.03 : open ? [1, 1.08, 0.985, 1] : 1,
+            y: isPressed ? 2 : isHovered ? -1 : 0,
           }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          transition={
+            open
+              ? { duration: SHOT_INTERVAL, delay: WIND_UP, times: [0, 0.4, 0.75, 1], ease: "easeInOut", repeat: socials.length - 1 }
+              : { type: "spring", stiffness: 400, damping: 18 }
+          }
+          className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden ${
+            open ? "border-[#1d1d1f] bg-[#1d1d1f] text-white" : "border-black/[0.08] bg-white text-[#1d1d1f]"
+          }`}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={open ? "close" : "message"}
-              initial={{ opacity: 0, scale: 0.4, rotate: -40 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, scale: 0.5, rotate: 40 }}
-              transition={{ duration: 0.13 }}
-            >
-              {open ? <X size={20} aria-hidden="true" /> : <MessageSquare size={20} aria-hidden="true" />}
-            </motion.span>
-          </AnimatePresence>
-        </motion.span>
-      </motion.button>
+          {/* Ambient Glow */}
+          <motion.div
+            animate={{
+              opacity: isHovered && !open ? 1 : 0,
+              scale: isHovered ? 1 : 0.8,
+            }}
+            transition={{ duration: 0.25 }}
+            className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 pointer-events-none"
+          />
+
+          <motion.span
+            className="flex items-center justify-center pointer-events-none"
+            initial={false}
+            animate={{
+              scale: open ? [1, 0.7, 1.08, 1] : 1,
+              rotate: open ? [0, -18, 6, 0] : 0,
+            }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {open ? (
+                <motion.span
+                  key="close"
+                  initial={{ opacity: 0, scale: 0.4, rotate: -40 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.5, rotate: 40 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <X size={20} aria-hidden="true" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="message"
+                  initial={{ opacity: 0, scale: 0.4 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center justify-center"
+                >
+                  {/* Rive Animated Vector Speech Bubble with Typing Dots */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="overflow-visible">
+                    <motion.path
+                      d="M21 11.5C21 16.1944 16.9706 20 12 20C10.4285 20 8.94827 19.6171 7.66667 18.9412L3 20L4.28571 16.2778C3.47953 14.8872 3 13.2543 3 11.5C3 6.80558 7.02944 3 12 3C16.9706 3 21 6.80558 21 11.5Z"
+                      stroke="#1d1d1f"
+                      strokeWidth="2.1"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      animate={{
+                        scale: isHovered ? [1, 1.04, 1] : 1,
+                      }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    {/* 3 Sequential Typing Dots */}
+                    <g>
+                      {[8, 12, 16].map((cx, idx) => (
+                        <motion.circle
+                          key={cx}
+                          cx={cx}
+                          cy="11.5"
+                          r="1.3"
+                          fill="#1d1d1f"
+                          animate={{
+                            y: isHovered ? [-1.6, 1.4, -1.6] : [0, -1, 0],
+                            opacity: [0.35, 1, 0.35],
+                          }}
+                          transition={{
+                            duration: 1.1,
+                            repeat: Infinity,
+                            delay: idx * 0.16,
+                            ease: "easeInOut",
+                          }}
+                        />
+                      ))}
+                    </g>
+                  </svg>
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.span>
+
+          {/* Micro Bevel Gloss Highlight */}
+          <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
+        </motion.button>
+      </motion.div>
 
       {/* Shockwave Radial Ring and Laser Ray Emitters */}
       {open && (
@@ -158,7 +269,7 @@ export default function SocialBurst({ open, onToggle }) {
       )}
 
       {/* Projectile Social Icons Shooting into Place */}
-      <div id="social-burst-links" className="grid grid-cols-3 gap-2 pt-1.5 sm:grid-cols-5">
+      <div id="social-burst-links" className="grid grid-cols-3 gap-2.5 pt-1 sm:grid-cols-5">
         <AnimatePresence>
           {open &&
             socials.map(({ label, href, icon: Icon, color }, index) => (
@@ -169,37 +280,56 @@ export default function SocialBurst({ open, onToggle }) {
                 title={label}
                 target={href.startsWith("https:") ? "_blank" : undefined}
                 rel={href.startsWith("https:") ? "noopener noreferrer" : undefined}
-                initial={{ opacity: 0, x: launchX(index), y: launchY(index), scale: 0.3, rotate: -18 }}
+                custom={index}
+                initial={{
+                  opacity: 0,
+                  x: launchX(index),
+                  y: launchY(index),
+                  scale: 0.3,
+                  rotate: -16,
+                }}
                 animate={{
-                  opacity: [0, 1, 1, 1],
-                  x: [launchX(index), 5, -1, 0],
-                  y: [launchY(index), -10, 1, 0],
-                  scale: [0.3, 1.06, 0.99, 1],
-                  rotate: [-18, 5, -1, 0],
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  rotate: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 20,
+                    mass: 0.7,
+                    delay: WIND_UP + index * SHOT_INTERVAL,
+                  },
                 }}
                 exit={{
                   opacity: 0,
                   x: launchX(index),
                   y: launchY(index),
                   scale: 0.3,
-                  rotate: -12,
-                  transition: { duration: 0.18, delay: (socials.length - 1 - index) * 0.035, ease: "easeIn" },
+                  rotate: -10,
+                  transition: {
+                    duration: 0.18,
+                    delay: (socials.length - 1 - index) * 0.035,
+                    ease: "easeIn",
+                  },
                 }}
-                transition={{
-                  duration: 0.38,
-                  delay: WIND_UP + index * SHOT_INTERVAL,
-                  times: [0, 0.6, 0.82, 1],
-                  ease: "easeOut",
+                whileHover={{
+                  y: -4,
+                  scale: 1.08,
+                  transition: { type: "spring", stiffness: 450, damping: 18 },
                 }}
-                whileHover={{ y: -4, scale: 1.08, transition: { duration: 0.16, delay: 0 } }}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{
+                  scale: 0.92,
+                  transition: { duration: 0.1 },
+                }}
                 onClick={() => {
                   try {
                     playPopSound(660, 0.12);
                   } catch {}
                 }}
                 style={{ color }}
-                className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-black/[0.06] bg-white shadow-[0_4px_14px_rgba(0,0,0,0.07)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+                className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/[0.08] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden"
               >
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
               </motion.a>
