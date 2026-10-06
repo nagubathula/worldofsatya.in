@@ -2,10 +2,14 @@
 
 import { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { playPopSound } from "./SoundEffects";
 
 export default function ChibiAvatar({ className = "" }) {
   const containerRef = useRef(null);
   const [isAstonished, setIsAstonished] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+  const [isBlinking, setIsBlinking] = useState(false);
 
   // Eye movement physics (silky spring with responsive tracking)
   const rawEyeX = useMotionValue(0);
@@ -14,6 +18,23 @@ export default function ChibiAvatar({ className = "" }) {
   const eyeSpringConfig = { damping: 20, stiffness: 240, mass: 0.4 };
   const eyeX = useSpring(rawEyeX, eyeSpringConfig);
   const eyeY = useSpring(rawEyeY, eyeSpringConfig);
+
+  // Natural spontaneous blinking interval
+  useEffect(() => {
+    let blinkTimeout;
+    const scheduleNextBlink = () => {
+      const delay = Math.random() * 3200 + 2200; // blink every 2.2 to 5.4 seconds
+      blinkTimeout = setTimeout(() => {
+        setIsBlinking(true);
+        setTimeout(() => {
+          setIsBlinking(false);
+          scheduleNextBlink();
+        }, 160);
+      }, delay);
+    };
+    scheduleNextBlink();
+    return () => clearTimeout(blinkTimeout);
+  }, []);
 
   useEffect(() => {
     const handlePointerMove = (e) => {
@@ -28,12 +49,13 @@ export default function ChibiAvatar({ className = "" }) {
       const dy = e.clientY - headAnchorY;
       const dist = Math.hypot(dx, dy);
 
-      // Astonished mouth trigger: when cursor is near the chibi (within 220px)
-      setIsAstonished(dist < 220);
+      // Astonished / attentive trigger: when cursor is close to the chibi (within 240px)
+      setIsAstonished(dist < 240);
+      setIsHovered(dist < 160);
 
       // Eyeball deflection inside eye socket
-      const maxEyeX = 12.0;
-      const maxEyeY = 8.0;
+      const maxEyeX = 14.0;
+      const maxEyeY = 9.0;
       const influence = Math.min(dist / 280, 1);
       const angle = Math.atan2(dy, dx);
 
@@ -45,6 +67,7 @@ export default function ChibiAvatar({ className = "" }) {
       rawEyeX.set(0);
       rawEyeY.set(0);
       setIsAstonished(false);
+      setIsHovered(false);
     };
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
@@ -56,15 +79,42 @@ export default function ChibiAvatar({ className = "" }) {
     };
   }, [rawEyeX, rawEyeY]);
 
+  const handleTap = () => {
+    try {
+      playPopSound(620, 0.08);
+    } catch {}
+    setIsPressed(true);
+    setTimeout(() => setIsPressed(false), 380);
+  };
+
   return (
-    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center select-none pointer-events-none">
-      <svg
+    <div
+      ref={containerRef}
+      onClick={handleTap}
+      className="relative w-full h-full flex items-center justify-center select-none cursor-pointer"
+    >
+      <motion.svg
         className={className}
         viewBox="0 0 483 523"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         role="img"
         aria-label="Interactive chibi avatar of Satya"
+        // Cute breathing bob & fluid squash-and-stretch on click
+        animate={
+          isPressed
+            ? { scaleX: 1.1, scaleY: 0.9, y: 6, rotate: 2 }
+            : isHovered
+            ? { scale: 1.04, y: -4, rotate: -1 }
+            : { scale: 1, y: [0, -3, 0], rotate: 0 }
+        }
+        transition={
+          isPressed
+            ? { type: "spring", stiffness: 450, damping: 15 }
+            : isHovered
+            ? { type: "spring", stiffness: 350, damping: 18 }
+            : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+        }
       >
         {/* Hair and Head Silhouette */}
         <path d="M253.409 0.0508972C252.629 -0.129086 251.17 0.211473 250.78 0.401483C250.21 0.681481 249.98 2.03082 250.57 2.97082L258.869 16.2911C228.689 5.71117 197.889 6.01129 167.03 9.91125C163.53 10.3612 160.31 11.2915 157.19 13.0714C160.68 17.8011 165.479 19.4715 170.339 24.4913C147.649 26.4413 125.899 31.6416 104.449 40.1915C92.1594 45.1015 80.2293 49.4114 68.5393 57.0714C73.1292 62.6511 79.529 63.8313 85.9787 67.0011C66.5689 76.991 48.3488 88.2813 32.4289 103.081C25.4993 109.521 37.4097 112.012 49.1096 116.901C37.8397 125.741 13.0896 154.541 14.8391 159.841C15.8091 162.761 23.4291 161.891 30.759 161.471C24.829 171.441 16.4388 184.171 17.0188 194.241C22.6188 194.711 27.119 191.991 31.719 189.051C26.889 205.061 21.6195 230.781 32.2893 221.692C34.1994 252.781 45.569 285.301 54.1789 316.671C36.479 308.931 16.7887 315.941 7.76878 332.921C-2.26113 351.811 -2.52027 375.001 6.64964 394.351C13.1196 407.991 23.2896 418.091 31.1496 432.111C38.9197 445.961 54.9799 451.071 70.4397 444.361C88.1348 493.5 148.635 520.5 222.135 522C295.635 523.5 345.499 486.941 395.309 427.491C395.309 427.491 434.719 431.341 447.839 415.291C457.149 403.901 465.759 393.071 472.989 380.291C487.259 354.721 486.519 322.952 468.219 300.232C456.419 285.582 438.029 281.021 420.299 288.971C424.939 260.631 429.269 233.191 431.739 204.891C432.509 196.021 432.39 188.211 430.48 179.111C433.649 180.221 435.67 182.011 438.949 182.351C445.159 182.98 437.869 163.341 429.869 153.151L444.19 153.291C454.169 153.39 434.589 128.791 422.339 120.721L441.059 115.161C427.699 98.8013 409.929 88.4708 390.089 83.9708C397.479 78.0108 404.97 74.401 412.61 70.2111C401.12 63.6311 380.939 67.1316 368.159 72.9816C369.989 59.9716 370.789 42.0711 362.679 32.0011L352.86 60.9015C346.15 42.1215 336.389 24.6812 319.229 12.1612C316.599 19.5012 321.699 28.5914 321.389 37.4913C302.269 19.2914 279.259 6.10091 253.409 0.0508972Z" fill="black"/>
@@ -85,14 +135,16 @@ export default function ChibiAvatar({ className = "" }) {
         {/* Nose Feature */}
         <path d="M189.106 359.149C184.806 367.289 193.126 373.109 197.426 381.949C190.346 378.629 185.226 373.499 180.706 367.819C177.836 364.209 178.646 359.939 180.986 356.309C187.876 345.639 193.586 334.839 196.766 322.809C201.396 333.049 194.477 348.949 189.097 359.149H189.106Z" fill="#060403"/>
 
-        {/* Reactive Smile / Mouth */}
+        {/* Clean Reactive Smirk / Mouth */}
         <motion.g
           animate={
-            isAstonished
-              ? { scaleY: 1.25, scaleX: 0.95, y: -2 }
+            isPressed
+              ? { scaleY: 1.15, scaleX: 1.05, y: -1 }
+              : isHovered
+              ? { scaleY: 1.08, scaleX: 1.02, y: -0.5 }
               : { scaleY: 1, scaleX: 1, y: 0 }
           }
-          transition={{ type: "spring", stiffness: 350, damping: 20 }}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
           style={{ originX: "220px", originY: "420px" }}
         >
           <path d="M179.277 431.519C172.057 433.349 164.056 426.129 167.146 423.909C168.816 422.709 172.077 429.869 179.247 428.469C205.557 423.349 231.417 419.199 257.917 415.459C266.717 414.219 276.287 411.359 279.537 404.189C281.667 405.039 282.457 406.879 282.087 408.589C280.697 414.979 268.417 417.229 258.827 418.279C231.847 421.249 205.607 424.839 179.277 431.529V431.519Z" fill="#181616"/>
@@ -112,8 +164,16 @@ export default function ChibiAvatar({ className = "" }) {
         <path d="M432.477 368.299C422.887 386.359 402.326 393.379 398.436 387.799C397.436 386.359 397.277 384.359 398.267 382.639L405.917 369.329C413.497 356.129 396.137 351.779 401.167 342.279C407.577 330.169 416.876 318.819 429.066 312.649C435.306 309.489 442.987 309.179 447.357 314.449C431.657 309.649 420.576 320.939 410.566 333.099C416.396 332.109 420.666 332.649 424.936 335.609C435.546 342.969 438.537 356.899 432.477 368.309V368.299Z" fill="#0A0A0A"/>
         <path d="M400.427 386.829C404.907 373.629 418.007 362.389 405.217 351.009C402.207 348.329 402.537 345.709 404.337 342.379C407.307 336.869 412.997 332.989 419.417 335.759C432.247 341.309 436.267 356.419 429.297 368.329C423.137 378.849 413.047 386.669 400.427 386.819V386.829Z" fill="#FCFCFC"/>
 
-        {/* Interactive Left Eye Group */}
-        <motion.g style={{ x: eyeX, y: eyeY }}>
+        {/* Interactive Left Eye Group (Spring Eye Tracking + Blink + Squint) */}
+        <motion.g
+          style={{ x: eyeX, y: eyeY }}
+          animate={{
+            scaleY: isPressed ? 0.2 : isBlinking ? 0.08 : 1,
+            originX: "135px",
+            originY: "331px",
+          }}
+          transition={{ duration: 0.09 }}
+        >
           {/* Eyeball Socket / Iris */}
           <path d="M156.135 331.5C156.135 346.688 146.509 359 134.635 359C122.761 359 113.135 346.688 113.135 331.5C113.135 316.312 122.761 304 134.635 304C146.509 304 156.135 316.312 156.135 331.5Z" fill="black"/>
           {/* Sparkle 1 */}
@@ -122,8 +182,16 @@ export default function ChibiAvatar({ className = "" }) {
           <path d="M125.135 352.5C125.135 353.881 124.015 355 122.635 355C121.254 355 120.135 353.881 120.135 352.5C120.135 351.119 121.254 350 122.635 350C124.015 350 125.135 351.119 125.135 352.5Z" fill="white"/>
         </motion.g>
 
-        {/* Interactive Right Eye Group */}
-        <motion.g style={{ x: eyeX, y: eyeY }}>
+        {/* Interactive Right Eye Group (Spring Eye Tracking + Blink + Squint) */}
+        <motion.g
+          style={{ x: eyeX, y: eyeY }}
+          animate={{
+            scaleY: isPressed ? 0.2 : isBlinking ? 0.08 : 1,
+            originX: "304px",
+            originY: "316px",
+          }}
+          transition={{ duration: 0.09 }}
+        >
           {/* Eyeball Socket / Iris */}
           <path d="M325.135 316.5C325.135 331.688 315.509 344 303.635 344C291.761 344 282.135 331.688 282.135 316.5C282.135 301.312 291.761 289 303.635 289C315.509 289 325.135 301.312 325.135 316.5Z" fill="black"/>
           {/* Sparkle 1 */}
@@ -131,7 +199,7 @@ export default function ChibiAvatar({ className = "" }) {
           {/* Sparkle 2 */}
           <path d="M319.135 334.5C319.135 335.881 318.015 337 316.635 337C315.254 337 314.135 335.881 314.135 334.5C314.135 333.119 315.254 332 316.635 332C318.015 332 319.135 333.119 319.135 334.5Z" fill="white"/>
         </motion.g>
-      </svg>
+      </motion.svg>
     </div>
   );
 }

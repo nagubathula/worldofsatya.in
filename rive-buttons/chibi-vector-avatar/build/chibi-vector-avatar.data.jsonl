@@ -1,0 +1,4 @@
+{"schema": 1, "kind": "header", "artboard": "Chibi Vector Button", "stateMachine": "State Machine 1", "intervalFrames": 1}
+{"frame": 0, "time": 0, "full": true, "values": [{"path": "isHovered", "value": false}, {"path": "isPressed", "value": false}, {"path": "cursor", "value": "arrow"}, {"path": "isFaceHovered", "value": false}]}
+{"frame": 2, "time": 0.0333333351, "values": [{"path": "isHovered", "value": true}, {"path": "cursor", "value": "pointer"}, {"path": "isFaceHovered", "value": true}]}
+{"frame": 22, "time": 0.366666764, "full": true, "values": [{"path": "isHovered", "value": true}, {"path": "isPressed", "value": false}, {"path": "cursor", "value": "pointer"}, {"path": "isFaceHovered", "value": true}]}

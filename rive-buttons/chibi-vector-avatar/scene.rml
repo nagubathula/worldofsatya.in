@@ -1,0 +1,430 @@
+<Rive version="1" kind="fragment">
+    <Artboard defaultStateMachineId="0:7" viewModelId="0:90" viewModelInstanceId="0:91" clip="true" width="160" height="160" styleId="0:5" name="Chibi Vector Button" id="0:2">
+        <LayoutComponentStyle name="Artboard Style" id="0:5"/>
+
+        <Fill name="Background" id="0:81">
+            <SolidColor colorValue="00000000" name="Color" id="0:82"/>
+        </Fill>
+
+        <!-- Invisible Mouse Target for Joystick to track -->
+        <Node x="80" y="80" name="MouseTarget" id="0:777"/>
+
+        <!-- Main Button Assembly -->
+        <Node x="80" y="80" name="ButtonRoot" id="0:20">
+            <!-- First sibling draws on top in Rive RML -->
+
+            <!-- Face Hit Area (detects if mouse is over face) -->
+            <Shape x="0" y="8" name="FaceHitArea" id="0:500">
+                <Ellipse width="56" height="52" originX="0.5" originY="0.5" name="FacePath" id="0:501"/>
+                <Fill name="FaceHitFill" id="0:502">
+                    <SolidColor colorValue="00000000" name="FaceHitColor" id="0:503"/>
+                </Fill>
+            </Shape>
+
+            <!-- Head Assembly (Rotates & Parallaxes toward cursor) -->
+            <Node x="0" y="0" name="HeadAssembly" id="0:710">
+                <!-- Open Mouth (Monochrome Manga Grin) -->
+                <Node x="0" y="0" name="MouthOpenGroup" id="0:712">
+                    <Image opacity="0" x="0" y="-2" scaleX="0.21" scaleY="0.21" originX="0.5" originY="0.5" assetId="0:63" name="MouthOpen" id="0:29"/>
+                </Node>
+
+                <!-- Closed Mouth / Smirk (Default resting mouth) -->
+                <Node x="0" y="0" name="MouthClosedGroup" id="0:713">
+                    <Image opacity="1" x="0" y="-2" scaleX="0.21" scaleY="0.21" originX="0.5" originY="0.5" assetId="0:62" name="MouthClosed" id="0:28"/>
+                </Node>
+
+                <!-- Eyes Group (moves with mouse gaze with socket parallax) -->
+                <Node x="0" y="-2" name="EyesGroup" id="0:27">
+                    <Image x="0" y="0" scaleX="0.21" scaleY="0.21" originX="0.5" originY="0.5" assetId="0:61" name="EyesImage" id="0:26"/>
+                </Node>
+
+                <!-- Base Avatar (Hair, Face, Brows, Nose, Ears) -->
+                <Image x="0" y="-2" scaleX="0.21" scaleY="0.21" originX="0.5" originY="0.5" assetId="0:60" name="AvatarBase" id="0:25"/>
+            </Node>
+
+            <!-- Circular Card Badge (back plate) -->
+            <Shape name="CardBadge" id="0:21">
+                <Ellipse width="130" height="130" originX="0.5" originY="0.5" name="CardPath" id="0:165"/>
+                <Fill name="CardFill" id="0:22">
+                    <SolidColor colorValue="FFFFFFFF" name="CardColor" id="0:23"/>
+                </Fill>
+                <Stroke thickness="2" name="CardStroke" id="0:24">
+                    <SolidColor colorValue="FFD2D2D7" name="StrokeColor" id="0:250"/>
+                </Stroke>
+            </Shape>
+        </Node>
+
+        <!-- 2.5D Head & Eye Tracking Joystick -->
+        <Joystick posX="80" posY="80" width="160" height="160" originX="0.5" originY="0.5" handleSourceId="0:777" xId="0:301" yId="0:302" name="HeadFollowJoystick" id="0:300"/>
+
+        <!-- State Machine -->
+        <StateMachine name="State Machine 1" id="0:7">
+            <!-- Pointer Move Listener (updates MouseTarget position for Joystick) -->
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="move" name="OnPointerMove" id="0:150">
+                <ListenerAlignTarget targetId="0:777" id="0:3062"/>
+            </StateMachineListenerSingle>
+
+            <!-- Face Enter/Exit Listeners (triggers mouth opening) -->
+            <StateMachineListenerSingle targetId="0:500" listenerTypeValue="enter" name="OnFaceEnter" id="0:530">
+                <ListenerViewModelChange id="0:532">
+                    <BindablePropertyBoolean propertyValue="true" id="0:533">
+                        <DataBindContext sourcePathIds="0:90-0:520" propertyKey="634" direction="true" id="0:534"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:500" listenerTypeValue="exit" name="OnFaceExit" id="0:531">
+                <ListenerViewModelChange id="0:535">
+                    <BindablePropertyBoolean propertyValue="false" id="0:536">
+                        <DataBindContext sourcePathIds="0:90-0:520" propertyKey="634" direction="true" id="0:537"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <!-- Badge Hover / Press Pointer Listeners -->
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="enter" name="OnEnter" id="0:75">
+                <ListenerViewModelChange id="0:176">
+                    <BindablePropertyBoolean propertyValue="true" id="0:177">
+                        <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" direction="true" id="0:178"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+                <ListenerViewModelChange id="0:179">
+                    <BindablePropertyString propertyValue="pointer" id="0:180">
+                        <DataBindContext sourcePathIds="0:90-0:96" propertyKey="635" direction="true" id="0:181"/>
+                    </BindablePropertyString>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="exit" name="OnExit" id="0:76">
+                <ListenerViewModelChange id="0:182">
+                    <BindablePropertyBoolean propertyValue="false" id="0:183">
+                        <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" direction="true" id="0:184"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+                <ListenerViewModelChange id="0:185">
+                    <BindablePropertyBoolean propertyValue="false" id="0:186">
+                        <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" direction="true" id="0:187"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+                <ListenerViewModelChange id="0:188">
+                    <BindablePropertyString propertyValue="arrow" id="0:189">
+                        <DataBindContext sourcePathIds="0:90-0:96" propertyKey="635" direction="true" id="0:190"/>
+                    </BindablePropertyString>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="down" name="OnDown" id="0:77">
+                <ListenerViewModelChange id="0:191">
+                    <BindablePropertyBoolean propertyValue="true" id="0:192">
+                        <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" direction="true" id="0:193"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="up" name="OnUp" id="0:78">
+                <ListenerViewModelChange id="0:194">
+                    <BindablePropertyBoolean propertyValue="false" id="0:195">
+                        <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" direction="true" id="0:196"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <!-- Layer 1: Button Hover & Press -->
+            <StateMachineLayer name="ButtonLayer" id="0:85">
+                <AnyState x="200" y="-120" id="0:197"/>
+                <ExitState x="400" y="-120" id="0:198"/>
+                <EntryState id="0:199">
+                    <StateTransition stateToId="0:86" id="0:200"/>
+                </EntryState>
+
+                <!-- Rest -->
+                <AnimationState x="0" y="60" animationId="0:70" id="0:86">
+                    <StateTransition stateToId="0:87" duration="140" id="0:201">
+                        <TransitionViewModelCondition id="0:202">
+                            <TransitionPropertyViewModelComparator id="0:203">
+                                <BindablePropertyBoolean id="0:204">
+                                    <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" id="0:205"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true" id="0:206"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+
+                <!-- Hover -->
+                <AnimationState x="200" y="60" animationId="0:71" id="0:87">
+                    <StateTransition stateToId="0:86" duration="160" id="0:207">
+                        <TransitionViewModelCondition id="0:208">
+                            <TransitionPropertyViewModelComparator id="0:209">
+                                <BindablePropertyBoolean id="0:210">
+                                    <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" id="0:211"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false" id="0:212"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                    <StateTransition stateToId="0:88" duration="60" id="0:213">
+                        <TransitionViewModelCondition id="0:214">
+                            <TransitionPropertyViewModelComparator id="0:215">
+                                <BindablePropertyBoolean id="0:216">
+                                    <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" id="0:217"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true" id="0:218"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+
+                <!-- Down (Tactile Squash) -->
+                <AnimationState x="400" y="60" animationId="0:72" id="0:88">
+                    <StateTransition stateToId="0:87" duration="120" id="0:219">
+                        <TransitionViewModelCondition id="0:220">
+                            <TransitionPropertyViewModelComparator id="0:221">
+                                <BindablePropertyBoolean id="0:222">
+                                    <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" id="0:223"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false" id="0:224"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+
+            <!-- Layer 2: Mouth Open / Closed Trigger -->
+            <StateMachineLayer name="MouthLayer" id="0:510">
+                <AnyState x="200" y="-120" id="0:511"/>
+                <ExitState x="400" y="-120" id="0:512"/>
+                <EntryState id="0:513">
+                    <StateTransition stateToId="0:514" id="0:515"/>
+                </EntryState>
+
+                <!-- Mouth Closed (Rest) -->
+                <AnimationState x="0" y="60" animationId="0:540" id="0:514">
+                    <StateTransition stateToId="0:516" duration="100" id="0:517">
+                        <TransitionViewModelCondition id="0:518">
+                            <TransitionPropertyViewModelComparator id="0:519">
+                                <BindablePropertyBoolean id="0:521">
+                                    <DataBindContext sourcePathIds="0:90-0:520" propertyKey="634" id="0:522"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true" id="0:523"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+
+                <!-- Mouth Open (When mouse is over face) -->
+                <AnimationState x="220" y="60" animationId="0:541" id="0:516">
+                    <StateTransition stateToId="0:514" duration="120" id="0:524">
+                        <TransitionViewModelCondition id="0:525">
+                            <TransitionPropertyViewModelComparator id="0:526">
+                                <BindablePropertyBoolean id="0:527">
+                                    <DataBindContext sourcePathIds="0:90-0:520" propertyKey="634" id="0:528"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false" id="0:529"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+
+            <!-- Layer 3: Natural Idle Float / Breathing -->
+            <StateMachineLayer name="IdleBreathingLayer" id="0:600">
+                <AnyState x="200" y="-120" id="0:601"/>
+                <ExitState x="400" y="-120" id="0:602"/>
+                <EntryState id="0:603">
+                    <StateTransition stateToId="0:604" id="0:605"/>
+                </EntryState>
+                <AnimationState x="200" y="60" animationId="0:610" id="0:604"/>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <!-- Animations: Button States -->
+        <LinearAnimation duration="1" name="Rest" id="0:70">
+            <KeyedObject objectId="0:20" id="0:225">
+                <KeyedProperty propertyKey="16" id="0:226">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear" id="0:227"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:228">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear" id="0:229"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="14" id="0:230">
+                    <KeyFrameDouble value="80" frame="0" interpolationType="linear" id="0:231"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Hover" id="0:71">
+            <KeyedObject objectId="0:20" id="0:234">
+                <KeyedProperty propertyKey="16" id="0:235">
+                    <KeyFrameDouble value="1.05" frame="0" interpolationType="linear" id="0:236"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:237">
+                    <KeyFrameDouble value="1.05" frame="0" interpolationType="linear" id="0:238"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="14" id="0:239">
+                    <KeyFrameDouble value="77" frame="0" interpolationType="linear" id="0:240"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Down" id="0:72">
+            <KeyedObject objectId="0:20" id="0:243">
+                <KeyedProperty propertyKey="16" id="0:244">
+                    <KeyFrameDouble value="1.04" frame="0" interpolationType="linear" id="0:245"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:246">
+                    <KeyFrameDouble value="0.94" frame="0" interpolationType="linear" id="0:247"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="14" id="0:248">
+                    <KeyFrameDouble value="82" frame="0" interpolationType="linear" id="0:249"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <!-- Animations: Mouth States -->
+        <LinearAnimation duration="1" name="MouthClosedAnim" id="0:540">
+            <KeyedObject objectId="0:28" id="0:542">
+                <KeyedProperty propertyKey="18" id="0:543">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear" id="0:544"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:29" id="0:545">
+                <KeyedProperty propertyKey="18" id="0:546">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear" id="0:547"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="MouthOpenAnim" id="0:541">
+            <KeyedObject objectId="0:28" id="0:548">
+                <KeyedProperty propertyKey="18" id="0:549">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear" id="0:550"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:29" id="0:551">
+                <KeyedProperty propertyKey="18" id="0:552">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear" id="0:553"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <!-- Natural Idle Breathing Loop -->
+        <LinearAnimation loopValue="pingPong" duration="90" fps="60" name="IdleBreathing" id="0:610">
+            <KeyedObject objectId="0:710" id="0:611">
+                <KeyedProperty propertyKey="16" id="0:612">
+                    <KeyFrameDouble value="1.0" frame="0" interpolationType="linear" id="0:613"/>
+                    <KeyFrameDouble value="1.012" frame="90" interpolationType="linear" id="0:614"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:615">
+                    <KeyFrameDouble value="1.0" frame="0" interpolationType="linear" id="0:616"/>
+                    <KeyFrameDouble value="1.018" frame="90" interpolationType="linear" id="0:617"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <!-- Animations: 2.5D Head & Eye Tracking Timelines (Mapped across -1 to 1 by Joystick) -->
+        <LinearAnimation duration="60" name="LookX" id="0:301">
+            <!-- 1. Head Assembly Turn / Tilt -->
+            <KeyedObject objectId="0:710" id="0:320">
+                <KeyedProperty propertyKey="13" id="0:321">
+                    <KeyFrameDouble value="-3.5" frame="0" interpolationType="linear" id="0:322"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:323"/>
+                    <KeyFrameDouble value="3.5" frame="60" interpolationType="linear" id="0:324"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="15" id="0:325">
+                    <KeyFrameDouble value="-0.07" frame="0" interpolationType="linear" id="0:326"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:327"/>
+                    <KeyFrameDouble value="0.07" frame="60" interpolationType="linear" id="0:328"/>
+                </KeyedProperty>
+            </KeyedObject>
+
+            <!-- 2. Eyes Socket Parallax Tracking -->
+            <KeyedObject objectId="0:27" id="0:303">
+                <KeyedProperty propertyKey="13" id="0:304">
+                    <KeyFrameDouble value="-6.5" frame="0" interpolationType="linear" id="0:305"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:306"/>
+                    <KeyFrameDouble value="6.5" frame="60" interpolationType="linear" id="0:3061"/>
+                </KeyedProperty>
+            </KeyedObject>
+
+            <!-- 3. Mouth Feature Parallax -->
+            <KeyedObject objectId="0:712" id="0:330">
+                <KeyedProperty propertyKey="13" id="0:331">
+                    <KeyFrameDouble value="-1.5" frame="0" interpolationType="linear" id="0:332"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:333"/>
+                    <KeyFrameDouble value="1.5" frame="60" interpolationType="linear" id="0:334"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:713" id="0:335">
+                <KeyedProperty propertyKey="13" id="0:336">
+                    <KeyFrameDouble value="-1.5" frame="0" interpolationType="linear" id="0:337"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:338"/>
+                    <KeyFrameDouble value="1.5" frame="60" interpolationType="linear" id="0:339"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="60" name="LookY" id="0:302">
+            <!-- 1. Head Assembly Pitch / Squash -->
+            <KeyedObject objectId="0:710" id="0:340">
+                <KeyedProperty propertyKey="14" id="0:341">
+                    <KeyFrameDouble value="-3.5" frame="0" interpolationType="linear" id="0:342"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:343"/>
+                    <KeyFrameDouble value="3.0" frame="60" interpolationType="linear" id="0:344"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:345">
+                    <KeyFrameDouble value="1.02" frame="0" interpolationType="linear" id="0:346"/>
+                    <KeyFrameDouble value="1.0" frame="30" interpolationType="linear" id="0:347"/>
+                    <KeyFrameDouble value="0.98" frame="60" interpolationType="linear" id="0:348"/>
+                </KeyedProperty>
+            </KeyedObject>
+
+            <!-- 2. Eyes Socket Parallax Tracking -->
+            <KeyedObject objectId="0:27" id="0:307">
+                <KeyedProperty propertyKey="14" id="0:308">
+                    <!-- Frame 0 is top (-1), Frame 60 is bottom (+1) -->
+                    <KeyFrameDouble value="-5.5" frame="0" interpolationType="linear" id="0:309"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:311"/>
+                    <KeyFrameDouble value="2.5" frame="60" interpolationType="linear" id="0:310"/>
+                </KeyedProperty>
+            </KeyedObject>
+
+            <!-- 3. Mouth Feature Parallax -->
+            <KeyedObject objectId="0:712" id="0:350">
+                <KeyedProperty propertyKey="14" id="0:351">
+                    <KeyFrameDouble value="-1.5" frame="0" interpolationType="linear" id="0:352"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:353"/>
+                    <KeyFrameDouble value="1.5" frame="60" interpolationType="linear" id="0:354"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:713" id="0:355">
+                <KeyedProperty propertyKey="14" id="0:356">
+                    <KeyFrameDouble value="-1.5" frame="0" interpolationType="linear" id="0:357"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="linear" id="0:358"/>
+                    <KeyFrameDouble value="1.5" frame="60" interpolationType="linear" id="0:359"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <!-- Assets -->
+    <ImageAsset file="base.png" name="base" id="0:60"/>
+    <ImageAsset file="eyes.png" name="eyes" id="0:61"/>
+    <ImageAsset file="mouth-closed.png" name="mouth-closed" id="0:62"/>
+    <ImageAsset file="mouth-open.png" name="mouth-open" id="0:63"/>
+
+    <!-- View Models -->
+    <ViewModel defaultInstanceId="0:91" name="ButtonViewModel" id="0:90">
+        <ViewModelPropertyBoolean name="isHovered" id="0:94"/>
+        <ViewModelPropertyBoolean name="isPressed" id="0:95"/>
+        <ViewModelPropertyString name="cursor" id="0:96"/>
+        <ViewModelPropertyBoolean name="isFaceHovered" id="0:520"/>
+
+        <ViewModelInstance name="ButtonInstance" id="0:91">
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:94" id="0:3063"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:95" id="0:3064"/>
+            <ViewModelInstanceString propertyValue="arrow" viewModelPropertyId="0:96" id="0:3065"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:520" id="0:3066"/>
+        </ViewModelInstance>
+    </ViewModel>
+</Rive>
