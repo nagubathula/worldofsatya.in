@@ -109,8 +109,11 @@ export default function HomeTilesLayout() {
       <section className="relative w-full max-w-7xl mx-auto min-h-[100dvh] flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 lg:gap-12 px-6 sm:px-10 lg:px-12 py-8 lg:py-0 select-none">
         <div className="w-full lg:w-1/2 flex flex-col justify-center px-0 shrink-0 z-20">
           <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-semibold tracking-tight leading-tight text-[#111111]">Satya Sai Nagubathula</h1>
-          <p className="mt-2 text-xl sm:text-2xl lg:text-3xl tracking-tight text-[#8f8f8f]">Design Technologist</p>
-          <p className="mt-3 text-base sm:text-lg text-[#6e6e73] tracking-tight">
+          <p className="mt-2 text-xl sm:text-2xl lg:text-3xl tracking-tight text-[#8f8f8f]">AI + Design Engineer</p>
+          <p className="mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-[#515154]">
+            I turn ideas into tools that feel clear, useful, and considered — connecting product design, systems engineering, and generative AI.
+          </p>
+          <p className="mt-3 text-sm sm:text-base text-[#6e6e73] tracking-tight">
             Currently working on{" "}
             <Link
               href="/works/o0"

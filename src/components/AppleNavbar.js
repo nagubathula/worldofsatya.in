@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -91,21 +91,6 @@ export default function AppleNavbar() {
           
           {/* Left Side: Brand & Context */}
           <div data-nav-cluster="brand" className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {!isHome && (
-              <>
-                <Link
-                  href="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] bg-[#f5f5f7] hover:bg-[#e8e8ed] transition-all active:scale-95"
-                  title="Return to Home"
-                >
-                  <ArrowLeft size={13} aria-hidden="true" />
-                  <span className="hidden xs:inline">Home</span>
-                </Link>
-                <div className="w-[1px] h-3.5 bg-black/[0.08]" aria-hidden="true" />
-              </>
-            )}
-
             {/* Modern Wordmark */}
             <Link
               href="/"
@@ -116,7 +101,7 @@ export default function AppleNavbar() {
             </Link>
 
             <span className="hidden md:inline font-sans text-[11px] font-medium text-[#86868b] tracking-wider ml-1 pl-3 border-l border-black/[0.08] uppercase">
-              Design Technologist
+              AI + Design Engineer
             </span>
           </div>
 
@@ -271,7 +256,7 @@ export default function AppleNavbar() {
                 </div>
 
                 <div className="text-[11px] font-sans text-neutral-400 text-center tracking-wider uppercase">
-                  Design Technologist &amp; AI Engineer
+                  AI + Design Engineer
                 </div>
               </div>
             </div>

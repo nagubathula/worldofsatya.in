@@ -1,80 +1,288 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Code2, Compass, Layers3, Sparkles } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Code2, Compass, Layers3, Sparkles } from "lucide-react";
 
 const principles = [
-  { icon: Compass, title: "Start with the person.", description: "Understand the task, remove the friction, and make the next step feel obvious." },
-  { icon: Layers3, title: "Make it real.", description: "Design, build, then refine. The details that matter reveal themselves in the working product." },
-  { icon: Code2, title: "Leave it open.", description: "Readable code, open formats, and tools people can make their own. Share what you learn." },
+  {
+    number: "01",
+    icon: Compass,
+    title: "Start with the person.",
+    description: "Understand the task, remove the friction, and make the next step feel obvious and inevitable.",
+  },
+  {
+    number: "02",
+    icon: Layers3,
+    title: "Make it real.",
+    description: "Design, build, then refine. The nuances and details that matter reveal themselves only in the working product.",
+  },
+  {
+    number: "03",
+    icon: Code2,
+    title: "Leave it open.",
+    description: "Readable code, open formats, and tools people can make their own. Always share what you learn with the community.",
+  },
 ];
 
-const card = "min-w-0 overflow-hidden rounded-[28px] border border-black/[0.06]";
-const label = "text-[11px] font-medium uppercase tracking-[0.18em]";
+const independentTools = [
+  {
+    name: "OpenWeave",
+    category: "Open Source · Design Canvas + AI",
+    id: "o0",
+    desc: "Sovereign design editor with Figma binary support & natural AI co-creation.",
+  },
+  {
+    name: "NotBad",
+    category: "Case Study · Distraction-Free Writing",
+    id: "case-studies/notbad-design",
+    desc: "Editorial sanctuary in Flutter where Markdown conceals on rest.",
+  },
+  {
+    name: "Toothpaste",
+    category: "Open Source · Media Workflow Engine",
+    id: "o1",
+    desc: "Specialized utility bridging timeline sequencing and automated media pipelines.",
+  },
+];
 
 export default function AboutMe() {
   return (
-    <section aria-label="About Satya" className="mx-auto w-full max-w-6xl py-8 text-[#1d1d1f] sm:py-12">
-      <div className="mb-6 flex items-center justify-between gap-4 px-1">
-        <p className={`${label} text-[#626267]`}>A little about me</p>
-        <span className="text-xs text-[#626267]">Design · Code · Curiosity</span>
+    <section aria-label="About Satya" className="mx-auto w-full max-w-5xl pt-4 pb-16 text-[#1d1d1f] sm:pt-8 sm:pb-24">
+      {/* Editorial Meta Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] pb-5 text-xs">
+        <div className="flex items-center gap-2 text-[#626267]">
+          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="font-mono uppercase tracking-[0.16em]">Available for select initiatives</span>
+        </div>
+        <span className="font-mono text-[#86868b] tracking-wider">Satya Sai Nagubathula · Design & Code</span>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
-        <div className={`${card} flex flex-col justify-between bg-white p-7 sm:p-10 md:col-span-4 lg:col-span-8`}>
+      {/* Hero Spread: Open Editorial Layout */}
+      <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14 items-start">
+        {/* Left: Typographic Title & Biography */}
+        <div className="lg:col-span-7 flex flex-col justify-between">
           <div>
-            <p className={`${label} mb-7 text-[#626267]`}>Satya Sai Nagubathula / Design technologist</p>
-            <h1 className="text-[2.65rem] font-semibold leading-[1.07] tracking-[-0.05em] sm:text-6xl lg:text-[4.25rem]">A designer&apos;s eye.<br /><span className="text-[#787870]">A builder&apos;s hands.</span></h1>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-[#515154] sm:text-lg">I turn ideas into tools that feel clear, useful, and considered. My work brings together product design, software, and generative AI.</p>
+            <p className="text-[11px] font-mono font-medium uppercase tracking-[0.2em] text-[#86868b] mb-4">
+              Satya Sai Nagubathula / AI + Design Engineer
+            </p>
+            <h1 className="text-4xl font-semibold tracking-[-0.04em] text-[#1d1d1f] sm:text-6xl lg:text-[4.2rem] leading-[1.06]">
+              A designer&apos;s eye.
+              <span
+                className="block italic font-normal text-[#626267] mt-1 sm:mt-2"
+                style={{ fontFamily: "var(--font-editorial)" }}
+              >
+                A builder&apos;s hands.
+              </span>
+            </h1>
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#515154] font-normal sm:text-xl sm:leading-relaxed">
+              I turn ideas into tools that feel clear, useful, and considered. My work brings together product design, systems engineering, and generative AI.
+            </p>
           </div>
-          <Link href="/works" className="mt-8 inline-flex w-fit items-center gap-4 rounded-full bg-[#1d1d1f] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[#414141]">Explore my work <ArrowUpRight size={16} aria-hidden="true" /></Link>
+
+          <div className="mt-10 flex flex-wrap items-center gap-5">
+            <Link
+              href="/works"
+              className="group inline-flex items-center gap-2.5 rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white transition-all hover:bg-[#333336] hover:shadow-md"
+            >
+              Explore my work
+              <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/experience"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#626267] hover:text-[#1d1d1f] transition-colors py-3 px-2 underline decoration-black/20 underline-offset-4"
+            >
+              View experience
+            </Link>
+          </div>
         </div>
 
-        <figure className={`${card} flex flex-col justify-between bg-[#eeeee8] md:col-span-2 lg:col-span-4`}>
-          <div className="p-7 pb-0 sm:p-8 sm:pb-0">
-            <p className={`${label} text-[#62625b]`}>Always curious</p>
-            <p className="mt-4 text-3xl leading-tight tracking-tight" style={{ fontFamily: "var(--font-editorial)" }}>From how it looks<br />to how it works.</p>
+        {/* Right: Natural Portrait Feature */}
+        <div className="lg:col-span-5">
+          <figure className="relative overflow-hidden rounded-2xl bg-[#f5f5f7] border border-black/[0.06] shadow-[0_8px_30px_rgba(0,0,0,0.03)]">
+            <Image
+              src="/images/about/about_main_image.png"
+              alt="Satya Sai Nagubathula with a cat"
+              width={596}
+              height={359}
+              priority
+              sizes="(max-width: 1024px) 90vw, 420px"
+              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-[1.02]"
+            />
+            <figcaption className="border-t border-black/[0.06] bg-white/90 backdrop-blur-sm p-4 sm:p-5">
+              <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.16em] text-[#86868b]">
+                <span>Always curious</span>
+                <span>Companion</span>
+              </div>
+              <p className="mt-1.5 text-base sm:text-lg text-[#1d1d1f]" style={{ fontFamily: "var(--font-editorial)" }}>
+                &ldquo;From how it looks to how it works.&rdquo;
+              </p>
+              <p className="mt-2 text-xs text-[#626267]">
+                Engineer. Designer. Open-source builder.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
+
+      {/* Chapter 01: Practice & Philosophy */}
+      <div className="mt-14 sm:mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+        {/* Left: Current Role at NxtWave */}
+        <div className="lg:col-span-5 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">01 / Current Practice</span>
+              <Sparkles size={14} className="text-[#86868b]" aria-hidden="true" />
+            </div>
+            <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              Creative tools.<br />Practical systems.
+            </h2>
+            <p className="mt-2 font-mono text-xs text-[#626267] uppercase tracking-wider">
+              NxtWave Disruptive Technologies · 2025 — Present
+            </p>
+            <p className="mt-5 text-sm sm:text-base leading-relaxed text-[#515154]">
+              My work spans generative AI production and internal tools that help teams create and deliver content at scale. Orchestrating high-throughput video pipelines, prompt automation, and creative toolchains that slash turnaround times by 90%.
+            </p>
           </div>
-          <Image src="/images/about/about_main_image.png" alt="Satya Sai Nagubathula with a cat" width={596} height={359} priority sizes="(max-width: 768px) 90vw, 380px" className="mt-8 h-auto w-full object-contain" />
-          <figcaption className="border-t border-black/[0.07] px-7 py-4 text-xs text-[#62625b]">Engineer. Designer. Open-source builder.</figcaption>
-        </figure>
 
-        <article className={`${card} bg-[#232722] p-7 text-white sm:p-8 md:col-span-3 lg:col-span-5`}>
-          <div className="flex items-center justify-between"><p className={`${label} text-[#c3ccbd]`}>Currently / NxtWave</p><Sparkles size={18} className="text-[#c3ccbd]" aria-hidden="true" /></div>
-          <h2 className="mt-8 text-3xl font-medium leading-tight tracking-tight">Creative tools.<br />Practical systems.</h2>
-          <p className="mt-5 text-sm leading-7 text-[#d6dcd2]">My work spans generative AI production and internal tools that help teams create and deliver content.</p>
-          <div className="mt-7 flex flex-wrap gap-2">{["Generative AI", "Automation", "Product design"].map(tag => <span key={tag} className="rounded-full border border-white/20 px-3 py-1.5 text-xs text-[#d6dcd2]">{tag}</span>)}</div>
-        </article>
-
-        <article className={`${card} bg-white p-7 sm:p-8 md:col-span-3 lg:col-span-7`}>
-          <p className={`${label} text-[#626267]`}>The common thread</p>
-          <h2 className="mt-8 text-3xl font-semibold tracking-tight">Learning by making.</h2>
-          <div className="mt-5 space-y-4 text-sm leading-7 text-[#515154]">
-            <p>I started with electronics and hardware security, then found my way into interfaces, design systems, and creative tools. The question stayed the same: how can this work better for the person using it?</p>
-            <p>Today, that means connecting the visible details with the systems underneath, from a component in Chaya UI to a quieter writing experience in NotBad.</p>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {["Generative AI", "Automation", "Product Design", "Internal Tools"].map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-black/[0.08] bg-[#f5f5f7] px-3 py-1 text-xs text-[#515154] font-medium"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
-        </article>
+        </div>
 
-        <article className={`${card} bg-[#e9eee5] p-7 sm:p-8 md:col-span-3 lg:col-span-4`}>
-          <p className={`${label} text-[#52604a]`}>Community / Engineerudu</p>
-          <h2 className="mt-8 text-3xl font-semibold leading-tight tracking-tight">Better when<br />we build together.</h2>
-          <p className="mt-5 text-sm leading-7 text-[#495343]">I build Engineerudu, an open-source community in Andhra Pradesh. A place to learn in public, share tools, and help others get started.</p>
-        </article>
-
-        <article className={`${card} bg-[#f2efe9] p-7 sm:p-8 md:col-span-3 lg:col-span-4`}>
-          <p className={`${label} text-[#686052]`}>Outside the day job</p>
-          <h2 className="mt-8 text-3xl font-semibold tracking-tight">Made to be yours.</h2>
-          <p className="mt-5 text-sm leading-7 text-[#5c554b]">Tools that give creators more control over their work.</p>
-          <div className="mt-5 divide-y divide-black/10">
-            {[["OpenWeave", "Design", "o0"], ["NotBad", "Writing", "o5"], ["Toothpaste", "Editing", "o1"]].map(([name, kind, id]) => <Link key={id} href={`/works/${id}`} className="group flex items-center justify-between gap-3 py-3 text-sm"><span className="font-medium group-hover:underline">{name}</span><span className="inline-flex items-center gap-2 text-xs text-[#686052]">{kind}<ArrowUpRight size={14} aria-hidden="true" /></span></Link>)}
+        {/* Right: The Common Thread */}
+        <div className="lg:col-span-7 lg:border-l lg:border-black/[0.08] lg:pl-16">
+          <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">02 / Philosophy</span>
+          <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+            Learning by making.
+          </h2>
+          <div className="mt-6 space-y-5 text-base leading-relaxed text-[#515154]">
+            <p>
+              I started with electronics and hardware security, then found my way into interfaces, design systems, and creative tools. The question stayed constant: <span className="text-[#1d1d1f] font-medium">how can this work better for the person using it?</span>
+            </p>
+            <p>
+              Today, that means connecting visible aesthetic details with the robust architectures underneath — whether tuning a tactile component in Chaya UI or crafting a quieter, distraction-free writing sanctuary in NotBad.
+            </p>
+            <p>
+              I believe great software doesn&apos;t just solve a functional requirement; it respects the user&apos;s attention and gives them confidence to create.
+            </p>
           </div>
-        </article>
+        </div>
+      </div>
 
-        <article className={`${card} bg-white p-7 sm:p-8 md:col-span-6 lg:col-span-4`}>
-          <p className={`${label} text-[#626267]`}>How I work</p>
-          <div className="mt-7 space-y-6">
-            {principles.map(({ icon: Icon, title, description }) => <div key={title} className="flex items-start gap-3"><Icon size={18} className="mt-1 shrink-0 text-[#757e6b]" aria-hidden="true" /><div><h2 className="text-base font-semibold tracking-tight">{title}</h2><p className="mt-1.5 text-sm leading-6 text-[#515154]">{description}</p></div></div>)}
+      {/* Divider */}
+      <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
+
+      {/* Chapter 02: Principles */}
+      <div className="mt-14 sm:mt-20">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">03 / Principles</span>
+            <h2 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              How I approach the craft.
+            </h2>
           </div>
-        </article>
+          <p className="max-w-md text-sm text-[#626267]">
+            Core tenets that guide every prototype, design system, and technical architecture.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+          {principles.map(({ number, icon: Icon, title, description }) => (
+            <div key={title} className="group relative border-t border-black/[0.1] pt-6 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-sm text-[#86868b]">{number}</span>
+                  <Icon
+                    size={18}
+                    className="text-[#86868b] transition-transform duration-300 group-hover:scale-110 group-hover:text-[#1d1d1f]"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold tracking-tight text-[#1d1d1f]">
+                  {title}
+                </h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-[#515154]">
+                  {description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
+
+      {/* Chapter 03: Community & Independent Software */}
+      <div className="mt-14 sm:mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+        {/* Left: Community */}
+        <div className="lg:col-span-5 flex flex-col justify-between">
+          <div>
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">04 / Community</span>
+            <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              Better when<br />we build together.
+            </h2>
+            <p className="mt-2 font-mono text-xs text-[#626267] uppercase tracking-wider">
+              Engineerudu · Founder & Community Lead
+            </p>
+            <p className="mt-5 text-sm sm:text-base leading-relaxed text-[#515154]">
+              I build Engineerudu, an open-source community in Andhra Pradesh. A dedicated space to learn in public, build real-world tools, and help students and new engineers transition from theory to shipping production software.
+            </p>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-black/[0.06] flex items-center gap-3 text-xs text-[#626267]">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1d1d1f]" />
+            <span>Open-source initiatives & public workshops</span>
+          </div>
+        </div>
+
+        {/* Right: Independent Tools */}
+        <div className="lg:col-span-7 lg:border-l lg:border-black/[0.08] lg:pl-16">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">05 / Independent Software</span>
+            <span className="text-xs text-[#86868b]">Outside the day job</span>
+          </div>
+          <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+            Made to be yours.
+          </h2>
+          <p className="mt-3 text-sm text-[#515154]">
+            Independent utilities designed to give creators autonomy and tactile control over their tools.
+          </p>
+
+          <div className="mt-8 divide-y divide-black/[0.08] border-y border-black/[0.08]">
+            {independentTools.map((tool) => (
+              <Link
+                key={tool.name}
+                href={`/works/${tool.id}`}
+                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-4 transition-colors hover:bg-black/[0.015] px-2 -mx-2 rounded"
+              >
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">
+                      {tool.name}
+                    </span>
+                    <span className="text-xs text-[#86868b]">{tool.category}</span>
+                  </div>
+                  <p className="mt-1 text-xs text-[#515154] max-w-md">{tool.desc}</p>
+                </div>
+                <ArrowUpRight
+                  size={16}
+                  className="text-[#86868b] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#1d1d1f] shrink-0"
+                  aria-hidden="true"
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

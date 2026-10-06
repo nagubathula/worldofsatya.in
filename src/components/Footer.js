@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
         <div suppressHydrationWarning>
           <p className="text-xs sm:text-sm font-sans text-[#86868b] mb-3 sm:mb-4 tracking-wider uppercase font-medium">
-            Open for Design Technologist &amp; AI Engineer roles
+            Open for AI + Design Engineer roles
           </p>
           <motion.a
             href="mailto:nagubathula.satyasai@gmail.com"

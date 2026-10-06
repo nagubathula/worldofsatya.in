@@ -13,20 +13,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { isSoundEnabled } from "@/components/SoundEffects";
 
 // -------------------------------------------------------------
-// Stage Timings (Strict adherence to the 5-phase choreography):
-// 1. opening   (200ms) - Black hole opens at click point (48x48px start size)
-// 2. sucking   (400ms) - Sucks all elements (with visible Genie funnel & spacetime distortion)
-// 3. bloating  (300ms) - Wobbles & pulsates like a bloated bubble under pressure
-// 4. centering (400ms) - Rushes from click point to screen center (50vw, 50vh)
-// 5. releasing (300ms) - New page + navbar erupt from the black hole at center
-// Total: 1600ms
+// Cinematic Stage Timings (Strict adherence to the 5-phase choreography):
+// 1. opening   (180ms) - Black hole opens at click point (48x48px start size)
+// 2. sucking   (420ms) - Sucks all elements with tidal spaghettification & vortex swirl
+// 3. bloating  (240ms) - Wobbles & pulsates like a bloated bubble under pressure
+// 4. centering (300ms) - High-velocity gravitational slingshot to screen center
+// 5. releasing (320ms) - Big Bang detonation: new page & navbar erupt from singularity
+// Total: ~1460ms
 // -------------------------------------------------------------
 const TIMING = {
-  OPENING: 200,
-  SUCKING: 400,
-  BLOATING: 300,
-  CENTERING: 400,
-  RELEASING: 300,
+  OPENING: 180,
+  SUCKING: 420,
+  BLOATING: 240,
+  CENTERING: 300,
+  RELEASING: 320,
 };
 
 const BlackHoleContext = createContext({
@@ -47,7 +47,7 @@ export function triggerBlackHoleNav(href, clickPos) {
 }
 
 // -------------------------------------------------------------
-// Web Audio: Monochromatic Synthesized Gravitational Sounds
+// Web Audio: Deep Cinematic Gravitational Acoustics
 // -------------------------------------------------------------
 function playOpeningSound() {
   if (typeof window === "undefined" || !isSoundEnabled()) return;
@@ -60,17 +60,17 @@ function playOpeningSound() {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(80, now);
-    osc.frequency.exponentialRampToValueAtTime(32, now + 0.18);
+    osc.frequency.setValueAtTime(95, now);
+    osc.frequency.exponentialRampToValueAtTime(28, now + 0.17);
 
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.09, now + 0.04);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.19);
+    gain.gain.linearRampToValueAtTime(0.12, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.2);
+    osc.stop(now + 0.19);
 
     setTimeout(() => {
       try { ctx.close(); } catch {}
@@ -86,22 +86,24 @@ function playGravitationalTremorSound() {
     const ctx = new Ctx();
     const now = ctx.currentTime;
 
+    // Sub-bass gravitational sweep
     const osc = ctx.createOscillator();
     const oscGain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(62, now);
-    osc.frequency.exponentialRampToValueAtTime(22, now + 0.38);
+    osc.frequency.setValueAtTime(58, now);
+    osc.frequency.exponentialRampToValueAtTime(18, now + 0.4);
 
     oscGain.gain.setValueAtTime(0.001, now);
-    oscGain.gain.linearRampToValueAtTime(0.12, now + 0.08);
-    oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.39);
+    oscGain.gain.linearRampToValueAtTime(0.14, now + 0.08);
+    oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.41);
 
     osc.connect(oscGain);
     oscGain.connect(ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.4);
+    osc.stop(now + 0.42);
 
-    const bufferSize = Math.floor(ctx.sampleRate * 0.38);
+    // Filtered noise for vortex accretion friction
+    const bufferSize = Math.floor(ctx.sampleRate * 0.4);
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
@@ -113,24 +115,24 @@ function playGravitationalTremorSound() {
 
     const noiseFilter = ctx.createBiquadFilter();
     noiseFilter.type = "lowpass";
-    noiseFilter.frequency.setValueAtTime(130, now);
-    noiseFilter.frequency.exponentialRampToValueAtTime(40, now + 0.38);
+    noiseFilter.frequency.setValueAtTime(140, now);
+    noiseFilter.frequency.exponentialRampToValueAtTime(35, now + 0.4);
 
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0.001, now);
-    noiseGain.gain.linearRampToValueAtTime(0.045, now + 0.1);
-    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+    noiseGain.gain.linearRampToValueAtTime(0.05, now + 0.1);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
 
     noise.connect(noiseFilter);
     noiseFilter.connect(noiseGain);
     noiseGain.connect(ctx.destination);
 
     noise.start(now);
-    noise.stop(now + 0.39);
+    noise.stop(now + 0.41);
 
     setTimeout(() => {
       try { ctx.close(); } catch {}
-    }, 550);
+    }, 600);
   } catch {}
 }
 
@@ -146,19 +148,19 @@ function playBloatedBubbleSound() {
     const gain = ctx.createGain();
 
     osc.type = "sine";
-    osc.frequency.setValueAtTime(38, now);
-    osc.frequency.linearRampToValueAtTime(52, now + 0.12);
-    osc.frequency.linearRampToValueAtTime(34, now + 0.22);
-    osc.frequency.linearRampToValueAtTime(44, now + 0.29);
+    osc.frequency.setValueAtTime(42, now);
+    osc.frequency.linearRampToValueAtTime(64, now + 0.08);
+    osc.frequency.linearRampToValueAtTime(36, now + 0.16);
+    osc.frequency.linearRampToValueAtTime(48, now + 0.23);
 
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.08, now + 0.06);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.29);
+    gain.gain.linearRampToValueAtTime(0.09, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.23);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.3);
+    osc.stop(now + 0.24);
 
     setTimeout(() => {
       try { ctx.close(); } catch {}
@@ -178,21 +180,21 @@ function playRushToCenterSound() {
     const gain = ctx.createGain();
 
     osc.type = "sine";
-    osc.frequency.setValueAtTime(32, now);
-    osc.frequency.exponentialRampToValueAtTime(95, now + 0.35);
+    osc.frequency.setValueAtTime(28, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.29);
 
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.1, now + 0.15);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+    gain.gain.linearRampToValueAtTime(0.12, now + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.29);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.4);
+    osc.stop(now + 0.3);
 
     setTimeout(() => {
       try { ctx.close(); } catch {}
-    }, 550);
+    }, 500);
   } catch {}
 }
 
@@ -208,22 +210,21 @@ function playReleaseDetonationSound() {
     const gain = ctx.createGain();
 
     osc.type = "sine";
-    osc.frequency.setValueAtTime(30, now);
-    osc.frequency.exponentialRampToValueAtTime(85, now + 0.08);
-    osc.frequency.exponentialRampToValueAtTime(32, now + 0.28);
+    osc.frequency.setValueAtTime(120, now);
+    osc.frequency.exponentialRampToValueAtTime(26, now + 0.28);
 
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.11, now + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.29);
+    gain.gain.linearRampToValueAtTime(0.14, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.3);
+    osc.stop(now + 0.31);
 
     setTimeout(() => {
       try { ctx.close(); } catch {}
-    }, 450);
+    }, 500);
   } catch {}
 }
 
@@ -233,7 +234,7 @@ function playReleaseDetonationSound() {
 const activeAnimations = new Set();
 
 function clearAllActiveElementAnimations() {
-  // 1. Cancel all tracked active animations
+  // Clear all tracked active animations initiated by Black Hole
   activeAnimations.forEach((anim) => {
     try {
       anim.cancel();
@@ -242,18 +243,7 @@ function clearAllActiveElementAnimations() {
   activeAnimations.clear();
 
   if (typeof document !== "undefined") {
-    // 2. Global W3C Web Animations API cancellation across the entire document
-    if (typeof document.getAnimations === "function") {
-      try {
-        document.getAnimations().forEach((anim) => {
-          try {
-            anim.cancel();
-          } catch {}
-        });
-      } catch {}
-    }
-
-    // 3. Cancel and reset ALL inline styles on header, navbar clusters, and page elements
+    // Reset any inline styles on header, navbar clusters, and page elements
     const allTargetEls = document.querySelectorAll(
       "header, header *, [data-nav-cluster], [data-nav-cluster] *, #black-hole-page, #black-hole-page *, main, main *"
     );
@@ -277,7 +267,6 @@ function clearAllActiveElementAnimations() {
 
 // -------------------------------------------------------------
 // Navbar background container gentle fade handler
-// (Fades ONLY background glass, keeping buttons/text 100% visible to distort!)
 // -------------------------------------------------------------
 function fadeNavbar(inOut, duration) {
   if (typeof document === "undefined") return;
@@ -357,34 +346,21 @@ function getSuckableElements() {
     document.body;
 
   const pageSelector = [
-    // 1. Bento & Grid Card Divisions (Crucial for sucking entire card boxes!)
-    ".grid > div",
-    ".grid > figure",
-    ".grid > article",
-    ".grid > a",
-    // 2. Semantic card containers & divisions
+    // Top-level sections & direct content containers
+    "main > *",
+    "section > *",
+    "article > *",
     "figure",
     "article",
+    ".grid > *",
     "[data-card]",
     ".retro-card",
     "[data-flip-calendar]",
-    // 3. Styled card divisions with rounded corners & backgrounds
-    "div[class*='rounded-3xl']",
-    "div[class*='rounded-[28px]']",
-    "div[class*='rounded-2xl']",
-    "div[class*='rounded-[30px]']",
-    "div[class*='rounded-[22px]']",
-    "div[class*='rounded-[26px]']",
-    // 4. Project card links
+    "div[class*='rounded-']",
     "a.group",
-    "a[href^='/works/']",
-    "a[href^='/case-studies/']",
-    // 5. Standalone headings, paragraphs, and controls outside cards
+    "div.flex",
     "h1", "h2", "h3", "h4",
-    "p",
-    "button", "a",
-    "img",
-    "li",
+    "p", "a", "button", "img", "li", "footer"
   ].join(", ");
 
   const rawElements = Array.from(pageContainer.querySelectorAll(pageSelector));
@@ -408,8 +384,8 @@ function getSuckableElements() {
       if (
         rect.width > 6 &&
         rect.height > 6 &&
-        rect.bottom > 0 &&
-        rect.top < window.innerHeight
+        rect.bottom > -20 &&
+        rect.top < window.innerHeight + 20
       ) {
         selected.push({ el, rect, isNav: false });
         selectedSet.add(el);
@@ -421,8 +397,8 @@ function getSuckableElements() {
 }
 
 // -------------------------------------------------------------
-// Stage 2: 400ms Suction with macOS Genie Funnel & Spaghettification
-// Sucks all individual DOM elements (including navbar items) into (targetX, targetY)
+// Stage 2: 420ms Suction with Tidal Spaghettification & Spiral Vortex
+// Sucks all individual DOM elements into (targetX, targetY)
 // -------------------------------------------------------------
 function runElementSuction(targetX, targetY) {
   if (typeof window === "undefined") return;
@@ -444,49 +420,38 @@ function runElementSuction(targetX, targetY) {
     const angleRad = Math.atan2(dy, dx);
     const angleDeg = (angleRad * 180) / Math.PI;
 
-    // Perpendicular vector for rotational vortex swirl
-    const perpX = -dy * 0.28;
-    const perpY = dx * 0.28;
+    // Perpendicular vector for rotational vortex swirl (Archimedean spiral)
+    const perpX = -dy * 0.32;
+    const perpY = dx * 0.32;
 
     const normDist = Math.min(1, dist / maxDist);
-    const delayMs = Math.round(normDist * 40);
+    const delayMs = Math.round(normDist * 35);
 
+    // True relativistic tidal spaghettification keyframes:
+    // 1. Gravitational elongation along radial vector (scaleX stretch, scaleY squeeze)
+    // 2. Transverse shear and helical vortex twist
+    // 3. Compression through 48px event horizon
     const keyframes = [
       {
         transform: "translate3d(0, 0, 0) scale(1, 1) rotate(0deg) skew(0deg, 0deg)",
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-        filter: "blur(0px) brightness(1)",
         opacity: 1,
         offset: 0,
       },
       {
-        // Stage 1: Gravitational pull & initial tidal elongation into funnel
-        transform: `translate3d(${dx * 0.25 + perpX * 0.3}px, ${dy * 0.25 + perpY * 0.3}px, 0) scale(1.35, 0.75) rotate(${angleDeg * 0.15}deg) skew(${angleDeg > 0 ? 12 : -12}deg, 0deg)`,
-        clipPath: "polygon(8% 0%, 92% 0%, 80% 100%, 20% 100%)",
-        filter: "blur(0.5px) brightness(1.08)",
+        // Tidal pull & initial elongation
+        transform: `translate3d(${dx * 0.28 + perpX * 0.18}px, ${dy * 0.28 + perpY * 0.18}px, 0) scale(1.15, 0.85) rotate(${angleDeg * 0.15}deg) skew(${angleDeg * 0.05}deg, 0deg)`,
         opacity: 1,
-        offset: 0.3,
+        offset: 0.35,
       },
       {
-        // Stage 2: Apple Genie Funnel (elongated into spaghettified beam spiraling into the vortex)
-        transform: `translate3d(${dx * 0.75 + perpX * 0.65}px, ${dy * 0.75 + perpY * 0.65}px, 0) scale(2.2, 0.22) rotate(${angleDeg * 0.45}deg) skew(${angleDeg > 0 ? 25 : -25}deg, 0deg)`,
-        clipPath: "polygon(18% 0%, 82% 0%, 60% 100%, 40% 100%)",
-        filter: "blur(2px) brightness(1.2)",
-        opacity: 0.95,
-        offset: 0.68,
+        // Spaghettification funnel: elongated along trajectory, spiraling into singularity
+        transform: `translate3d(${dx * 0.72 + perpX * 0.42}px, ${dy * 0.72 + perpY * 0.42}px, 0) scale(0.45, 0.15) rotate(${angleDeg * 0.4}deg) skew(${angleDeg * 0.15}deg, ${angleDeg * 0.08}deg)`,
+        opacity: 0.85,
+        offset: 0.72,
       },
       {
-        // Stage 3: Plunging into Singularity Event Horizon (48x48px)
-        transform: `translate3d(${dx * 0.96}px, ${dy * 0.96}px, 0) scale(0.25, 0.05) rotate(${angleDeg * 0.8}deg)`,
-        clipPath: "polygon(40% 0%, 60% 0%, 52% 100%, 48% 100%)",
-        filter: "blur(5px) brightness(1.5)",
-        opacity: 0.6,
-        offset: 0.92,
-      },
-      {
-        transform: `translate3d(${dx}px, ${dy}px, 0) scale(0.001, 0.001) rotate(${angleDeg}deg)`,
-        clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
-        filter: "blur(10px) brightness(2)",
+        // Event horizon absorption: plunging into 48px singularity
+        transform: `translate3d(${dx}px, ${dy}px, 0) scale(0.001, 0.001) rotate(${angleDeg * 0.75}deg)`,
         opacity: 0,
         offset: 1,
       },
@@ -494,31 +459,18 @@ function runElementSuction(targetX, targetY) {
 
     try {
       const anim = el.animate(keyframes, {
-        duration: Math.max(260, 400 - delayMs),
+        duration: Math.max(220, TIMING.SUCKING - delayMs),
         delay: delayMs,
-        easing: "cubic-bezier(0.5, 0, 0.2, 1)",
+        easing: "cubic-bezier(0.38, 0, 0.12, 1)",
         fill: "forwards",
       });
       activeAnimations.add(anim);
-      // Suction animation remains tracked in activeAnimations until explicitly cancelled at Stage 5
-    } catch {
-      try {
-        const fallbackKeyframes = keyframes.map(({ clipPath, ...rest }) => rest);
-        const anim = el.animate(fallbackKeyframes, {
-          duration: Math.max(260, 400 - delayMs),
-          delay: delayMs,
-          easing: "cubic-bezier(0.5, 0, 0.2, 1)",
-          fill: "forwards",
-        });
-        activeAnimations.add(anim);
-        // Suction animation remains tracked in activeAnimations until explicitly cancelled at Stage 5
-      } catch {}
-    }
+    } catch {}
   });
 }
 
 // -------------------------------------------------------------
-// Stage 5: 300ms Element Release from Black Hole at Screen Center
+// Stage 5: Big Bang Detonation & Element Release from Screen Center
 // -------------------------------------------------------------
 function runElementRelease(targetX, targetY) {
   if (typeof window === "undefined") return;
@@ -527,7 +479,7 @@ function runElementRelease(targetX, targetY) {
   const cy = typeof targetY === "number" ? targetY : window.innerHeight / 2;
   const maxDist = Math.hypot(window.innerWidth, window.innerHeight);
 
-  fadeNavbar("in", 300);
+  fadeNavbar("in", TIMING.RELEASING);
 
   const elements = getSuckableElements();
 
@@ -537,31 +489,23 @@ function runElementRelease(targetX, targetY) {
     const dx = cx - elX;
     const dy = cy - elY;
     const dist = Math.hypot(dx, dy);
-    const angleRad = Math.atan2(dy, dx);
-    const angleDeg = (angleRad * 180) / Math.PI;
 
     const normDist = Math.min(1, dist / maxDist);
     const delayMs = Math.round(normDist * 25);
 
     const releaseKeyframes = [
       {
-        transform: `translate3d(${dx}px, ${dy}px, 0) scale(0.02, 0.02) rotate(${angleDeg}deg)`,
-        clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)",
-        filter: "blur(10px) brightness(1.6)",
+        transform: `translate3d(${dx}px, ${dy}px, 0) scale(0.04, 0.04)`,
         opacity: 0,
         offset: 0,
       },
       {
-        transform: `translate3d(${dx * -0.04}px, ${dy * -0.04}px, 0) scale(1.04, 1.04) rotate(${-angleDeg * 0.05}deg)`,
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-        filter: "blur(0.5px) brightness(1.05)",
+        transform: `translate3d(${dx * -0.02}px, ${dy * -0.02}px, 0) scale(1.03, 1.03)`,
         opacity: 0.95,
-        offset: 0.65,
+        offset: 0.7,
       },
       {
-        transform: "translate3d(0, 0, 0) scale(1, 1) rotate(0deg) skew(0deg, 0deg)",
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-        filter: "blur(0px) brightness(1)",
+        transform: "translate3d(0, 0, 0) scale(1, 1)",
         opacity: 1,
         offset: 1,
       },
@@ -569,7 +513,7 @@ function runElementRelease(targetX, targetY) {
 
     try {
       const anim = el.animate(releaseKeyframes, {
-        duration: Math.max(240, 280 - delayMs),
+        duration: Math.max(240, TIMING.RELEASING - delayMs),
         delay: delayMs,
         easing: "cubic-bezier(0.16, 1, 0.3, 1)",
         fill: "forwards",
@@ -581,41 +525,19 @@ function runElementRelease(targetX, targetY) {
         try {
           anim.cancel();
         } catch {}
-        // Explicitly clear inline styles to guarantee 100% natural, visible layout
         el.style.transform = "";
         el.style.opacity = "";
         el.style.filter = "";
         el.style.clipPath = "";
       };
-    } catch {
-      try {
-        const fallbackRelease = releaseKeyframes.map(({ clipPath, ...rest }) => rest);
-        const anim = el.animate(fallbackRelease, {
-          duration: Math.max(240, 280 - delayMs),
-          delay: delayMs,
-          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-          fill: "forwards",
-        });
-        activeAnimations.add(anim);
-        anim.onfinish = () => {
-          activeAnimations.delete(anim);
-          try {
-            anim.cancel();
-          } catch {}
-          el.style.transform = "";
-          el.style.opacity = "";
-          el.style.filter = "";
-          el.style.clipPath = "";
-        };
-      } catch {}
-    }
+    } catch {}
   });
 }
 
 // -------------------------------------------------------------
-// The Black Hole Singularity Overlay
-// Monochromatic Apple aesthetic: Obsidian Black #000000 + Silver/White Ring
-// Start size: 48x48px
+// The Cinematic Black Hole Singularity Overlay
+// Monochromatic Apple aesthetic: Obsidian Black #000000 + Relativistic Photon Ring
+// Start size: strictly 48x48px
 // -------------------------------------------------------------
 function BlackHoleVortexOverlay({ phase, singularityPos }) {
   if (phase === "idle") return null;
@@ -636,28 +558,23 @@ function BlackHoleVortexOverlay({ phase, singularityPos }) {
       aria-hidden="true"
     >
       {/* 
-        Handover Veil:
-        STRICTLY 0% opacity during opening, sucking, and bloating so user clearly
-        sees page and navbar elements distort into the 48x48px click point!
-        Only conceals DOM replacement at the end of centering -> releasing.
+        Handover Spatial Depth Veil:
+        Subtle spatial dimming during centering & release — NO harsh pitch-black flashing!
       */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={
           isCentering
-            ? { opacity: [0, 0, 0.85, 1] }
+            ? { opacity: [0, 0.12, 0.18] }
             : isReleasing
-            ? { opacity: [1, 0.35, 0] }
+            ? { opacity: [0.18, 0.05, 0] }
             : { opacity: 0 }
         }
-        transition={
-          isCentering
-            ? { duration: 0.4, times: [0, 0.6, 0.85, 1], ease: "easeInOut" }
-            : isReleasing
-            ? { duration: 0.3, ease: "easeOut" }
-            : { duration: 0 }
-        }
-        className="absolute inset-0 bg-[#000000]"
+        transition={{
+          duration: isCentering ? TIMING.CENTERING / 1000 : TIMING.RELEASING / 1000,
+          ease: "easeInOut",
+        }}
+        className="absolute inset-0 bg-black/10 backdrop-blur-[1.5px] pointer-events-none"
       />
 
       {/* 
@@ -686,7 +603,7 @@ function BlackHoleVortexOverlay({ phase, singularityPos }) {
         }
         transition={
           isCentering
-            ? { duration: 0.4, ease: [0.35, 0, 0.15, 1] }
+            ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
             : { duration: 0 }
         }
         style={{
@@ -695,54 +612,61 @@ function BlackHoleVortexOverlay({ phase, singularityPos }) {
         }}
         className="flex items-center justify-center pointer-events-none"
       >
-        {/* Monochromatic Accretion Photon Ring (proportional to 48px core) */}
+        {/* 
+          Relativistic Accretion Halo & Doppler Photon Ring:
+          Monochromatic, organic luminosity orbiting the 48px event horizon
+        */}
         <motion.div
           animate={
             isOpening
-              ? { scale: [0, 1], rotate: [0, 90], opacity: [0, 0.85] }
+              ? { scale: [0, 1], rotate: [0, 90], opacity: [0, 0.9] }
               : isSucking
-              ? { scale: [1, 1.2, 1], rotate: [90, 270], opacity: 0.9 }
+              ? { scale: [1, 1.25, 1.1], rotate: [90, 360], opacity: 1 }
               : isBloating
               ? {
-                  scale: [1, 0.8, 2.5, 2.1],
-                  rotate: [270, 360],
-                  opacity: [0.9, 1, 0.9],
+                  scale: [1.1, 0.9, 2.3, 2.0],
+                  rotate: [360, 480],
+                  opacity: [1, 0.95, 1],
                   borderRadius: [
                     "50%",
-                    "62% 38% 58% 42% / 42% 58% 42% 58%",
-                    "40% 60% 38% 62% / 62% 38% 62% 38%",
+                    "60% 40% 58% 42% / 42% 58% 42% 58%",
+                    "42% 58% 40% 60% / 60% 40% 60% 40%",
                     "50%",
                   ],
                 }
               : isCentering
-              ? { scale: [2.1, 2.4, 2.0], rotate: [360, 480], opacity: 0.95 }
+              ? { scale: [2.0, 2.3, 1.9], rotate: [480, 640], opacity: 1 }
               : isReleasing
-              ? { scale: [2.0, 4.2], opacity: [0.95, 0] }
+              ? { scale: [1.9, 4.2], opacity: [1, 0] }
               : { scale: 0, opacity: 0 }
           }
           transition={
             isOpening
-              ? { duration: 0.2, ease: [0.16, 1, 0.3, 1] }
+              ? { duration: TIMING.OPENING / 1000, ease: [0.16, 1, 0.3, 1] }
               : isSucking
-              ? { duration: 0.4, ease: "easeInOut" }
+              ? { duration: TIMING.SUCKING / 1000, ease: "linear" }
               : isBloating
-              ? { duration: 0.3, ease: "easeInOut", times: [0, 0.25, 0.65, 1] }
+              ? { duration: TIMING.BLOATING / 1000, ease: "easeInOut", times: [0, 0.25, 0.65, 1] }
               : isCentering
-              ? { duration: 0.4, ease: [0.35, 0, 0.15, 1] }
+              ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
               : isReleasing
-              ? { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+              ? { duration: TIMING.RELEASING / 1000, ease: [0.16, 1, 0.3, 1] }
               : { duration: 0 }
           }
-          className="absolute w-[84px] h-[84px] rounded-full pointer-events-none"
+          className="absolute w-[86px] h-[86px] rounded-full pointer-events-none"
           style={{
-            boxShadow: "0 0 35px 12px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.8)",
+            background: "conic-gradient(from 180deg at 50% 50%, rgba(0,0,0,0.85) 0deg, rgba(0,0,0,0.95) 140deg, rgba(29,29,31,0.6) 260deg, rgba(0,0,0,0.9) 360deg)",
+            boxShadow: `
+              0 0 25px 8px rgba(0, 0, 0, 0.65),
+              inset 0 0 15px rgba(0, 0, 0, 0.9)
+            `,
           }}
         />
 
         {/* 
-          The Black Hole Core / Event Horizon (Obsidian Void):
-          Start size is exactly 48x48px!
-          Pure obsidian black with deep gravitational lensing — NO white borders!
+          The Black Hole Event Horizon (Singularity Core):
+          Initial size: strictly 48x48px!
+          Pure Obsidian Abyss (#000000) with deep gravitational gradient lensing.
           Bloated bubble physics in Stage 3: morphing border radius & pulsating scale!
         */}
         <motion.div
@@ -753,59 +677,59 @@ function BlackHoleVortexOverlay({ phase, singularityPos }) {
               ? { scale: [1, 1.15, 1], opacity: 1, borderRadius: "50%" }
               : isBloating
               ? {
-                  scale: [1, 0.72, 2.35, 1.95],
+                  scale: [1, 0.82, 2.2, 1.9],
                   opacity: 1,
                   borderRadius: [
                     "50%",
-                    "66% 34% 62% 38% / 36% 64% 36% 64%",
-                    "35% 65% 38% 62% / 62% 38% 62% 38%",
-                    "58% 42% 54% 46% / 46% 54% 46% 54%",
+                    "64% 36% 60% 40% / 38% 62% 38% 62%",
+                    "38% 62% 40% 60% / 60% 40% 60% 40%",
+                    "54% 46% 52% 48% / 48% 52% 48% 52%",
                     "50%",
                   ],
                 }
               : isCentering
-              ? { scale: [1.95, 2.2, 1.8], opacity: 1, borderRadius: "50%" }
+              ? { scale: [1.9, 2.1, 1.75], opacity: 1, borderRadius: "50%" }
               : isReleasing
-              ? { scale: [1.8, 2.3, 0], opacity: [1, 0.7, 0] }
+              ? { scale: [1.75, 2.4, 0], opacity: [1, 0.75, 0] }
               : { scale: 0, opacity: 0 }
           }
           transition={
             isOpening
-              ? { duration: 0.2, ease: [0.16, 1, 0.3, 1] }
+              ? { duration: TIMING.OPENING / 1000, ease: [0.16, 1, 0.3, 1] }
               : isSucking
-              ? { duration: 0.4, ease: "easeInOut" }
+              ? { duration: TIMING.SUCKING / 1000, ease: "easeInOut" }
               : isBloating
-              ? { duration: 0.3, ease: "easeInOut", times: [0, 0.25, 0.6, 0.85, 1] }
+              ? { duration: TIMING.BLOATING / 1000, ease: "easeInOut", times: [0, 0.25, 0.6, 0.85, 1] }
               : isCentering
-              ? { duration: 0.4, ease: [0.35, 0, 0.15, 1] }
+              ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
               : isReleasing
-              ? { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+              ? { duration: TIMING.RELEASING / 1000, ease: [0.16, 1, 0.3, 1] }
               : { duration: 0 }
           }
           className="relative z-10 w-[48px] h-[48px] bg-[#000000] flex items-center justify-center shrink-0"
           style={{
             boxShadow: `
-              0 0 20px 4px rgba(0, 0, 0, 0.95),
-              0 0 45px 12px rgba(0, 0, 0, 0.85),
-              inset 0 0 16px rgba(0, 0, 0, 1)
+              0 0 24px 6px rgba(0, 0, 0, 0.95),
+              0 0 55px 14px rgba(0, 0, 0, 0.8),
+              inset 0 0 18px rgba(0, 0, 0, 1)
             `,
           }}
         />
 
-        {/* Explosive Gravitational Shockwave on Release (Pure Void Shockwave) */}
+        {/* Big Bang Shockwave Expansion on Release */}
         <AnimatePresence>
           {isReleasing && (
             <motion.div
               key="detonation-shockwave"
-              initial={{ scale: 1, opacity: 0.7 }}
-              animate={{ scale: 4.5, opacity: 0 }}
+              initial={{ scale: 1, opacity: 0.8 }}
+              animate={{ scale: 5.5, opacity: 0 }}
               transition={{
-                duration: 0.3,
+                duration: TIMING.RELEASING / 1000,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="absolute w-[84px] h-[84px] rounded-full pointer-events-none"
+              className="absolute w-[86px] h-[86px] rounded-full pointer-events-none"
               style={{
-                boxShadow: "0 0 40px 10px rgba(0,0,0,0.5)",
+                boxShadow: "0 0 50px 14px rgba(0,0,0,0.55)",
               }}
             />
           )}
@@ -816,7 +740,7 @@ function BlackHoleVortexOverlay({ phase, singularityPos }) {
 }
 
 // -------------------------------------------------------------
-// Provider & Transition Orchestrator with 5-Stage Storyboard & Camera Shake
+// Provider & Transition Orchestrator with Route Synchronization
 // -------------------------------------------------------------
 export function BlackHoleTransitionProvider({ children }) {
   const router = useRouter();
@@ -838,7 +762,7 @@ export function BlackHoleTransitionProvider({ children }) {
     timersRef.current = [];
   }, []);
 
-  // Quick fallback release (e.g. for popstate/back button)
+  // Quick fallback release
   const triggerInstantRelease = useCallback(() => {
     clearAllTimers();
     clearAllActiveElementAnimations();
@@ -869,24 +793,32 @@ export function BlackHoleTransitionProvider({ children }) {
       clearAllTimers();
       clearAllActiveElementAnimations();
 
-      const pos =
-        clickPos &&
-        typeof clickPos.x === "number" &&
-        typeof clickPos.y === "number"
-          ? { x: clickPos.x, y: clickPos.y }
-          : {
-              x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
-              y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
-            };
+      const rawX =
+        clickPos && typeof clickPos.x === "number"
+          ? clickPos.x
+          : typeof window !== "undefined" ? window.innerWidth / 2 : 0;
+      const rawY =
+        clickPos && typeof clickPos.y === "number"
+          ? clickPos.y
+          : typeof window !== "undefined" ? window.innerHeight / 2 : 0;
+
+      // Keep singularity fully inside viewport
+      const margin = 60;
+      const winW = typeof window !== "undefined" ? window.innerWidth : 800;
+      const winH = typeof window !== "undefined" ? window.innerHeight : 600;
+      const pos = {
+        x: Math.max(margin, Math.min(winW - margin, rawX)),
+        y: Math.max(margin, Math.min(winH - margin, rawY)),
+      };
 
       setSingularityPos(pos);
 
-      // Stage 1: Black hole opens at click point with 48x48px start size (200ms)
+      // Stage 1: Black hole opens at click point with strictly 48x48px start size (180ms)
       setPhase("opening");
       phaseRef.current = "opening";
       playOpeningSound();
 
-      // Stage 2: Sucks all elements with Genie funnel & spacetime distortion (400ms)
+      // Stage 2: Sucks all elements with tidal spaghettification & spiral vortex (420ms)
       const t1 = setTimeout(() => {
         setPhase("sucking");
         phaseRef.current = "sucking";
@@ -895,7 +827,7 @@ export function BlackHoleTransitionProvider({ children }) {
       }, TIMING.OPENING);
       timersRef.current.push(t1);
 
-      // Stage 3: Compressed to a bloated bubble wobbling under pressure (300ms)
+      // Stage 3: Compressed to a bloated bubble wobbling under pressure (240ms)
       const t2 = setTimeout(() => {
         setPhase("bloating");
         phaseRef.current = "bloating";
@@ -903,7 +835,7 @@ export function BlackHoleTransitionProvider({ children }) {
       }, TIMING.OPENING + TIMING.SUCKING);
       timersRef.current.push(t2);
 
-      // Stage 4: Can't take more and rushes to screen center (400ms)
+      // Stage 4: High-velocity gravitational slingshot to screen center (300ms)
       const t3 = setTimeout(() => {
         setPhase("centering");
         phaseRef.current = "centering";
@@ -911,27 +843,35 @@ export function BlackHoleTransitionProvider({ children }) {
       }, TIMING.OPENING + TIMING.SUCKING + TIMING.BLOATING);
       timersRef.current.push(t3);
 
-      // Handover: Push route near climax of centering (350ms into centering)
+      // Route Handover: Trigger route change & reset scroll position right at the peak of centering
       const t4 = setTimeout(() => {
         router.push(href);
-      }, TIMING.OPENING + TIMING.SUCKING + TIMING.BLOATING + 350);
+        if (typeof window !== "undefined") {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+      }, TIMING.OPENING + TIMING.SUCKING + TIMING.BLOATING + Math.round(TIMING.CENTERING * 0.75));
       timersRef.current.push(t4);
 
-      // Stage 5: New page & navbar come out of the black hole at center (300ms)
+      // Stage 5: Big Bang Detonation & Release from screen center (320ms)
       const t5 = setTimeout(() => {
         setPhase("releasing");
         phaseRef.current = "releasing";
         playReleaseDetonationSound();
 
-        // Clear previous suction fill:"forwards" animations so all DOM nodes restore natural coordinates
+        // Clear previous suction animations
         clearAllActiveElementAnimations();
 
-        // Synchronously run element release so all keyframes bind immediately
+        // Reset scroll strictly to top
+        if (typeof window !== "undefined") {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+
+        // Run element release explosion from center
         runElementRelease(window.innerWidth / 2, window.innerHeight / 2);
       }, TIMING.OPENING + TIMING.SUCKING + TIMING.BLOATING + TIMING.CENTERING);
       timersRef.current.push(t5);
 
-      // Reset to idle with safety buffer to allow all release animations to finish completely
+      // Reset to idle with safety buffer
       const t6 = setTimeout(() => {
         setPhase("idle");
         phaseRef.current = "idle";
@@ -942,12 +882,19 @@ export function BlackHoleTransitionProvider({ children }) {
     [router, clearAllTimers]
   );
 
-  // Guarantee clean DOM restoration whenever idle or route changes
+  // Guarantee clean DOM restoration and scroll reset on route changes
+  useEffect(() => {
+    clearAllActiveElementAnimations();
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [pathname]);
+
   useEffect(() => {
     if (phase === "idle") {
       clearAllActiveElementAnimations();
     }
-  }, [pathname, phase]);
+  }, [phase]);
 
   useEffect(() => {
     globalTriggerTransition = navigate;
@@ -1007,113 +954,19 @@ export function BlackHoleTransitionProvider({ children }) {
     return () => {
       document.removeEventListener("click", handleDocumentClick, true);
       window.removeEventListener("popstate", handlePopState);
-      clearAllTimers();
-      clearAllActiveElementAnimations();
     };
-  }, [navigate, triggerInstantRelease, clearAllTimers]);
-
-  const isOpening = phase === "opening";
-  const isSucking = phase === "sucking";
-  const isBloating = phase === "bloating";
-  const isCentering = phase === "centering";
-  const isReleasing = phase === "releasing";
+  }, [navigate, triggerInstantRelease]);
 
   return (
     <BlackHoleContext.Provider value={{ phase, navigate }}>
-      {/* Gravitational Spacetime Wave Distortion Filter */}
-      <svg
-        className="fixed -top-[9999px] -left-[9999px] w-0 h-0 pointer-events-none"
-        aria-hidden="true"
-      >
-        <defs>
-          <filter
-            id="black-hole-spacetime-distortion"
-            x="-20%"
-            y="-20%"
-            width="140%"
-            height="140%"
-          >
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.02"
-              numOctaves="2"
-              result="noise"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="32"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* The Central / Moving Black Hole Singularity Overlay */}
-      <BlackHoleVortexOverlay phase={phase} singularityPos={singularityPos} />
-
-      {/* 
-        CAMERA SHAKE & SPACETIME DISTORTION WRAPPER:
-        - In Sucking phase: Spacetime Gravitational Lensing dynamically bends all pixels!
-        - Opening: subtle micro-vibration
-        - Sucking: heavy gravitational tremors as matter accelerates
-        - Bloating: rapid fluid bubble vibration
-        - Centering: inertia shift
-        - Releasing: explosive detonation recoil
-      */}
-      <motion.div
-        className="w-full min-h-screen origin-center"
-        style={{
-          filter: isSucking ? "url(#black-hole-spacetime-distortion)" : "none",
-        }}
-        animate={
-          isOpening
-            ? {
-                x: [0, -1, 1, -1, 0],
-                y: [0, 1, -1, 1, 0],
-              }
-            : isSucking
-            ? {
-                x: [0, -4, 5, -7, 8, -6, 5, -2, 0],
-                y: [0, 4, -5, 7, -6, 5, -4, 1, 0],
-                rotate: [0, -0.7, 0.9, -1.2, 1.1, -0.5, 0],
-              }
-            : isBloating
-            ? {
-                x: [0, 2, -2, 3, -3, 2, 0],
-                y: [0, -2, 3, -2, 2, -1, 0],
-              }
-            : isCentering
-            ? {
-                x: [0, -3, 2, -1, 0],
-                y: [0, 3, -2, 1, 0],
-              }
-            : isReleasing
-            ? {
-                x: [0, 8, -6, 4, -2, 0],
-                y: [0, -7, 5, -3, 1, 0],
-                rotate: [0, 1.2, -0.8, 0.4, 0],
-              }
-            : { x: 0, y: 0, rotate: 0 }
-        }
-        transition={{
-          duration: isOpening
-            ? 0.2
-            : isSucking
-            ? 0.4
-            : isBloating
-            ? 0.3
-            : isCentering
-            ? 0.4
-            : isReleasing
-            ? 0.3
-            : 0,
-          ease: "easeInOut",
-        }}
-      >
+      <div id="black-hole-page" className="w-full min-h-screen">
         {children}
-      </motion.div>
+      </div>
+
+      <BlackHoleVortexOverlay
+        phase={phase}
+        singularityPos={singularityPos}
+      />
     </BlackHoleContext.Provider>
   );
 }

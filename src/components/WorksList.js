@@ -63,15 +63,15 @@ export default function WorksList() {
 
       {/* List */}
       <div className="flex flex-col gap-4 sm:gap-5">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="popLayout" initial={false}>
           {filteredWorks.map((work) => {
             return (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: -10 }}
-                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 key={work.id}
               >
                 <Link href={work.link?.startsWith("/works/case-studies/") ? work.link : `/works/${work.id}`} className="block group h-full">

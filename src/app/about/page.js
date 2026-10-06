@@ -3,9 +3,9 @@ import ExperienceTimeline from "@/components/ExperienceTimeline";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "About | Satya Sai Nagubathula — Design Technologist & AI Engineer",
+  title: "About | Satya Sai Nagubathula — AI + Design Engineer",
   description:
-    "Meet Satya Sai Nagubathula, a Design Technologist and AI Engineer connecting product design, frontend engineering, and generative AI to build working products.",
+    "Meet Satya Sai Nagubathula, an AI + Design Engineer connecting product design, frontend engineering, and generative AI to build working products.",
 };
 
 export default function AboutPage() {
