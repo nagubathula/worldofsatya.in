@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Code, Briefcase, BookOpen } from "lucide-react";
+import { ArrowUpRight, Code, Briefcase, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { allWorks } from "@/data/works";
@@ -12,9 +12,11 @@ import { playPopSound, play8BitTapSound } from "./SoundEffects";
 
 // Keep every discipline together in one collection.
 const CATEGORY_PRIORITY = { "Open Source": 0, "Project": 1, "Case Study": 2 };
+const ITEMS_PER_PAGE = 6;
 
 export default function WorksList() {
   const [filter, setFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const worksOnly = allWorks;
 
@@ -33,6 +35,12 @@ export default function WorksList() {
     ? sortedWorks
     : sortedWorks.filter(work => work.category === filter);
 
+  const totalPages = Math.ceil(filteredWorks.length / ITEMS_PER_PAGE);
+  const validCurrentPage = Math.min(Math.max(currentPage, 1), Math.max(totalPages, 1));
+  const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredWorks.length);
+  const paginatedWorks = filteredWorks.slice(startIndex, endIndex);
+
   const getIcon = (category) => {
     switch(category) {
       case "Case Study": return <BookOpen size={13} className="mr-1" />;
@@ -48,6 +56,20 @@ export default function WorksList() {
         playPopSound(520, 0.08);
       } catch {}
       setFilter(category);
+      setCurrentPage(1);
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages && newPage !== validCurrentPage) {
+      try {
+        playPopSound(480, 0.08);
+      } catch {}
+      setCurrentPage(newPage);
+      const element = document.getElementById("collection");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
   };
 
@@ -91,9 +113,9 @@ export default function WorksList() {
       </div>
 
       {/* List */}
-      <div className="flex flex-col gap-4 sm:gap-5">
+      <div className="flex flex-col gap-4 sm:gap-5 min-h-[480px]">
         <AnimatePresence mode="popLayout" initial={false}>
-          {filteredWorks.map((work) => {
+          {paginatedWorks.map((work) => {
             return (
               <motion.div
                 layout
@@ -152,6 +174,99 @@ export default function WorksList() {
           })}
         </AnimatePresence>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="mt-4 flex flex-col items-center gap-3 sm:mt-8 sm:gap-4">
+          {/* Subtle Range Indicator */}
+          <p className="text-xs text-[#86868b] font-sans">
+            Showing <span className="font-medium text-[#1d1d1f]">{startIndex + 1}</span>–<span className="font-medium text-[#1d1d1f]">{endIndex}</span> of <span className="font-medium text-[#1d1d1f]">{filteredWorks.length}</span> works
+          </p>
+
+          {/* Segmented Pill Pagination Bar */}
+          <nav aria-label="Works pagination" className="inline-flex items-center gap-1 p-1 rounded-full bg-[#f5f5f7] border border-black/[0.04] shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
+            {/* Previous Page */}
+            <motion.button
+              type="button"
+              onClick={() => handlePageChange(validCurrentPage - 1)}
+              disabled={validCurrentPage <= 1}
+              aria-label="Previous page"
+              onMouseEnter={() => {
+                if (validCurrentPage > 1) {
+                  try { play8BitTapSound(); } catch {}
+                }
+              }}
+              whileHover={validCurrentPage > 1 ? { scale: 1.06, y: -0.5 } : {}}
+              whileTap={validCurrentPage > 1 ? { scale: 0.94 } : {}}
+              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
+                validCurrentPage <= 1
+                  ? "opacity-30 cursor-not-allowed text-[#86868b]"
+                  : "text-[#1d1d1f] hover:bg-white hover:shadow-sm"
+              }`}
+            >
+              <ChevronLeft size={16} />
+            </motion.button>
+
+            {/* Page Number Pills */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+              const isActive = pageNum === validCurrentPage;
+              return (
+                <motion.button
+                  key={pageNum}
+                  type="button"
+                  onClick={() => handlePageChange(pageNum)}
+                  onMouseEnter={() => {
+                    try { play8BitTapSound(); } catch {}
+                  }}
+                  whileHover={{ scale: 1.06, y: -0.5 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                  aria-label={`Page ${pageNum}`}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`relative flex h-8 min-w-8 sm:h-9 sm:min-w-9 items-center justify-center px-3 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
+                    isActive
+                      ? "text-[#1d1d1f]"
+                      : "text-[#86868b] hover:text-[#1d1d1f]"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activePagePill"
+                      className="absolute inset-0 rounded-full bg-white shadow-sm border border-black/[0.04]"
+                      transition={{ type: "spring", stiffness: 500, damping: 32 }}
+                    />
+                  )}
+                  <span className="relative z-10">{pageNum}</span>
+                </motion.button>
+              );
+            })}
+
+            {/* Next Page */}
+            <motion.button
+              type="button"
+              onClick={() => handlePageChange(validCurrentPage + 1)}
+              disabled={validCurrentPage >= totalPages}
+              aria-label="Next page"
+              onMouseEnter={() => {
+                if (validCurrentPage < totalPages) {
+                  try { play8BitTapSound(); } catch {}
+                }
+              }}
+              whileHover={validCurrentPage < totalPages ? { scale: 1.06, y: -0.5 } : {}}
+              whileTap={validCurrentPage < totalPages ? { scale: 0.94 } : {}}
+              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
+                validCurrentPage >= totalPages
+                  ? "opacity-30 cursor-not-allowed text-[#86868b]"
+                  : "text-[#1d1d1f] hover:bg-white hover:shadow-sm"
+              }`}
+            >
+              <ChevronRight size={16} />
+            </motion.button>
+          </nav>
+        </div>
+      )}
     </div>
   );
 }

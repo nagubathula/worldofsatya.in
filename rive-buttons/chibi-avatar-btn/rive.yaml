@@ -1,0 +1,9 @@
+name: chibi-avatar-btn
+cursor:
+  property: cursor
+logs:
+  file: build/rive.log
+  problems: build/problems.log
+push:
+  projectId: 1951266
+  fileId: 2633571

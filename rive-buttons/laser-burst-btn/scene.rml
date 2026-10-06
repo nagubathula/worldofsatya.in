@@ -1,0 +1,232 @@
+<Rive version="1" kind="fragment">
+    <Artboard defaultStateMachineId="0:7" viewModelId="0:90" viewModelInstanceId="0:91" clip="true" width="180" height="180" styleId="0:5" name="Laser Burst Cannon" id="0:2">
+        <LayoutComponentStyle name="Artboard Style" id="0:5"/>
+
+        <Fill name="Background" id="0:81">
+            <SolidColor colorValue="00000000" name="Color" id="0:82"/>
+        </Fill>
+
+        <Node x="90" y="90" name="CannonAssembly" id="0:20">
+            <!-- Outer Armor Shell -->
+            <Shape name="OuterShell" id="0:21">
+                <Ellipse width="112" height="112" originX="0.5" originY="0.5" name="ShellPath" id="0:97"/>
+                <Fill name="ShellFill" id="0:22">
+                    <SolidColor colorValue="FF16181D" name="ShellColor" id="0:23"/>
+                </Fill>
+                <Stroke thickness="2" name="ShellStroke" id="0:24">
+                    <SolidColor colorValue="FF3A3A3C" name="StrokeColor" id="0:25"/>
+                </Stroke>
+            </Shape>
+
+            <!-- Emitter Ring -->
+            <Shape name="EmitterRing" id="0:27">
+                <Ellipse width="84" height="84" originX="0.5" originY="0.5" name="EmitterPath" id="0:98"/>
+                <Stroke thickness="2" name="EmitterStroke" id="0:28">
+                    <SolidColor colorValue="FF0071E3" name="EmitterColor" id="0:29"/>
+                </Stroke>
+            </Shape>
+
+            <!-- Glowing Laser Core -->
+            <Shape name="LaserCore" id="0:32">
+                <Ellipse width="50" height="50" originX="0.5" originY="0.5" name="CorePath" id="0:99"/>
+                <Fill name="CoreFill" id="0:33">
+                    <SolidColor colorValue="FF0071E3" name="CoreColor" id="0:34"/>
+                </Fill>
+            </Shape>
+
+            <!-- Center Focal Emitter -->
+            <Shape name="Nozzle" id="0:36">
+                <Ellipse width="20" height="20" originX="0.5" originY="0.5" name="NozzlePath" id="0:100"/>
+                <Fill name="NozzleFill" id="0:37">
+                    <SolidColor colorValue="FFFFFFFF" name="NozzleColor" id="0:38"/>
+                </Fill>
+            </Shape>
+        </Node>
+
+        <StateMachine name="State Machine 1" id="0:7">
+            <!-- Listeners -->
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="enter" name="OnEnter" id="0:75">
+                <ListenerViewModelChange id="0:101">
+                    <BindablePropertyBoolean propertyValue="true" id="0:102">
+                        <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" direction="true" id="0:103"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+                <ListenerViewModelChange id="0:104">
+                    <BindablePropertyString propertyValue="pointer" id="0:105">
+                        <DataBindContext sourcePathIds="0:90-0:96" propertyKey="635" direction="true" id="0:106"/>
+                    </BindablePropertyString>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="exit" name="OnExit" id="0:76">
+                <ListenerViewModelChange id="0:107">
+                    <BindablePropertyBoolean propertyValue="false" id="0:108">
+                        <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" direction="true" id="0:109"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+                <ListenerViewModelChange id="0:110">
+                    <BindablePropertyBoolean propertyValue="false" id="0:111">
+                        <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" direction="true" id="0:112"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+                <ListenerViewModelChange id="0:113">
+                    <BindablePropertyString propertyValue="arrow" id="0:114">
+                        <DataBindContext sourcePathIds="0:90-0:96" propertyKey="635" direction="true" id="0:115"/>
+                    </BindablePropertyString>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="down" name="OnDown" id="0:77">
+                <ListenerViewModelChange id="0:116">
+                    <BindablePropertyBoolean propertyValue="true" id="0:117">
+                        <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" direction="true" id="0:118"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:21" listenerTypeValue="up" name="OnUp" id="0:78">
+                <ListenerViewModelChange id="0:119">
+                    <BindablePropertyBoolean propertyValue="false" id="0:120">
+                        <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" direction="true" id="0:121"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <!-- State Machine Layers -->
+            <StateMachineLayer name="CannonLayer" id="0:85">
+                <AnyState x="200" y="-120" id="0:122"/>
+                <ExitState x="400" y="-120" id="0:123"/>
+                <EntryState id="0:124">
+                    <StateTransition stateToId="0:86" id="0:125"/>
+                </EntryState>
+
+                <!-- Rest -->
+                <AnimationState x="0" y="60" animationId="0:70" id="0:86">
+                    <StateTransition stateToId="0:87" duration="140" id="0:126">
+                        <TransitionViewModelCondition id="0:127">
+                            <TransitionPropertyViewModelComparator id="0:128">
+                                <BindablePropertyBoolean id="0:129">
+                                    <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" id="0:130"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true" id="0:131"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+
+                <!-- Hover -->
+                <AnimationState x="200" y="60" animationId="0:71" id="0:87">
+                    <StateTransition stateToId="0:86" duration="160" id="0:132">
+                        <TransitionViewModelCondition id="0:133">
+                            <TransitionPropertyViewModelComparator id="0:134">
+                                <BindablePropertyBoolean id="0:135">
+                                    <DataBindContext sourcePathIds="0:90-0:94" propertyKey="634" id="0:136"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false" id="0:137"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                    <StateTransition stateToId="0:88" duration="40" id="0:138">
+                        <TransitionViewModelCondition id="0:139">
+                            <TransitionPropertyViewModelComparator id="0:140">
+                                <BindablePropertyBoolean id="0:141">
+                                    <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" id="0:142"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true" id="0:143"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+
+                <!-- Fire Recoil -->
+                <AnimationState x="400" y="60" animationId="0:72" id="0:88">
+                    <StateTransition stateToId="0:87" duration="120" id="0:144">
+                        <TransitionViewModelCondition id="0:145">
+                            <TransitionPropertyViewModelComparator id="0:146">
+                                <BindablePropertyBoolean id="0:147">
+                                    <DataBindContext sourcePathIds="0:90-0:95" propertyKey="634" id="0:148"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false" id="0:149"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <!-- Animations -->
+        <LinearAnimation duration="1" name="Rest" id="0:70">
+            <KeyedObject objectId="0:20" id="0:150">
+                <KeyedProperty propertyKey="16" id="0:151">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear" id="0:152"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:153">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear" id="0:154"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:29" id="0:155">
+                <KeyedProperty propertyKey="37" id="0:156">
+                    <KeyFrameColor value="FF0071E3" frame="0" interpolationType="linear" id="0:157"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:34" id="0:158">
+                <KeyedProperty propertyKey="37" id="0:159">
+                    <KeyFrameColor value="FF0071E3" frame="0" interpolationType="linear" id="0:160"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Hover" id="0:71">
+            <KeyedObject objectId="0:20" id="0:161">
+                <KeyedProperty propertyKey="16" id="0:162">
+                    <KeyFrameDouble value="1.08" frame="0" interpolationType="linear" id="0:163"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:164">
+                    <KeyFrameDouble value="1.08" frame="0" interpolationType="linear" id="0:165"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:29" id="0:166">
+                <KeyedProperty propertyKey="37" id="0:167">
+                    <KeyFrameColor value="FF5AC8FA" frame="0" interpolationType="linear" id="0:168"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:34" id="0:169">
+                <KeyedProperty propertyKey="37" id="0:170">
+                    <KeyFrameColor value="FF5AC8FA" frame="0" interpolationType="linear" id="0:171"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Down" id="0:72">
+            <KeyedObject objectId="0:20" id="0:172">
+                <KeyedProperty propertyKey="16" id="0:173">
+                    <KeyFrameDouble value="0.92" frame="0" interpolationType="linear" id="0:174"/>
+                </KeyedProperty>
+                <KeyedProperty propertyKey="17" id="0:175">
+                    <KeyFrameDouble value="0.92" frame="0" interpolationType="linear" id="0:176"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:29" id="0:177">
+                <KeyedProperty propertyKey="37" id="0:178">
+                    <KeyFrameColor value="FFFFFFFF" frame="0" interpolationType="linear" id="0:179"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:34" id="0:180">
+                <KeyedProperty propertyKey="37" id="0:181">
+                    <KeyFrameColor value="FFFFFFFF" frame="0" interpolationType="linear" id="0:182"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <ViewModel defaultInstanceId="0:91" name="Root" id="0:90">
+        <ViewModelPropertyBoolean name="hover" id="0:94"/>
+        <ViewModelPropertyBoolean name="down" id="0:95"/>
+        <ViewModelPropertyString name="cursor" id="0:96"/>
+        <ViewModelInstance exports="true" name="Instance" id="0:91">
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:94" id="0:183"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:95" id="0:184"/>
+            <ViewModelInstanceString propertyValue="arrow" viewModelPropertyId="0:96" id="0:185"/>
+        </ViewModelInstance>
+    </ViewModel>
+</Rive>

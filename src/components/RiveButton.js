@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion, useSpring, useMotionValue } from "framer-motion";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
 
+const MotionLink = motion.create ? motion.create(Link) : motion(Link);
+
 /**
  * Reusable Rive-Style State Machine Button
  * - Magnetic cursor attraction
@@ -139,19 +141,17 @@ export default function RiveButton({
     }
 
     return (
-      <Link href={href} onClick={onClick} passHref legacyBehavior>
-        <motion.a {...wrapperProps}>
-          <motion.span
-            animate={{
-              opacity: isHovered ? 1 : 0,
-              scale: isHovered ? 1.05 : 0.9,
-            }}
-            transition={{ duration: 0.2 }}
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/15 via-transparent to-emerald-500/15 pointer-events-none"
-          />
-          {content}
-        </motion.a>
-      </Link>
+      <MotionLink href={href} onClick={onClick} {...wrapperProps}>
+        <motion.span
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            scale: isHovered ? 1.05 : 0.9,
+          }}
+          transition={{ duration: 0.2 }}
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/15 via-transparent to-emerald-500/15 pointer-events-none"
+        />
+        {content}
+      </MotionLink>
     );
   }
 

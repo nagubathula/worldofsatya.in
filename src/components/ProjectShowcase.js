@@ -136,7 +136,7 @@ const ProjectCard = ({ project }) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Link href={project.link} passHref>
+        <Link href={project.link}>
           <div
             className={`aspect-square relative bg-gray-100 rounded-lg overflow-hidden transition-all duration-300 ${hovered ? 'scale-105 shadow-xl' : 'scale-100 shadow-none'}`}
           >

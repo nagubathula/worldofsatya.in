@@ -1,0 +1,152 @@
+<Rive version="1" kind="fragment">
+    <Artboard defaultStateMachineId="0:7" viewModelId="0:40" viewModelInstanceId="0:41" clip="true" width="160" height="100" styleId="0:5" name="Tactile Switch" id="0:2">
+        <LayoutComponentStyle name="Artboard Style" id="0:5"/>
+
+        <Fill name="Background" id="0:81">
+            <SolidColor colorValue="00000000" name="Color" id="0:82"/>
+        </Fill>
+
+        <Node x="80" y="50" name="SwitchGroup" id="0:10">
+            <!-- Pill Track -->
+            <Shape name="TrackShape" id="0:20">
+                <Rectangle width="92" height="52" cornerRadiusTL="26" cornerRadiusTR="26" cornerRadiusBL="26" cornerRadiusBR="26" originX="0.5" originY="0.5" name="TrackPath" id="0:99"/>
+                <Fill name="TrackFill" id="0:21">
+                    <SolidColor colorValue="FF3A3A3C" name="TrackColor" id="0:22"/>
+                </Fill>
+                <Stroke thickness="1.5" name="TrackStroke" id="0:23">
+                    <SolidColor colorValue="FF48484A" name="StrokeColor" id="0:24"/>
+                </Stroke>
+            </Shape>
+
+            <!-- Knob -->
+            <Node x="-20" y="0" name="KnobGroup" id="0:30">
+                <Shape name="KnobPlate" id="0:31">
+                    <Ellipse width="44" height="44" originX="0.5" originY="0.5" name="KnobPath" id="0:100"/>
+                    <Fill name="KnobFill" id="0:32">
+                        <SolidColor colorValue="FFFFFFFF" name="KnobColor" id="0:33"/>
+                    </Fill>
+                </Shape>
+                <Shape name="KnobShadow" id="0:35">
+                    <Ellipse width="44" height="44" originX="0.5" originY="0.5" name="ShadowPath" id="0:101"/>
+                    <Stroke thickness="1" name="ShadowStroke" id="0:36">
+                        <SolidColor colorValue="15000000" name="ShadowColor" id="0:37"/>
+                    </Stroke>
+                </Shape>
+            </Node>
+        </Node>
+
+        <StateMachine name="State Machine 1" id="0:7">
+            <!-- Listeners -->
+            <StateMachineListenerSingle targetId="0:20" listenerTypeValue="enter" name="OnHoverIn" id="0:50">
+                <ListenerViewModelChange id="0:102">
+                    <BindablePropertyString propertyValue="pointer" id="0:103">
+                        <DataBindContext sourcePathIds="0:40-0:46" propertyKey="635" direction="true" id="0:104"/>
+                    </BindablePropertyString>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <StateMachineListenerSingle targetId="0:20" listenerTypeValue="exit" name="OnHoverOut" id="0:51">
+                <ListenerViewModelChange id="0:105">
+                    <BindablePropertyString propertyValue="arrow" id="0:106">
+                        <DataBindContext sourcePathIds="0:40-0:46" propertyKey="635" direction="true" id="0:107"/>
+                    </BindablePropertyString>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <!-- Toggle Click -->
+            <StateMachineListenerSingle targetId="0:20" listenerTypeValue="click" name="OnToggleClick" id="0:52">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:53" id="0:108">
+                    <BindablePropertyBoolean id="0:109">
+                        <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634" id="0:53" converterId="0:98"/>
+                        <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634" direction="true" id="0:110"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+
+            <!-- Layers -->
+            <StateMachineLayer name="ToggleLayer" id="0:60">
+                <AnyState x="200" y="-120" id="0:111"/>
+                <ExitState x="400" y="-120" id="0:112"/>
+                <EntryState id="0:113">
+                    <StateTransition stateToId="0:62" id="0:114"/>
+                </EntryState>
+
+                <!-- State: OFF -->
+                <AnimationState x="0" y="60" animationId="0:70" id="0:62">
+                    <StateTransition stateToId="0:63" duration="180" id="0:115">
+                        <TransitionViewModelCondition id="0:116">
+                            <TransitionPropertyViewModelComparator id="0:117">
+                                <BindablePropertyBoolean id="0:118">
+                                    <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634" id="0:119"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true" id="0:120"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+
+                <!-- State: ON -->
+                <AnimationState x="200" y="60" animationId="0:71" id="0:63">
+                    <StateTransition stateToId="0:62" duration="180" id="0:121">
+                        <TransitionViewModelCondition id="0:122">
+                            <TransitionPropertyViewModelComparator id="0:123">
+                                <BindablePropertyBoolean id="0:124">
+                                    <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634" id="0:125"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false" id="0:126"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <!-- Animations -->
+        <LinearAnimation duration="1" name="Switch Off" id="0:70">
+            <KeyedObject objectId="0:30" id="0:127">
+                <KeyedProperty propertyKey="13" id="0:128">
+                    <KeyFrameDouble value="-20" frame="0" interpolationType="linear" id="0:129"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:22" id="0:130">
+                <KeyedProperty propertyKey="37" id="0:131">
+                    <KeyFrameColor value="FF3A3A3C" frame="0" interpolationType="linear" id="0:132"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:24" id="0:133">
+                <KeyedProperty propertyKey="37" id="0:134">
+                    <KeyFrameColor value="FF48484A" frame="0" interpolationType="linear" id="0:135"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Switch On" id="0:71">
+            <KeyedObject objectId="0:30" id="0:136">
+                <KeyedProperty propertyKey="13" id="0:137">
+                    <KeyFrameDouble value="20" frame="0" interpolationType="linear" id="0:138"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:22" id="0:139">
+                <KeyedProperty propertyKey="37" id="0:140">
+                    <KeyFrameColor value="FF0071E3" frame="0" interpolationType="linear" id="0:141"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:24" id="0:142">
+                <KeyedProperty propertyKey="37" id="0:143">
+                    <KeyFrameColor value="FF34C759" frame="0" interpolationType="linear" id="0:144"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <DataConverterBooleanNegate name="Not" id="0:98"/>
+
+    <ViewModel defaultInstanceId="0:41" name="Root" id="0:40">
+        <ViewModelPropertyBoolean name="isOn" id="0:44"/>
+        <ViewModelPropertyString name="cursor" id="0:46"/>
+        <ViewModelInstance exports="true" name="Instance" id="0:41">
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:44" id="0:145"/>
+            <ViewModelInstanceString propertyValue="arrow" viewModelPropertyId="0:46" id="0:146"/>
+        </ViewModelInstance>
+    </ViewModel>
+</Rive>
