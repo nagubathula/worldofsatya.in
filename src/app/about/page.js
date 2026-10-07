@@ -1,5 +1,6 @@
 import AboutMe from "@/components/AboutMe";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
+import Achievements from "@/components/Achievements";
 import Footer from "@/components/Footer";
 
 export const metadata = {
@@ -13,7 +14,12 @@ export default function AboutPage() {
     <div className="min-h-screen relative max-w-7xl mx-auto w-full px-4 sm:px-12">
       <main className="relative z-10 flex flex-col pt-16 sm:pt-14">
         <AboutMe />
-        <ExperienceTimeline bento />
+        <section id="experience" aria-label="Experience timeline" className="scroll-mt-24">
+          <ExperienceTimeline bento />
+        </section>
+        <section id="achievements" aria-label="Achievements and honors" className="scroll-mt-24 border-t border-black/[0.08]">
+          <Achievements />
+        </section>
       </main>
       <Footer />
     </div>

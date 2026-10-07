@@ -243,9 +243,9 @@ function clearAllActiveElementAnimations() {
   activeAnimations.clear();
 
   if (typeof document !== "undefined") {
-    // Reset any inline styles on header, navbar clusters, and page elements
+    // Reset any inline styles on navbar clusters and page elements
     const allTargetEls = document.querySelectorAll(
-      "header, header *, [data-nav-cluster], [data-nav-cluster] *, #black-hole-page, #black-hole-page *, main, main *"
+      "[data-site-navbar], [data-site-navbar] *, [data-nav-cluster], [data-nav-cluster] *, header, header *, #black-hole-page, #black-hole-page *, main, main *"
     );
     allTargetEls.forEach((el) => {
       el.style.transform = "";
@@ -253,15 +253,6 @@ function clearAllActiveElementAnimations() {
       el.style.filter = "";
       el.style.clipPath = "";
     });
-
-    const header = document.querySelector("header");
-    if (header) {
-      header.style.backgroundColor = "";
-      header.style.borderBottomColor = "";
-      header.style.opacity = "";
-      header.style.filter = "";
-      header.style.transform = "";
-    }
   }
 }
 
@@ -269,43 +260,7 @@ function clearAllActiveElementAnimations() {
 // Navbar background container gentle fade handler
 // -------------------------------------------------------------
 function fadeNavbar(inOut, duration) {
-  if (typeof document === "undefined") return;
-  const header = document.querySelector("header");
-  if (!header) return;
-
-  try {
-    const anim = header.animate(
-      inOut === "out"
-        ? [
-            { backgroundColor: "rgba(251, 251, 253, 0.8)", borderBottomColor: "rgba(0, 0, 0, 0.06)" },
-            { backgroundColor: "rgba(251, 251, 253, 0)", borderBottomColor: "rgba(0, 0, 0, 0)" },
-          ]
-        : [
-            { backgroundColor: "rgba(251, 251, 253, 0)", borderBottomColor: "rgba(0, 0, 0, 0)" },
-            { backgroundColor: "rgba(251, 251, 253, 0.8)", borderBottomColor: "rgba(0, 0, 0, 0.06)" },
-          ],
-      {
-        duration,
-        easing:
-          inOut === "out"
-            ? "cubic-bezier(0.5, 0, 0.2, 1)"
-            : "cubic-bezier(0.16, 1, 0.3, 1)",
-        fill: "forwards",
-      }
-    );
-
-    activeAnimations.add(anim);
-    anim.onfinish = () => {
-      activeAnimations.delete(anim);
-      if (inOut === "in") {
-        try {
-          anim.cancel();
-        } catch {}
-        header.style.backgroundColor = "";
-        header.style.borderBottomColor = "";
-      }
-    };
-  } catch {}
+  // Dynamic Island clusters are directly animated via suction and release keyframes
 }
 
 // -------------------------------------------------------------
@@ -317,15 +272,16 @@ function getSuckableElements() {
   const selected = [];
   const selectedSet = new Set();
 
-  // 1. Target Navbar cluster divisions (Brand, Segmented Pill, CTA)
-  const header = document.querySelector("header");
-  if (header) {
+  // 1. Target Navbar (Dynamic Island cluster divisions)
+  const siteNav =
+    document.querySelector("[data-site-navbar]") ||
+    document.getElementById("site-navbar");
+
+  if (siteNav) {
     const navClusters = Array.from(
-      header.querySelectorAll("[data-nav-cluster]")
+      siteNav.querySelectorAll("[data-nav-cluster]")
     );
-    const clusters = navClusters.length > 0
-      ? navClusters
-      : Array.from(header.querySelectorAll(".max-w-6xl > div, .max-w-6xl > nav"));
+    const clusters = navClusters.length > 0 ? navClusters : [siteNav];
 
     for (const el of clusters) {
       const style = window.getComputedStyle(el);
@@ -346,8 +302,9 @@ function getSuckableElements() {
     document.body;
 
   const pageSelector = [
-    // Top-level sections & direct content containers
-    "main > *",
+    // Page header elements & direct content containers
+    "header > *",
+    "main > *:not(header)",
     "section > *",
     "article > *",
     "figure",
@@ -366,7 +323,7 @@ function getSuckableElements() {
   const rawElements = Array.from(pageContainer.querySelectorAll(pageSelector));
 
   for (const el of rawElements) {
-    if (header && header.contains(el)) continue;
+    if (siteNav && siteNav.contains(el)) continue;
     if (selectedSet.has(el)) continue;
 
     let hasAncestor = false;
@@ -540,71 +497,201 @@ function runElementRelease(targetX, targetY) {
 // Start size: strictly 48x48px
 // -------------------------------------------------------------
 function BlackHoleVortexOverlay({ phase, singularityPos }) {
-  if (phase === "idle") return null;
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
+  // Ball Squash & Stretch physics state
+  const lastPosRef = useRef({ x: 0, y: 0, time: 0, initialized: false });
+  const prevAngleRef = useRef(0);
+  const stopTimerRef = useRef(null);
+  const [stretchState, setStretchState] = useState({
+    scaleX: 1,
+    scaleY: 1,
+    rotate: 0,
+  });
 
   const isCentering = phase === "centering";
   const isReleasing = phase === "releasing";
   const isBloating = phase === "bloating";
   const isSucking = phase === "sucking";
   const isOpening = phase === "opening";
+  const isTransitioning = phase !== "idle";
 
-  const screenCenter = typeof window !== "undefined"
-    ? { x: window.innerWidth / 2, y: window.innerHeight / 2 }
-    : { x: 0, y: 0 };
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+    const isTouchOnly =
+      !hasFinePointer &&
+      (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window);
+    setIsTouchDevice(isTouchOnly);
+    if (isTouchOnly) return;
+
+    document.documentElement.classList.add("black-hole-cursor-active");
+
+    const handleMouseMove = (e) => {
+      const now = performance.now();
+      const prev = lastPosRef.current;
+
+      if (!prev.initialized) {
+        lastPosRef.current = { x: e.clientX, y: e.clientY, time: now, initialized: true };
+        setMousePos({ x: e.clientX, y: e.clientY });
+        setCursorVisible(true);
+        return;
+      }
+
+      const dt = Math.max(1, now - prev.time);
+      const dx = e.clientX - prev.x;
+      const dy = e.clientY - prev.y;
+      const dist = Math.hypot(dx, dy);
+
+      // Speed normalized to ~60fps frame displacement
+      const speed = Math.min(dist / (dt / 16.67), 35);
+
+      lastPosRef.current = { x: e.clientX, y: e.clientY, time: now, initialized: true };
+      setMousePos({ x: e.clientX, y: e.clientY });
+      if (!cursorVisible) setCursorVisible(true);
+
+      if (dist > 1.2) {
+        // Continuous angle calculation along exact direction of velocity
+        const rawAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
+        const prevAngle = prevAngleRef.current;
+        let diff = (rawAngle - prevAngle) % 360;
+        if (diff > 180) diff -= 360;
+        if (diff < -180) diff += 360;
+        const continuousAngle = prevAngle + diff;
+        prevAngleRef.current = continuousAngle;
+
+        // Ball stretch along movement direction, proportional squash across
+        const stretch = 1 + Math.min(speed * 0.025, 0.55);
+        const squash = 1 / Math.sqrt(stretch);
+
+        setStretchState({
+          scaleX: stretch,
+          scaleY: squash,
+          rotate: continuousAngle,
+        });
+
+        if (stopTimerRef.current) clearTimeout(stopTimerRef.current);
+        stopTimerRef.current = setTimeout(() => {
+          setStretchState((curr) => ({
+            scaleX: 1,
+            scaleY: 1,
+            rotate: curr.rotate,
+          }));
+        }, 70);
+      }
+    };
+
+    const handleMouseOver = (e) => {
+      const target = e.target;
+      if (
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.closest("a") ||
+        target.closest("button") ||
+        target.closest("[role='button']") ||
+        target.closest("[data-flip-calendar]") ||
+        target.closest("[data-magnetic]")
+      ) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    const handleMouseDown = () => setIsMouseDown(true);
+    const handleMouseUp = () => setIsMouseDown(false);
+    const handleMouseLeave = () => setCursorVisible(false);
+    const handleMouseEnter = () => setCursorVisible(true);
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
+    window.addEventListener("mousedown", handleMouseDown, { passive: true });
+    window.addEventListener("mouseup", handleMouseUp, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
+
+    return () => {
+      if (stopTimerRef.current) clearTimeout(stopTimerRef.current);
+      document.documentElement.classList.remove("black-hole-cursor-active");
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+    };
+  }, [cursorVisible]);
+
+  const screenCenter =
+    typeof window !== "undefined"
+      ? { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+      : { x: 0, y: 0 };
+
+  // If mobile touch device and idle, nothing to render (touch has no hover cursor)
+  if (isTouchDevice && !isTransitioning) {
+    return null;
+  }
+
+  // Active coordinates
+  // While idle: follows mouse cursor
+  // While transitioning: starts at click position (which was cursor position), then centers
+  const activeX = isCentering
+    ? [singularityPos.x, screenCenter.x]
+    : isReleasing
+    ? screenCenter.x
+    : isTransitioning
+    ? singularityPos.x
+    : mousePos.x;
+
+  const activeY = isCentering
+    ? [singularityPos.y, screenCenter.y]
+    : isReleasing
+    ? screenCenter.y
+    : isTransitioning
+    ? singularityPos.y
+    : mousePos.y;
 
   return (
     <div
       className="fixed inset-0 z-[99998] pointer-events-none overflow-hidden"
       aria-hidden="true"
     >
-      {/* 
-        Handover Spatial Depth Veil:
-        Subtle spatial dimming during centering & release — NO harsh pitch-black flashing!
-      */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={
-          isCentering
-            ? { opacity: [0, 0.12, 0.18] }
-            : isReleasing
-            ? { opacity: [0.18, 0.05, 0] }
-            : { opacity: 0 }
-        }
-        transition={{
-          duration: isCentering ? TIMING.CENTERING / 1000 : TIMING.RELEASING / 1000,
-          ease: "easeInOut",
-        }}
-        className="absolute inset-0 bg-black/10 backdrop-blur-[1.5px] pointer-events-none"
-      />
+      {/* Handover Spatial Depth Veil during Transition */}
+      {isTransitioning && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={
+            isCentering
+              ? { opacity: [0, 0.12, 0.18] }
+              : isReleasing
+              ? { opacity: [0.18, 0.05, 0] }
+              : { opacity: 0 }
+          }
+          transition={{
+            duration: isCentering ? TIMING.CENTERING / 1000 : TIMING.RELEASING / 1000,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 bg-black/10 backdrop-blur-[1.5px] pointer-events-none"
+        />
+      )}
 
-      {/* 
-        The Moving Black Hole Singularity Container:
-        Positions at (singularityPos.x, singularityPos.y) during opening/sucking/bloating.
-        Rushes to screen center during centering.
-        Bursts at screen center during releasing.
-      */}
+      {/* The Black Hole Container (Mouse Pointer <-> Active Singularity) */}
       <motion.div
-        initial={false}
-        animate={
-          isCentering
-            ? {
-                left: [singularityPos.x, screenCenter.x],
-                top: [singularityPos.y, screenCenter.y],
-              }
-            : isReleasing
-            ? {
-                left: screenCenter.x,
-                top: screenCenter.y,
-              }
-            : {
-                left: singularityPos.x,
-                top: singularityPos.y,
-              }
-        }
+        animate={{
+          left: activeX,
+          top: activeY,
+          opacity: isTransitioning ? 1 : cursorVisible ? 1 : 0,
+        }}
         transition={
           isCentering
             ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
-            : { duration: 0 }
+            : isTransitioning
+            ? { duration: 0 }
+            : { duration: 0.02, ease: "linear" }
         }
         style={{
           position: "fixed",
@@ -612,109 +699,100 @@ function BlackHoleVortexOverlay({ phase, singularityPos }) {
         }}
         className="flex items-center justify-center pointer-events-none"
       >
-        {/* 
-          Relativistic Accretion Halo & Doppler Photon Ring:
-          Monochromatic, organic luminosity orbiting the 48px event horizon
-        */}
+        {/* Direction Rotator: Orient coordinate system along velocity trajectory */}
         <motion.div
-          animate={
-            isOpening
-              ? { scale: [0, 1], rotate: [0, 90], opacity: [0, 0.9] }
-              : isSucking
-              ? { scale: [1, 1.25, 1.1], rotate: [90, 360], opacity: 1 }
-              : isBloating
-              ? {
-                  scale: [1.1, 0.9, 2.3, 2.0],
-                  rotate: [360, 480],
-                  opacity: [1, 0.95, 1],
-                  borderRadius: [
-                    "50%",
-                    "60% 40% 58% 42% / 42% 58% 42% 58%",
-                    "42% 58% 40% 60% / 60% 40% 60% 40%",
-                    "50%",
-                  ],
-                }
-              : isCentering
-              ? { scale: [2.0, 2.3, 1.9], rotate: [480, 640], opacity: 1 }
-              : isReleasing
-              ? { scale: [1.9, 4.2], opacity: [1, 0] }
-              : { scale: 0, opacity: 0 }
-          }
-          transition={
-            isOpening
-              ? { duration: TIMING.OPENING / 1000, ease: [0.16, 1, 0.3, 1] }
-              : isSucking
-              ? { duration: TIMING.SUCKING / 1000, ease: "linear" }
-              : isBloating
-              ? { duration: TIMING.BLOATING / 1000, ease: "easeInOut", times: [0, 0.25, 0.65, 1] }
-              : isCentering
-              ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
-              : isReleasing
-              ? { duration: TIMING.RELEASING / 1000, ease: [0.16, 1, 0.3, 1] }
-              : { duration: 0 }
-          }
-          className="absolute w-[86px] h-[86px] rounded-full pointer-events-none"
-          style={{
-            background: "conic-gradient(from 180deg at 50% 50%, rgba(0,0,0,0.85) 0deg, rgba(0,0,0,0.95) 140deg, rgba(29,29,31,0.6) 260deg, rgba(0,0,0,0.9) 360deg)",
-            boxShadow: `
-              0 0 25px 8px rgba(0, 0, 0, 0.65),
-              inset 0 0 15px rgba(0, 0, 0, 0.9)
-            `,
+          animate={{
+            rotate: isTransitioning ? 0 : stretchState.rotate,
           }}
-        />
-
-        {/* 
-          The Black Hole Event Horizon (Singularity Core):
-          Initial size: strictly 48x48px!
-          Pure Obsidian Abyss (#000000) with deep gravitational gradient lensing.
-          Bloated bubble physics in Stage 3: morphing border radius & pulsating scale!
-        */}
-        <motion.div
-          animate={
-            isOpening
-              ? { scale: [0, 1], opacity: 1, borderRadius: "50%" }
-              : isSucking
-              ? { scale: [1, 1.15, 1], opacity: 1, borderRadius: "50%" }
-              : isBloating
-              ? {
-                  scale: [1, 0.82, 2.2, 1.9],
-                  opacity: 1,
-                  borderRadius: [
-                    "50%",
-                    "64% 36% 60% 40% / 38% 62% 38% 62%",
-                    "38% 62% 40% 60% / 60% 40% 60% 40%",
-                    "54% 46% 52% 48% / 48% 52% 48% 52%",
-                    "50%",
-                  ],
-                }
-              : isCentering
-              ? { scale: [1.9, 2.1, 1.75], opacity: 1, borderRadius: "50%" }
-              : isReleasing
-              ? { scale: [1.75, 2.4, 0], opacity: [1, 0.75, 0] }
-              : { scale: 0, opacity: 0 }
-          }
           transition={
-            isOpening
-              ? { duration: TIMING.OPENING / 1000, ease: [0.16, 1, 0.3, 1] }
-              : isSucking
-              ? { duration: TIMING.SUCKING / 1000, ease: "easeInOut" }
-              : isBloating
-              ? { duration: TIMING.BLOATING / 1000, ease: "easeInOut", times: [0, 0.25, 0.6, 0.85, 1] }
-              : isCentering
-              ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
-              : isReleasing
-              ? { duration: TIMING.RELEASING / 1000, ease: [0.16, 1, 0.3, 1] }
-              : { duration: 0 }
+            isTransitioning
+              ? { duration: 0 }
+              : { type: "spring", stiffness: 650, damping: 36, mass: 0.15 }
           }
-          className="relative z-10 w-[48px] h-[48px] bg-[#000000] flex items-center justify-center shrink-0"
-          style={{
-            boxShadow: `
-              0 0 24px 6px rgba(0, 0, 0, 0.95),
-              0 0 55px 14px rgba(0, 0, 0, 0.8),
-              inset 0 0 18px rgba(0, 0, 0, 1)
-            `,
-          }}
-        />
+          className="flex items-center justify-center pointer-events-none"
+        >
+          {/* The Black Hole Ball (with Squash & Stretch Physics in local trajectory coordinates) */}
+          <motion.div
+            animate={
+              isOpening
+                ? {
+                    scaleX: [1, 5.2],
+                    scaleY: [1, 5.2],
+                    opacity: 1,
+                    borderRadius: "50%",
+                  }
+                : isSucking
+                ? {
+                    scaleX: [5.2, 6.2, 5.5],
+                    scaleY: [5.2, 6.2, 5.5],
+                    opacity: 1,
+                    borderRadius: "50%",
+                  }
+                : isBloating
+                ? {
+                    scaleX: [5.5, 4.2, 8.8, 7.8],
+                    scaleY: [5.5, 4.2, 8.8, 7.8],
+                    opacity: 1,
+                    borderRadius: [
+                      "50%",
+                      "64% 36% 60% 40% / 38% 62% 38% 62%",
+                      "38% 62% 40% 60% / 60% 40% 60% 40%",
+                      "54% 46% 52% 48% / 48% 52% 48% 52%",
+                      "50%",
+                    ],
+                  }
+                : isCentering
+                ? {
+                    scaleX: [7.8, 8.8, 7.2],
+                    scaleY: [7.8, 8.8, 7.2],
+                    opacity: 1,
+                    borderRadius: "50%",
+                  }
+                : isReleasing
+                ? {
+                    scaleX: [7.2, 14, 0],
+                    scaleY: [7.2, 14, 0],
+                    opacity: [1, 0.75, 0],
+                  }
+                : {
+                    scaleX: isMouseDown
+                      ? 0.88
+                      : stretchState.scaleX * (isHovering ? 1.35 : 1),
+                    scaleY: isMouseDown
+                      ? 0.88
+                      : stretchState.scaleY * (isHovering ? 1.35 : 1),
+                    opacity: 1,
+                    borderRadius: "50%",
+                  }
+            }
+            transition={
+              isOpening
+                ? { duration: TIMING.OPENING / 1000, ease: [0.16, 1, 0.3, 1] }
+                : isSucking
+                ? { duration: TIMING.SUCKING / 1000, ease: "easeInOut" }
+                : isBloating
+                ? {
+                    duration: TIMING.BLOATING / 1000,
+                    ease: "easeInOut",
+                    times: [0, 0.25, 0.6, 0.85, 1],
+                  }
+                : isCentering
+                ? { duration: TIMING.CENTERING / 1000, ease: [0.35, 0, 0.15, 1] }
+                : isReleasing
+                ? { duration: TIMING.RELEASING / 1000, ease: [0.16, 1, 0.3, 1] }
+                : {
+                    scaleX: { type: "spring", stiffness: 450, damping: 25, mass: 0.25 },
+                    scaleY: { type: "spring", stiffness: 450, damping: 25, mass: 0.25 },
+                  }
+            }
+            className="relative z-10 w-[18px] h-[18px] bg-[#000000] flex items-center justify-center shrink-0 border border-white/20"
+            style={{
+              boxShadow: isTransitioning
+                ? "0 0 35px 10px rgba(0, 0, 0, 0.95), 0 0 70px 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 1)"
+                : "0 2px 10px rgba(0, 0, 0, 0.45), 0 0 4px rgba(0, 0, 0, 0.8), inset 0 0 4px rgba(255, 255, 255, 0.35)",
+            }}
+          />
+        </motion.div>
 
         {/* Big Bang Shockwave Expansion on Release */}
         <AnimatePresence>
@@ -780,6 +858,16 @@ export function BlackHoleTransitionProvider({ children }) {
     timersRef.current.push(t);
   }, [clearAllTimers]);
 
+  const lastMousePosRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => {
+      lastMousePosRef.current = { x: e.clientX, y: e.clientY };
+    };
+    window.addEventListener("mousemove", handleGlobalMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
+  }, []);
+
   // Execute the exact 5-stage transition
   const navigate = useCallback(
     (href, clickPos) => {
@@ -794,12 +882,16 @@ export function BlackHoleTransitionProvider({ children }) {
       clearAllActiveElementAnimations();
 
       const rawX =
-        clickPos && typeof clickPos.x === "number"
+        clickPos && typeof clickPos.x === "number" && clickPos.x > 0
           ? clickPos.x
+          : lastMousePosRef.current.x > 0
+          ? lastMousePosRef.current.x
           : typeof window !== "undefined" ? window.innerWidth / 2 : 0;
       const rawY =
-        clickPos && typeof clickPos.y === "number"
+        clickPos && typeof clickPos.y === "number" && clickPos.y > 0
           ? clickPos.y
+          : lastMousePosRef.current.y > 0
+          ? lastMousePosRef.current.y
           : typeof window !== "undefined" ? window.innerHeight / 2 : 0;
 
       // Keep singularity fully inside viewport

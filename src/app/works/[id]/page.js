@@ -1,7 +1,7 @@
 import { allWorks } from "@/data/works";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, Code, Briefcase } from "lucide-react";
+import { ArrowUpRight, BookOpen, Code, Briefcase, Video, Sparkles, Wrench } from "lucide-react";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 
@@ -25,6 +25,9 @@ export default async function WorkDetailPage({ params }) {
     switch (category) {
       case "Project": return <Briefcase size={14} className="mr-1.5" />;
       case "Open Source": return <Code size={14} className="mr-1.5" />;
+      case "AI Videos": return <Video size={14} className="mr-1.5" />;
+      case "Case Study": return <BookOpen size={14} className="mr-1.5" />;
+      case "Internal Tools": return <Wrench size={14} className="mr-1.5" />;
       default: return null;
     }
   };
@@ -67,17 +70,28 @@ export default async function WorkDetailPage({ params }) {
         {/* Detail Content Section */}
         <div className="w-full">
           <div className="max-w-6xl mx-auto px-4 sm:px-8">
-            {work.image && (
+            {work.videoSrc ? (
+              <div className="w-full relative rounded-3xl overflow-hidden mb-12 sm:mb-20 bg-black shadow-[0_4px_30px_rgba(0,0,0,0.12)] flex items-center justify-center border border-black/[0.08]">
+                <video 
+                  src={work.videoSrc} 
+                  poster={work.poster || work.image} 
+                  controls 
+                  playsInline 
+                  preload="metadata"
+                  className={`w-full max-h-[75vh] object-contain ${work.isVertical ? "max-w-md mx-auto" : ""}`}
+                />
+              </div>
+            ) : work.image ? (
               <div className="w-full relative rounded-3xl overflow-hidden mb-12 sm:mb-20 bg-[#f5f5f7] shadow-[0_4px_24px_rgba(0,0,0,0.04)] flex items-center justify-center border border-black/[0.06]">
                 <Image 
                   src={work.image} 
                   alt={work.title} 
-                  width={1920}
-                  height={1080}
+                  width={1920} 
+                  height={1080} 
                   className="w-full h-auto object-contain" 
                 />
               </div>
-            )}
+            ) : null}
             
             <div className="prose prose-base sm:prose-lg font-sans text-[#515154] leading-relaxed max-w-none sm:columns-2 lg:columns-3 gap-8 sm:gap-12 mt-8 sm:mt-12">
               {work.content ? (

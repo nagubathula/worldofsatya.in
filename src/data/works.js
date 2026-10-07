@@ -556,5 +556,277 @@ export const allWorks = [
       </div>
     `,
     image: "/gallery/compatriot-board.jpg",
+  },
+
+  // Generative AI Videos
+  {
+    id: "v1",
+    title: "Stereo Headphones",
+    description: "Commercial generative AI showcase featuring studio-grade product illumination, physical ray dispersion, and macro acoustics.",
+    category: "AI Videos",
+    tag: "Commercial AI",
+    videoSrc: "/aivideos/AI_ADVERTISEMENT.mp4",
+    poster: "/aivideos/posters/AI_ADVERTISEMENT.jpg",
+    image: "/aivideos/posters/AI_ADVERTISEMENT.jpg",
+    isVertical: false,
+    link: "/works/v1",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The vision</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">A commercial-grade product film exploring high-end consumer audio hardware. The goal was to achieve hyper-realistic product rendering, realistic acoustic vibration visualization, and cinematic studio lighting entirely inside generative video pipelines.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Pipeline & technique</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Orchestrated with custom ComfyUI diffusion graphs, depth-map conditioning, and frame interpolation models to eliminate latent flickering and preserve fine hardware brushed-metal textures across continuous 60fps pans.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v2",
+    title: "Hangy",
+    description: "Experimental animation study exploring physical weight, tactile deformation, and spatial dynamics in latent diffusion models.",
+    category: "AI Videos",
+    tag: "Latent Motion",
+    videoSrc: "/aivideos/HANGY.mp4",
+    poster: "/aivideos/posters/HANGY.jpg",
+    image: "/aivideos/posters/HANGY.jpg",
+    isVertical: false,
+    link: "/works/v2",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The experiment</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Exploring organic creature dynamics and physics-based suspension in AI-generated video. Pushing latent models to understand physical tension, gravity resistance, and expressive anatomical deformation without uncanny morphing artifacts.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v3",
+    title: "AI Virtual Host",
+    description: "Hyper-realistic digital presenter synthesized using multi-modal transformer workflows with neural lip-synchronization and facial micro-expressions.",
+    category: "AI Videos",
+    tag: "Virtual Presenter",
+    videoSrc: "/aivideos/female_host_ai_generated.mp4",
+    poster: "/aivideos/posters/female_host_ai_generated.jpg",
+    image: "/aivideos/posters/female_host_ai_generated.jpg",
+    isVertical: true,
+    link: "/works/v3",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The objective</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Generating high-fidelity human presenters capable of natural gaze shifts, expressive micro-blinks, and accurate phonetic lip-synchronization tailored for localized educational and technical explainers.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v4",
+    title: "NIAT UGC",
+    description: "High-conversion creator content simulation engineered for mobile feeds with realistic natural lighting and conversational micro-cadence.",
+    category: "AI Videos",
+    tag: "Social UGC",
+    videoSrc: "/aivideos/niat_ugc.mp4",
+    poster: "/aivideos/posters/niat_ugc.jpg",
+    image: "/aivideos/posters/niat_ugc.jpg",
+    isVertical: true,
+    link: "/works/v4",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Social-first realism</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">User-generated content (UGC) holds high engagement due to authentic imperfections. This production simulates handheld camera shake, casual dialogue timing, and realistic room reverberation entirely generated with AI.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v5",
+    title: "Mustang AI Realism",
+    description: "Cinematic automotive tracking shot rendered directly in latent space, achieving accurate chrome reflections and vehicular speed motion blur.",
+    category: "AI Videos",
+    tag: "Automotive CGI",
+    videoSrc: "/aivideos/mustang_ai_realism.mp4",
+    poster: "/aivideos/posters/mustang_ai_realism.jpg",
+    image: "/aivideos/posters/mustang_ai_realism.jpg",
+    isVertical: false,
+    link: "/works/v5",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Automotive motion benchmark</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Cars are notoriously difficult for AI video due to rigid-body physics, wheel spoke rotation, and glossy specular curvature reflections. This experiment achieved consistent vehicle geometry and highway reflections through controlled multi-pass prompting.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v6",
+    title: "Hyper-Realistic Detail",
+    description: "Extreme fidelity macro exploration pushing model resolution to the edge with volumetric atmosphere and photorealistic textures.",
+    category: "AI Videos",
+    tag: "Cinematic Visuals",
+    videoSrc: "/aivideos/hyper_realistic_detail.mp4",
+    poster: "/aivideos/posters/hyper_realistic_detail.jpg",
+    image: "/aivideos/posters/hyper_realistic_detail.jpg",
+    isVertical: false,
+    link: "/works/v6",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Macro texture depth</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Pushing latent diffusion models to reconstruct tactile micro-surfaces, skin porosity, and ambient lens chromatic aberration without digital softness.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v7",
+    title: "Engineerudu (Widescreen)",
+    description: "Widescreen cinematic narrative celebrating Andhra Pradesh's first Free and Open Source Software engineering community.",
+    category: "AI Videos",
+    tag: "Community Film",
+    videoSrc: "/aivideos/engineerudu_horizontal.mp4",
+    poster: "/aivideos/posters/engineerudu_horizontal.jpg",
+    image: "/aivideos/posters/engineerudu_horizontal.jpg",
+    isVertical: false,
+    link: "/works/v7",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The story</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">A cinematic visual anthem created for Engineerudu — telling the story of engineers breaking boundaries, open-source hacking, and community solidarity across Telugu-speaking regions.</p>
+        </section>
+      </div>
+    `,
+  },
+  {
+    id: "v8",
+    title: "Engineerudu (Mobile)",
+    description: "High-impact vertical storytelling tailored for smartphone consumption with dynamic typography and rapid visual pacing.",
+    category: "AI Videos",
+    tag: "Mobile Narrative",
+    videoSrc: "/aivideos/engineerudu_vertical.mp4",
+    poster: "/aivideos/posters/engineerudu_vertical.jpg",
+    image: "/aivideos/posters/engineerudu_vertical.jpg",
+    isVertical: true,
+    link: "/works/v8",
+    actionText: "Watch Video",
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Mobile engagement</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Vertical reformatted cut of the Engineerudu cinematic, engineered with aggressive cuts and punchy typography for viral distribution across Instagram Reels and YouTube Shorts.</p>
+        </section>
+      </div>
+    `,
+  },
+
+  // Internal Tools
+  {
+    id: "t1",
+    title: "AutoEdit",
+    description: "AI-powered infographic and typography editor making complex animations in seconds.",
+    category: "Internal Tools",
+    tag: "Automation Suite",
+    link: "/works/t1",
+    actionText: "Restricted Access",
+    isInternal: true,
+    tags: ["Python", "React", "Whisper", "Gemini"],
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The challenge</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Content creation at scale demands hundreds of custom animated typography and infographic assets per week. Manual keyframing in After Effects creates massive production bottlenecks. AutoEdit was built as an internal web studio to automate this end-to-end.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Architecture</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Powered by Whisper for phonetic word alignment and Gemini for semantic keyword highlighting. Renders dynamic SVG/Canvas animations at 60fps with one-click export into video editors.</p>
+        </section>
+      </div>
+    `,
+    image: "",
+  },
+  {
+    id: "t2",
+    title: "WhatThePrompt",
+    description: "Web application offering standardized preset pipelines for high-consistency AI video/image generations.",
+    category: "Internal Tools",
+    tag: "Prompt Engineering",
+    link: "/works/t2",
+    actionText: "Restricted Access",
+    isInternal: true,
+    tags: ["Next.js", "ComfyUI", "Supabase"],
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The challenge</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Keeping visual style, lighting, and camera seeds consistent across multi-scene generative AI video projects is notoriously difficult with ad-hoc prompting. WhatThePrompt enforces parameterized prompt formulas and node recipes across our creative team.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Pipeline</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Deep integration with ComfyUI workflows, Supabase for persistent seed history, and instant preview rendering directly from the browser.</p>
+        </section>
+      </div>
+    `,
+    image: "",
+  },
+  {
+    id: "t3",
+    title: "Content Nexus",
+    description: "Centralized operations suite featuring real-time YouTube analytics, team workflows, and role-based access.",
+    category: "Internal Tools",
+    tag: "Operations Suite",
+    link: "/works/t3",
+    actionText: "Restricted Access",
+    isInternal: true,
+    tags: ["PostgreSQL", "React", "REST APIs"],
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The challenge</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Managing digital media distribution across multiple channels, languages, and creators requires precise metrics and role separation. Content Nexus serves as our unified command center.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Capabilities</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Live YouTube Data API integrations, automated thumbnail CTR tracking, velocity anomaly alerts, and strict permission tiers for internal vs external collaborators.</p>
+        </section>
+      </div>
+    `,
+    image: "",
+  },
+  {
+    id: "t4",
+    title: "WA-Guardian",
+    description: "Real-time browser extension detecting harmful content and scam alerts in chat apps.",
+    category: "Internal Tools",
+    tag: "Browser Extension",
+    link: "/works/t4",
+    actionText: "Restricted Access",
+    isInternal: true,
+    tags: ["JavaScript", "Extension", "AI Filter"],
+    content: `
+      <div class="flex flex-col gap-12">
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The challenge</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Preventing phishing, impersonation, and malicious link execution within community communication channels in real-time before users click.</p>
+        </section>
+        <section>
+          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Protection engine</h2>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">On-device URL heuristics, zero-latency DOM scanning, and lightweight machine learning classifiers that flag suspicious patterns without transmitting personal user data.</p>
+        </section>
+      </div>
+    `,
+    image: "",
   }
 ];

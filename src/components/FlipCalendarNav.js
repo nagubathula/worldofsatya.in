@@ -12,9 +12,9 @@ import { useBlackHoleTransition } from "./BlackHoleTransition";
 export const calendarSections = [
   {
     id: "avatar",
-    code: "AVATAR",
-    title: "Avatar",
-    href: "/about",
+    code: "ABOUT",
+    title: "About",
+    href: "/about#two-truths",
     isAvatar: true,
   },
   {
@@ -60,16 +60,36 @@ function CardFace({ section, onExpandWorks }) {
   return (
     <div className="relative w-full h-full bg-white text-[#111111] flex flex-col justify-between p-4 sm:p-6 lg:p-7 select-none overflow-hidden">
       {section.isAvatar ? (
-        <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
-          {/* Subtle soft studio lighting */}
-          <div className="absolute w-[85%] h-[85%] -top-[5%] left-[7.5%] bg-radial from-amber-100/35 via-slate-100/35 to-transparent blur-2xl pointer-events-none" />
+        <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
+          {/* Top code badge */}
+          <div className="w-full flex items-center justify-between z-10">
+            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
+              {section.code}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              2 Truths & 1 Lie
+            </span>
+          </div>
 
           {/* Interactive SVG Chibi Character */}
-          <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
-            <div className="relative w-40 sm:w-48 lg:w-56 aspect-[9/16] max-h-[30vh] sm:max-h-[36vh] lg:max-h-[42vh]">
+          <div className="relative flex-1 w-full flex flex-col items-center justify-center z-10 my-1 sm:my-1.5">
+            <div className="absolute w-[85%] h-[85%] -top-[5%] left-[7.5%] bg-radial from-amber-100/35 via-slate-100/35 to-transparent blur-2xl pointer-events-none" />
+            <div className="relative w-36 sm:w-44 lg:w-48 aspect-[9/16] max-h-[25vh] sm:max-h-[29vh] lg:max-h-[33vh]">
               <ChibiAvatar className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.07)]" />
             </div>
-            <div className="w-32 sm:w-40 h-2 sm:h-2.5 rounded-full bg-black/[0.07] blur-[3px] mt-0.5" />
+            <div className="w-28 sm:w-36 h-2 rounded-full bg-black/[0.07] blur-[3px] mt-0.5" />
+          </div>
+
+          {/* Bottom Title */}
+          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
+            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
+              About Satya
+            </span>
+            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1 group-hover:text-black transition-colors">
+              <span>Explore</span>
+              <ArrowUpRight size={12} />
+            </span>
           </div>
         </div>
       ) : section.isContact ? (
@@ -188,7 +208,7 @@ function CardFace({ section, onExpandWorks }) {
   );
 }
 
-export default function FlipCalendarNav({ onExpandWorks, initialSection = "avatar" }) {
+export default function FlipCalendarNav({ onExpandWorks, initialSection = "avatar", onSectionChange }) {
   const reduceMotion = useReducedMotion();
   const initialIndex = Math.max(0, calendarSections.findIndex(section => section.id === initialSection));
   const router = useRouter();
@@ -204,6 +224,11 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
 
+  // Notify parent of current section on mount or when initialIndex changes
+  useEffect(() => {
+    onSectionChange?.(calendarSections[currIndexRef.current]?.id || "avatar");
+  }, [onSectionChange]);
+
   const flipToNext = useCallback(() => {
     if (isFlippingRef.current) return;
     isFlippingRef.current = true;
@@ -212,6 +237,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     setDirection("down");
     setIsFlipping(true);
     setCurrIndex(target);
+    onSectionChange?.(calendarSections[target].id);
 
     try {
       play8BitBlipSound(620);
@@ -226,8 +252,8 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     flipTimerRef.current = setTimeout(() => {
       setIsFlipping(false);
       isFlippingRef.current = false;
-    }, 650);
-  }, [total]);
+    }, 480);
+  }, [total, onSectionChange]);
 
   const flipToPrev = useCallback(() => {
     if (isFlippingRef.current) return;
@@ -237,6 +263,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     setDirection("up");
     setIsFlipping(true);
     setCurrIndex(target);
+    onSectionChange?.(calendarSections[target].id);
 
     try {
       play8BitBlipSound(520);
@@ -251,8 +278,8 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     flipTimerRef.current = setTimeout(() => {
       setIsFlipping(false);
       isFlippingRef.current = false;
-    }, 650);
-  }, [total]);
+    }, 480);
+  }, [total, onSectionChange]);
 
   // Wheel listener: Flips calendar when hovering over the widget, allows normal page scroll elsewhere
   useEffect(() => {
@@ -564,42 +591,47 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
             }
           }}
           className="relative w-[min(320px,84vw)] sm:w-[min(390px,86vw)] lg:w-[440px] aspect-[4/4.2] max-h-[40vh] sm:max-h-[46vh] lg:max-h-[460px] rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] bg-white shadow-[0_12px_28px_rgba(0,0,0,0.06)] cursor-pointer group"
-          style={{ perspective: "1000px" }}
+          style={{ perspective: "1200px" }}
         >
           {/* Apple iOS Level Smooth 3D Perspective Card Turn */}
-          <AnimatePresence initial={false} custom={direction}>
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.div
               key={currIndex}
               custom={direction}
               variants={{
                 enter: (dir) => ({
-                  rotateX: dir === "down" ? 50 : -50,
-                  y: dir === "down" ? 28 : -28,
-                  scale: 0.95,
+                  rotateX: dir === "down" ? 55 : -55,
+                  y: dir === "down" ? 30 : -30,
+                  z: -40,
+                  scale: 0.94,
                   opacity: 0,
                 }),
                 center: {
                   rotateX: 0,
                   y: 0,
+                  z: 0,
                   scale: 1,
                   opacity: 1,
                   transition: {
-                    duration: 0.65,
-                    ease: [0.22, 1, 0.36, 1],
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 26,
+                    mass: 0.75,
                   },
                 },
                 exit: (dir) => ({
-                  rotateX: dir === "down" ? -50 : 50,
-                  y: dir === "down" ? -28 : 28,
-                  scale: 0.95,
+                  rotateX: dir === "down" ? -55 : 55,
+                  y: dir === "down" ? -30 : 30,
+                  z: -40,
+                  scale: 0.94,
                   opacity: 0,
                   transition: {
-                    duration: 0.65,
-                    ease: [0.22, 1, 0.36, 1],
+                    duration: 0.38,
+                    ease: [0.32, 0, 0.67, 0],
                   },
                 }),
               }}
-              initial={false}
+              initial="enter"
               animate="center"
               exit="exit"
               style={{
@@ -609,9 +641,18 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
                 WebkitBackfaceVisibility: "hidden",
                 willChange: "transform, opacity",
               }}
-              className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] overflow-hidden bg-white"
+              className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] overflow-hidden bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
             >
               <CardFace section={currSection} onExpandWorks={onExpandWorks} />
+              
+              {/* Dynamic ambient lighting shadow during 3D flip */}
+              <motion.div
+                initial={{ opacity: 0.2 }}
+                animate={{ opacity: 0 }}
+                exit={{ opacity: 0.25 }}
+                transition={{ duration: 0.35 }}
+                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/15"
+              />
             </motion.div>
           </AnimatePresence>
         </div>

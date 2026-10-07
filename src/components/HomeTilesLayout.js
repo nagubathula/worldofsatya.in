@@ -54,8 +54,11 @@ export default function HomeTilesLayout() {
   const reduceMotion = useReducedMotion();
   const [isWorksExpanded, setIsWorksExpanded] = useState(false);
   const [previewSection, setPreviewSection] = useState("avatar");
+  const [currentSection, setCurrentSection] = useState("avatar");
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
+
+  const isAvatarVisible = !isWorksExpanded && currentSection === "avatar";
 
   // Close works or contact on Escape key
   useEffect(() => {
@@ -125,11 +128,11 @@ export default function HomeTilesLayout() {
             .
           </p>
           <div ref={contactContainerRef} className="mt-6 flex flex-wrap items-start gap-3">
-            <RiveAboutButton />
+            <RiveAboutButton showFace={!isAvatarVisible} />
             <SocialBurst open={isContactOpen} onToggle={toggleContact} />
           </div>
           {isWorksExpanded && <button type="button" aria-expanded={true} aria-controls="home-work-preview"
-            onClick={() => { setIsWorksExpanded(value => !value); setIsContactOpen(false); }}
+            onClick={() => { setIsWorksExpanded(false); setIsContactOpen(false); }}
             className="mt-8 flex w-fit items-center gap-3 rounded-full px-3 py-2 text-sm text-[#515154] transition-colors duration-500 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
             <ArrowLeft size={16} />
             Back to preview
@@ -140,7 +143,19 @@ export default function HomeTilesLayout() {
         <div id="home-work-preview" className="relative w-full min-w-0 lg:w-1/2 flex items-center justify-center lg:justify-end px-0 z-10">
           {!isWorksExpanded ? (
             <motion.div key="calendar" className="w-full flex justify-center">
-              <FlipCalendarNav initialSection={previewSection} onExpandWorks={() => { setPreviewSection("works"); setIsWorksExpanded(true); setIsContactOpen(false); }} />
+              <FlipCalendarNav
+                initialSection={previewSection}
+                onSectionChange={(sectionId) => {
+                  setCurrentSection(sectionId);
+                  setPreviewSection(sectionId);
+                }}
+                onExpandWorks={() => {
+                  setPreviewSection("works");
+                  setCurrentSection("works");
+                  setIsWorksExpanded(true);
+                  setIsContactOpen(false);
+                }}
+              />
             </motion.div>
           ) : (
             <motion.div key="expanded" layout className="w-full max-w-[540px] py-6 flex flex-col gap-5 sm:gap-6">

@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Sparkles, Gamepad2 } from "lucide-react";
 import RiveButton from "./RiveButton";
 import { RiveCompass, RiveLayers, RiveCode } from "./RiveIcons";
+import TwoTruthsAndALie from "./TwoTruthsAndALie";
 
 const principles = [
   {
@@ -55,7 +56,16 @@ export default function AboutMe() {
           <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-mono uppercase tracking-[0.16em]">Available for select initiatives</span>
         </div>
-        <span className="font-mono text-[#86868b] tracking-wider">Satya Sai Nagubathula · Design & Code</span>
+        <div className="flex items-center gap-4">
+          <a
+            href="#two-truths"
+            className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs text-[#1d1d1f] hover:text-emerald-700 transition-colors"
+          >
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span>Play 2 Truths & 1 Lie</span>
+          </a>
+          <span className="font-mono text-[#86868b] tracking-wider">Satya Sai Nagubathula · Design & Code</span>
+        </div>
       </div>
 
       {/* Hero Spread: Open Editorial Layout */}
@@ -80,7 +90,7 @@ export default function AboutMe() {
             </p>
           </div>
 
-          <div className="mt-10 flex flex-wrap items-center gap-5">
+          <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-5">
             <RiveButton
               href="/works"
               className="px-6 py-3 text-sm font-medium"
@@ -95,6 +105,13 @@ export default function AboutMe() {
             >
               View experience
             </Link>
+            <a
+              href="#two-truths"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[#1d1d1f] hover:text-emerald-800 transition-all py-2.5 px-3.5 rounded-full bg-black/[0.04] hover:bg-emerald-500/10 border border-black/[0.08] shadow-2xs group"
+            >
+              <Gamepad2 size={15} className="text-emerald-600 transition-transform group-hover:rotate-12" />
+              <span>Two Truths & A Lie</span>
+            </a>
           </div>
         </div>
 
@@ -126,11 +143,16 @@ export default function AboutMe() {
         </div>
       </div>
 
+      {/* Chapter 00: Two Truths and One Lie Icebreaker */}
+      <section id="two-truths" aria-label="Two Truths and One Lie Game" className="mt-16 sm:mt-24 scroll-mt-24">
+        <TwoTruthsAndALie />
+      </section>
+
       {/* Divider */}
       <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
 
       {/* Chapter 01: Practice & Philosophy */}
-      <div className="mt-14 sm:mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+      <div id="practice-philosophy" className="mt-14 sm:mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 scroll-mt-24">
         {/* Left: Current Role at NxtWave */}
         <div className="lg:col-span-5 flex flex-col justify-between">
           <div>

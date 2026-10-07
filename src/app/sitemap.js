@@ -4,7 +4,7 @@ import { caseStudiesData } from "@/data/caseStudies";
 const BASE_URL = "https://worldofsatya.in";
 
 export default function sitemap() {
-  const routes = ["", "/about", "/works", "/experience", "/achievements",
+  const routes = ["", "/about", "/works", "/gallery", "/experience", "/achievements",
     ...allWorks.map(({ id }) => `/works/${id}`),
     ...caseStudiesData.map(({ slug }) => `/works/case-studies/${slug}`),
   ];
