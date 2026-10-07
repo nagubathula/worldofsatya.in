@@ -27,13 +27,8 @@ export default function Template({ children }) {
         className="fixed top-0 left-0 right-0 h-[2px] z-[9999] pointer-events-none bg-gradient-to-r from-transparent via-[#1d1d1f] to-transparent shadow-[0_1px_6px_rgba(0,0,0,0.25)]"
       />
 
-      {/* 
-        The page host container:
-        The background stays steady, while the individual elements (cards, text, buttons, avatar, images)
-        are individually warped, stretched into funnels, and sucked into the black hole!
-      */}
+      {/* Page host container */}
       <div
-        id="black-hole-page"
         key={`page-${pathname}`}
         className="min-h-screen w-full relative"
       >

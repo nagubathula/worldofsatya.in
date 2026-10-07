@@ -83,7 +83,7 @@ export default function ExperienceTimeline({ limit, showStats = false, bento = f
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-baseline">
                   {/* Period */}
                   <div className="md:col-span-3">
-                    <span className="font-mono text-xs sm:text-sm font-medium text-[#86868b]">
+                    <span className="inline-block font-mono text-xs sm:text-sm font-medium text-[#86868b]">
                       {exp.year}
                     </span>
                   </div>

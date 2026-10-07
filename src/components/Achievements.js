@@ -57,7 +57,7 @@ export default function Achievements({ limit }) {
       viewport={{ once: true, margin: "-80px" }}
       className="w-full"
     >
-      <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col gap-8 sm:gap-10" suppressHydrationWarning>
+      <div className="py-12 sm:py-16 w-full flex flex-col gap-8 sm:gap-10" suppressHydrationWarning>
         <motion.div variants={itemAnim} className="mb-2 sm:mb-8" suppressHydrationWarning>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#86868b] text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]" suppressHydrationWarning>
             <Trophy size={13} /> Recognition

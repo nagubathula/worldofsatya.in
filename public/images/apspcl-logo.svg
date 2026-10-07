@@ -1,0 +1,38 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="apspcl_bg" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <linearGradient id="apspcl_sun" x1="60" y1="20" x2="60" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="apspcl_grid" x1="30" y1="65" x2="90" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+  </defs>
+  <!-- Base circular badge -->
+  <rect width="120" height="120" rx="26" fill="url(#apspcl_bg)"/>
+  <circle cx="60" cy="60" r="52" stroke="#FDE047" stroke-width="2" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+  
+  <!-- Sun Rays & Rising Sun -->
+  <g transform="translate(60, 48)">
+    <!-- Rays -->
+    <path d="M0 -32V-24M-23 -23L-17 -17M23 -23L17 -17M-32 0H-24M32 0H24" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+    <!-- Sun disk -->
+    <circle cx="0" cy="0" r="18" fill="url(#apspcl_sun)"/>
+    <!-- Inner glowing highlight -->
+    <circle cx="-4" cy="-4" r="14" fill="#FEF08A" fill-opacity="0.3"/>
+  </g>
+
+  <!-- Perspective Solar PV Panel Grid -->
+  <path d="M26 92L38 64H82L94 92H26Z" fill="url(#apspcl_grid)" stroke="#E0F2FE" stroke-width="1.5"/>
+  <!-- Grid lines -->
+  <path d="M60 64V92M46 64L41 92M74 64L79 92" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.85"/>
+  <path d="M34 73H86M30 82H90" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.85"/>
+
+  <!-- Energy Wave Base -->
+  <path d="M22 98C34 94 48 97 60 95C72 93 86 96 98 98" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

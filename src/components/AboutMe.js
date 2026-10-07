@@ -1,28 +1,39 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Sparkles, Gamepad2 } from "lucide-react";
-import RiveButton from "./RiveButton";
-import { RiveCompass, RiveLayers, RiveCode } from "./RiveIcons";
+import {
+  ArrowUpRight,
+  Sparkles,
+  Gamepad2,
+  ChevronDown,
+  Terminal,
+  Heart,
+  ExternalLink,
+} from "lucide-react";
+import VennDiagram from "./VennDiagram";
+import ExperienceTable from "./ExperienceTable";
 import TwoTruthsAndALie from "./TwoTruthsAndALie";
 
 const principles = [
   {
     number: "01",
-    icon: RiveCompass,
     title: "Start with the person.",
-    description: "Understand the task, remove the friction, and make the next step feel obvious and inevitable.",
+    description:
+      "Understand the task, remove the plumbing, and make the next step feel obvious and inevitable.",
   },
   {
     number: "02",
-    icon: RiveLayers,
     title: "Make it real.",
-    description: "Design, build, then refine. The nuances and details that matter reveal themselves only in the working product.",
+    description:
+      "Design, build, then refine. The nuances and tactile details reveal themselves only in working software.",
   },
   {
     number: "03",
-    icon: RiveCode,
     title: "Leave it open.",
-    description: "Readable code, open formats, and tools people can make their own. Always share what you learn with the community.",
+    description:
+      "Readable code, open formats, and sovereign tools people can truly own. Always share what you learn in public.",
   },
 ];
 
@@ -31,284 +42,190 @@ const independentTools = [
     name: "OpenWeave",
     category: "Open Source · Design Canvas + AI",
     id: "o0",
-    desc: "Sovereign design editor with Figma binary support & natural AI co-creation.",
+    desc: "Sovereign vector design editor with Figma binary support & natural AI co-creation.",
   },
   {
     name: "NotBad",
     category: "Case Study · Distraction-Free Writing",
     id: "case-studies/notbad-design",
-    desc: "Editorial sanctuary in Flutter where Markdown conceals on rest.",
+    desc: "Pure-Flutter native Markdown editor where syntax conceals on rest. 1.0s cold start.",
   },
   {
     name: "Toothpaste",
     category: "Open Source · Media Workflow Engine",
     id: "o1",
-    desc: "Specialized utility bridging timeline sequencing and automated media pipelines.",
+    desc: "Adobe CEP extension bridging instant clipboard paste straight to the Premiere timeline.",
   },
 ];
 
 export default function AboutMe() {
+  const [showGame, setShowGame] = useState(false);
+
   return (
-    <section aria-label="About Satya" className="mx-auto w-full max-w-5xl pt-4 pb-16 text-[#1d1d1f] sm:pt-8 sm:pb-24">
-      {/* Editorial Meta Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] pb-5 text-xs">
-        <div className="flex items-center gap-2 text-[#626267]">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-mono uppercase tracking-[0.16em]">Available for select initiatives</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <a
-            href="#two-truths"
-            className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs text-[#1d1d1f] hover:text-emerald-700 transition-colors"
-          >
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            <span>Play 2 Truths & 1 Lie</span>
-          </a>
-          <span className="font-mono text-[#86868b] tracking-wider">Satya Sai Nagubathula · Design & Code</span>
-        </div>
+    <div className="mx-auto w-full max-w-6xl text-[#1d1d1f] flex flex-col gap-20 sm:gap-28 pb-16 sm:pb-24">
+      {/* ==============================================================
+          1) WHO AM I -> VENN DIAGRAM OF DESIGNER, ENGINEER, AI
+         ============================================================== */}
+      <div id="who-am-i" className="scroll-mt-24 w-full">
+        <VennDiagram />
       </div>
 
-      {/* Hero Spread: Open Editorial Layout */}
-      <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14 items-start">
-        {/* Left: Typographic Title & Biography */}
-        <div className="lg:col-span-7 flex flex-col justify-between">
-          <div>
-            <p className="text-[11px] font-mono font-medium uppercase tracking-[0.2em] text-[#86868b] mb-4">
-              Satya Sai Nagubathula / AI + Design Engineer
-            </p>
-            <h1 className="text-4xl font-semibold tracking-[-0.04em] text-[#1d1d1f] sm:text-6xl lg:text-[4.2rem] leading-[1.06]">
-              A designer&apos;s eye.
-              <span
-                className="block italic font-normal text-[#626267] mt-1 sm:mt-2"
-                style={{ fontFamily: "var(--font-editorial)" }}
-              >
-                A builder&apos;s hands.
-              </span>
-            </h1>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#515154] font-normal sm:text-xl sm:leading-relaxed">
-              I turn ideas into tools that feel clear, useful, and considered. My work brings together product design, systems engineering, and generative AI.
-            </p>
-          </div>
+      {/* ==============================================================
+          2) ABOUT SOMETHING (Personal Journey, Craft & Philosophy)
+         ============================================================== */}
+      <section
+        id="about-something"
+        aria-label="About the Journey and Craft"
+        className="scroll-mt-24 border-t border-black/[0.08] pt-16 sm:pt-20"
+      >
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">
+          Learning by making.
+        </h2>
+        <p
+          className="mt-2 text-lg sm:text-xl text-[#626267] font-normal"
+          style={{ fontFamily: "var(--font-editorial)" }}
+        >
+          From hardware security and protocol sniffing to generative AI pipelines and sovereign tools.
+        </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-5">
-            <RiveButton
-              href="/works"
-              className="px-6 py-3 text-sm font-medium"
-              variant="primary"
-            >
-              <span>Explore my work</span>
-              <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </RiveButton>
-            <Link
-              href="/experience"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#626267] hover:text-[#1d1d1f] transition-colors py-3 px-2 underline decoration-black/20 underline-offset-4"
-            >
-              View experience
-            </Link>
-            <a
-              href="#two-truths"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[#1d1d1f] hover:text-emerald-800 transition-all py-2.5 px-3.5 rounded-full bg-black/[0.04] hover:bg-emerald-500/10 border border-black/[0.08] shadow-2xs group"
-            >
-              <Gamepad2 size={15} className="text-emerald-600 transition-transform group-hover:rotate-12" />
-              <span>Two Truths & A Lie</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Right: Natural Portrait Feature */}
-        <div className="lg:col-span-5">
-          <figure className="relative overflow-hidden rounded-2xl bg-[#f5f5f7] border border-black/[0.06] shadow-[0_8px_30px_rgba(0,0,0,0.03)]">
+        {/* Narrative & Visual Spread - Single Column Flow */}
+        <div className="mt-10 flex flex-col gap-10 w-full">
+          {/* Centered Portrait with Companion Cat */}
+          <figure className="relative overflow-hidden rounded-3xl bg-[#f5f5f7] border border-black/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.03)] w-full">
             <Image
               src="/images/about/about_main_image.png"
-              alt="Satya Sai Nagubathula with a cat"
-              width={596}
-              height={359}
+              alt="Satya Sai Nagubathula with a cat wearing sunglasses"
+              width={800}
+              height={480}
               priority
-              sizes="(max-width: 1024px) 90vw, 420px"
-              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-[1.02]"
+              sizes="(max-width: 1024px) 100vw, 768px"
+              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-[1.01]"
             />
-            <figcaption className="border-t border-black/[0.06] bg-white/90 backdrop-blur-sm p-4 sm:p-5">
-              <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.16em] text-[#86868b]">
-                <span>Always curious</span>
-                <span>Companion</span>
-              </div>
-              <p className="mt-1.5 text-base sm:text-lg text-[#1d1d1f]" style={{ fontFamily: "var(--font-editorial)" }}>
-                &ldquo;From how it looks to how it works.&rdquo;
-              </p>
-              <p className="mt-2 text-xs text-[#626267]">
-                Engineer. Designer. Open-source builder.
-              </p>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-
-      {/* Chapter 00: Two Truths and One Lie Icebreaker */}
-      <section id="two-truths" aria-label="Two Truths and One Lie Game" className="mt-16 sm:mt-24 scroll-mt-24">
-        <TwoTruthsAndALie />
-      </section>
-
-      {/* Divider */}
-      <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
-
-      {/* Chapter 01: Practice & Philosophy */}
-      <div id="practice-philosophy" className="mt-14 sm:mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 scroll-mt-24">
-        {/* Left: Current Role at NxtWave */}
-        <div className="lg:col-span-5 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">01 / Current Practice</span>
-              <Sparkles size={14} className="text-[#86868b]" aria-hidden="true" />
-            </div>
-            <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
-              Creative tools.<br />Practical systems.
-            </h2>
-            <p className="mt-2 font-mono text-xs text-[#626267] uppercase tracking-wider">
-              NxtWave Disruptive Technologies · 2025 — Present
-            </p>
-            <p className="mt-5 text-sm sm:text-base leading-relaxed text-[#515154]">
-              My work spans generative AI production and internal tools that help teams create and deliver content at scale. Orchestrating high-throughput video pipelines, prompt automation, and creative toolchains that slash turnaround times by 90%.
-            </p>
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-2">
-            {["Generative AI", "Automation", "Product Design", "Internal Tools"].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-black/[0.08] bg-[#f5f5f7] px-3 py-1 text-xs text-[#515154] font-medium"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: The Common Thread */}
-        <div className="lg:col-span-7 lg:border-l lg:border-black/[0.08] lg:pl-16">
-          <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">02 / Philosophy</span>
-          <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
-            Learning by making.
-          </h2>
-          <div className="mt-6 space-y-5 text-base leading-relaxed text-[#515154]">
-            <p>
-              I started with electronics and hardware security, then found my way into interfaces, design systems, and creative tools. The question stayed constant: <span className="text-[#1d1d1f] font-medium">how can this work better for the person using it?</span>
-            </p>
-            <p>
-              Today, that means connecting visible aesthetic details with the robust architectures underneath — whether tuning a tactile component in Chaya UI or crafting a quieter, distraction-free writing sanctuary in NotBad.
-            </p>
-            <p>
-              I believe great software doesn&apos;t just solve a functional requirement; it respects the user&apos;s attention and gives them confidence to create.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
-
-      {/* Chapter 02: Principles */}
-      <div className="mt-14 sm:mt-20">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">03 / Principles</span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
-              How I approach the craft.
-            </h2>
-          </div>
-          <p className="max-w-md text-sm text-[#626267]">
-            Core tenets that guide every prototype, design system, and technical architecture.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
-          {principles.map(({ number, icon: Icon, title, description }) => (
-            <div key={title} className="group relative border-t border-black/[0.1] pt-6 flex flex-col justify-between">
+            <figcaption className="border-t border-black/[0.06] bg-white/95 backdrop-blur-sm p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-sm text-[#86868b]">{number}</span>
-                  <Icon
-                    size={18}
-                    className="text-[#86868b] transition-transform duration-300 group-hover:scale-110 group-hover:text-[#1d1d1f]"
-                    aria-hidden="true"
-                  />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold tracking-tight text-[#1d1d1f]">
-                  {title}
-                </h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-[#515154]">
-                  {description}
+                <p
+                  className="text-base sm:text-lg text-[#1d1d1f]"
+                  style={{ fontFamily: "var(--font-editorial)" }}
+                >
+                  &ldquo;From how it looks to how it works.&rdquo;
+                </p>
+                <p className="text-xs text-[#626267] mt-0.5">
+                  Satya & the coolest sunglasses-wearing feline companion.
                 </p>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#86868b] shrink-0">
+                Always curious
+              </span>
+            </figcaption>
+          </figure>
 
-      {/* Divider */}
-      <div className="mt-20 sm:mt-28 border-t border-black/[0.08]" />
-
-      {/* Chapter 03: Community & Independent Software */}
-      <div className="mt-14 sm:mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-        {/* Left: Community */}
-        <div className="lg:col-span-5 flex flex-col justify-between">
-          <div>
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">04 / Community</span>
-            <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
-              Better when<br />we build together.
-            </h2>
-            <p className="mt-2 font-mono text-xs text-[#626267] uppercase tracking-wider">
-              Engineerudu · Founder & Community Lead
+          {/* Deep Story Narrative in Single Column */}
+          <div className="space-y-6 text-base sm:text-lg leading-relaxed text-[#515154]">
+            <p>
+              I didn&apos;t start in a traditional design classroom. I started with microcontrollers, electronics, and hardware security — dumping SPI flash memories, probing UART ports, and understanding how data actually travels across silicon.
             </p>
-            <p className="mt-5 text-sm sm:text-base leading-relaxed text-[#515154]">
-              I build Engineerudu, an open-source community in Andhra Pradesh. A dedicated space to learn in public, build real-world tools, and help students and new engineers transition from theory to shipping production software.
+            <p>
+              That physical grounding shaped how I see interfaces today. Whether it&apos;s tuning a 1.0-second cold start in <strong className="text-[#1d1d1f] font-semibold">NotBad</strong> (a pure-Dart Markdown editor replacing 42,000 lines of upstream Swift/TypeScript) or architecting <strong className="text-[#1d1d1f] font-semibold">OpenWeave</strong> (an open design canvas with Figma binary support), I care about sovereign tools that people can inspect, trust, and truly own.
+            </p>
+            <p>
+              At <strong className="text-[#1d1d1f] font-semibold">NxtWave</strong>, I lead Generative AI production. That means orchestrating over 2,000 video pipelines, automating multi-lingual workflows with structured JSON for models like Veo 3 & Wan 2.2, and cutting production turnaround times by 90%.
+            </p>
+            <p>
+              Outside the day job, I build <strong className="text-[#1d1d1f] font-semibold">Engineerudu</strong> — Andhra Pradesh&apos;s first Free and Open Source Software (FOSS) community — helping students bridge theory to shipping real production software in public.
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-black/[0.06] flex items-center gap-3 text-xs text-[#626267]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1d1d1f]" />
-            <span>Open-source initiatives & public workshops</span>
-          </div>
-        </div>
-
-        {/* Right: Independent Tools */}
-        <div className="lg:col-span-7 lg:border-l lg:border-black/[0.08] lg:pl-16">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b]">05 / Independent Software</span>
-            <span className="text-xs text-[#86868b]">Outside the day job</span>
-          </div>
-          <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
-            Made to be yours.
-          </h2>
-          <p className="mt-3 text-sm text-[#515154]">
-            Independent utilities designed to give creators autonomy and tactile control over their tools.
-          </p>
-
-          <div className="mt-8 divide-y divide-black/[0.08] border-y border-black/[0.08]">
-            {independentTools.map((tool) => (
-              <Link
-                key={tool.name}
-                href={`/works/${tool.id}`}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-4 transition-colors hover:bg-black/[0.015] px-2 -mx-2 rounded"
-              >
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">
-                      {tool.name}
-                    </span>
-                    <span className="text-xs text-[#86868b]">{tool.category}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-[#515154] max-w-md">{tool.desc}</p>
+          {/* Core Tenets Checklist */}
+          <div className="pt-8 border-t border-black/[0.08]">
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-[#86868b] block mb-5">
+              Core Tenets of Craft
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {principles.map((p) => (
+                <div key={p.title} className="flex flex-col gap-2 p-5 rounded-2xl bg-[#fafafc] border border-black/[0.05]">
+                  <span className="font-mono text-xs text-[#86868b] font-semibold">{p.number}</span>
+                  <h4 className="text-sm font-semibold text-[#1d1d1f]">{p.title}</h4>
+                  <p className="text-xs text-[#626267] leading-relaxed">{p.description}</p>
                 </div>
-                <ArrowUpRight
-                  size={16}
-                  className="text-[#86868b] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#1d1d1f] shrink-0"
-                  aria-hidden="true"
-                />
-              </Link>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Sovereign Independent Tools */}
+          <div className="rounded-3xl border border-black/[0.08] bg-white p-6 sm:p-7 shadow-2xs">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#86868b] block">
+                  Independent Software
+                </span>
+                <h4 className="text-base font-semibold text-[#1d1d1f] mt-0.5">
+                  Made to be free and sovereign.
+                </h4>
+              </div>
+              <span className="text-xs font-mono text-[#86868b]">3 Utilities</span>
+            </div>
+
+            <div className="divide-y divide-black/[0.06]">
+              {independentTools.map((tool) => (
+                <Link
+                  key={tool.name}
+                  href={`/works/${tool.id}`}
+                  className="group py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.015] -mx-2 px-2 rounded-xl"
+                >
+                  <div>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-sm sm:text-base font-semibold text-[#1d1d1f] group-hover:text-sky-600 transition-colors">
+                        {tool.name}
+                      </span>
+                      <span className="text-[11px] font-mono text-[#86868b]">
+                        {tool.category}
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#626267] mt-1">{tool.desc}</p>
+                  </div>
+                  <ArrowUpRight
+                    size={16}
+                    className="text-[#86868b] group-hover:text-[#1d1d1f] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0"
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Optional Two Truths and One Lie Collapsible */}
+          <div className="rounded-3xl border border-black/[0.08] bg-[#fbfbfd] p-4 sm:p-5 text-xs">
+            <button
+              type="button"
+              onClick={() => setShowGame((prev) => !prev)}
+              className="w-full flex items-center justify-between text-left font-mono font-medium text-[#1d1d1f] hover:text-emerald-700 transition-colors cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <Gamepad2 size={16} className="text-emerald-600" />
+                <span>Bonus: Play Two Truths & One Lie</span>
+              </span>
+              <ChevronDown
+                size={15}
+                className={`transition-transform duration-200 ${
+                  showGame ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {showGame && (
+              <div className="mt-4 pt-4 border-t border-black/[0.06]">
+                <TwoTruthsAndALie />
+              </div>
+            )}
           </div>
         </div>
+      </section>
+
+      {/* ==============================================================
+          4) EXPERIENCE TABLE (Company Logo, Work Role, Responsibilities)
+         ============================================================== */}
+      <div id="experience" className="scroll-mt-24 border-t border-black/[0.08] pt-16 sm:pt-20">
+        <ExperienceTable />
       </div>
-    </section>
+    </div>
   );
 }

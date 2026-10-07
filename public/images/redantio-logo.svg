@@ -1,0 +1,30 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="redantio_bg" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#991B1B"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="26" fill="url(#redantio_bg)"/>
+  <g transform="translate(60, 60)" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Antennae -->
+    <path d="M-5 -22C-9 -29 -16 -30 -22 -26"/>
+    <circle cx="-22" cy="-26" r="1.5" fill="#FFFFFF"/>
+    <path d="M5 -22C9 -29 16 -30 22 -26"/>
+    <circle cx="22" cy="-26" r="1.5" fill="#FFFFFF"/>
+    <!-- Head -->
+    <circle cx="0" cy="-17" r="7" fill="#FFFFFF"/>
+    <!-- Thorax -->
+    <ellipse cx="0" cy="-2" rx="8" ry="10" fill="#FFFFFF"/>
+    <!-- Abdomen -->
+    <ellipse cx="0" cy="19" rx="12" ry="15" fill="#FFFFFF"/>
+    <!-- Legs Left -->
+    <path d="M-7 -5L-20 -12L-27 -7"/>
+    <path d="M-8 -1L-24 0L-29 9"/>
+    <path d="M-7 4L-22 11L-26 24"/>
+    <!-- Legs Right -->
+    <path d="M7 -5L20 -12L27 -7"/>
+    <path d="M8 -1L24 0L29 9"/>
+    <path d="M7 4L22 11L26 24"/>
+  </g>
+</svg>

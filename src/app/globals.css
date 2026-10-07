@@ -189,12 +189,4 @@ html.lenis, html.lenis-smooth {
   }
 }
 
-/* Hide default cursor on desktop when Black Hole cursor is active */
-@media (hover: hover) and (pointer: fine) {
-  html.black-hole-cursor-active,
-  html.black-hole-cursor-active * {
-    cursor: none !important;
-  }
-}
-
 
