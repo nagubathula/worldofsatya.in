@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Mail, ArrowUpRight, Smartphone } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
 import { play8BitBlipSound } from "./SoundEffects";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
@@ -14,7 +14,7 @@ export const calendarSections = [
     id: "avatar",
     code: "ABOUT",
     title: "About",
-    href: "/about#two-truths",
+    href: "/about",
     isAvatar: true,
   },
   {
@@ -28,136 +28,67 @@ export const calendarSections = [
         id: "openweave",
         title: "OpenWeave",
         image: "/openweave-app.png",
+        href: "/works/o0",
       },
       {
         id: "notbad",
         title: "NotBad",
         image: "/notbad-editor.png",
+        href: "/works/case-studies/notbad-design",
       },
       {
         id: "toothpaste",
         title: "Toothpaste",
         image: "/toothpaste-panel.png",
+        href: "/works/o1",
       },
       {
         id: "tailus",
         title: "Tailus",
         image: "/tailus.png",
+        href: "/works/p5",
       },
     ],
-  },
-  {
-    id: "contact",
-    code: "CONTACT",
-    title: "Contact",
-    href: "mailto:nagubathula.satyasai@gmail.com",
-    isContact: true,
   },
 ];
 
 // Renders the complete, uncut card face for each section
-function CardFace({ section, onExpandWorks }) {
+function CardFace({ section, onNavigate }) {
   return (
-    <div className="relative w-full h-full bg-white text-[#111111] flex flex-col justify-between p-4 sm:p-6 lg:p-7 select-none overflow-hidden">
+    <div className={`relative w-full h-full text-[#111111] flex flex-col justify-between select-none overflow-hidden ${section.isAvatar ? "bg-transparent p-0" : "bg-white p-4 sm:p-5 lg:p-6"}`}>
       {section.isAvatar ? (
-        <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
-          {/* Top code badge */}
-          <div className="w-full flex items-center justify-between z-10">
-            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
-              {section.code}
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider text-emerald-700">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              2 Truths & 1 Lie
-            </span>
-          </div>
-
+        <div className="relative w-full h-full flex flex-col items-center justify-center overflow-visible">
           {/* Interactive SVG Chibi Character */}
-          <div className="relative flex-1 w-full flex flex-col items-center justify-center z-10 my-1 sm:my-1.5">
-            <div className="absolute w-[85%] h-[85%] -top-[5%] left-[7.5%] bg-radial from-amber-100/35 via-slate-100/35 to-transparent blur-2xl pointer-events-none" />
-            <div className="relative w-36 sm:w-44 lg:w-48 aspect-[9/16] max-h-[25vh] sm:max-h-[29vh] lg:max-h-[33vh]">
-              <ChibiAvatar className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.07)]" />
+          <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+            <div className="relative w-44 sm:w-52 lg:w-56 aspect-square max-h-[260px]">
+              <ChibiAvatar className="w-full h-full object-contain" />
             </div>
-            <div className="w-28 sm:w-36 h-2 rounded-full bg-black/[0.07] blur-[3px] mt-0.5" />
-          </div>
-
-          {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
-            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
-              About Satya
-            </span>
-            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1 group-hover:text-black transition-colors">
-              <span>Explore</span>
-              <ArrowUpRight size={12} />
-            </span>
           </div>
         </div>
-      ) : section.isContact ? (
+      ) : (
         <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
-          {/* Top code badge */}
-          <div className="w-full flex items-center justify-between z-10">
-            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
-              {section.code}
-            </span>
-          </div>
-
-          {/* Contact Graphic Frame */}
-          <div className="relative flex-1 w-full my-1.5 sm:my-2 rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-[#1d1d1f] to-[#2c2c2e] text-white p-4 sm:p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center mb-2 sm:mb-3">
-              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </div>
-            <h4 className="text-sm sm:text-lg font-semibold tracking-tight text-white mb-0.5 sm:mb-1">
-              Let&apos;s Build Together
-            </h4>
-            <p className="text-[11px] sm:text-xs text-white/70 max-w-xs font-sans truncate">
-              nagubathula.satyasai@gmail.com
-            </p>
-          </div>
-
-          {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
-            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
-              {section.title}
-            </span>
-            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1">
-              <span>Send Email</span>
-              <ArrowUpRight size={12} />
-            </span>
-          </div>
-        </div>
-      ) : section.isWorks ? (
-        <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
-          {/* Top code badge */}
-          <div className="w-full flex items-center justify-between z-10">
-            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
-              {section.code}
-            </span>
-          </div>
-
           {/* 2x2 Bento Preview Grid of 4 Works */}
-          <div
-            onClick={(e) => {
-              if (onExpandWorks) {
-                e.stopPropagation();
-                onExpandWorks();
-              }
-            }}
-            className="relative flex-1 w-full my-1.5 sm:my-2 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2.5 cursor-pointer"
-          >
+          <div className="relative flex-1 w-full my-1.5 sm:my-2 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2.5">
             {section.previewItems.map((item, idx) => (
               <div
                 key={idx}
-                className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] border border-black/[0.06] shadow-2xs group/tile hover:border-black/20 hover:scale-[1.02] transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (item.href && onNavigate) {
+                    onNavigate(item.href, { x: e.clientX, y: e.clientY });
+                  }
+                }}
+                className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] group/tile hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer"
               >
-                <motion.div layoutId={`work-image-${item.id}`} style={{ borderRadius: 12 }} className="relative w-full h-full overflow-hidden">
+                <div style={{ borderRadius: 12 }} className="relative w-full h-full overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     sizes="(max-width: 768px) 45vw, 220px"
-                    className="object-cover object-top"
+                    className="object-cover object-top group-hover/tile:scale-105 transition-transform duration-300"
                   />
-                </motion.div>
+                </div>
               </div>
             ))}
           </div>
@@ -167,39 +98,9 @@ function CardFace({ section, onExpandWorks }) {
             <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
               {section.title}
             </span>
-            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1">
-              <span>Click to view</span>
+            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1 group-hover:text-black transition-colors">
+              <span>View all</span>
               <ArrowUpRight size={12} />
-            </span>
-          </div>
-        </div>
-      ) : (
-        <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
-          {/* Top code badge */}
-          <div className="w-full flex items-center justify-between z-10">
-            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#888888]">
-              {section.code}
-            </span>
-          </div>
-
-          {/* Preview Image Frame */}
-          <div className="relative flex-1 w-full my-1.5 sm:my-2 rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] border border-black/[0.04]">
-            <Image
-              src={section.image}
-              alt={section.title}
-              fill
-              sizes="(max-width: 768px) 85vw, 440px"
-              className="object-cover"
-            />
-          </div>
-
-          {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
-            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
-              {section.title}
-            </span>
-            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase">
-              Click to view
             </span>
           </div>
         </div>
@@ -208,7 +109,7 @@ function CardFace({ section, onExpandWorks }) {
   );
 }
 
-export default function FlipCalendarNav({ onExpandWorks, initialSection = "avatar", onSectionChange }) {
+export default function FlipCalendarNav({ initialSection = "avatar", onSectionChange }) {
   const reduceMotion = useReducedMotion();
   const initialIndex = Math.max(0, calendarSections.findIndex(section => section.id === initialSection));
   const router = useRouter();
@@ -281,30 +182,50 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     }, 480);
   }, [total, onSectionChange]);
 
-  // Wheel listener: Flips calendar when hovering over the widget, allows normal page scroll elsewhere
+  // Wheel listener: Flips calendar when scrolling anywhere on the home screen
   useEffect(() => {
+    let accumulatedDelta = 0;
+    let resetTimer = null;
+
     const handleGlobalWheel = (e) => {
-      const overCalendar = e.target?.closest?.("[data-flip-calendar='true']");
-      if (!overCalendar) return;
+      // Ignore if user is interacting with form controls or interactive popups
+      if (e.target instanceof Element && e.target.closest("input, textarea, select, [data-prevent-flip='true']")) return;
 
-      if (Math.abs(e.deltaY) < 14) return;
-      if (isFlippingRef.current) return;
-      if (e.cancelable) e.preventDefault();
+      if (isFlippingRef.current) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
 
-      if (e.deltaY > 0) {
-        flipToNext();
-      } else {
-        flipToPrev();
+      accumulatedDelta += e.deltaY;
+
+      if (resetTimer) clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => {
+        accumulatedDelta = 0;
+      }, 180);
+
+      const THRESHOLD = 22;
+
+      if (Math.abs(accumulatedDelta) >= THRESHOLD) {
+        if (e.cancelable) e.preventDefault();
+        const goingDown = accumulatedDelta > 0;
+        accumulatedDelta = 0;
+
+        if (goingDown) {
+          flipToNext();
+        } else {
+          flipToPrev();
+        }
       }
     };
 
     window.addEventListener("wheel", handleGlobalWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", handleGlobalWheel);
+      if (resetTimer) clearTimeout(resetTimer);
     };
   }, [flipToNext, flipToPrev]);
 
-  // Touch swipe support: swiping on the calendar flips cards, swiping elsewhere scrolls the page
+  // Touch swipe support: swiping vertically or horizontally flips cards
   useEffect(() => {
     const handleGlobalTouchStart = (e) => {
       touchStartY.current = e.touches[0].clientY;
@@ -312,9 +233,12 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
     };
 
     const handleGlobalTouchMove = (e) => {
-      const overCalendar = e.target?.closest?.("[data-flip-calendar='true']");
-      if (overCalendar && e.cancelable) {
-        e.preventDefault();
+      if (e.cancelable) {
+        const diffY = touchStartY.current - e.touches[0].clientY;
+        const diffX = touchStartX.current - e.touches[0].clientX;
+        if (Math.abs(diffY) > 8 || Math.abs(diffX) > 8) {
+          e.preventDefault();
+        }
       }
     };
 
@@ -324,13 +248,13 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
       const diffX = touchStartX.current - e.changedTouches[0].clientX;
 
       // Check vertical swipe first
-      if (Math.abs(diffY) > 28 && Math.abs(diffY) >= Math.abs(diffX)) {
+      if (Math.abs(diffY) > 22 && Math.abs(diffY) >= Math.abs(diffX)) {
         if (diffY > 0) {
           flipToNext();
         } else {
           flipToPrev();
         }
-      } else if (Math.abs(diffX) > 28) {
+      } else if (Math.abs(diffX) > 26) {
         // Horizontal swipe (left = next, right = prev)
         if (diffX > 0) {
           flipToNext();
@@ -514,14 +438,6 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
       } else if (e.key === "Enter") {
         if (e.target instanceof Element && e.target.closest("button, a, input, textarea, select")) return;
         const item = calendarSections[currIndexRef.current];
-        if (item.isWorks && onExpandWorks) { onExpandWorks(); return; }
-        if (item.id === "works") {
-          const worksEl = document.getElementById("works-section");
-          if (worksEl) {
-            worksEl.scrollIntoView({ behavior: "smooth" });
-            return;
-          }
-        }
         if (item.href.startsWith("mailto:")) {
           window.location.href = item.href;
         } else {
@@ -556,7 +472,7 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
       delete window.flipCalendarNext;
       delete window.flipCalendarPrev;
     };
-  }, [flipToNext, flipToPrev, router, onExpandWorks]);
+  }, [flipToNext, flipToPrev, router, blackHoleNavigate]);
 
   const currSection = calendarSections[currIndex];
   return (
@@ -565,130 +481,73 @@ export default function FlipCalendarNav({ onExpandWorks, initialSection = "avata
       data-flip-calendar="true"
       className="relative w-full h-full flex flex-col items-center justify-center select-none"
     >
-      {/* Clean Flip Housing with fluid responsive sizing */}
-      <div className="relative p-2 sm:p-2.5 lg:p-3 rounded-[28px] sm:rounded-[34px] lg:rounded-[38px] bg-gradient-to-b from-[#e8e8ea] to-[#d0d0d4] shadow-[0_20px_50px_rgba(0,0,0,0.12),0_8px_18px_rgba(0,0,0,0.05),inset_0_2px_3px_rgba(255,255,255,0.7)] border border-white/60">
-        
-        {/* Main Display Area */}
-        <div
-          onClick={(e) => {
-            if (!isFlippingRef.current) {
-              if (currSection.id === "works") {
-                if (onExpandWorks) {
-                  onExpandWorks();
-                  return;
-                }
-                const worksEl = document.getElementById("works-section");
-                if (worksEl) {
-                  worksEl.scrollIntoView({ behavior: "smooth" });
-                  return;
-                }
-              }
-              if (currSection.href.startsWith("mailto:")) {
-                window.location.href = currSection.href;
-              } else {
-                blackHoleNavigate(currSection.href, { x: e.clientX, y: e.clientY });
-              }
+      {/* Main Display Area */}
+      <div
+        onClick={(e) => {
+          if (!isFlippingRef.current) {
+            if (currSection.href.startsWith("mailto:")) {
+              window.location.href = currSection.href;
+            } else {
+              blackHoleNavigate(currSection.href, { x: e.clientX, y: e.clientY });
             }
-          }}
-          className="relative w-[min(320px,84vw)] sm:w-[min(390px,86vw)] lg:w-[440px] aspect-[4/4.2] max-h-[40vh] sm:max-h-[46vh] lg:max-h-[460px] rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] bg-white shadow-[0_12px_28px_rgba(0,0,0,0.06)] cursor-pointer group"
-          style={{ perspective: "1200px" }}
-        >
-          {/* Apple iOS Level Smooth 3D Perspective Card Turn */}
-          <AnimatePresence initial={false} custom={direction} mode="popLayout">
-            <motion.div
-              key={currIndex}
-              custom={direction}
-              variants={{
-                enter: (dir) => ({
-                  rotateX: dir === "down" ? 55 : -55,
-                  y: dir === "down" ? 30 : -30,
-                  z: -40,
-                  scale: 0.94,
-                  opacity: 0,
-                }),
-                center: {
-                  rotateX: 0,
-                  y: 0,
-                  z: 0,
-                  scale: 1,
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 26,
-                    mass: 0.75,
-                  },
+          }
+        }}
+        className={`relative w-[min(300px,84vw)] sm:w-[340px] lg:w-[370px] xl:w-[390px] aspect-[4/4.1] max-h-[420px] rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] cursor-pointer group ${currSection.isAvatar ? "bg-transparent" : "bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)]"}`}
+        style={{ perspective: "1200px" }}
+      >
+        {/* Apple iOS Level Smooth 3D Perspective Card Turn */}
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            key={currIndex}
+            custom={direction}
+            variants={{
+              enter: (dir) => ({
+                rotateX: dir === "down" ? 55 : -55,
+                y: dir === "down" ? 30 : -30,
+                z: -40,
+                scale: 0.94,
+                opacity: 0,
+              }),
+              center: {
+                rotateX: 0,
+                y: 0,
+                z: 0,
+                scale: 1,
+                opacity: 1,
+                transition: {
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 26,
+                  mass: 0.75,
                 },
-                exit: (dir) => ({
-                  rotateX: dir === "down" ? -55 : 55,
-                  y: dir === "down" ? -30 : 30,
-                  z: -40,
-                  scale: 0.94,
-                  opacity: 0,
-                  transition: {
-                    duration: 0.38,
-                    ease: [0.32, 0, 0.67, 0],
-                  },
-                }),
-              }}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              style={{
-                transformOrigin: "50% 50%",
-                transformStyle: "preserve-3d",
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                willChange: "transform, opacity",
-              }}
-              className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] lg:rounded-[30px] overflow-hidden bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
-            >
-              <CardFace section={currSection} onExpandWorks={onExpandWorks} />
-              
-              {/* Dynamic ambient lighting shadow during 3D flip */}
-              <motion.div
-                initial={{ opacity: 0.2 }}
-                animate={{ opacity: 0 }}
-                exit={{ opacity: 0.25 }}
-                transition={{ duration: 0.35 }}
-                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/15"
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Discrete flip indicator & navigation hints */}
-      <div className="mt-3 sm:mt-5 flex flex-col items-center gap-1.5 text-[11px] sm:text-xs font-mono text-[#86868b]">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={flipToPrev}
-            disabled={isFlipping}
-            aria-label="Previous date"
-            className="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-black/10 active:bg-black/20 active:scale-90 flex items-center justify-center transition-all text-[#111111]"
+              },
+              exit: (dir) => ({
+                rotateX: dir === "down" ? -55 : 55,
+                y: dir === "down" ? -30 : 30,
+                z: -40,
+                scale: 0.94,
+                opacity: 0,
+                transition: {
+                  duration: 0.38,
+                  ease: [0.32, 0, 0.67, 0],
+                },
+              }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            style={{
+              transformOrigin: "50% 50%",
+              transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+              willChange: "transform, opacity",
+            }}
+            className={`absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] overflow-hidden ${currSection.isAvatar ? "bg-transparent" : "bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)]"}`}
           >
-            ▲
-          </button>
-
-          <span className="tracking-widest font-medium">
-            {String(currIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-          </span>
-
-          <button
-            onClick={flipToNext}
-            disabled={isFlipping}
-            aria-label="Next date"
-            className="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-black/10 active:bg-black/20 active:scale-90 flex items-center justify-center transition-all text-[#111111]"
-          >
-            ▼
-          </button>
-        </div>
-
-        {/* Mobile quick interaction hint */}
-        <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#999999] lg:hidden mt-0.5">
-          <Smartphone size={11} className="opacity-70 animate-pulse" />
-          <span>Shake phone or swipe to flip</span>
-        </div>
+            <CardFace section={currSection} onNavigate={blackHoleNavigate} />
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

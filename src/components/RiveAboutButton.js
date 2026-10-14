@@ -87,9 +87,9 @@ export default function RiveAboutButton({ showFace = false }) {
     >
       <Link
         ref={buttonRef}
-        href="/about#two-truths"
-        aria-label="About Satya — Two Truths & One Lie"
-        title="About Satya — Two Truths & One Lie"
+        href="/about"
+        aria-label="About Satya"
+        title="About Satya"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

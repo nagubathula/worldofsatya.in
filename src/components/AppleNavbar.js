@@ -16,7 +16,6 @@ import {
   Image as ImageIcon,
   Mail,
   Sparkles,
-  Gamepad2,
 } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
@@ -57,12 +56,6 @@ const primaryNav = [
         description: "Bio, philosophy & design perspective",
         href: "/about",
         icon: User,
-      },
-      {
-        label: "Two Truths & A Lie",
-        description: "Interactive icebreaker trivia before the bio",
-        href: "/about#two-truths",
-        icon: Gamepad2,
       },
       {
         label: "Experience",

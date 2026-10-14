@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { playPopSound } from "./SoundEffects";
 
 const DOMAINS = {
   core: {
     id: "core",
     name: "SATYA Core",
     badge: "Convergence",
-    title: "AI + Design Convergence :",
-    accentColor: "#fbbf24",
+    title: "AI + Design Convergence",
     description:
       "Operating at the bleeding edge where craft, fullstack engineering, and generative models meet. Building sovereign tools and design-first AI systems that remove friction between human intent and running software.",
     companies: [
@@ -21,29 +19,12 @@ const DOMAINS = {
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Product Engineer" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Product & Design Engineer" },
     ],
-    projects: [
-      {
-        title: "OpenWeave",
-        tag: "Open Source · AI Canvas",
-        desc: "Sovereign vector design editor with native Figma support and AI co-creation.",
-        image: "/openweave-app.png",
-        link: "https://github.com/nagubathula/OpenWeave",
-      },
-      {
-        title: "NotBad",
-        tag: "Desktop App · Flutter",
-        desc: "Distraction-free cross-platform Markdown editor where syntax conceals on rest.",
-        image: "/notbad-editor.png",
-        link: "/works/case-studies/notbad-design",
-      },
-    ],
   },
   designer: {
     id: "designer",
     name: "Designer",
     badge: "UI / UX · Typography",
-    title: "Product & Visual Systems :",
-    accentColor: "#0284c7",
+    title: "Product & Visual Systems",
     description:
       "Obsessive focus on typography, spatial balance, micro-interactions, and design systems. Translating ambiguous human problems into intuitive, tactile, and memorable digital artifacts.",
     companies: [
@@ -52,29 +33,12 @@ const DOMAINS = {
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "GovTech Information Architecture" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Design Systems & Storybook" },
     ],
-    projects: [
-      {
-        title: "Redantio",
-        tag: "Brand & UI Sprint",
-        desc: "Complete startup brand, UI system, and web presence designed in a single 6-hour sprint.",
-        image: "/redantio.webp",
-        link: "https://hippogriff.medium.com/redantio-designing-a-startup-in-6-hours-4e24a593950f",
-      },
-      {
-        title: "Own Your Bill",
-        tag: "Product Design",
-        desc: "New-age customizable billing system designed around how people read and share receipts.",
-        image: "/ownyourbill.png",
-        link: "https://www.figma.com/board/iZoO9T4W3C4RwIUWZRbZsV/Case-Study?node-id=0-1",
-      },
-    ],
   },
   engineer: {
     id: "engineer",
     name: "Engineer",
     badge: "Fullstack · Hardware",
-    title: "Fullstack & Systems :",
-    accentColor: "#059669",
+    title: "Fullstack & Systems Engineering",
     description:
       "Writing resilient, high-performance software with clean paradigms. From Dart/Flutter desktop runtimes and WebAssembly layout engines to robust web architectures and security tooling.",
     companies: [
@@ -83,29 +47,12 @@ const DOMAINS = {
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Component Engineering" },
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Systems & Infrastructure" },
     ],
-    projects: [
-      {
-        title: "NotBad",
-        tag: "Pure Flutter / Dart",
-        desc: "Desktop Markdown engine with custom live span caching, single-instance handoff, and zero drift.",
-        image: "/notbad-editor.png",
-        link: "/works/case-studies/notbad-design",
-      },
-      {
-        title: "bi0s Hardware",
-        tag: "Web Architecture",
-        desc: "High-security technical web presence and project showcase for bi0s hardware researchers.",
-        image: "/bi0shardware.png",
-        link: "https://bi0shardware.com/",
-      },
-    ],
   },
   ai: {
     id: "ai",
     name: "AI",
     badge: "GenAI · Pipelines",
-    title: "Generative AI & Models :",
-    accentColor: "#7c3aed",
+    title: "Generative AI & Model Pipelines",
     description:
       "Architecting end-to-end generative media workflows, LLM orchestration, model evaluations, and automation pipelines that turn cutting-edge AI research into production utilities.",
     companies: [
@@ -114,29 +61,12 @@ const DOMAINS = {
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "AI Workflow Exploration" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Digital Infrastructure" },
     ],
-    projects: [
-      {
-        title: "Zero-Cost Automation",
-        tag: "AI Architecture",
-        desc: "Processed 5,000+ monthly automated AI tasks using serverless queues and Colab compute for $0/mo.",
-        image: "/toothpaste-panel.png",
-        link: "/works/case-studies/zero-cost-automation",
-      },
-      {
-        title: "OpenWeave AI Engine",
-        tag: "Agent Tooling",
-        desc: "90+ AI tools creating and manipulating vector scene graphs from natural conversation.",
-        image: "/openweave-app.png",
-        link: "https://github.com/nagubathula/OpenWeave",
-      },
-    ],
   },
   "design-eng": {
     id: "design-eng",
     name: "Design Eng",
     badge: "Design + Code",
-    title: "Design Engineering :",
-    accentColor: "#0d9488",
+    title: "Design Engineering",
     description:
       "Eliminating the gap between design mockups and production code. Engineering component libraries with Radix primitives, Tailwind CSS, accessible states, and sub-pixel alignment.",
     companies: [
@@ -145,29 +75,12 @@ const DOMAINS = {
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Reusable Component Design" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Accessible Design Tokens" },
     ],
-    projects: [
-      {
-        title: "Chaya UI",
-        tag: "Design System",
-        desc: "40+ TypeScript & Radix component library engineered for high-density SaaS products.",
-        image: "/chaya.avif",
-        link: "https://chaya.traboda.com",
-      },
-      {
-        title: "Tailus",
-        tag: "UI Kit & Tokens",
-        desc: "Composable Tailwind CSS UI kit engineered with modular token architecture.",
-        image: "/tailus.png",
-        link: "https://www.behance.net/gallery/210333091/Tailus-Ui-Case-Study",
-      },
-    ],
   },
   "creative-ai": {
     id: "creative-ai",
     name: "Creative AI",
     badge: "Design + AI",
-    title: "Creative AI & Media :",
-    accentColor: "#db2777",
+    title: "Creative AI & Media",
     description:
       "Where visual imagination meets synthetic generation. Building creative canvases with text-to-vector engines, automated video synthesis (Veo 3), and custom diffusion pipelines.",
     companies: [
@@ -176,29 +89,12 @@ const DOMAINS = {
       { name: "Redantio", logo: "/images/redantio-icon.png", role: "Creative Prototyping" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Interactive Visuals" },
     ],
-    projects: [
-      {
-        title: "OpenWeave",
-        tag: "Generative Canvas",
-        desc: "Vector canvas that builds, tints, and positions graphic elements through chat.",
-        image: "/openweave-app.png",
-        link: "https://github.com/nagubathula/OpenWeave",
-      },
-      {
-        title: "Toothpaste",
-        tag: "Media Workflow",
-        desc: "Direct clipboard-to-timeline Premiere Pro extension with automatic format conversion.",
-        image: "/toothpaste-panel-wide.png",
-        link: "https://github.com/nagubathula/toothpaste",
-      },
-    ],
   },
   "ai-systems": {
     id: "ai-systems",
     name: "AI Systems",
     badge: "Code + AI",
-    title: "AI Systems & Automation :",
-    accentColor: "#d97706",
+    title: "AI Systems & Automation",
     description:
       "Designing autonomous agent tools, Model Context Protocol (MCP) servers, background queues, and reliable pipelines that enable AI models to interface with real software environments.",
     companies: [
@@ -207,135 +103,153 @@ const DOMAINS = {
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Autonomous Automation" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Data Infrastructure" },
     ],
-    projects: [
-      {
-        title: "Zero-Cost Automation",
-        tag: "Queue Orchestration",
-        desc: "Serverless pipeline handling distributed AI task queues and data streaming.",
-        image: "/toothpaste-panel.png",
-        link: "/works/case-studies/zero-cost-automation",
-      },
-      {
-        title: "OpenWeave MCP",
-        tag: "Model Context Protocol",
-        desc: "MCP server allowing Claude Code and agent coders to edit vector files natively.",
-        image: "/openweave-app.png",
-        link: "https://github.com/nagubathula/OpenWeave",
-      },
-    ],
   },
 };
 
 export default function VennDiagram() {
   const [activeDomain, setActiveDomain] = useState("core");
+  const [hoveredCompany, setHoveredCompany] = useState(null);
   const current = DOMAINS[activeDomain] || DOMAINS.core;
 
+  const selectDomain = (id) => {
+    setActiveDomain((prev) => {
+      if (prev !== id) {
+        try {
+          playPopSound(540, 0.03);
+        } catch {}
+        return id;
+      }
+      return prev;
+    });
+  };
+
   return (
-    <section aria-labelledby="who-am-i-heading" className="w-full">
-      {/* 2-Column Split Layout matching user mockup */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-16 items-start">
+    <section aria-label="Me in Venn" className="w-full py-4 sm:py-8 select-none">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-20 items-center">
         
         {/* =========================================================
-            LEFT COLUMN: "Me in a VENN" heading + Spacious Venn SVG
+            LEFT COLUMN: "me in venn" annotation + Venn Diagram
            ========================================================= */}
-        <div className="flex flex-col">
-          {/* Left Column Header */}
-          <div className="mb-6 sm:mb-8">
-            <h2
-              id="who-am-i-heading"
-              className="text-4xl sm:text-5xl font-semibold tracking-[-0.03em] text-[#1d1d1f]"
+        <div className="relative w-full flex items-center justify-center">
+          {/* Handwritten Annotation "me in venn" with curved arrow pointing to diagram */}
+          <div className="hidden sm:flex absolute -left-2 md:-left-8 lg:-left-14 top-4 lg:top-8 flex-col items-end z-20 pointer-events-none select-none">
+            <span
+              className="text-2xl lg:text-3xl text-[#515154] leading-tight"
+              style={{ fontFamily: "var(--font-editorial)", fontStyle: "italic" }}
             >
-              Me in a VENN.
-            </h2>
-            <p
-              className="mt-2 text-base sm:text-lg text-[#626267] font-normal"
-              style={{ fontFamily: "var(--font-editorial)" }}
+              me in
+            </span>
+            <span
+              className="text-2xl lg:text-3xl text-[#515154] leading-tight -mt-1 mr-2"
+              style={{ fontFamily: "var(--font-editorial)", fontStyle: "italic" }}
             >
-              At the exact convergence of Designer, Engineer, and AI.
-            </p>
+              venn
+            </span>
+            <svg
+              width="58"
+              height="38"
+              viewBox="0 0 58 38"
+              fill="none"
+              className="text-[#6e6e73] mt-0.5 mr-0.5"
+            >
+              <path
+                d="M6 6 C 20 6, 38 20, 52 26"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                fill="none"
+              />
+              <path
+                d="M44 20 L 52 26 L 43 30"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
           </div>
 
-          {/* Spacious Venn Diagram (Fills Left Column, No Extra Buttons) */}
-          <div className="relative w-full max-w-[540px] aspect-[600/570] select-none mx-auto lg:mx-0">
+          {/* Mobile minimal annotation */}
+          <div className="flex sm:hidden absolute top-0 left-0 items-center gap-2 z-20 pointer-events-none">
+            <span
+              className="text-xl text-[#515154]"
+              style={{ fontFamily: "var(--font-editorial)", fontStyle: "italic" }}
+            >
+              me in venn
+            </span>
+            <svg width="24" height="16" viewBox="0 0 24 16" fill="none" className="text-[#6e6e73]">
+              <path d="M2 8 L 20 8 M 14 3 L 20 8 L 14 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Minimal Architectural Venn Diagram */}
+          <div className="relative w-full max-w-[460px] sm:max-w-[490px] lg:max-w-[510px] aspect-[600/570] select-none mx-auto lg:mx-0">
             <svg
               viewBox="20 20 600 570"
-              className="w-full h-full filter drop-shadow-[0_16px_48px_rgba(0,0,0,0.04)]"
+              className="w-full h-full overflow-visible"
             >
               <defs>
-                {/* Dynamic circle gradients based on active state */}
-                <radialGradient id="grad-designer" cx="35%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity={activeDomain === "designer" ? 0.38 : 0.26} />
-                  <stop offset="100%" stopColor="#0284c7" stopOpacity={activeDomain === "designer" ? 0.18 : 0.11} />
-                </radialGradient>
-                <radialGradient id="grad-engineer" cx="65%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="#34d399" stopOpacity={activeDomain === "engineer" ? 0.38 : 0.26} />
-                  <stop offset="100%" stopColor="#059669" stopOpacity={activeDomain === "engineer" ? 0.18 : 0.11} />
-                </radialGradient>
-                <radialGradient id="grad-ai" cx="50%" cy="65%" r="65%">
-                  <stop offset="0%" stopColor="#c084fc" stopOpacity={activeDomain === "ai" ? 0.38 : 0.26} />
-                  <stop offset="100%" stopColor="#7c3aed" stopOpacity={activeDomain === "ai" ? 0.18 : 0.11} />
-                </radialGradient>
-                <radialGradient id="grad-center" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#1a1a1e" stopOpacity="0.98" />
-                  <stop offset="100%" stopColor="#0a0a0c" stopOpacity="0.95" />
-                </radialGradient>
-                {/* Drop shadow filters */}
-                <filter id="pill-shadow" x="-10%" y="-20%" width="120%" height="150%">
-                  <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.06" />
+                <filter id="brush-filter" x="-20%" y="-20%" width="140%" height="140%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
-                <filter id="core-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="6" stdDeviation="8" floodOpacity="0.16" />
+                <filter id="brush-filter-subtle" x="-15%" y="-15%" width="130%" height="130%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
               </defs>
 
-              {/* Base Circles (Spacious R=175 geometry) */}
               {/* 1. Designer (Top Left) */}
               <g
-                className="cursor-pointer transition-all duration-300 hover:opacity-95"
-                onClick={() => setActiveDomain("designer")}
+                className="cursor-pointer transition-all duration-200"
+                onClick={() => selectDomain("designer")}
+                onMouseEnter={() => selectDomain("designer")}
               >
-                <circle
-                  cx="225"
-                  cy="225"
-                  r="175"
-                  fill="url(#grad-designer)"
-                  stroke="#0284c7"
-                  strokeWidth={activeDomain === "designer" ? "2.5" : "1.75"}
-                  strokeOpacity={activeDomain === "designer" ? "1" : "0.7"}
+                <path
+                  d="M 402.9 225.0 C 402.8 247.5, 397.0 272.0, 387.7 292.4 C 378.4 312.7, 363.1 331.5, 347.1 347.1 C 331.1 362.7, 312.1 376.4, 291.7 386.1 C 271.4 395.8, 247.7 404.0, 225.0 405.1 C 202.3 406.3, 176.1 402.4, 155.4 393.0 C 134.7 383.7, 115.1 366.3, 101.0 349.0 C 87.0 331.6, 78.0 309.4, 71.0 288.8 C 64.0 268.1, 60.3 246.7, 59.2 225.0 C 58.1 203.3, 58.1 179.9, 64.2 158.4 C 70.4 136.9, 80.9 113.0, 96.1 96.1 C 111.2 79.1, 133.8 64.4, 155.3 56.6 C 176.7 48.8, 202.5 47.7, 225.0 49.4 C 247.5 51.1, 270.1 57.9, 290.6 66.7 C 311.0 75.6, 331.3 87.3, 347.6 102.4 C 364.0 117.4, 379.2 136.9, 388.5 157.3 C 397.2 177.7, 400.3 202.5, 400.2 225.0 Z"
+                  fill={activeDomain === "designer" ? "rgba(0,0,0,0.05)" : "rgba(0,0,0,0.016)"}
+                  stroke={activeDomain === "designer" ? "#111111" : "rgba(0,0,0,0.22)"}
+                  strokeWidth={activeDomain === "designer" ? "2.75" : "1.5"}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#brush-filter)"
                   className="transition-all duration-300"
                 />
               </g>
 
               {/* 2. Engineer (Top Right) */}
               <g
-                className="cursor-pointer transition-all duration-300 hover:opacity-95"
-                onClick={() => setActiveDomain("engineer")}
+                className="cursor-pointer transition-all duration-200"
+                onClick={() => selectDomain("engineer")}
+                onMouseEnter={() => selectDomain("engineer")}
               >
-                <circle
-                  cx="415"
-                  cy="225"
-                  r="175"
-                  fill="url(#grad-engineer)"
-                  stroke="#059669"
-                  strokeWidth={activeDomain === "engineer" ? "2.5" : "1.75"}
-                  strokeOpacity={activeDomain === "engineer" ? "1" : "0.7"}
+                <path
+                  d="M 582.8 225.0 C 581.0 246.8, 575.0 267.8, 567.2 288.0 C 559.5 308.3, 550.3 329.1, 536.4 346.4 C 522.6 363.7, 504.4 381.8, 484.1 391.9 C 463.9 402.0, 437.8 407.8, 415.0 407.1 C 392.2 406.5, 367.7 398.2, 347.4 388.1 C 327.1 378.1, 308.7 362.9, 293.2 346.8 C 277.6 330.8, 263.3 312.0, 254.0 291.7 C 244.7 271.4, 237.5 247.3, 237.2 225.0 C 237.0 202.7, 242.9 177.7, 252.5 157.7 C 262.2 137.7, 278.7 119.7, 295.1 105.1 C 311.5 90.5, 331.0 79.4, 350.9 70.3 C 370.9 61.3, 392.6 53.3, 415.0 50.9 C 437.4 48.4, 463.4 48.4, 485.2 55.6 C 506.9 62.9, 530.1 77.4, 545.6 94.4 C 561.1 111.3, 572.0 135.6, 578.2 157.4 C 584.4 179.2, 584.8 203.2, 582.9 225.0 Z"
+                  fill={activeDomain === "engineer" ? "rgba(0,0,0,0.05)" : "rgba(0,0,0,0.016)"}
+                  stroke={activeDomain === "engineer" ? "#111111" : "rgba(0,0,0,0.22)"}
+                  strokeWidth={activeDomain === "engineer" ? "2.75" : "1.5"}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#brush-filter)"
                   className="transition-all duration-300"
                 />
               </g>
 
               {/* 3. AI (Bottom Center) */}
               <g
-                className="cursor-pointer transition-all duration-300 hover:opacity-95"
-                onClick={() => setActiveDomain("ai")}
+                className="cursor-pointer transition-all duration-200"
+                onClick={() => selectDomain("ai")}
+                onMouseEnter={() => selectDomain("ai")}
               >
-                <circle
-                  cx="320"
-                  cy="390"
-                  r="175"
-                  fill="url(#grad-ai)"
-                  stroke="#7c3aed"
-                  strokeWidth={activeDomain === "ai" ? "2.5" : "1.75"}
-                  strokeOpacity={activeDomain === "ai" ? "1" : "0.7"}
+                <path
+                  d="M 494.4 390.0 C 494.8 412.5, 492.4 437.3, 484.0 458.0 C 475.7 478.6, 460.6 499.3, 444.1 514.1 C 427.6 528.9, 405.6 539.4, 384.9 546.8 C 364.3 554.1, 342.0 557.4, 320.0 558.1 C 298.0 558.9, 274.7 557.9, 253.1 551.4 C 231.6 545.0, 207.7 534.7, 190.5 519.5 C 173.3 504.3, 157.9 481.9, 150.1 460.4 C 142.4 438.8, 141.7 412.4, 144.1 390.0 C 146.5 367.6, 155.3 345.5, 164.7 325.7 C 174.2 305.9, 186.3 287.2, 201.0 271.0 C 215.8 254.9, 233.4 238.6, 253.2 228.8 C 273.0 218.9, 297.6 211.9, 320.0 211.7 C 342.4 211.4, 367.0 218.0, 387.4 227.3 C 407.8 236.7, 426.6 251.8, 442.3 267.7 C 458.0 283.7, 473.0 302.7, 481.7 323.0 C 491.3 343.4, 499.8 367.5, 500.2 390.0 Z"
+                  fill={activeDomain === "ai" ? "rgba(0,0,0,0.05)" : "rgba(0,0,0,0.016)"}
+                  stroke={activeDomain === "ai" ? "#111111" : "rgba(0,0,0,0.22)"}
+                  strokeWidth={activeDomain === "ai" ? "2.75" : "1.5"}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#brush-filter)"
                   className="transition-all duration-300"
                 />
               </g>
@@ -343,14 +257,15 @@ export default function VennDiagram() {
               {/* Outer Region Labels */}
               <g
                 className="cursor-pointer"
-                onClick={() => setActiveDomain("designer")}
+                onClick={() => selectDomain("designer")}
+                onMouseEnter={() => selectDomain("designer")}
               >
                 <text
                   x="145"
                   y="165"
                   textAnchor="middle"
-                  className={`font-sans text-[13px] font-semibold tracking-wider transition-all duration-200 ${
-                    activeDomain === "designer" ? "fill-[#0284c7] font-bold" : "fill-[#0369a1]"
+                  className={`font-sans text-[12px] uppercase tracking-[0.14em] transition-all duration-200 ${
+                    activeDomain === "designer" ? "fill-[#111111] font-bold" : "fill-[#333333] font-semibold"
                   }`}
                 >
                   DESIGNER
@@ -359,7 +274,7 @@ export default function VennDiagram() {
                   x="145"
                   y="184"
                   textAnchor="middle"
-                  className="font-mono text-[9.5px] fill-[#64748b]"
+                  className="font-mono text-[9px] uppercase tracking-wider fill-[#8e8e93]"
                 >
                   UI / UX · Typography
                 </text>
@@ -367,14 +282,15 @@ export default function VennDiagram() {
 
               <g
                 className="cursor-pointer"
-                onClick={() => setActiveDomain("engineer")}
+                onClick={() => selectDomain("engineer")}
+                onMouseEnter={() => selectDomain("engineer")}
               >
                 <text
                   x="495"
                   y="165"
                   textAnchor="middle"
-                  className={`font-sans text-[13px] font-semibold tracking-wider transition-all duration-200 ${
-                    activeDomain === "engineer" ? "fill-[#059669] font-bold" : "fill-[#047857]"
+                  className={`font-sans text-[12px] uppercase tracking-[0.14em] transition-all duration-200 ${
+                    activeDomain === "engineer" ? "fill-[#111111] font-bold" : "fill-[#333333] font-semibold"
                   }`}
                 >
                   ENGINEER
@@ -383,7 +299,7 @@ export default function VennDiagram() {
                   x="495"
                   y="184"
                   textAnchor="middle"
-                  className="font-mono text-[9.5px] fill-[#64748b]"
+                  className="font-mono text-[9px] uppercase tracking-wider fill-[#8e8e93]"
                 >
                   Fullstack · Hardware
                 </text>
@@ -391,14 +307,15 @@ export default function VennDiagram() {
 
               <g
                 className="cursor-pointer"
-                onClick={() => setActiveDomain("ai")}
+                onClick={() => selectDomain("ai")}
+                onMouseEnter={() => selectDomain("ai")}
               >
                 <text
                   x="320"
                   y="475"
                   textAnchor="middle"
-                  className={`font-sans text-[13px] font-semibold tracking-wider transition-all duration-200 ${
-                    activeDomain === "ai" ? "fill-[#7c3aed] font-bold" : "fill-[#6d28d9]"
+                  className={`font-sans text-[12px] uppercase tracking-[0.14em] transition-all duration-200 ${
+                    activeDomain === "ai" ? "fill-[#111111] font-bold" : "fill-[#333333] font-semibold"
                   }`}
                 >
                   AI
@@ -407,7 +324,7 @@ export default function VennDiagram() {
                   x="320"
                   y="494"
                   textAnchor="middle"
-                  className="font-mono text-[9.5px] fill-[#64748b]"
+                  className="font-mono text-[9px] uppercase tracking-wider fill-[#8e8e93]"
                 >
                   GenAI · Model Pipelines
                 </text>
@@ -417,7 +334,8 @@ export default function VennDiagram() {
               <g
                 className="cursor-pointer transition-transform duration-200 hover:scale-105"
                 style={{ transformOrigin: "320px 147px" }}
-                onClick={() => setActiveDomain("design-eng")}
+                onClick={() => selectDomain("design-eng")}
+                onMouseEnter={() => selectDomain("design-eng")}
               >
                 <rect
                   x="268"
@@ -425,24 +343,23 @@ export default function VennDiagram() {
                   width="104"
                   height="28"
                   rx="14"
-                  fill={activeDomain === "design-eng" ? "#0f766e" : "#ffffff"}
-                  stroke={activeDomain === "design-eng" ? "#0d9488" : "rgba(13,148,136,0.3)"}
-                  strokeWidth={activeDomain === "design-eng" ? "2" : "1"}
-                  filter="url(#pill-shadow)"
+                  fill={activeDomain === "design-eng" ? "#111111" : "#ffffff"}
+                  stroke={activeDomain === "design-eng" ? "#111111" : "rgba(0,0,0,0.14)"}
+                  strokeWidth="1"
                   className="transition-all duration-200"
                 />
                 <circle
                   cx="282"
                   cy="147"
-                  r="3.5"
-                  fill={activeDomain === "design-eng" ? "#ffffff" : "#0d9488"}
+                  r="3"
+                  fill={activeDomain === "design-eng" ? "#ffffff" : "rgba(0,0,0,0.35)"}
                 />
                 <text
                   x="324"
                   y="151"
                   textAnchor="middle"
                   className={`font-mono text-[9px] font-semibold uppercase tracking-wider pointer-events-none transition-colors duration-200 ${
-                    activeDomain === "design-eng" ? "fill-white" : "fill-[#0f766e]"
+                    activeDomain === "design-eng" ? "fill-white" : "fill-[#222222]"
                   }`}
                 >
                   Design Eng
@@ -453,7 +370,8 @@ export default function VennDiagram() {
               <g
                 className="cursor-pointer transition-transform duration-200 hover:scale-105"
                 style={{ transformOrigin: "232px 338px" }}
-                onClick={() => setActiveDomain("creative-ai")}
+                onClick={() => selectDomain("creative-ai")}
+                onMouseEnter={() => selectDomain("creative-ai")}
               >
                 <rect
                   x="180"
@@ -461,24 +379,23 @@ export default function VennDiagram() {
                   width="104"
                   height="28"
                   rx="14"
-                  fill={activeDomain === "creative-ai" ? "#be185d" : "#ffffff"}
-                  stroke={activeDomain === "creative-ai" ? "#db2777" : "rgba(219,39,119,0.3)"}
-                  strokeWidth={activeDomain === "creative-ai" ? "2" : "1"}
-                  filter="url(#pill-shadow)"
+                  fill={activeDomain === "creative-ai" ? "#111111" : "#ffffff"}
+                  stroke={activeDomain === "creative-ai" ? "#111111" : "rgba(0,0,0,0.14)"}
+                  strokeWidth="1"
                   className="transition-all duration-200"
                 />
                 <circle
                   cx="194"
                   cy="338"
-                  r="3.5"
-                  fill={activeDomain === "creative-ai" ? "#ffffff" : "#db2777"}
+                  r="3"
+                  fill={activeDomain === "creative-ai" ? "#ffffff" : "rgba(0,0,0,0.35)"}
                 />
                 <text
                   x="236"
                   y="342"
                   textAnchor="middle"
                   className={`font-mono text-[9px] font-semibold uppercase tracking-wider pointer-events-none transition-colors duration-200 ${
-                    activeDomain === "creative-ai" ? "fill-white" : "fill-[#be185d]"
+                    activeDomain === "creative-ai" ? "fill-white" : "fill-[#222222]"
                   }`}
                 >
                   Creative AI
@@ -489,7 +406,8 @@ export default function VennDiagram() {
               <g
                 className="cursor-pointer transition-transform duration-200 hover:scale-105"
                 style={{ transformOrigin: "408px 338px" }}
-                onClick={() => setActiveDomain("ai-systems")}
+                onClick={() => selectDomain("ai-systems")}
+                onMouseEnter={() => selectDomain("ai-systems")}
               >
                 <rect
                   x="356"
@@ -497,24 +415,23 @@ export default function VennDiagram() {
                   width="104"
                   height="28"
                   rx="14"
-                  fill={activeDomain === "ai-systems" ? "#b45309" : "#ffffff"}
-                  stroke={activeDomain === "ai-systems" ? "#d97706" : "rgba(217,119,6,0.3)"}
-                  strokeWidth={activeDomain === "ai-systems" ? "2" : "1"}
-                  filter="url(#pill-shadow)"
+                  fill={activeDomain === "ai-systems" ? "#111111" : "#ffffff"}
+                  stroke={activeDomain === "ai-systems" ? "#111111" : "rgba(0,0,0,0.14)"}
+                  strokeWidth="1"
                   className="transition-all duration-200"
                 />
                 <circle
                   cx="370"
                   cy="338"
-                  r="3.5"
-                  fill={activeDomain === "ai-systems" ? "#ffffff" : "#d97706"}
+                  r="3"
+                  fill={activeDomain === "ai-systems" ? "#ffffff" : "rgba(0,0,0,0.35)"}
                 />
                 <text
                   x="412"
                   y="342"
                   textAnchor="middle"
                   className={`font-mono text-[9px] font-semibold uppercase tracking-wider pointer-events-none transition-colors duration-200 ${
-                    activeDomain === "ai-systems" ? "fill-white" : "fill-[#b45309]"
+                    activeDomain === "ai-systems" ? "fill-white" : "fill-[#222222]"
                   }`}
                 >
                   AI Systems
@@ -524,24 +441,35 @@ export default function VennDiagram() {
               {/* Center: The Core (SATYA) */}
               <g
                 className="cursor-pointer group/center"
-                onClick={() => setActiveDomain("core")}
+                onClick={() => selectDomain("core")}
+                onMouseEnter={() => selectDomain("core")}
               >
-                <circle
-                  cx="320"
-                  cy="280"
-                  r="44"
-                  fill="url(#grad-center)"
-                  stroke={activeDomain === "core" ? "#fbbf24" : "#ffffff"}
-                  strokeWidth={activeDomain === "core" ? "2.5" : "2"}
-                  filter="url(#core-shadow)"
-                  className="transition-all duration-200 group-hover/center:scale-105"
+                {/* Active Outer Ring */}
+                {activeDomain === "core" && (
+                  <path
+                    d="M 374.0 280.0 C 373.8 295.2, 369.3 310.2, 358.3 321.2 C 347.3 332.2, 332.2 336.8, 320.0 336.8 C 307.8 336.8, 292.7 332.2, 281.7 321.2 C 270.7 310.2, 266.2 295.2, 266.0 280.0 C 265.8 264.8, 270.7 249.8, 281.7 238.8 C 292.7 227.8, 307.8 223.2, 320.0 223.2 C 332.2 223.2, 347.3 227.8, 358.3 238.8 C 369.3 249.8, 374.2 264.8, 374.0 280.0 Z"
+                    fill="none"
+                    stroke="#111111"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 3"
+                    className="animate-spin-slow"
+                    style={{ transformOrigin: "320px 280px" }}
+                  />
+                )}
+                <path
+                  d="M 367.7 280.0 C 367.2 285.8, 363.9 292.1, 360.8 296.9 C 357.6 301.7, 353.1 305.4, 348.9 308.9 C 344.7 312.4, 340.6 315.5, 335.8 318.0 C 330.9 320.6, 325.5 323.3, 320.0 324.0 C 314.5 324.6, 307.8 324.1, 302.6 322.0 C 297.4 319.9, 292.3 315.7, 288.6 311.4 C 284.9 307.2, 282.3 301.7, 280.2 296.5 C 278.1 291.3, 276.4 285.7, 275.9 280.0 C 275.4 274.3, 275.3 267.7, 277.2 262.3 C 279.1 256.8, 282.9 250.9, 287.2 247.2 C 291.6 243.5, 298.0 241.3, 303.5 240.1 C 308.9 238.8, 314.6 239.5, 320.0 239.9 C 325.4 240.3, 330.3 240.9, 335.6 242.4 C 340.9 243.8, 346.8 245.2, 351.6 248.4 C 356.3 251.7, 361.3 256.5, 364.0 261.8 C 366.5 267.1, 367.2 274.2, 366.7 280.0 Z"
+                  fill="#111111"
+                  stroke="#ffffff"
+                  strokeWidth="2"
+                  filter="url(#brush-filter-subtle)"
+                  className="transition-transform duration-200 group-hover/center:scale-105"
                   style={{ transformOrigin: "320px 280px" }}
                 />
                 <text
                   x="320"
                   y="276"
                   textAnchor="middle"
-                  className="font-sans text-[11px] font-bold fill-white tracking-widest pointer-events-none"
+                  className="font-sans text-[11px] font-bold fill-white tracking-[0.2em] pointer-events-none"
                 >
                   SATYA
                 </text>
@@ -549,7 +477,7 @@ export default function VennDiagram() {
                   x="320"
                   y="291"
                   textAnchor="middle"
-                  className="font-mono text-[8px] fill-amber-300 font-semibold uppercase tracking-wider pointer-events-none"
+                  className="font-mono text-[7.5px] fill-white/80 font-semibold uppercase tracking-[0.22em] pointer-events-none"
                 >
                   AI + DESIGN
                 </text>
@@ -559,20 +487,20 @@ export default function VennDiagram() {
         </div>
 
         {/* =========================================================
-            RIGHT COLUMN: Dynamic Domain Inspector (Aligned with left)
+            RIGHT COLUMN: Title + Description + 4 Company Circles
            ========================================================= */}
-        <div className="flex flex-col justify-start">
+        <div className="flex flex-col justify-center max-w-xl">
           <AnimatePresence mode="wait">
             <motion.div
               key={current.id}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col"
             >
-              {/* Domain Heading (Matches user's "Lorem ipsum dolor sit amet, :") */}
-              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-[-0.03em] text-[#1d1d1f] leading-tight">
+              {/* Domain Heading */}
+              <h3 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-[-0.03em] text-[#111111] leading-[1.12]">
                 {current.title}
               </h3>
 
@@ -581,76 +509,39 @@ export default function VennDiagram() {
                 {current.description}
               </p>
 
-              {/* Companies Worked In This Domain */}
-              <div className="mt-8">
-                <h4 className="text-sm font-medium text-[#1d1d1f] tracking-tight">
-                  Companies worked in this domain :
-                </h4>
-                <div className="grid grid-cols-4 gap-3 sm:gap-4 mt-3">
+              {/* Row of 4 Circular Company Logos matching user sketch ○ ○ ○ ○ */}
+              <div className="mt-8 flex flex-col gap-3">
+                <div className="flex items-center gap-3.5 sm:gap-4.5">
                   {current.companies.map((company, idx) => (
                     <div
                       key={idx}
-                      className="group relative flex flex-col items-center justify-center aspect-square rounded-2xl bg-[#f5f5f7] border border-black/[0.04] p-3 transition-all duration-200 hover:bg-white hover:shadow-md hover:border-black/[0.08]"
+                      onMouseEnter={() => setHoveredCompany(company)}
+                      onMouseLeave={() => setHoveredCompany(null)}
+                      className="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border border-black/[0.08] p-2.5 sm:p-3 flex items-center justify-center shadow-2xs hover:scale-110 hover:border-black/25 hover:shadow-xs transition-all duration-200 cursor-pointer"
                       title={`${company.name} — ${company.role}`}
                     >
-                      <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
-                        <Image
-                          src={company.logo}
-                          alt={company.name}
-                          width={40}
-                          height={40}
-                          className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-200"
-                        />
-                      </div>
-                      <span className="mt-1.5 text-[11px] font-sans font-medium text-[#626267] truncate max-w-full text-center group-hover:text-[#1d1d1f] transition-colors">
-                        {company.name}
-                      </span>
+                      <Image
+                        src={company.logo}
+                        alt={company.name}
+                        width={36}
+                        height={36}
+                        className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-200"
+                      />
                     </div>
                   ))}
                 </div>
-              </div>
 
-              {/* Projects Gallery */}
-              <div className="mt-8">
-                <h4 className="text-sm font-medium text-[#1d1d1f] tracking-tight">
-                  Projects gallery
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
-                  {current.projects.map((project, idx) => {
-                    const isExternal = project.link.startsWith("http");
-                    return (
-                      <a
-                        key={idx}
-                        href={project.link}
-                        target={isExternal ? "_blank" : undefined}
-                        rel={isExternal ? "noopener noreferrer" : undefined}
-                        className="group flex flex-col rounded-2xl bg-[#f5f5f7] border border-black/[0.05] overflow-hidden transition-all duration-200 hover:bg-white hover:shadow-lg hover:border-black/[0.12] hover:-translate-y-1"
-                      >
-                        <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/[0.03]">
-                          <Image
-                            src={project.image}
-                            alt={project.title}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                          />
-                          <div className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-white/85 backdrop-blur-xs text-[#1d1d1f] opacity-0 group-hover:opacity-100 transition-opacity shadow-xs">
-                            <ArrowUpRight size={13} />
-                          </div>
-                        </div>
-                        <div className="p-3.5 flex flex-col flex-1">
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-[#86868b]">
-                            {project.tag}
-                          </span>
-                          <h5 className="text-sm font-semibold text-[#1d1d1f] mt-0.5 tracking-tight group-hover:text-[#0284c7] transition-colors">
-                            {project.title}
-                          </h5>
-                          <p className="text-xs text-[#626267] mt-1 line-clamp-2 leading-relaxed">
-                            {project.desc}
-                          </p>
-                        </div>
-                      </a>
-                    );
-                  })}
+                {/* Company Role Micro-label */}
+                <div className="h-5 flex items-center">
+                  <p className="text-xs text-[#6e6e73] tracking-tight transition-opacity duration-200">
+                    {hoveredCompany ? (
+                      <span>
+                        <strong className="text-[#111111] font-medium">{hoveredCompany.name}</strong> — {hoveredCompany.role}
+                      </span>
+                    ) : (
+                      <span className="text-[#8e8e93]">Hover a company to inspect role</span>
+                    )}
+                  </p>
                 </div>
               </div>
             </motion.div>
