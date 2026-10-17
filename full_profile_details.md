@@ -73,10 +73,6 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 ## 🎓 Education
 
 ### B.Tech, Electronics and Communication Engineering
-**Koneru Lakshmaiah Educational Foundation** | *2024 – 2025* | Vijayawada, Andhra Pradesh
-
-
-### B.Tech, Electronics and Communication Engineering
 **Amrita University** | *2021 – 2024* | Kollam, Kerala
 * Active in amFOSS, the Free & Open Source student community
 * Mentored students in team bi0s, India’s No.1 ranked CTF team
@@ -91,6 +87,73 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 * **NASA Space Apps Awards:** Galactic Impact Award (2023) and Local Award for Local Impact (2022). [Link](https://www.spaceappschallenge.org/)
 * **Hackathon Highlights:** Runner Up at Kavach Cyber Security Hackathon (2023). Top 5 at Nullcon Goa (2022).
 * **SIH 2022 Finalist:** National Finalist in Smart India Hackathon Hardware Edition.
+
+---
+
+## 🛠️ Open Source & Tools
+
+### NotBad
+**Role:** Creator | [View Repository](https://github.com/nagubathula/NotBad)  
+**Portfolio:** [worldofsatya.in/works/notbad](https://worldofsatya.in/works/notbad)
+**Images:** `/notbad-demo.gif`, `/notbad-editor.png`
+* **A quiet place to write — on every desktop:** Markdown editors make you choose: stare at raw syntax, or split the screen with a preview pane. NotBad does neither. Marks like `**` and `#` fade as you type, what remains reads like the finished piece, and every bit of chrome recedes until you reach for it. It's a from-scratch, pure-Flutter port of the macOS-only Trace — no web view, no CodeMirror — so one Dart codebase behaves identically on Windows, macOS, and Linux.
+* **What it does:** 
+  * **Concealed syntax with a caret-line reveal** — three view modes one keystroke apart: styled with marks hidden (the caret's line reveals its marks so editing stays predictable), styled with marks visible, and plain monospace source.
+  * **Everything within reach, nothing in view** — a fuzzy command palette, keyboard-driven file sidebar, hover table of contents, find & replace with live highlights, and a floating toolbar that fades while you type.
+  * **Trustworthy with files** — session restore, autosave, crash-safe untitled drafts, external-change detection, CRLF/LF preservation, and single-instance document handoff. Plain .md files, no lock-in.
+  * **A writer's editor** — smart list continuation, auto-pairing, focus mode with typewriter scrolling, smart typography, Copy as Rich Text, and HTML export.
+* **Under the hood:** The upstream app is ~28k lines of Swift wrapped around ~14.6k lines of TypeScript; NotBad re-imagines it in ~3.5k lines of Dart. A custom `TextEditingController` styles Markdown live with per-line span caching, concealed marks stay in the text (painted invisible) so caret math never drifts from the file, and the chrome — hidden title bar, custom caption buttons, receding toolbar — is drawn by the app itself. Ships with an Inno Setup installer, "Open with NotBad" shell integration, CI builds for all three platforms, and an in-app update check against GitHub releases.
+
+### OpenWeave
+**Role:** Creator | [View Repository](https://github.com/nagubathula/OpenWeave)  
+**Portfolio:** [worldofsatya.in/works/openweave](https://worldofsatya.in/works/openweave)
+**Image:** `/openweave-app.png`
+* **Why I built it:** Design tools are closed ecosystems: your files live in someone else's cloud, and automating anything means fighting a plugin sandbox. OpenWeave is my answer — a design editor that treats the design file as an open, inspectable document you own, and the editor itself as a programmable toolkit rather than a walled garden.
+* **What it does:**
+  * **Opens native design files** — reads and writes Figma `.fig` and Pencil `.pen` documents, with copy & paste between apps.
+  * **AI builds designs** — describe what you want in chat and 90+ tools create and modify nodes. Works with Anthropic, OpenAI, Google AI, OpenRouter, and compatible endpoints.
+  * **Fully programmable** — headless CLI, XPath queries over the node tree, Figma Plugin API support, and an MCP server so AI agents like Claude Code can drive the editor.
+  * **Design-to-code** — export selections as JSX/Tailwind, extract design tokens, lint naming, layout, and accessibility.
+  * **Real-time collaboration** — peer-to-peer over WebRTC with cursors, presence, and follow mode. No server, no account.
+  * **React SDK** — headless components and composables for embedding the editor into other apps or building custom editing surfaces.
+* **Under the hood:** A monorepo of focused packages — scene graph, file-format codecs, core engine, React bindings, CLI, and MCP server — built with Next.js and TypeScript. Auto layout and CSS Grid run on Yoga WASM, and the desktop app ships as a ~7 MB Tauri v2 binary for macOS, Windows, and Linux, with the same code running in the browser as a PWA.
+
+### Toothpaste
+**Role:** Creator | [View Repository](https://github.com/nagubathula/toothpaste)  
+**Portfolio:** [worldofsatya.in/works/toothpaste](https://worldofsatya.in/works/toothpaste)
+**Images:** `/toothpaste-panel-wide.png`
+* **Paste anything. Straight to the timeline:** Getting media into Premiere Pro is death by a thousand clicks: download, locate, import, drag to the timeline. Toothpaste collapses all of it into a paste. It's a CEP 11 extension for Premiere Pro 15+ and After Effects 18+ — hit `Ctrl+V` in the panel and your media lands at the playhead.
+* **What it does:**
+  * **Paste or drag anything** — images, file paths, or URLs, with batch drag-and-drop from Explorer/Finder.
+  * **URL downloads** — paste a YouTube, TikTok, X/Twitter, Reddit, or Pinterest link and it auto-downloads and imports via yt-dlp, with quality selection and time-range clipping to grab just a segment.
+  * **Timeline-ready** — imported media auto-places at the playhead; GIFs and WebPs are converted to MP4 via FFmpeg so they just work.
+  * **Editor conveniences** — audio-only MP3 extraction, browser-cookie support for restricted content, and a recent-history panel for instant re-use.
+* **Distribution:** Ships as a pre-built `.zxp` on GitHub Releases — no Node.js, no build steps, just install and go. The repo also doubles as a clean, documented template for anyone building their own Adobe CEP extension.
+
+### CHAYA UI
+**Role:** Core Contributor | [View Repository](https://github.com/traboda/chaya)  
+**Portfolio:** [worldofsatya.in/works/chaya](https://worldofsatya.in/works/chaya)
+* **What it is:** Chaya UI is a modern, data-first component library for React by Traboda — 40+ components and custom hooks with full TypeScript type safety, styled with Tailwind CSS on Radix primitives, with dark mode and custom theming built in. Documented with Storybook and open-sourced under GPL v3.
+* **My contribution:** As a core contributor I collaborated directly with the creators on design, development, and optimization, and authored several exclusive custom components — working across the full lifecycle from component design to the code that ships.
+
+### Engineerudu
+**Role:** FOSS Community Builder | [Visit Community](https://engineerudu.com)  
+**Portfolio:** [worldofsatya.in/works/engineerudu](https://worldofsatya.in/works/engineerudu)
+* **The mission:** Andhra Pradesh has no shortage of engineering talent — what it lacked was a home for open source. Engineerudu is the state's first Free and Open Source Software community, built to give local developers a place to learn in public, contribute to real projects, and find each other.
+* **What building it means:** Community building is unglamorous open source: organizing people rather than code. The work spans growing membership, fostering a contribution culture among students and early-career engineers, and connecting local talent to the wider FOSS ecosystem.
+
+### CompatrIoT
+**Role:** Hardware Security | [Watch Demo](https://drive.google.com/file/d/1e1d_eKrPW2BtSN-1nqGks1lxa6HyI7hn/view)  
+**Portfolio:** [worldofsatya.in/works/compatriot](https://worldofsatya.in/works/compatriot)
+**Images:** `/gallery/compatriot-board.jpg`, `/gallery/compatriot-labs.jpg`
+* **What it is:** Most people learn hardware security from slides. CompatrIoT is a physical, open-source training board you attack for real — built for security researchers, hobbyists, and students. Dual microcontrollers (an STM32 and an ESP32) give it broad protocol coverage, and the on-board targets — SPI flash, I2C EEPROM, sensors, programmable LEDs, JTAG/SWD debug ports, and a USB serial console — turn every classic hardware attack into something you can practice hands-on.
+* **The training labs:** Twenty gamified labs walk from first contact to full compromise, with progressive difficulty:
+  * **UART** — port identification two ways, then talking to the target.
+  * **JTAG/SWD** — pinout identification, firmware extraction, firmware patching, and peripheral access.
+  * **I2C** — chip reconnaissance, communication sniffing, memory dumping.
+  * **SPI** — chip recon, sniffing, and full flash firmware extraction.
+  * **BLE** — scanning, GATT enumeration, protocol sniffing, device control, and LTK cracking.
+* **Why it matters:** Everything is open — hardware designs, firmware, and documentation — so anyone can build, extend, or teach with it. It compresses what usually takes a shelf of dev boards and scattered CTF challenges into one board with a structured learning path: real protocols, real extraction, real exploitation, from beginner to advanced.
 
 ---
 
@@ -167,73 +230,6 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 **Portfolio:** [worldofsatya.in/works/why-are-you-still-confused-when-turning-your-design-to-code](https://worldofsatya.in/works/why-are-you-still-confused-when-turning-your-design-to-code)
 * **What it covers:** The design-to-development handoff is where good work goes to die: spacing drifts, states get missed, and both sides blame each other. Published in Design Bootcamp, this guide walks through the common pitfalls of turning designs into code and how to structure your work so the translation is faithful.
 * **Read it:** The full article is on Medium via the link above.
-
----
-
-## 🛠️ Open Source & Tools
-
-### NotBad
-**Role:** Creator | [View Repository](https://github.com/nagubathula/NotBad)  
-**Portfolio:** [worldofsatya.in/works/notbad](https://worldofsatya.in/works/notbad)
-**Images:** `/notbad-demo.gif`, `/notbad-editor.png`
-* **A quiet place to write — on every desktop:** Markdown editors make you choose: stare at raw syntax, or split the screen with a preview pane. NotBad does neither. Marks like `**` and `#` fade as you type, what remains reads like the finished piece, and every bit of chrome recedes until you reach for it. It's a from-scratch, pure-Flutter port of the macOS-only Trace — no web view, no CodeMirror — so one Dart codebase behaves identically on Windows, macOS, and Linux.
-* **What it does:** 
-  * **Concealed syntax with a caret-line reveal** — three view modes one keystroke apart: styled with marks hidden (the caret's line reveals its marks so editing stays predictable), styled with marks visible, and plain monospace source.
-  * **Everything within reach, nothing in view** — a fuzzy command palette, keyboard-driven file sidebar, hover table of contents, find & replace with live highlights, and a floating toolbar that fades while you type.
-  * **Trustworthy with files** — session restore, autosave, crash-safe untitled drafts, external-change detection, CRLF/LF preservation, and single-instance document handoff. Plain .md files, no lock-in.
-  * **A writer's editor** — smart list continuation, auto-pairing, focus mode with typewriter scrolling, smart typography, Copy as Rich Text, and HTML export.
-* **Under the hood:** The upstream app is ~28k lines of Swift wrapped around ~14.6k lines of TypeScript; NotBad re-imagines it in ~3.5k lines of Dart. A custom `TextEditingController` styles Markdown live with per-line span caching, concealed marks stay in the text (painted invisible) so caret math never drifts from the file, and the chrome — hidden title bar, custom caption buttons, receding toolbar — is drawn by the app itself. Ships with an Inno Setup installer, "Open with NotBad" shell integration, CI builds for all three platforms, and an in-app update check against GitHub releases.
-
-### OpenWeave
-**Role:** Creator | [View Repository](https://github.com/nagubathula/OpenWeave)  
-**Portfolio:** [worldofsatya.in/works/openweave](https://worldofsatya.in/works/openweave)
-**Image:** `/openweave-app.png`
-* **Why I built it:** Design tools are closed ecosystems: your files live in someone else's cloud, and automating anything means fighting a plugin sandbox. OpenWeave is my answer — a design editor that treats the design file as an open, inspectable document you own, and the editor itself as a programmable toolkit rather than a walled garden.
-* **What it does:**
-  * **Opens native design files** — reads and writes Figma `.fig` and Pencil `.pen` documents, with copy & paste between apps.
-  * **AI builds designs** — describe what you want in chat and 90+ tools create and modify nodes. Works with Anthropic, OpenAI, Google AI, OpenRouter, and compatible endpoints.
-  * **Fully programmable** — headless CLI, XPath queries over the node tree, Figma Plugin API support, and an MCP server so AI agents like Claude Code can drive the editor.
-  * **Design-to-code** — export selections as JSX/Tailwind, extract design tokens, lint naming, layout, and accessibility.
-  * **Real-time collaboration** — peer-to-peer over WebRTC with cursors, presence, and follow mode. No server, no account.
-  * **React SDK** — headless components and composables for embedding the editor into other apps or building custom editing surfaces.
-* **Under the hood:** A monorepo of focused packages — scene graph, file-format codecs, core engine, React bindings, CLI, and MCP server — built with Next.js and TypeScript. Auto layout and CSS Grid run on Yoga WASM, and the desktop app ships as a ~7 MB Tauri v2 binary for macOS, Windows, and Linux, with the same code running in the browser as a PWA.
-
-### Toothpaste
-**Role:** Creator | [View Repository](https://github.com/nagubathula/toothpaste)  
-**Portfolio:** [worldofsatya.in/works/toothpaste](https://worldofsatya.in/works/toothpaste)
-**Images:** `/toothpaste-panel-wide.png`
-* **Paste anything. Straight to the timeline:** Getting media into Premiere Pro is death by a thousand clicks: download, locate, import, drag to the timeline. Toothpaste collapses all of it into a paste. It's a CEP 11 extension for Premiere Pro 15+ and After Effects 18+ — hit `Ctrl+V` in the panel and your media lands at the playhead.
-* **What it does:**
-  * **Paste or drag anything** — images, file paths, or URLs, with batch drag-and-drop from Explorer/Finder.
-  * **URL downloads** — paste a YouTube, TikTok, X/Twitter, Reddit, or Pinterest link and it auto-downloads and imports via yt-dlp, with quality selection and time-range clipping to grab just a segment.
-  * **Timeline-ready** — imported media auto-places at the playhead; GIFs and WebPs are converted to MP4 via FFmpeg so they just work.
-  * **Editor conveniences** — audio-only MP3 extraction, browser-cookie support for restricted content, and a recent-history panel for instant re-use.
-* **Distribution:** Ships as a pre-built `.zxp` on GitHub Releases — no Node.js, no build steps, just install and go. The repo also doubles as a clean, documented template for anyone building their own Adobe CEP extension.
-
-### CHAYA UI
-**Role:** Core Contributor | [View Repository](https://github.com/traboda/chaya)  
-**Portfolio:** [worldofsatya.in/works/chaya](https://worldofsatya.in/works/chaya)
-* **What it is:** Chaya UI is a modern, data-first component library for React by Traboda — 40+ components and custom hooks with full TypeScript type safety, styled with Tailwind CSS on Radix primitives, with dark mode and custom theming built in. Documented with Storybook and open-sourced under GPL v3.
-* **My contribution:** As a core contributor I collaborated directly with the creators on design, development, and optimization, and authored several exclusive custom components — working across the full lifecycle from component design to the code that ships.
-
-### Engineerudu
-**Role:** FOSS Community Builder | [Visit Community](https://engineerudu.com)  
-**Portfolio:** [worldofsatya.in/works/engineerudu](https://worldofsatya.in/works/engineerudu)
-* **The mission:** Andhra Pradesh has no shortage of engineering talent — what it lacked was a home for open source. Engineerudu is the state's first Free and Open Source Software community, built to give local developers a place to learn in public, contribute to real projects, and find each other.
-* **What building it means:** Community building is unglamorous open source: organizing people rather than code. The work spans growing membership, fostering a contribution culture among students and early-career engineers, and connecting local talent to the wider FOSS ecosystem.
-
-### CompatrIoT
-**Role:** Hardware Security | [Watch Demo](https://drive.google.com/file/d/1e1d_eKrPW2BtSN-1nqGks1lxa6HyI7hn/view)  
-**Portfolio:** [worldofsatya.in/works/compatriot](https://worldofsatya.in/works/compatriot)
-**Images:** `/gallery/compatriot-board.jpg`, `/gallery/compatriot-labs.jpg`
-* **What it is:** Most people learn hardware security from slides. CompatrIoT is a physical, open-source training board you attack for real — built for security researchers, hobbyists, and students. Dual microcontrollers (an STM32 and an ESP32) give it broad protocol coverage, and the on-board targets — SPI flash, I2C EEPROM, sensors, programmable LEDs, JTAG/SWD debug ports, and a USB serial console — turn every classic hardware attack into something you can practice hands-on.
-* **The training labs:** Twenty gamified labs walk from first contact to full compromise, with progressive difficulty:
-  * **UART** — port identification two ways, then talking to the target.
-  * **JTAG/SWD** — pinout identification, firmware extraction, firmware patching, and peripheral access.
-  * **I2C** — chip reconnaissance, communication sniffing, memory dumping.
-  * **SPI** — chip recon, sniffing, and full flash firmware extraction.
-  * **BLE** — scanning, GATT enumeration, protocol sniffing, device control, and LTK cracking.
-* **Why it matters:** Everything is open — hardware designs, firmware, and documentation — so anyone can build, extend, or teach with it. It compresses what usually takes a shelf of dev boards and scattered CTF challenges into one board with a structured learning path: real protocols, real extraction, real exploitation, from beginner to advanced.
 
 ---
 

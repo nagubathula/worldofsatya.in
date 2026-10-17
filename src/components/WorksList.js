@@ -26,19 +26,19 @@ import RetroVideoPlayer from "./RetroVideoPlayer";
 
 const CATEGORY_TABS = [
   { key: "All", label: "All", category: null },
-  { key: "Project", label: "Projects", category: "Project" },
-  { key: "Case Study", label: "Case Studies", category: "Case Study" },
   { key: "Open Source", label: "Open Source", category: "Open Source" },
-  { key: "AI Videos", label: "AI Videos", category: "AI Videos" },
+  { key: "Case Study", label: "Case Studies", category: "Case Study" },
+  { key: "Project", label: "Projects", category: "Project" },
   { key: "Internal Tools", label: "Internal Tools", category: "Internal Tools" },
+  { key: "AI Videos", label: "AI Videos", category: "AI Videos" },
 ];
 
 const CATEGORY_PRIORITY = {
-  "AI Videos": 0,
+  "Open Source": 0,
   "Case Study": 1,
-  "Open Source": 2,
-  "Project": 3,
-  "Internal Tools": 4,
+  "Project": 2,
+  "Internal Tools": 3,
+  "AI Videos": 4,
 };
 const ITEMS_PER_PAGE = 12;
 
