@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   ArrowUpRight,
   Code,
@@ -17,7 +18,7 @@ import {
   X,
   Search,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 import { allWorks } from "@/data/works";
 import { playPopSound, play8BitTapSound } from "./SoundEffects";
@@ -39,7 +40,7 @@ const CATEGORY_PRIORITY = {
   "Project": 3,
   "Internal Tools": 4,
 };
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 12;
 
 function VideoCardPreview({ work }) {
   const videoRef = useRef(null);
@@ -142,16 +143,93 @@ function CardPlaceholder({ category, tag }) {
   );
 }
 
+const PREVIEW_W = 280;
+const PREVIEW_H = 178;
+
+function clampPreview(clientX, clientY) {
+  const pad = 12;
+  const vw = typeof window === "undefined" ? 1280 : window.innerWidth;
+  const vh = typeof window === "undefined" ? 800 : window.innerHeight;
+  let x = clientX + 26;
+  let y = clientY - PREVIEW_H * 0.42;
+  if (x + PREVIEW_W > vw - pad) x = clientX - PREVIEW_W - 26;
+  x = Math.max(pad, Math.min(x, vw - PREVIEW_W - pad));
+  y = Math.max(pad, Math.min(y, vh - PREVIEW_H - pad));
+  return { x, y };
+}
+
+function AnimatedWorkRow({
+  index,
+  stagger,
+  reduceMotion,
+  direction,
+  className,
+  children,
+  ...rest
+}) {
+  const delay = reduceMotion ? 0 : Math.min(index, 10) * stagger;
+  return (
+    <motion.div
+      {...rest}
+      className={className}
+      initial={
+        reduceMotion
+          ? { opacity: 0 }
+          : { opacity: 0, y: 16 * direction, filter: "blur(7px)" }
+      }
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      exit={{
+        opacity: 0,
+        y: -8 * direction,
+        filter: "blur(0px)",
+        transition: { duration: 0.14, ease: [0.4, 0, 1, 1] },
+      }}
+      transition={
+        reduceMotion
+          ? { duration: 0.16 }
+          : {
+              y: { type: "spring", stiffness: 520, damping: 36, mass: 0.55, delay },
+              opacity: { duration: 0.38, ease: [0.22, 1, 0.36, 1], delay },
+              filter: { duration: 0.42, ease: [0.22, 1, 0.36, 1], delay },
+            }
+      }
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function WorksList() {
+  const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const [filter, setFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [listDirection, setListDirection] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef(null);
+  const previewPlaced = useRef(false);
 
   const [activeVideo, setActiveVideo] = useState(null);
   const [lockedTool, setLockedTool] = useState(null);
   const [pin, setPin] = useState("");
   const [pinError, setPinError] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(null);
+
+  // Hover preview state
+  const [hoveredWork, setHoveredWork] = useState(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 460, damping: 34, mass: 0.45 });
+  const springY = useSpring(mouseY, { stiffness: 460, damping: 34, mass: 0.45 });
+
+  // One list in the tree once we know the viewport, so hidden rows are not announced twice.
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const apply = () => setIsDesktop(media.matches);
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, []);
 
   // Shortcut key listener (press / or Cmd+K to focus search)
   useEffect(() => {
@@ -259,6 +337,9 @@ export default function WorksList() {
       try {
         playPopSound(520, 0.08);
       } catch {}
+      setListDirection(1);
+      setHoveredWork(null);
+      previewPlaced.current = false;
       setFilter(tabKey);
       setCurrentPage(1);
     }
@@ -269,6 +350,9 @@ export default function WorksList() {
       try {
         playPopSound(480, 0.08);
       } catch {}
+      setListDirection(newPage > validCurrentPage ? 1 : -1);
+      setHoveredWork(null);
+      previewPlaced.current = false;
       setCurrentPage(newPage);
       const element = document.getElementById("collection");
       if (element) {
@@ -290,6 +374,55 @@ export default function WorksList() {
       setTimeout(() => setPin(""), 600);
     }
   };
+
+  const openWork = (work) => {
+    const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
+    const isInternal = work.category === "Internal Tools" || work.isInternal;
+    const destinationHref = work.link?.startsWith("/works/case-studies/")
+      ? work.link
+      : isAIVideo
+      ? `/works/${work.id}`
+      : work.link?.startsWith("http")
+      ? work.link
+      : `/works/${work.id}`;
+
+    if (isAIVideo) {
+      try { playPopSound(600, 0.08); } catch {}
+      setActiveVideo({
+        src: work.videoSrc,
+        poster: work.poster || work.image,
+        title: work.title,
+      });
+      return;
+    }
+    if (isInternal) {
+      try { playPopSound(500, 0.08); } catch {}
+      setLockedTool(work);
+      return;
+    }
+    try { playPopSound(520, 0.06); } catch {}
+    if (destinationHref.startsWith("http")) {
+      window.location.href = destinationHref;
+    } else {
+      router.push(destinationHref);
+    }
+  };
+
+  const placePreview = (clientX, clientY) => {
+    const point = clampPreview(clientX, clientY);
+    if (!previewPlaced.current) {
+      mouseX.jump(point.x);
+      mouseY.jump(point.y);
+      springX.jump(point.x);
+      springY.jump(point.y);
+      previewPlaced.current = true;
+    } else {
+      mouseX.set(point.x);
+      mouseY.set(point.y);
+    }
+  };
+
+  const stagger = searchQuery.trim() ? 0.018 : 0.046;
 
   return (
     <div id="ai-videos" className="w-full max-w-5xl mx-auto flex flex-col gap-6 sm:gap-8 pb-20 scroll-mt-28">
@@ -421,7 +554,10 @@ export default function WorksList() {
             {filter !== "All" && (
               <button
                 type="button"
-                onClick={() => setFilter("All")}
+                onClick={() => {
+                  setListDirection(1);
+                  setFilter("All");
+                }}
                 className="px-4 py-2 bg-white text-[#1d1d1f] border border-black/[0.08] rounded-full text-xs font-sans font-medium hover:bg-[#f5f5f7] transition-all shadow-sm"
               >
                 View All Works
@@ -430,171 +566,183 @@ export default function WorksList() {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 min-h-[500px]">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {paginatedWorks.map((work) => {
-              const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
-              const isInternal = work.category === "Internal Tools" || work.isInternal;
-              const destinationHref = work.link?.startsWith("/works/case-studies/")
-                ? work.link
-                : isAIVideo
-                ? `/works/${work.id}`
-                : work.link?.startsWith("http")
-                ? work.link
-                : `/works/${work.id}`;
-
-              return (
-                <motion.div
-                  layout
-                  initial={false}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.98, y: -10 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  key={work.id}
-                  className="h-full"
+        <>
+          {/* ── Desktop list. Div rows, because table rows cannot transform. ── */}
+          {(isDesktop === null || isDesktop) && <div
+            className="hidden md:block rounded-2xl border border-black/[0.08] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden w-full"
+            onMouseMove={(e) => placePreview(e.clientX, e.clientY)}
+            onMouseLeave={() => {
+              previewPlaced.current = false;
+              setHoveredWork(null);
+            }}
+          >
+            <div className="grid grid-cols-[minmax(0,1.35fr)_minmax(0,0.8fr)_minmax(0,1.45fr)_auto] border-b border-black/[0.06] bg-[#fafafa]">
+              {["Work", "Type", "Description", "Category"].map((label) => (
+                <div
+                  key={label}
+                  className={`py-3.5 px-6 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#8e8e93] ${label === "Category" ? "text-right" : ""}`}
                 >
-                  <div
-                    className="group relative flex flex-col h-full rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.06)] hover:border-black/[0.12] hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer"
-                    onClick={() => {
-                      if (isAIVideo) {
-                        try {
-                          playPopSound(600, 0.08);
-                        } catch {}
-                        setActiveVideo({
-                          src: work.videoSrc,
-                          poster: work.poster || work.image,
-                          title: work.title,
-                        });
-                      } else if (isInternal) {
-                        try {
-                          playPopSound(500, 0.08);
-                        } catch {}
-                        setLockedTool(work);
+                  {label}
+                </div>
+              ))}
+            </div>
+            <AnimatePresence mode="popLayout" initial>
+              {paginatedWorks.map((work, index) => {
+                const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
+                const isInternal = work.category === "Internal Tools" || work.isInternal;
+                return (
+                  <AnimatedWorkRow
+                    key={work.id}
+                    index={index}
+                    stagger={stagger}
+                    reduceMotion={!!reduceMotion}
+                    direction={listDirection}
+                    role="link"
+                    tabIndex={0}
+                    aria-label={work.title}
+                    onMouseEnter={(e) => {
+                      placePreview(e.clientX, e.clientY);
+                      setHoveredWork(work);
+                    }}
+                    onClick={() => openWork(work)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openWork(work);
                       }
                     }}
+                    className="group grid grid-cols-[minmax(0,1.35fr)_minmax(0,0.8fr)_minmax(0,1.45fr)_auto] border-b border-black/[0.05] last:border-b-0 cursor-pointer hover:bg-[#f5f5f7]/70"
                   >
-                    {/* Media Section */}
-                    <div className="p-4 sm:p-5 pb-0">
-                      {isAIVideo ? (
-                        <VideoCardPreview work={work} />
-                      ) : work.image ? (
-                        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-2xl bg-[#f5f5f7] border border-black/[0.04]">
-                          <Image
-                            src={work.image}
-                            alt={work.title}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 500px"
-                            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                          />
-                        </div>
-                      ) : (
-                        <CardPlaceholder category={work.category} tag={work.tag} />
-                      )}
-                    </div>
-
-                    {/* Body Content */}
-                    <div className="p-5 sm:p-6 flex flex-col flex-1">
-                      {/* Header Badges */}
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#f5f5f7] text-[11px] font-sans font-medium text-[#515154] border border-black/[0.04]">
-                          {getCategoryIcon(work.category)}
-                          {work.category}
-                        </span>
-                        {work.tag && (
-                          <span className="text-[11px] font-sans uppercase tracking-wider text-[#86868b] font-medium truncate max-w-[160px]">
-                            {work.tag}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Title */}
-                      <h2 className="text-xl sm:text-2xl font-sans font-semibold text-[#1d1d1f] tracking-tight mb-2 group-hover:text-black transition-colors line-clamp-1">
+                    <div className="py-4 px-6 min-w-0 flex items-center gap-2.5">
+                      {isAIVideo && <Play size={11} className="text-purple-500 fill-purple-500 shrink-0" />}
+                      {isInternal && <Lock size={11} className="text-orange-500 shrink-0" />}
+                      <span className="font-semibold text-[13px] text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors line-clamp-1">
                         {work.title}
-                      </h2>
-
-                      {/* Description */}
-                      <p className="text-sm text-[#515154] leading-relaxed font-sans line-clamp-2 mb-4">
+                      </span>
+                    </div>
+                    <div className="py-4 px-6 min-w-0 flex items-center">
+                      <span className="text-[11px] font-mono text-[#6e6e73] truncate">
+                        {work.tag || "—"}
+                      </span>
+                    </div>
+                    <div className="py-4 px-6 min-w-0 flex items-center">
+                      <span className="text-[13px] text-[#515154] line-clamp-1 font-sans">
                         {work.description}
-                      </p>
+                      </span>
+                    </div>
+                    <div className="py-4 px-6 flex items-center justify-end">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f5f5f7] border border-black/[0.04] text-[#515154] whitespace-nowrap">
+                        {getCategoryIcon(work.category)}
+                        {work.category}
+                      </span>
+                    </div>
+                  </AnimatedWorkRow>
+                );
+              })}
+            </AnimatePresence>
+          </div>}
 
-                      {/* Tags for internal tools if available */}
-                      {isInternal && Array.isArray(work.tags) && (
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          {work.tags.map((t, idx) => (
-                            <span
-                              key={idx}
-                              className="text-[11px] font-sans text-[#86868b] bg-[#f5f5f7] border border-black/[0.04] px-2 py-0.5 rounded-full"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Action Row */}
-                      <div className="mt-auto pt-3 flex items-center justify-between border-t border-black/[0.04]">
-                        {isAIVideo ? (
-                          <>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                try {
-                                playPopSound(600, 0.08);
-                              } catch {}
-                              setActiveVideo({
-                                src: work.videoSrc,
-                                poster: work.poster || work.image,
-                                title: work.title,
-                              });
-                            }}
-                            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-sans font-medium text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors"
-                          >
-                            <Play size={13} className="fill-current" /> Watch Video
-                          </button>
-                          <Link
-                            href={`/works/${work.id}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-xs text-[#86868b] hover:text-[#1d1d1f] transition-colors inline-flex items-center gap-1"
-                          >
-                            Notes <ArrowUpRight size={12} />
-                          </Link>
-                        </>
-                      ) : isInternal ? (
-                        <div className="flex items-center justify-between w-full">
-                          <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-sans font-medium text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">
-                            <Lock size={13} /> Restricted Access
-                          </span>
-                          <span className="text-[11px] font-mono text-[#86868b] bg-[#f5f5f7] px-2 py-0.5 rounded border border-black/[0.04]">
-                            PIN Locked
-                          </span>
-                        </div>
+          {/* ── Mobile Stacked List ───────────────────────────────────── */}
+          {(isDesktop === null || !isDesktop) && <div className="md:hidden rounded-2xl border border-black/[0.08] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden">
+            <AnimatePresence mode="popLayout" initial>
+              {paginatedWorks.map((work, index) => {
+                const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
+                const isInternal = work.category === "Internal Tools" || work.isInternal;
+                return (
+                  <AnimatedWorkRow
+                    key={work.id}
+                    index={index}
+                    stagger={stagger}
+                    reduceMotion={!!reduceMotion}
+                    direction={listDirection}
+                    role="link"
+                    tabIndex={0}
+                    aria-label={work.title}
+                    className="flex items-start gap-3 px-4 py-3.5 cursor-pointer active:bg-[#f5f5f7] border-b border-black/[0.05] last:border-b-0"
+                    onClick={() => openWork(work)}
+                  >
+                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-[#f5f5f7] border border-black/[0.05] shrink-0">
+                      {work.image ? (
+                        <Image src={work.image} alt="" fill className="object-cover" sizes="48px" />
                       ) : (
-                        <Link
-                          href={destinationHref}
-                          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-sans font-medium text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors w-full justify-between"
-                        >
-                          <span>
-                            {work.category === "Case Study"
-                              ? "Read case study"
-                              : work.category === "Open Source"
-                              ? "Explore code"
-                              : "Explore project"}
-                          </span>
-                          <ArrowUpRight
-                            size={14}
-                            className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          />
-                        </Link>
+                        <div className="w-full h-full flex items-center justify-center">
+                          {getCategoryIcon(work.category) || <Sparkles size={18} className="text-neutral-400" />}
+                        </div>
                       )}
                     </div>
-                  </div>
-                </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <span className="font-semibold text-[13px] text-[#1d1d1f] truncate">{work.title}</span>
+                        {isInternal && <Lock size={10} className="text-orange-500 shrink-0" />}
+                        {isAIVideo && <Play size={10} className="text-purple-500 fill-purple-500 shrink-0" />}
+                      </div>
+                      <p className="text-[12px] text-[#86868b] truncate">{work.description}</p>
+                    </div>
+                    <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#f5f5f7] border border-black/[0.04] text-[#515154]">
+                      {getCategoryIcon(work.category)}
+                      {work.category}
+                    </span>
+                  </AnimatedWorkRow>
+                );
+              })}
+            </AnimatePresence>
+          </div>}
+
+          {/* ── Floating Hover Preview (desktop only) ─────────────────── */}
+          <AnimatePresence>
+            {hoveredWork && (
+              <motion.div
+                key="work-preview"
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 540, damping: 36, mass: 0.55 }}
+                className="fixed left-0 top-0 z-[60] pointer-events-none rounded-2xl overflow-hidden shadow-[0_20px_56px_rgba(0,0,0,0.18)] border border-black/[0.08] bg-[#f5f5f7] hidden md:block"
+                style={{
+                  width: PREVIEW_W,
+                  height: PREVIEW_H,
+                  x: springX,
+                  y: springY,
+                }}
+              >
+                <AnimatePresence initial={false}>
+                  <motion.div
+                    key={hoveredWork.id}
+                    className="absolute inset-0"
+                    initial={{ opacity: 0, scale: 1.04 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {hoveredWork.videoSrc ? (
+                      <video
+                        src={hoveredWork.videoSrc}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                    ) : hoveredWork.image ? (
+                      <Image
+                        src={hoveredWork.image}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="280px"
+                      />
+                    ) : (
+                      <CardPlaceholder category={hoveredWork.category} tag={hoveredWork.tag} />
+                    )}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent px-3 py-2.5">
+                      <p className="text-white text-xs font-semibold truncate">{hoveredWork.title}</p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </div>
+            )}
+          </AnimatePresence>
+        </>
       )}
 
       {/* Pagination Controls */}

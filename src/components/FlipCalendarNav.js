@@ -2,8 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
 import { play8BitBlipSound } from "./SoundEffects";
@@ -52,8 +58,26 @@ export const calendarSections = [
   },
 ];
 
+const tileContainer = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.16 },
+  },
+};
+
+const tileReveal = {
+  hidden: { opacity: 0, y: 22, scale: 0.9, filter: "blur(8px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { type: "spring", stiffness: 420, damping: 28, mass: 0.62 },
+  },
+};
+
 // Renders the complete, uncut card face for each section
-function CardFace({ section, onNavigate }) {
+function CardFace({ section, onNavigate, interactive, reduceMotion }) {
   return (
     <div className={`relative w-full h-full text-[#111111] flex flex-col justify-between select-none overflow-hidden ${section.isAvatar ? "bg-transparent p-0" : "bg-white p-4 sm:p-5 lg:p-6"}`}>
       {section.isAvatar ? (
@@ -68,41 +92,69 @@ function CardFace({ section, onNavigate }) {
       ) : (
         <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
           {/* 2x2 Bento Preview Grid of 4 Works */}
-          <div className="relative flex-1 w-full my-1.5 sm:my-2 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2.5">
+          <motion.div
+            className="relative flex-1 w-full my-1.5 sm:my-2 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2.5"
+            variants={reduceMotion ? undefined : tileContainer}
+            initial={reduceMotion ? false : "hidden"}
+            animate="show"
+          >
             {section.previewItems.map((item, idx) => (
-              <div
-                key={idx}
+              <motion.div
+                key={item.id}
+                variants={reduceMotion ? undefined : tileReveal}
+                whileHover={interactive ? { scale: 1.045, transition: { type: "spring", stiffness: 460, damping: 22 } } : undefined}
+                whileTap={interactive ? { scale: 0.96, transition: { type: "spring", stiffness: 500, damping: 26 } } : undefined}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (item.href && onNavigate) {
-                    onNavigate(item.href, { x: e.clientX, y: e.clientY });
-                  }
+                  if (!interactive || !item.href || !onNavigate) return;
+                  onNavigate(item.href, { x: e.clientX, y: e.clientY });
                 }}
-                className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] group/tile hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] cursor-pointer"
               >
-                <div style={{ borderRadius: 12 }} className="relative w-full h-full overflow-hidden">
+                <motion.div
+                  className="absolute inset-0"
+                  animate={reduceMotion ? { scale: 1 } : { scale: [1, 1.06, 1] }}
+                  transition={reduceMotion ? undefined : {
+                    duration: 8.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.55 + idx * 0.55,
+                  }}
+                >
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     sizes="(max-width: 768px) 45vw, 220px"
-                    className="object-cover object-top group-hover/tile:scale-105 transition-transform duration-300"
+                    className="object-cover object-top"
                   />
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Bottom Title */}
-          <div className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2">
+          {/* Bottom Title — arrives after the tiles, then the arrow keeps moving */}
+          <motion.div
+            className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2"
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: reduceMotion ? 0 : 0.42, type: "spring", stiffness: 380, damping: 28 }}
+          >
             <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
               {section.title}
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1 group-hover:text-black transition-colors">
-              <span>View all</span>
-              <ArrowUpRight size={12} />
+              <span>All works</span>
+              <motion.span
+                aria-hidden="true"
+                className="inline-flex"
+                animate={reduceMotion ? undefined : { x: [0, 3.5, 0], y: [0, -3.5, 0] }}
+                transition={{ duration: 1.45, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
+              >
+                <ArrowUpRight size={12} />
+              </motion.span>
             </span>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>
@@ -112,7 +164,6 @@ function CardFace({ section, onNavigate }) {
 export default function FlipCalendarNav({ initialSection = "avatar", onSectionChange }) {
   const reduceMotion = useReducedMotion();
   const initialIndex = Math.max(0, calendarSections.findIndex(section => section.id === initialSection));
-  const router = useRouter();
   const { navigate: blackHoleNavigate } = useBlackHoleTransition();
   const [currIndex, setCurrIndex] = useState(initialIndex);
   const [isFlipping, setIsFlipping] = useState(false);
@@ -121,24 +172,91 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
   const total = calendarSections.length;
   const currIndexRef = useRef(initialIndex);
   const isFlippingRef = useRef(false);
+  const isDepartingRef = useRef(false);
   const flipTimerRef = useRef(null);
+  const departTimerRef = useRef(null);
+  // Swallows trackpad inertia so one flick turns the card and the next gesture continues.
+  const gestureLockUntil = useRef(0);
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
+  const onSectionChangeRef = useRef(onSectionChange);
+  onSectionChangeRef.current = onSectionChange;
+  const [isDeparting, setIsDeparting] = useState(false);
 
-  // Notify parent of current section on mount or when initialIndex changes
+  // Spring physics motion values for physical gesture rubber-banding and momentum
+  const pullY = useMotionValue(0);
+  const pullSpring = useSpring(pullY, {
+    stiffness: 380,
+    damping: 20, // Elastic rubber-band snapback
+    mass: 0.5,
+  });
+
+  const liveRotateX = useTransform(pullSpring, [-120, 0, 120], [20, 0, -20]);
+  const liveY = useTransform(pullSpring, [-120, 0, 120], [-26, 0, 26]);
+  const liveScale = useTransform(pullSpring, [-120, 0, 120], [0.96, 1, 0.96]);
+
+  // Notify parent of current section once on mount
   useEffect(() => {
-    onSectionChange?.(calendarSections[currIndexRef.current]?.id || "avatar");
-  }, [onSectionChange]);
+    onSectionChangeRef.current?.(calendarSections[currIndexRef.current]?.id || "avatar");
+  }, []);
+
+  useEffect(() => () => {
+    if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
+    if (departTimerRef.current) clearTimeout(departTimerRef.current);
+  }, []);
+
+  const holdGestures = useCallback((ms) => {
+    isFlippingRef.current = true;
+    setIsFlipping(true);
+    gestureLockUntil.current = Date.now() + ms;
+    if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
+    flipTimerRef.current = setTimeout(() => {
+      setIsFlipping(false);
+      isFlippingRef.current = false;
+    }, Math.min(ms, 720));
+  }, []);
+
+  // The works card is the last face. The next gesture opens the archive
+  // instead of wrapping back to the portrait.
+  const continueToArchive = useCallback(() => {
+    if (isFlippingRef.current || isDepartingRef.current) return;
+    const section = calendarSections[currIndexRef.current];
+    if (!section) return;
+    isDepartingRef.current = true;
+    isFlippingRef.current = true;
+    setIsFlipping(true);
+    setIsDeparting(true);
+    gestureLockUntil.current = Date.now() + 1600;
+    pullY.set(reduceMotion ? 0 : -70);
+
+    try {
+      play8BitBlipSound(760);
+    } catch {}
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      try {
+        navigator.vibrate([18, 24, 18]);
+      } catch {}
+    }
+
+    if (departTimerRef.current) clearTimeout(departTimerRef.current);
+    departTimerRef.current = setTimeout(() => {
+      blackHoleNavigate(section.href || "/works");
+    }, reduceMotion ? 40 : 340);
+  }, [blackHoleNavigate, pullY, reduceMotion]);
 
   const flipToNext = useCallback(() => {
-    if (isFlippingRef.current) return;
-    isFlippingRef.current = true;
-    const target = (currIndexRef.current + 1) % total;
+    if (isFlippingRef.current || isDepartingRef.current) return;
+    if (Date.now() < gestureLockUntil.current) return;
+    if (currIndexRef.current >= total - 1) {
+      continueToArchive();
+      return;
+    }
+    const target = currIndexRef.current + 1;
     currIndexRef.current = target;
     setDirection("down");
-    setIsFlipping(true);
     setCurrIndex(target);
-    onSectionChange?.(calendarSections[target].id);
+    onSectionChangeRef.current?.(calendarSections[target].id);
+    holdGestures(1080);
 
     try {
       play8BitBlipSound(620);
@@ -148,23 +266,18 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         navigator.vibrate(20);
       } catch {}
     }
-
-    if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
-    flipTimerRef.current = setTimeout(() => {
-      setIsFlipping(false);
-      isFlippingRef.current = false;
-    }, 480);
-  }, [total, onSectionChange]);
+  }, [total, continueToArchive, holdGestures]);
 
   const flipToPrev = useCallback(() => {
-    if (isFlippingRef.current) return;
-    isFlippingRef.current = true;
-    const target = (currIndexRef.current - 1 + total) % total;
+    if (isFlippingRef.current || isDepartingRef.current) return;
+    if (Date.now() < gestureLockUntil.current) return;
+    if (currIndexRef.current <= 0) return;
+    const target = currIndexRef.current - 1;
     currIndexRef.current = target;
     setDirection("up");
-    setIsFlipping(true);
     setCurrIndex(target);
-    onSectionChange?.(calendarSections[target].id);
+    onSectionChangeRef.current?.(calendarSections[target].id);
+    holdGestures(1080);
 
     try {
       play8BitBlipSound(520);
@@ -174,13 +287,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         navigator.vibrate(20);
       } catch {}
     }
-
-    if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
-    flipTimerRef.current = setTimeout(() => {
-      setIsFlipping(false);
-      isFlippingRef.current = false;
-    }, 480);
-  }, [total, onSectionChange]);
+  }, [holdGestures]);
 
   // Wheel listener: Flips calendar when scrolling anywhere on the home screen
   useEffect(() => {
@@ -191,24 +298,29 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       // Ignore if user is interacting with form controls or interactive popups
       if (e.target instanceof Element && e.target.closest("input, textarea, select, [data-prevent-flip='true']")) return;
 
-      if (isFlippingRef.current) {
+      if (isFlippingRef.current || isDepartingRef.current || Date.now() < gestureLockUntil.current) {
         if (e.cancelable) e.preventDefault();
+        accumulatedDelta = 0;
         return;
       }
 
       accumulatedDelta += e.deltaY;
+      // Real-time elastic rubber-band pull
+      pullY.set(Math.max(-85, Math.min(85, -accumulatedDelta * 0.7)));
 
       if (resetTimer) clearTimeout(resetTimer);
       resetTimer = setTimeout(() => {
         accumulatedDelta = 0;
-      }, 180);
+        pullY.set(0); // Snap back with rubber-band spring!
+      }, 150);
 
-      const THRESHOLD = 22;
+      const THRESHOLD = 26;
 
       if (Math.abs(accumulatedDelta) >= THRESHOLD) {
         if (e.cancelable) e.preventDefault();
         const goingDown = accumulatedDelta > 0;
         accumulatedDelta = 0;
+        pullY.set(0);
 
         if (goingDown) {
           flipToNext();
@@ -223,9 +335,9 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       window.removeEventListener("wheel", handleGlobalWheel);
       if (resetTimer) clearTimeout(resetTimer);
     };
-  }, [flipToNext, flipToPrev]);
+  }, [flipToNext, flipToPrev, pullY]);
 
-  // Touch swipe support: swiping vertically or horizontally flips cards
+  // Touch swipe support with real-time rubber-band tracking
   useEffect(() => {
     const handleGlobalTouchStart = (e) => {
       touchStartY.current = e.touches[0].clientY;
@@ -233,19 +345,30 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     };
 
     const handleGlobalTouchMove = (e) => {
-      if (e.cancelable) {
-        const diffY = touchStartY.current - e.touches[0].clientY;
-        const diffX = touchStartX.current - e.touches[0].clientX;
-        if (Math.abs(diffY) > 8 || Math.abs(diffX) > 8) {
-          e.preventDefault();
-        }
+      if (isFlippingRef.current || isDepartingRef.current || Date.now() < gestureLockUntil.current) return;
+      const diffY = touchStartY.current - e.touches[0].clientY;
+      const diffX = touchStartX.current - e.touches[0].clientX;
+      if (Math.abs(diffY) > 6 || Math.abs(diffX) > 6) {
+        if (e.cancelable) e.preventDefault();
+      }
+
+      // Elastic rubber-band live stretch
+      if (Math.abs(diffY) >= Math.abs(diffX)) {
+        pullY.set(Math.max(-95, Math.min(95, -diffY * 0.72)));
+      } else {
+        pullY.set(Math.max(-95, Math.min(95, -diffX * 0.55)));
       }
     };
 
     const handleGlobalTouchEnd = (e) => {
-      if (isFlippingRef.current) return;
+      if (isFlippingRef.current || isDepartingRef.current || Date.now() < gestureLockUntil.current) {
+        pullY.set(0);
+        return;
+      }
       const diffY = touchStartY.current - e.changedTouches[0].clientY;
       const diffX = touchStartX.current - e.changedTouches[0].clientX;
+
+      pullY.set(0); // Rubber band bounce back to resting
 
       // Check vertical swipe first
       if (Math.abs(diffY) > 22 && Math.abs(diffY) >= Math.abs(diffX)) {
@@ -272,7 +395,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       window.removeEventListener("touchmove", handleGlobalTouchMove);
       window.removeEventListener("touchend", handleGlobalTouchEnd);
     };
-  }, [flipToNext, flipToPrev]);
+  }, [flipToNext, flipToPrev, pullY]);
 
   // iOS DeviceMotion permission state
   const [needsMotionPermission, setNeedsMotionPermission] = useState(false);
@@ -438,7 +561,10 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       } else if (e.key === "Enter") {
         if (e.target instanceof Element && e.target.closest("button, a, input, textarea, select")) return;
         const item = calendarSections[currIndexRef.current];
-        if (item.href.startsWith("mailto:")) {
+        if (!item || isDepartingRef.current) return;
+        if (item.isWorks) {
+          continueToArchive();
+        } else if (item.href.startsWith("mailto:")) {
           window.location.href = item.href;
         } else {
           blackHoleNavigate(item.href);
@@ -472,7 +598,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       delete window.flipCalendarNext;
       delete window.flipCalendarPrev;
     };
-  }, [flipToNext, flipToPrev, router, blackHoleNavigate]);
+  }, [flipToNext, flipToPrev, continueToArchive, blackHoleNavigate]);
 
   const currSection = calendarSections[currIndex];
   return (
@@ -481,60 +607,104 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       data-flip-calendar="true"
       className="relative w-full h-full flex flex-col items-center justify-center select-none"
     >
-      {/* Main Display Area */}
-      <div
-        onClick={(e) => {
-          if (!isFlippingRef.current) {
-            if (currSection.href.startsWith("mailto:")) {
-              window.location.href = currSection.href;
-            } else {
-              blackHoleNavigate(currSection.href, { x: e.clientX, y: e.clientY });
-            }
+      {/* Shell size springs between the portrait and the works card.
+          Drag and the 3D turn live on the inner layers so they don't fight layout. */}
+      <motion.div
+        layout={reduceMotion ? false : true}
+        transition={{ layout: { type: "spring", stiffness: 280, damping: 30, mass: 0.82 } }}
+        animate={{
+          backgroundColor: currSection.isAvatar ? "rgba(255,255,255,0)" : "#ffffff",
+          boxShadow: currSection.isAvatar
+            ? "0 0 0 rgba(0,0,0,0)"
+            : "0 16px 40px rgba(0,0,0,0.06)",
+        }}
+        className={`relative rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] ${
+          currSection.isAvatar
+            ? "w-[min(220px,72vw)] sm:w-[240px] lg:w-[250px] aspect-square"
+            : "w-[min(300px,84vw)] sm:w-[340px] lg:w-[370px] xl:w-[390px] aspect-[4/4.1] max-h-[420px]"
+        }`}
+      >
+      <motion.div
+        className="absolute inset-0"
+        style={{ perspective: 1400 }}
+        animate={isDeparting ? { opacity: 0, scale: 1.045 } : { opacity: 1, scale: 1 }}
+        transition={{ duration: reduceMotion ? 0.12 : 0.34, ease: [0.22, 1, 0.36, 1] }}
+      >
+      <motion.div
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.22}
+        dragMomentum={false}
+        onDragStart={() => {
+          pullY.set(0);
+        }}
+        onDrag={(e, info) => {
+          pullY.set(-info.offset.y * 0.55);
+        }}
+        onDragEnd={(e, info) => {
+          pullY.set(0);
+          if (isFlippingRef.current || isDepartingRef.current || Date.now() < gestureLockUntil.current) return;
+          const { offset, velocity } = info;
+          if (offset.y < -28 || velocity.y < -240) {
+            flipToNext();
+          } else if (offset.y > 28 || velocity.y > 240) {
+            flipToPrev();
           }
         }}
-        className={`relative rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] cursor-pointer group ${
-          currSection.isAvatar
-            ? "w-[min(220px,72vw)] sm:w-[240px] lg:w-[250px] aspect-square bg-transparent"
-            : "w-[min(300px,84vw)] sm:w-[340px] lg:w-[370px] xl:w-[390px] aspect-[4/4.1] max-h-[420px] bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)]"
-        }`}
-        style={{ perspective: "1200px" }}
+        onClick={(e) => {
+          if (isFlippingRef.current || isDepartingRef.current) return;
+          if (currSection.isWorks) {
+            continueToArchive();
+            return;
+          }
+          if (currSection.href.startsWith("mailto:")) {
+            window.location.href = currSection.href;
+          } else {
+            blackHoleNavigate(currSection.href, { x: e.clientX, y: e.clientY });
+          }
+        }}
+        style={{
+          rotateX: liveRotateX,
+          y: liveY,
+          scale: liveScale,
+          transformStyle: "preserve-3d",
+        }}
+        className="absolute inset-0 cursor-grab active:cursor-grabbing touch-none select-none group"
       >
-        {/* Apple iOS Level Smooth 3D Perspective Card Turn */}
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+        {/* Card turn. Exit is a short glide; the next face springs in and the shell keeps growing. */}
+        <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={currIndex}
             custom={direction}
-            variants={{
+            variants={reduceMotion ? {
+              enter: { opacity: 0 },
+              center: { opacity: 1, transition: { duration: 0.2 } },
+              exit: { opacity: 0, transition: { duration: 0.14 } },
+            } : {
               enter: (dir) => ({
-                rotateX: dir === "down" ? 55 : -55,
-                y: dir === "down" ? 30 : -30,
-                z: -40,
-                scale: 0.94,
+                rotateX: dir === "down" ? 42 : -42,
+                y: dir === "down" ? 36 : -36,
                 opacity: 0,
+                filter: "blur(5px)",
               }),
               center: {
                 rotateX: 0,
                 y: 0,
-                z: 0,
-                scale: 1,
                 opacity: 1,
+                filter: "blur(0px)",
                 transition: {
                   type: "spring",
-                  stiffness: 260,
+                  stiffness: 290,
                   damping: 26,
-                  mass: 0.75,
+                  mass: 0.78,
                 },
               },
               exit: (dir) => ({
-                rotateX: dir === "down" ? -55 : 55,
-                y: dir === "down" ? -30 : 30,
-                z: -40,
-                scale: 0.94,
+                rotateX: dir === "down" ? -28 : 28,
+                y: dir === "down" ? -22 : 22,
                 opacity: 0,
-                transition: {
-                  duration: 0.38,
-                  ease: [0.32, 0, 0.67, 0],
-                },
+                filter: "blur(3px)",
+                transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
               }),
             }}
             initial="enter"
@@ -545,14 +715,20 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
               transformStyle: "preserve-3d",
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
-              willChange: "transform, opacity",
             }}
-            className={`absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] overflow-hidden ${currSection.isAvatar ? "bg-transparent" : "bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)]"}`}
+            className={`absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] overflow-hidden ${currSection.isAvatar ? "bg-transparent" : "bg-white"}`}
           >
-            <CardFace section={currSection} onNavigate={blackHoleNavigate} />
+            <CardFace
+              section={currSection}
+              onNavigate={blackHoleNavigate}
+              interactive={!isFlipping && !isDeparting}
+              reduceMotion={reduceMotion}
+            />
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
+      </motion.div>
+      </motion.div>
     </div>
   );
 }

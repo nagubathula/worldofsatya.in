@@ -14,10 +14,11 @@ I’m Satya — operating at the boundary where interface craft, typography, and
 
 ## 📈 Stats & Milestones
 * **6** Years of experience
-* **280+** Clients served
+* **280+** Clients served as freelancer
 * **2,000+** AI Video Pipelines Orchestrated
 * **36** Students trained in engineering & design
 * **3** Movies worked on
+* **20** Products Developed , managed and worked on
 
 ---
 
@@ -26,22 +27,44 @@ I’m Satya — operating at the boundary where interface craft, typography, and
 ### Generative AI Engineer and Creative Lead
 **NXTWAVE DISRUPTIVE TECHNOLOGIES** | *05/2025 - Present*
 Led AI production, scaling channels to 100K+ followers and orchestrating 2,000+ videos. Pioneered structured JSON automation for models like Veo 3 & Wan 2.2. Built internal tools slashing asset creation time by 90%.
+Lead 3 engineers and a 20+ creative team on an AI video editor. Own the React and TypeScript interface, from prompt and
+timeline to review.
+Shipped 14 web applications with retrieval-augmented generation, large language models, and context-aware agents.
+Cut production setup time by 90% with shared Python and JSON automation. Pipelines handle thousands of batch
+requests, including structured runs for Veo 3 and Wan 2.2.
+Built Content Nexus, the REST service for usage, performance, and reliability, and ContentFlow, a role-based content
+platform with 30+ dashboards for multi-language production.
+The same tooling supported 14 channels from 0 to 100K+ followers and 1,000+ videos a month.
+
 
 ### Product Engineer
 **CrestLogic Systems** | *11/2024 - 03/2025*
 Branding, User Interface Design, and marketing funnel development for billjot.
+Took Billjot from 0 to 1: an HTML5 PWA and Electron client on custom POS hardware, and a headless OS on Ubuntu 22.04.
+Product work generated 2M INR.
+Owned the billing UI, branding, and marketing funnel so the same product could be sold, installed, and operated on the
+hardware.
 
 ### Product & Design Engineer (Consultant)
 **Andhra Pradesh Solar Power Corporation** | *07/2024 - 10/2024*
 UI Design, Web Design, and Fullstack Web development.
+Designed and built 2 responsive web applications, the APSPCL public site, a small component set, and admin dashboards
 
 ### Product Engineer (Intern)
 **Traboda Solutions** | *08/2023 - 07/2024*
 UI Designer, Hardware Security Researcher, and Fullstack Web Development.
+Built JavaScript and React interfaces for cybersecurity and embedded products, covering UI, fullstack features, and
+hardware-security research surfaces.
+Core contributor to Chaya UI, a Next.js and Tailwind design system. Authored custom components used in Traboda
+Learning, Arena, and Traboda Pay.
+Designed Made the web-ui and hardware Gui for Wifi-Pineapple.
 
 ### Design and Development Engineer (Intern)
 **Redantio Solutions** | *01/2022 - 02/2023*
 UI Designer, Figma Tutor, Graphic Design, Hardware Security Research and Web Development.
+Key designer for Compatriot. Hardware GUIs, and a LoRa detection interface that identifies signals in 800 ms.
+Built CompatrIoT, an open hardware-security trainer and GUI designer on STM32 and ESP32 with 20 gamified labs across UART,
+JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 
 ---
 

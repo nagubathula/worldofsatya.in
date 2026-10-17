@@ -3,6 +3,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AppleNavbar from "@/components/AppleNavbar";
 import { BlackHoleTransitionProvider } from "@/components/BlackHoleTransition";
+import { NavbarProvider } from "@/components/NavbarContext";
 import { Inter, EB_Garamond } from "next/font/google";
 
 const sansFont = Inter({ 
@@ -102,10 +103,12 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <BlackHoleTransitionProvider>
-            <AppleNavbar />
-            <SmoothScroll>
-              {children}
-            </SmoothScroll>
+            <NavbarProvider>
+              <AppleNavbar />
+              <SmoothScroll>
+                {children}
+              </SmoothScroll>
+            </NavbarProvider>
           </BlackHoleTransitionProvider>
         </ThemeProvider>
       </body>

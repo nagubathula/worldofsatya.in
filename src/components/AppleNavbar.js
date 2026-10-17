@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
+import { useNavbar } from "./NavbarContext";
 
 const primaryNav = [
   {
@@ -202,25 +203,41 @@ export default function AppleNavbar() {
   const activeHoverMenu = primaryNav.find(
     (item) => item.key === hoveredNavKey && item.subItems.length > 1
   );
+  const { homeSection } = useNavbar();
+  const isHome = pathname === "/";
+  // On the home page, only show navbar when works is visible; hide when avatar/bio is showing
+  const isShowingWorks = !isHome || homeSection === "works";
 
   return (
-    <div
-      ref={containerRef}
-      id="site-navbar"
-      data-site-navbar="true"
-      className="fixed top-3.5 sm:top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-auto select-none"
-      onMouseLeave={handleMouseLeaveNav}
-    >
-      <LayoutGroup id="apple-dynamic-island">
+    <AnimatePresence>
+      {isShowingWorks && (
+        <motion.div
+          key="site-navbar"
+          ref={containerRef}
+          id="site-navbar"
+          data-site-navbar="true"
+          initial={{ opacity: 0, y: -16, x: "-50%", scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+          exit={{ opacity: 0, y: -16, x: "-50%", scale: 0.96 }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 30,
+            mass: 0.8,
+          }}
+          className="fixed top-3.5 sm:top-5 left-1/2 z-50 pointer-events-auto select-none"
+          onMouseLeave={handleMouseLeaveNav}
+        >
+          <LayoutGroup id="apple-dynamic-island">
         <motion.div
           layout
           transition={{
             type: "spring",
-            stiffness: 380,
-            damping: 32,
+            stiffness: 400,
+            damping: 30,
             mass: 0.8,
           }}
-          className={`relative bg-black/90 backdrop-blur-2xl text-white border border-white/[0.14] shadow-[0_16px_48px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.18)] transition-all ${
+          className={`relative bg-black/90 backdrop-blur-2xl text-white border border-white/[0.14] shadow-[0_16px_48px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.18)] overflow-hidden ${
             isExpanded
               ? "w-[92vw] max-w-[440px] rounded-[32px] p-5 sm:p-6"
               : scrolled
@@ -231,11 +248,17 @@ export default function AppleNavbar() {
           {/* ============================================================
               COMPACT ISLAND MODE (Desktop & Mobile Pill)
              ============================================================ */}
-          {!isExpanded && (
-            <motion.div
-              layout="position"
-              className="flex items-center gap-2 sm:gap-3"
-            >
+          <AnimatePresence mode="popLayout" initial={false}>
+            {!isExpanded ? (
+              <motion.div
+                key="compact-island"
+                layout="position"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.16, ease: "easeOut" }}
+                className="flex items-center gap-2 sm:gap-3"
+              >
               {/* Left Island Accessory: Mini Avatar */}
               <Link
                 href="/"
@@ -291,8 +314,9 @@ export default function AppleNavbar() {
                             layoutId="island-active-pill"
                             transition={{
                               type: "spring",
-                              stiffness: 450,
-                              damping: 35,
+                              stiffness: 420,
+                              damping: 24,
+                              mass: 0.6,
                             }}
                             className="absolute inset-0 rounded-full bg-white/20 border border-white/20 shadow-sm"
                           />
@@ -340,21 +364,17 @@ export default function AppleNavbar() {
                 </button>
               </div>
             </motion.div>
-          )}
-
-          {/* ============================================================
-              EXPANDED DYNAMIC ISLAND MODE (Fluid Morph Card)
-             ============================================================ */}
-          {isExpanded && (
-            <motion.div
-              layout="position"
-              data-nav-cluster="expanded"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col gap-4 w-full"
-            >
+          ) : (
+              <motion.div
+                key="expanded-island"
+                layout="position"
+                data-nav-cluster="expanded"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="flex flex-col gap-4 w-full"
+              >
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <div className="flex items-center gap-3">
@@ -522,6 +542,7 @@ export default function AppleNavbar() {
               </div>
             </motion.div>
           )}
+        </AnimatePresence>
         </motion.div>
 
         {/* ============================================================
@@ -568,6 +589,8 @@ export default function AppleNavbar() {
           )}
         </AnimatePresence>
       </LayoutGroup>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
