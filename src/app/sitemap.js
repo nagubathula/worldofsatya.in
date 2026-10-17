@@ -5,7 +5,7 @@ const BASE_URL = "https://worldofsatya.in";
 
 export default function sitemap() {
   const routes = ["", "/about", "/works", "/gallery", "/experience", "/achievements",
-    ...allWorks.map(({ id }) => `/works/${id}`),
+    ...allWorks.map(({ slug }) => `/works/${slug}`),
     ...caseStudiesData.map(({ slug }) => `/works/case-studies/${slug}`),
   ];
   return routes.map((route) => ({

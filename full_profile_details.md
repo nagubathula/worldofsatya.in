@@ -1,9 +1,11 @@
 # Satya Sai Nagubathula
 **Generative AI Lead @ NxtWave | Design Technologist**
 
-*Design + Engineering. Currently building OpenWeave & NotBad.*
+*Design + Engineering. Currently building [OpenWeave](https://worldofsatya.in/works/openweave) & [NotBad](https://worldofsatya.in/works/notbad).*
 
 **Email:** nagubathula.satyasai@gmail.com  
+**Phone:** +91 84998 88133  
+**Portfolio:** [worldofsatya.in](https://worldofsatya.in)  
 **LinkedIn:** [satyasainagubathula](https://www.linkedin.com/in/satyasainagubathula)  
 **Profile Image:** `/main.jpeg`
 
@@ -32,7 +34,7 @@ timeline to review.
 Shipped 14 web applications with retrieval-augmented generation, large language models, and context-aware agents.
 Cut production setup time by 90% with shared Python and JSON automation. Pipelines handle thousands of batch
 requests, including structured runs for Veo 3 and Wan 2.2.
-Built Content Nexus, the REST service for usage, performance, and reliability, and ContentFlow, a role-based content
+Built [Content Nexus](https://worldofsatya.in/works/content-nexus), the REST service for usage, performance, and reliability, and [ContentFlow](https://worldofsatya.in/works/contentflow), a role-based content
 platform with 30+ dashboards for multi-language production.
 The same tooling supported 14 channels from 0 to 100K+ followers and 1,000+ videos a month.
 
@@ -48,23 +50,38 @@ hardware.
 ### Product & Design Engineer (Consultant)
 **Andhra Pradesh Solar Power Corporation** | *07/2024 - 10/2024*
 UI Design, Web Design, and Fullstack Web development.
-Designed and built 2 responsive web applications, the APSPCL public site, a small component set, and admin dashboards
+Designed and built 2 responsive web applications, the [APSPCL](https://worldofsatya.in/works/apspcl) public site, a small component set, and admin dashboards
 
 ### Product Engineer (Intern)
 **Traboda Solutions** | *08/2023 - 07/2024*
 UI Designer, Hardware Security Researcher, and Fullstack Web Development.
 Built JavaScript and React interfaces for cybersecurity and embedded products, covering UI, fullstack features, and
 hardware-security research surfaces.
-Core contributor to Chaya UI, a Next.js and Tailwind design system. Authored custom components used in Traboda
+Core contributor to [Chaya UI](https://worldofsatya.in/works/chaya), a Next.js and Tailwind design system. Authored custom components used in Traboda
 Learning, Arena, and Traboda Pay.
 Designed Made the web-ui and hardware Gui for Wifi-Pineapple.
 
 ### Design and Development Engineer (Intern)
 **Redantio Solutions** | *01/2022 - 02/2023*
 UI Designer, Figma Tutor, Graphic Design, Hardware Security Research and Web Development.
-Key designer for Compatriot. Hardware GUIs, and a LoRa detection interface that identifies signals in 800 ms.
+Key designer for [Compatriot](https://worldofsatya.in/works/compatriot). Hardware GUIs, and a LoRa detection interface that identifies signals in 800 ms.
 Built CompatrIoT, an open hardware-security trainer and GUI designer on STM32 and ESP32 with 20 gamified labs across UART,
 JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
+
+---
+
+## 🎓 Education
+
+### B.Tech, Electronics and Communication Engineering
+**Koneru Lakshmaiah Educational Foundation** | *2024 – 2025* | Vijayawada, Andhra Pradesh
+
+
+### B.Tech, Electronics and Communication Engineering
+**Amrita University** | *2021 – 2024* | Kollam, Kerala
+* Active in amFOSS, the Free & Open Source student community
+* Mentored students in team bi0s, India’s No.1 ranked CTF team
+* Took part in developing college portals
+* Won 14 hackathons
 
 ---
 
@@ -80,7 +97,8 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 ## 🔬 In-Depth Case Studies
 
 ### NotBad — The Words Are the Interface
-**Type:** Product Design Case Study
+**Type:** Product Design Case Study  
+**Portfolio:** [worldofsatya.in/works/case-studies/notbad-design](https://worldofsatya.in/works/case-studies/notbad-design)
 **Images:** `/notbad-demo.gif`, `/notbad-editor.png`, `/notbad-palette.png`
 **Hero Description:** Designing and building a cross-platform Markdown writer where the chrome disappears — a pure-Flutter port of the macOS-only Trace, covering the concealment engine, the token system, and every decision in between.
 
@@ -112,7 +130,8 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 
 
 ### Zero-Cost Automation
-**Type:** Architecture Breakdown
+**Type:** Architecture Breakdown  
+**Portfolio:** [worldofsatya.in/works/case-studies/zero-cost-automation](https://worldofsatya.in/works/case-studies/zero-cost-automation)
 **Hero Description:** Building an internal productivity suite using Google Colab, Supabase, and lightweight web extensions without spending a dime on infrastructure.
 * **The Problem:** Modern SaaS tools for productivity and automation can quickly become expensive, especially for solo developers or small teams trying to orchestrate complex AI workflows. The challenge was to build a robust, scalable system to automate content generation and data processing without relying on paid tiers of services like Zapier or AWS.
 * **The Architecture:** I architected a serverless, decoupled system using three primary components:
@@ -124,24 +143,28 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 
 
 ### ContentFlow
-**Type:** Product Engineering
+**Type:** Product Engineering  
+**Portfolio:** [worldofsatya.in/works/contentflow](https://worldofsatya.in/works/contentflow)
 * **The problem:** Producing content at scale across YouTube and Instagram, in five languages — Telugu, Hindi, Tamil, Marathi, and Kannada — means dozens of people touching every video: writers, voice artists, editors, designers, managers. Spreadsheets and chat threads don't survive that. ContentFlow is the internal platform I built to run the entire operation in one place.
 * **30+ dashboards, one per job:** Instead of one dashboard trying to serve everyone, ContentFlow ships 30+ purpose-built views — Manager, Writer, Editor, Editing Manager, Voice Artist, Graphic Designer, Central Team, Admin, and more. Each role logs in to exactly the screens, actions, and data its job needs, enforced by a role-based access control system that also scopes everything by language and region.
 * **The pipeline:** Every piece of content moves through an eight-stage pipeline — Script, Review, Voice Over, Audio Cut, Raw Upload, Editing, Ready, Posted — visible on a shared content calendar with per-channel and per-status filtering. Around the pipeline sit the supporting systems: channel analytics (including YouTube analytics), studio booking for recording slots, and team role management.
 * **The impact:** ContentFlow is the operational backbone behind the numbers on this site — 2,000+ videos orchestrated and channels scaled to 100K+ followers, with every handoff between roles tracked instead of lost in chat.
 
 ### From Doodles to Design
-**Type:** Medium Article | [Read Article](https://hippogriff.medium.com)
+**Type:** Medium Article | [Read Article](https://hippogriff.medium.com)  
+**Portfolio:** [worldofsatya.in/works/from-doodles-to-design](https://worldofsatya.in/works/from-doodles-to-design)
 * **The story:** How does someone go from sketching doodles to architecting AI pipelines? This piece traces that arc — the journey from pure visual design into deep technical automation, and why the most interesting work happens in the overlap between the two. It's the origin story behind "The AI/UI Guy."
 * **Read it:** The full article is on Medium, along with my other writing on design, engineering, and generative AI.
 
 ### How I Built My Pseudo Fullstack Portfolio
-**Type:** Medium Article | [Read Article](https://medium.com/@hippogriff/how-i-built-my-psuedo-fullstack-portfolio-73cd1f6aecda)
+**Type:** Medium Article | [Read Article](https://medium.com/@hippogriff/how-i-built-my-psuedo-fullstack-portfolio-73cd1f6aecda)  
+**Portfolio:** [worldofsatya.in/works/how-i-built-my-pseudo-fullstack-portfolio](https://worldofsatya.in/works/how-i-built-my-pseudo-fullstack-portfolio)
 * **What it covers:** An in-depth breakdown of how this very website was designed and built — the "pseudo fullstack" approach of getting dynamic-feeling behavior out of a lean static architecture, and the design and engineering decisions behind it.
 * **Read it:** The full write-up is on Medium — from concept and visual direction through implementation.
 
 ### Why Are You Still Confused When Turning Your Design To Code?
-**Type:** Medium Article | [Read Article](https://medium.com/design-bootcamp/why-are-you-still-confusing-when-turning-your-design-to-code-a7489d544deb)
+**Type:** Medium Article | [Read Article](https://medium.com/design-bootcamp/why-are-you-still-confusing-when-turning-your-design-to-code-a7489d544deb)  
+**Portfolio:** [worldofsatya.in/works/why-are-you-still-confused-when-turning-your-design-to-code](https://worldofsatya.in/works/why-are-you-still-confused-when-turning-your-design-to-code)
 * **What it covers:** The design-to-development handoff is where good work goes to die: spacing drifts, states get missed, and both sides blame each other. Published in Design Bootcamp, this guide walks through the common pitfalls of turning designs into code and how to structure your work so the translation is faithful.
 * **Read it:** The full article is on Medium via the link above.
 
@@ -150,7 +173,8 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 ## 🛠️ Open Source & Tools
 
 ### NotBad
-**Role:** Creator | [View Repository](https://github.com/nagubathula/NotBad)
+**Role:** Creator | [View Repository](https://github.com/nagubathula/NotBad)  
+**Portfolio:** [worldofsatya.in/works/notbad](https://worldofsatya.in/works/notbad)
 **Images:** `/notbad-demo.gif`, `/notbad-editor.png`
 * **A quiet place to write — on every desktop:** Markdown editors make you choose: stare at raw syntax, or split the screen with a preview pane. NotBad does neither. Marks like `**` and `#` fade as you type, what remains reads like the finished piece, and every bit of chrome recedes until you reach for it. It's a from-scratch, pure-Flutter port of the macOS-only Trace — no web view, no CodeMirror — so one Dart codebase behaves identically on Windows, macOS, and Linux.
 * **What it does:** 
@@ -161,7 +185,8 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 * **Under the hood:** The upstream app is ~28k lines of Swift wrapped around ~14.6k lines of TypeScript; NotBad re-imagines it in ~3.5k lines of Dart. A custom `TextEditingController` styles Markdown live with per-line span caching, concealed marks stay in the text (painted invisible) so caret math never drifts from the file, and the chrome — hidden title bar, custom caption buttons, receding toolbar — is drawn by the app itself. Ships with an Inno Setup installer, "Open with NotBad" shell integration, CI builds for all three platforms, and an in-app update check against GitHub releases.
 
 ### OpenWeave
-**Role:** Creator | [View Repository](https://github.com/nagubathula/OpenWeave)
+**Role:** Creator | [View Repository](https://github.com/nagubathula/OpenWeave)  
+**Portfolio:** [worldofsatya.in/works/openweave](https://worldofsatya.in/works/openweave)
 **Image:** `/openweave-app.png`
 * **Why I built it:** Design tools are closed ecosystems: your files live in someone else's cloud, and automating anything means fighting a plugin sandbox. OpenWeave is my answer — a design editor that treats the design file as an open, inspectable document you own, and the editor itself as a programmable toolkit rather than a walled garden.
 * **What it does:**
@@ -174,7 +199,8 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 * **Under the hood:** A monorepo of focused packages — scene graph, file-format codecs, core engine, React bindings, CLI, and MCP server — built with Next.js and TypeScript. Auto layout and CSS Grid run on Yoga WASM, and the desktop app ships as a ~7 MB Tauri v2 binary for macOS, Windows, and Linux, with the same code running in the browser as a PWA.
 
 ### Toothpaste
-**Role:** Creator | [View Repository](https://github.com/nagubathula/toothpaste)
+**Role:** Creator | [View Repository](https://github.com/nagubathula/toothpaste)  
+**Portfolio:** [worldofsatya.in/works/toothpaste](https://worldofsatya.in/works/toothpaste)
 **Images:** `/toothpaste-panel-wide.png`
 * **Paste anything. Straight to the timeline:** Getting media into Premiere Pro is death by a thousand clicks: download, locate, import, drag to the timeline. Toothpaste collapses all of it into a paste. It's a CEP 11 extension for Premiere Pro 15+ and After Effects 18+ — hit `Ctrl+V` in the panel and your media lands at the playhead.
 * **What it does:**
@@ -185,17 +211,20 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 * **Distribution:** Ships as a pre-built `.zxp` on GitHub Releases — no Node.js, no build steps, just install and go. The repo also doubles as a clean, documented template for anyone building their own Adobe CEP extension.
 
 ### CHAYA UI
-**Role:** Core Contributor | [View Repository](https://github.com/traboda/chaya)
+**Role:** Core Contributor | [View Repository](https://github.com/traboda/chaya)  
+**Portfolio:** [worldofsatya.in/works/chaya](https://worldofsatya.in/works/chaya)
 * **What it is:** Chaya UI is a modern, data-first component library for React by Traboda — 40+ components and custom hooks with full TypeScript type safety, styled with Tailwind CSS on Radix primitives, with dark mode and custom theming built in. Documented with Storybook and open-sourced under GPL v3.
 * **My contribution:** As a core contributor I collaborated directly with the creators on design, development, and optimization, and authored several exclusive custom components — working across the full lifecycle from component design to the code that ships.
 
 ### Engineerudu
-**Role:** FOSS Community Builder | [Visit Community](https://engineerudu.com)
+**Role:** FOSS Community Builder | [Visit Community](https://engineerudu.com)  
+**Portfolio:** [worldofsatya.in/works/engineerudu](https://worldofsatya.in/works/engineerudu)
 * **The mission:** Andhra Pradesh has no shortage of engineering talent — what it lacked was a home for open source. Engineerudu is the state's first Free and Open Source Software community, built to give local developers a place to learn in public, contribute to real projects, and find each other.
 * **What building it means:** Community building is unglamorous open source: organizing people rather than code. The work spans growing membership, fostering a contribution culture among students and early-career engineers, and connecting local talent to the wider FOSS ecosystem.
 
 ### CompatrIoT
-**Role:** Hardware Security | [Watch Demo](https://drive.google.com/file/d/1e1d_eKrPW2BtSN-1nqGks1lxa6HyI7hn/view)
+**Role:** Hardware Security | [Watch Demo](https://drive.google.com/file/d/1e1d_eKrPW2BtSN-1nqGks1lxa6HyI7hn/view)  
+**Portfolio:** [worldofsatya.in/works/compatriot](https://worldofsatya.in/works/compatriot)
 **Images:** `/gallery/compatriot-board.jpg`, `/gallery/compatriot-labs.jpg`
 * **What it is:** Most people learn hardware security from slides. CompatrIoT is a physical, open-source training board you attack for real — built for security researchers, hobbyists, and students. Dual microcontrollers (an STM32 and an ESP32) give it broad protocol coverage, and the on-board targets — SPI flash, I2C EEPROM, sensors, programmable LEDs, JTAG/SWD debug ports, and a USB serial console — turn every classic hardware attack into something you can practice hands-on.
 * **The training labs:** Twenty gamified labs walk from first contact to full compromise, with progressive difficulty:
@@ -211,7 +240,8 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 ## 🎨 Design & Web Projects
 
 ### Redantio
-**Type:** Brand Design | [Case Study](https://hippogriff.medium.com/redantio-designing-a-startup-in-6-hours-4e24a593950f)
+**Type:** Brand Design | [Case Study](https://hippogriff.medium.com/redantio-designing-a-startup-in-6-hours-4e24a593950f)  
+**Portfolio:** [worldofsatya.in/works/redantio](https://worldofsatya.in/works/redantio)
 **Image:** `/redantio.webp`
 * **The challenge:** Six hours. One designer. Zero room for error. Redantio was a cybersecurity brand aimed at a very specific audience of bureaucrats, and it needed a complete identity and web presence — brand, interface, and experience — in a single sprint. A real-world simulation of startup pressure: limited resources, an impossible deadline, and a vision that needed translating into pixels fast.
 * **The process:**
@@ -222,13 +252,15 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 * **What I learned:** Built with Figma, Tailwind CSS, and raw HTML/CSS/JS — speed over polish. The takeaway: great design isn't born in a vacuum, it's born in constraints. Time pressure didn't kill creativity; it forced it to grow in new directions.
 
 ### Chaya UI
-**Type:** Design System | [Visit Site](https://chaya.traboda.com)
+**Type:** Design System | [Visit Site](https://chaya.traboda.com)  
+**Portfolio:** [worldofsatya.in/works/chaya-ui](https://worldofsatya.in/works/chaya-ui)
 **Image:** `/chaya.avif`
 * **What it is:** Chaya UI is a modern, data-first component library for React, built to help teams ship SaaS applications with minimal code. It offers 40+ components and custom hooks with full TypeScript type safety, Tailwind CSS styling on top of Radix primitives, dark mode, and custom theming — documented in Storybook.
 * **My role:** I worked directly with the creators at Traboda on design, development, and optimization of the system, and authored several of its custom components — shaping both how the components look and how they're engineered underneath.
 
 ### KLU PAS
-**Type:** Product Design | [Case Study](https://hippogriff.medium.com/ux-case-study-of-public-adressing-system-for-hoste-a84ce1583288)
+**Type:** Product Design | [Case Study](https://hippogriff.medium.com/ux-case-study-of-public-adressing-system-for-hoste-a84ce1583288)  
+**Portfolio:** [worldofsatya.in/works/klu-pas](https://worldofsatya.in/works/klu-pas)
 **Image:** `/customamplifierbox.webp`
 * **The problem:** K L University's hostels ran announcements manually — microphones, speakers, and trained operators. The result: missed wake-up calls, last-minute panic during emergencies, and total dependency on whoever knew how to work the equipment. The university needed a centralized public address system that hostel wardens — many of them not tech-savvy, some over 60 — could operate confidently without assistance.
 * **The approach:**
@@ -238,43 +270,50 @@ JTAG/SWD, I2C, SPI, and BLE. Also tutored Figma.
 * **Outcomes:** In trial runs: 100% task completion by wardens on first try, zero scheduling errors over a month, and new-warden onboarding in under five minutes. Wardens reported feeling "empowered" and "confident" — the design became a bridge to digital comfort for users who had long stayed away from tech.
 
 ### Own Your Bill
-**Type:** Product Design | [Case Study](https://www.figma.com/board/iZoO9T4W3C4RwIUWZRbZsV/Case-Study?node-id=0-1&t=OAdZQYVAwiFOnSA7-1)
+**Type:** Product Design | [Case Study](https://www.figma.com/board/iZoO9T4W3C4RwIUWZRbZsV/Case-Study?node-id=0-1&t=OAdZQYVAwiFOnSA7-1)  
+**Portfolio:** [worldofsatya.in/works/own-your-bill](https://worldofsatya.in/works/own-your-bill)
 **Image:** `/videos/8.webp`
 * **The idea:** Billing is one of the most repeated interactions in commerce, yet receipts and invoices are stuck in a one-size-fits-all format. Own Your Bill rethinks the bill as something the business and the customer can shape — a new-age, customizable billing system designed around how people actually read, share, and act on their bills.
 * **The work:** A product design exploration covering the end-to-end flow — from research and sketches through wireframes to the final concept. The complete process, artifacts and thinking are laid out on the FigJam case study board.
 
 ### Tailus
-**Type:** Design System | [Case Study](https://www.behance.net/gallery/210333091/Tailus-Ui-Case-Study)
+**Type:** Design System | [Case Study](https://www.behance.net/gallery/210333091/Tailus-Ui-Case-Study)  
+**Portfolio:** [worldofsatya.in/works/tailus](https://worldofsatya.in/works/tailus)
 **Image:** `/tailus.png`
 * **About the project:** Tailus is a Tailwind CSS UI kit — a library of polished, ready-to-compose interface blocks and components built on utility-first CSS. The work focused on designing components that look refined out of the box while staying flexible enough to theme and rearrange for real products.
 * **The case study:** The full visual case study — component anatomy, layout systems, and design decisions — is published on Behance via the link above.
 
 ### APSPCL
-**Type:** Website | [Visit Site](https://apspcl.ap.gov.in)
+**Type:** Website | [Visit Site](https://apspcl.ap.gov.in)  
+**Portfolio:** [worldofsatya.in/works/apspcl](https://worldofsatya.in/works/apspcl)
 **Image:** `/videos/2.webp`
 * **About the project:** The official website for the Andhra Pradesh Solar Power Corporation Pvt. Ltd. (APSPCL) — the state body behind some of India's largest solar parks. A public-sector site serving citizens, vendors, and government stakeholders, where clarity and reliability matter more than decoration.
 * **The work:** Designing for government means organizing dense information — tenders, project data, notices, reports — into an architecture people can actually navigate, and building it to hold up for every visitor on every device.
 
 ### RWDY Store Revamp
-**Type:** Website | [View Case Study](https://www.behance.net/gallery/195847337/RWDY-Store-Revamping)
+**Type:** Website | [View Case Study](https://www.behance.net/gallery/195847337/RWDY-Store-Revamping)  
+**Portfolio:** [worldofsatya.in/works/rwdy-store-revamp](https://worldofsatya.in/works/rwdy-store-revamp)
 **Image:** `/videos/1.webp`
 * **About the project:** A ground-up revamp of the RWDY e-commerce fashion store. Fashion retail lives or dies on presentation: the redesign focused on letting the products lead — cleaner product presentation, a clearer path from browsing to buying, and a visual language that matches the brand's energy.
 * **The work:** The before-and-after breakdown of the revamp — screens, flows, and design decisions — is published on Behance.
 
 ### B Sides Kochi
-**Type:** Website | [Visit Site](https://bsideskochi.in/)
+**Type:** Website | [Visit Site](https://bsideskochi.in/)  
+**Portfolio:** [worldofsatya.in/works/b-sides-kochi](https://worldofsatya.in/works/b-sides-kochi)
 **Image:** `/videos/9.gif`
 * **About the project:** The website for BSides Kochi, part of the global Security BSides family of community-driven cybersecurity conferences. A conference site has to do several jobs at once — sell the event to attendees, inform speakers and sponsors, and carry the community's identity — and this one was built to do all three.
 * **The work:** Design and build of the event's web presence — schedule, speakers, CFP, and sponsor information — with a look that fits hacker-culture without sacrificing legibility.
 
 ### Bi0s Hardware
-**Type:** Website | [Visit Site](https://bi0shardware.com/)
+**Type:** Website | [Visit Site](https://bi0shardware.com/)  
+**Portfolio:** [worldofsatya.in/works/bi0s-hardware](https://worldofsatya.in/works/bi0s-hardware)
 **Image:** `/bi0shardware.png`
 * **About the project:** The website for bi0s Hardware — the hardware security wing of team bi0s, one of India's top-ranked CTF (Capture The Flag) teams. The site presents the team's research, projects, and community work in hardware and embedded security.
 * **The work:** Design and build of a web identity that reflects the team's technical depth — a security-culture aesthetic that stays clean and readable.
 
 ### Graphic Design
-**Type:** Graphic Design | [Visit Site](https://bi0shardware.com/)
+**Type:** Graphic Design | [Visit Site](https://bi0shardware.com/)  
+**Portfolio:** [worldofsatya.in/works/graphic-design](https://worldofsatya.in/works/graphic-design)
 **Image:** `/wiredctf.png`
 * **About the work:** A running collection of graphic design work for events and organizations — conference branding, CTF event graphics, posters, and social media creatives. Each piece adapts to its event's identity while keeping typography and hierarchy doing the heavy lifting.
 * **Range:** From cybersecurity event identities (like the WiRED CTF artwork) to promotional material for student and community organizations — work that spans print, web, and social formats.

@@ -1,5 +1,5 @@
 import { allWorks } from "@/data/works";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, Code, Briefcase, Video, Sparkles, Wrench } from "lucide-react";
 import Footer from "@/components/Footer";
@@ -7,18 +7,20 @@ import Image from "next/image";
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
-  return allWorks.map((work) => ({
-    id: work.id,
-  }));
+  return allWorks.flatMap((work) => [{ id: work.slug }, { id: work.id }]);
 }
 
 export default async function WorkDetailPage({ params }) {
   const { id } = await params;
-  
-  const work = allWorks.find((w) => w.id === id);
+
+  const work = allWorks.find((entry) => entry.slug === id) || allWorks.find((entry) => entry.id === id);
 
   if (!work) {
     notFound();
+  }
+
+  if (id !== work.slug) {
+    permanentRedirect(`/works/${work.slug}`);
   }
 
   const getIcon = (category) => {

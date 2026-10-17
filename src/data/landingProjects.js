@@ -6,7 +6,7 @@ export const landingProjects = [
     tagline: "Why should designs remain locked in proprietary clouds?",
     image: "/openweave-app.png",
     imageAlt: "OpenWeave’s design canvas, layers, and property controls",
-    href: "/works/o0",
+    href: "/works/openweave",
     design: {
       title: "An open design canvas where AI is a true co-creator",
       description: "I refused to accept that creative files belong to closed subscriptions. I crafted a familiar, fluid design workspace where designers retain complete file sovereignty while collaborating directly with generative AI agents on the same canvas.",
@@ -56,7 +56,7 @@ export const landingProjects = [
     tagline: "Scaling creative video output across 5 languages without chaos.",
     image: null,
     imageAlt: "ContentFlow role-based production workspace",
-    href: "/works/c0",
+    href: "/works/contentflow",
     design: {
       title: "Designing peace of mind for multi-disciplinary creative teams",
       description: "At NxtWave, scaling video creation was breaking teams across disconnected sheets and chats. I designed tailored cockpits for writers, voice artists, and editors so every handoff has an unambiguous home.",

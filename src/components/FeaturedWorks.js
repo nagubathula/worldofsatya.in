@@ -65,7 +65,7 @@ export default function FeaturedWorks({ limit }) {
         <div className="flex flex-col gap-4 sm:gap-5">
           {works.map((work) => (
             <motion.div variants={itemAnim} key={work.id}>
-              <Link href={`/works/${work.id}`} className="block group h-full">
+              <Link href={`/works/${work.slug}`} className="block group h-full">
                 <motion.div
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}

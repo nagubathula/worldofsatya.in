@@ -156,7 +156,7 @@ export default function HomeTilesLayout() {
                   <span className="inline-block mr-1 text-[#111111] font-normal">→</span>
                   Currently building{" "}
                   <Link
-                    href="/works/o0"
+                    href="/works/openweave"
                     className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
                   >
                     OpenWeave

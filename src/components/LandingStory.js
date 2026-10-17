@@ -87,7 +87,7 @@ export default function LandingStory() {
                   </motion.span>
                   <motion.span variants={wordBlur} className="relative inline-block mr-[0.25em]">
                     <Link
-                      href="/works/o0"
+                      href="/works/openweave"
                       className="inline-block text-[#1d1d1f] font-medium underline decoration-black/20 underline-offset-4 hover:decoration-[#1d1d1f] transition-colors cursor-pointer"
                       onMouseEnter={() => setHoveredProject("openweave")}
                       onMouseLeave={() => setHoveredProject(null)}

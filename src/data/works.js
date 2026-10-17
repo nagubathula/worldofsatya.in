@@ -569,7 +569,7 @@ export const allWorks = [
     poster: "/aivideos/posters/AI_ADVERTISEMENT.jpg",
     image: "/aivideos/posters/AI_ADVERTISEMENT.jpg",
     isVertical: false,
-    link: "/works/v1",
+    link: "/works/stereo-headphones",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -594,7 +594,7 @@ export const allWorks = [
     poster: "/aivideos/posters/HANGY.jpg",
     image: "/aivideos/posters/HANGY.jpg",
     isVertical: false,
-    link: "/works/v2",
+    link: "/works/hangy",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -615,7 +615,7 @@ export const allWorks = [
     poster: "/aivideos/posters/female_host_ai_generated.jpg",
     image: "/aivideos/posters/female_host_ai_generated.jpg",
     isVertical: true,
-    link: "/works/v3",
+    link: "/works/ai-virtual-host",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -636,7 +636,7 @@ export const allWorks = [
     poster: "/aivideos/posters/niat_ugc.jpg",
     image: "/aivideos/posters/niat_ugc.jpg",
     isVertical: true,
-    link: "/works/v4",
+    link: "/works/niat-ugc",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -657,7 +657,7 @@ export const allWorks = [
     poster: "/aivideos/posters/mustang_ai_realism.jpg",
     image: "/aivideos/posters/mustang_ai_realism.jpg",
     isVertical: false,
-    link: "/works/v5",
+    link: "/works/mustang-ai-realism",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -678,7 +678,7 @@ export const allWorks = [
     poster: "/aivideos/posters/hyper_realistic_detail.jpg",
     image: "/aivideos/posters/hyper_realistic_detail.jpg",
     isVertical: false,
-    link: "/works/v6",
+    link: "/works/hyper-realistic-detail",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -699,7 +699,7 @@ export const allWorks = [
     poster: "/aivideos/posters/engineerudu_horizontal.jpg",
     image: "/aivideos/posters/engineerudu_horizontal.jpg",
     isVertical: false,
-    link: "/works/v7",
+    link: "/works/engineerudu-widescreen",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -720,7 +720,7 @@ export const allWorks = [
     poster: "/aivideos/posters/engineerudu_vertical.jpg",
     image: "/aivideos/posters/engineerudu_vertical.jpg",
     isVertical: true,
-    link: "/works/v8",
+    link: "/works/engineerudu-mobile",
     actionText: "Watch Video",
     content: `
       <div class="flex flex-col gap-12">
@@ -739,7 +739,7 @@ export const allWorks = [
     description: "AI-powered infographic and typography editor making complex animations in seconds.",
     category: "Internal Tools",
     tag: "Automation Suite",
-    link: "/works/t1",
+    link: "/works/autoedit",
     actionText: "Restricted Access",
     isInternal: true,
     tags: ["Python", "React", "Whisper", "Gemini"],
@@ -763,7 +763,7 @@ export const allWorks = [
     description: "Web application offering standardized preset pipelines for high-consistency AI video/image generations.",
     category: "Internal Tools",
     tag: "Prompt Engineering",
-    link: "/works/t2",
+    link: "/works/whattheprompt",
     actionText: "Restricted Access",
     isInternal: true,
     tags: ["Next.js", "ComfyUI", "Supabase"],
@@ -787,7 +787,7 @@ export const allWorks = [
     description: "Centralized operations suite featuring real-time YouTube analytics, team workflows, and role-based access.",
     category: "Internal Tools",
     tag: "Operations Suite",
-    link: "/works/t3",
+    link: "/works/content-nexus",
     actionText: "Restricted Access",
     isInternal: true,
     tags: ["PostgreSQL", "React", "REST APIs"],
@@ -811,7 +811,7 @@ export const allWorks = [
     description: "Real-time browser extension detecting harmful content and scam alerts in chat apps.",
     category: "Internal Tools",
     tag: "Browser Extension",
-    link: "/works/t4",
+    link: "/works/wa-guardian",
     actionText: "Restricted Access",
     isInternal: true,
     tags: ["JavaScript", "Extension", "AI Filter"],
@@ -830,3 +830,32 @@ export const allWorks = [
     image: "",
   }
 ];
+
+function slugifyTitle(title) {
+  return String(title)
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// The design-system page and the open-source library are both named Chaya UI.
+const slugOverrides = {
+  o2: "chaya",
+};
+
+const seenSlugs = new Map();
+for (const work of allWorks) {
+  const slug = slugOverrides[work.id] || slugifyTitle(work.title);
+  if (seenSlugs.has(slug)) {
+    throw new Error(`Duplicate work slug "${slug}" for ${work.id} and ${seenSlugs.get(slug)}`);
+  }
+  seenSlugs.set(slug, work.id);
+  work.slug = slug;
+  if (work.link === `/works/${work.id}`) {
+    work.link = `/works/${slug}`;
+  }
+}
+
+

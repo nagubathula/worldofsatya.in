@@ -10,31 +10,31 @@ export default function OpenSource({ limit }) {
       name: "OpenWeave",
       role: "Creator",
       description: "An open-source design editor that opens native Figma (.fig) and Pencil (.pen) files, with built-in AI that builds designs from chat, real-time P2P collaboration, and a headless React SDK for building custom editors.",
-      link: "/works/o0",
+      link: "/works/openweave",
     },
     {
       name: "CompatrIoT",
       role: "Hardware Security",
       description: "An open-source hardware security training platform built on dual STM32 + ESP32 microcontrollers — 20 gamified labs covering UART, JTAG/SWD, I2C, SPI, and BLE exploitation on real hardware.",
-      link: "/works/o4",
+      link: "/works/compatriot",
     },
     {
       name: "Toothpaste",
       role: "Creator",
       description: "A plug-and-play Adobe CEP (Common Extensibility Platform) extension for Premiere Pro. Built to streamline workflows and provide an easy-to-use template for Adobe extension development.",
-      link: "/works/o1",
+      link: "/works/toothpaste",
     },
     {
       name: "CHAYA UI",
       role: "Core Contributor",
       description: "A modern, functional design system and component library for React built with Next.js and TailwindCSS. Collaborated directly with creators on design, development, and optimization. Authored several exclusive custom components.",
-      link: "/works/o2",
+      link: "/works/chaya",
     },
     {
       name: "Engineerudu",
       role: "FOSS Community Builder",
       description: "Building Andhra Pradesh's first Free and Open Source Community to foster local talent and collaborative development.",
-      link: "/works/o3",
+      link: "/works/engineerudu",
     }
   ];
 

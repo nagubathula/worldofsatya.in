@@ -381,10 +381,10 @@ export default function WorksList() {
     const destinationHref = work.link?.startsWith("/works/case-studies/")
       ? work.link
       : isAIVideo
-      ? `/works/${work.id}`
+      ? `/works/${work.slug}`
       : work.link?.startsWith("http")
       ? work.link
-      : `/works/${work.id}`;
+      : `/works/${work.slug}`;
 
     if (isAIVideo) {
       try { playPopSound(600, 0.08); } catch {}
