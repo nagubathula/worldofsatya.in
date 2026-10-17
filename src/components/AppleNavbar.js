@@ -193,11 +193,6 @@ export default function AppleNavbar() {
     }, 220);
   };
 
-  // Hide the navbar completely on the home page as requested
-  const isHome = pathname === "/";
-  if (isHome) {
-    return null;
-  }
 
   // Active label for compact mobile indicator
   const activeNavItem = primaryNav.find((item) => item.match(pathname));

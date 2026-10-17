@@ -106,7 +106,7 @@ export default function SocialBurst({ open, onToggle }) {
 
   return (
     <div
-      className="relative flex h-[108px] w-[212px] shrink-0 items-start gap-2 sm:h-14 sm:w-[316px]"
+      className="relative flex h-14 w-14 shrink-0 items-start"
       onKeyDown={(event) => {
         if (event.key === "Escape" && open) trigger.current?.focus();
       }}
@@ -269,7 +269,7 @@ export default function SocialBurst({ open, onToggle }) {
       )}
 
       {/* Projectile Social Icons Shooting into Place */}
-      <div id="social-burst-links" className="grid grid-cols-3 gap-2.5 pt-1 sm:grid-cols-5">
+      <div id="social-burst-links" className="pointer-events-none absolute left-full ml-2.5 top-0 grid w-max grid-cols-3 gap-2.5 pt-1 sm:grid-cols-5">
         <AnimatePresence>
           {open &&
             socials.map(({ label, href, icon: Icon, color }, index) => (
@@ -329,7 +329,7 @@ export default function SocialBurst({ open, onToggle }) {
                   } catch {}
                 }}
                 style={{ color }}
-                className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/[0.08] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden"
+                className="pointer-events-auto relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-black/[0.08] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden"
               >
                 <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
               </motion.a>

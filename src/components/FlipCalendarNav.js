@@ -492,7 +492,11 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
             }
           }
         }}
-        className={`relative w-[min(300px,84vw)] sm:w-[340px] lg:w-[370px] xl:w-[390px] aspect-[4/4.1] max-h-[420px] rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] cursor-pointer group ${currSection.isAvatar ? "bg-transparent" : "bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)]"}`}
+        className={`relative rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] cursor-pointer group ${
+          currSection.isAvatar
+            ? "w-[min(220px,72vw)] sm:w-[240px] lg:w-[250px] aspect-square bg-transparent"
+            : "w-[min(300px,84vw)] sm:w-[340px] lg:w-[370px] xl:w-[390px] aspect-[4/4.1] max-h-[420px] bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)]"
+        }`}
         style={{ perspective: "1200px" }}
       >
         {/* Apple iOS Level Smooth 3D Perspective Card Turn */}

@@ -61,48 +61,85 @@ export default function HomeTilesLayout() {
       data-lenis-prevent="true"
       className="relative w-full min-h-screen bg-[#f4f4f4] text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
     >
-      <section className="relative w-full max-w-7xl mx-auto min-h-[100dvh] flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14 xl:gap-20 px-6 sm:px-10 lg:px-14 pt-24 lg:pt-0 pb-12 lg:pb-0 select-none">
-        <div className="w-full lg:flex-1 lg:max-w-xl xl:max-w-2xl flex flex-col justify-center px-0 z-20">
-          <h1 className="text-3xl sm:text-4xl lg:text-[46px] xl:text-[52px] font-semibold tracking-tight leading-[1.1] text-[#111111] sm:whitespace-nowrap">
-            Satya Sai Nagubathula
-          </h1>
-          <p className="mt-2 sm:mt-2.5 text-xl sm:text-2xl lg:text-[28px] tracking-tight text-[#8f8f8f]">
-            AI + Design Engineer
-          </p>
-          <p className="mt-5 max-w-xl xl:max-w-2xl text-base sm:text-lg leading-relaxed text-[#515154]">
-            I turn ideas into tools that feel clear, useful, and considered — connecting product design, systems engineering, and generative AI.
-          </p>
-          <p className="mt-3.5 text-sm sm:text-base text-[#6e6e73] tracking-tight">
-            Currently building{" "}
-            <Link
-              href="/works/o0"
-              className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
-            >
-              OpenWeave
-            </Link>{" "}
-            &amp;{" "}
-            <Link
-              href="/works/case-studies/notbad-design"
-              className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
-            >
-              NotBad
-            </Link>
-            .
-          </p>
-          <div ref={contactContainerRef} className="mt-8 flex flex-wrap items-start gap-3.5">
-            <RiveAboutButton showFace={!isAvatarVisible} />
-            <SocialBurst open={isContactOpen} onToggle={toggleContact} />
-          </div>
-        </div>
-
-        {/* 3D Flip Card Widget */}
-        <div className="relative w-full lg:w-auto lg:shrink-0 flex items-center justify-center lg:justify-end px-0 z-10">
+      <section className="relative w-full max-w-3xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-6 sm:px-10 pt-20 pb-12 select-none">
+        {/* 3D Flip Card Widget + Floating Hand-drawn Annotation */}
+        <div className="relative flex items-center justify-center z-10 mb-5 sm:mb-7">
           <FlipCalendarNav
             initialSection="avatar"
             onSectionChange={(sectionId) => {
               setCurrentSection(sectionId);
             }}
           />
+
+          {/* Floating 'AI + Design Engineer' Handwritten Annotation with Curved Blue Arrow */}
+          {isAvatarVisible && (
+            <div className="absolute -top-3 sm:-top-5 left-[62%] sm:left-[66%] md:left-[70%] flex items-center gap-1.5 sm:gap-2.5 whitespace-nowrap pointer-events-none select-none z-20 scale-[0.85] sm:scale-100 origin-left">
+              <svg
+                width="34"
+                height="26"
+                viewBox="0 0 34 26"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-[#20a8e3] shrink-0 -rotate-6 sm:-rotate-3"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3 21C9 12 18 7 30 5"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M22 3.5L30 5L25 12.5"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="font-handwriting text-xl sm:text-2xl text-[#111111] font-semibold tracking-wide">
+                AI + Design Engineer
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className={`w-full max-w-[560px] flex flex-col ${isAvatarVisible ? "items-start text-left" : "items-center text-center"} justify-center px-0 z-20`}>
+          {isAvatarVisible && (
+            <>
+              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12] text-[#111111]">
+                Satya Sai Nagubathula
+              </h1>
+              <p className="mt-4 sm:mt-5 text-base sm:text-[17px] leading-relaxed text-[#515154]">
+                I turn design ideas into working software — interfaces, interactive prototypes, and AI-powered tools. My work brings together product design, frontend engineering, and generative AI, from the first interaction to the systems behind it.
+              </p>
+              <p className="mt-3.5 sm:mt-4 text-sm sm:text-base text-[#6e6e73] tracking-tight">
+                <span className="inline-block mr-1 text-[#111111] font-normal">→</span>
+                Currently building{" "}
+                <Link
+                  href="/works/o0"
+                  className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
+                >
+                  OpenWeave
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/works/case-studies/notbad-design"
+                  className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
+                >
+                  NotBad
+                </Link>
+                .
+              </p>
+            </>
+          )}
+          <div
+            ref={contactContainerRef}
+            className={`${isAvatarVisible ? "mt-6 sm:mt-8" : "mt-2"} flex flex-wrap items-center ${isAvatarVisible ? "justify-start" : "justify-center"} gap-3.5`}
+          >
+            <RiveAboutButton showFace={!isAvatarVisible} />
+            <SocialBurst open={isContactOpen} onToggle={toggleContact} />
+          </div>
         </div>
       </section>
     </div>

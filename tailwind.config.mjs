@@ -19,6 +19,7 @@ export default {
         mono: ["SFMono-Regular", "ui-monospace", "Menlo", "Monaco", "monospace"],
         pixel: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         editorial: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "SF Pro Display", "system-ui", "sans-serif"],
+        handwriting: ["Caveat", "Virgil", "Kalam", "Segoe Print", "Architects Daughter", "cursive", "sans-serif"],
       },
     },
   },
