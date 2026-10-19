@@ -221,9 +221,9 @@ export default function AppleNavbar() {
           exit={{ opacity: 0, y: -16, x: "-50%", scale: 0.96 }}
           transition={{
             type: "spring",
-            stiffness: 400,
-            damping: 30,
-            mass: 0.8,
+            stiffness: 280,
+            damping: 34,
+            mass: 0.9,
           }}
           className="fixed top-3.5 sm:top-5 left-1/2 z-50 pointer-events-auto select-none"
           onMouseLeave={handleMouseLeaveNav}
@@ -233,9 +233,9 @@ export default function AppleNavbar() {
           layout
           transition={{
             type: "spring",
-            stiffness: 400,
-            damping: 30,
-            mass: 0.8,
+            stiffness: 280,
+            damping: 34,
+            mass: 0.9,
           }}
           className={`relative bg-black/90 backdrop-blur-2xl text-white border border-white/[0.14] shadow-[0_16px_48px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.18)] overflow-hidden ${
             isExpanded
@@ -314,9 +314,9 @@ export default function AppleNavbar() {
                             layoutId="island-active-pill"
                             transition={{
                               type: "spring",
-                              stiffness: 420,
-                              damping: 24,
-                              mass: 0.6,
+                              stiffness: 280,
+                              damping: 32,
+                              mass: 0.85,
                             }}
                             className="absolute inset-0 rounded-full bg-white/20 border border-white/20 shadow-sm"
                           />

@@ -19,7 +19,7 @@ function ScrollReset() {
 
 export default function SmoothScroll({ children }) {
   return (
-    <ReactLenis root options={{ lerp: 0.08, duration: 1.6, smoothWheel: true, wheelMultiplier: 0.9 }}>
+    <ReactLenis root options={{ lerp: 0.072, duration: 1.45, smoothWheel: true, syncTouch: true, wheelMultiplier: 0.82, touchMultiplier: 1.05 }}>
       <ScrollReset />
       {children}
     </ReactLenis>

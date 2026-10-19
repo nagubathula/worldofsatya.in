@@ -72,7 +72,7 @@ const tileReveal = {
     y: 0,
     scale: 1,
     filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 420, damping: 28, mass: 0.62 },
+    transition: { type: "spring", stiffness: 280, damping: 32, mass: 0.82 },
   },
 };
 
@@ -102,8 +102,8 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
               <motion.div
                 key={item.id}
                 variants={reduceMotion ? undefined : tileReveal}
-                whileHover={interactive ? { scale: 1.045, transition: { type: "spring", stiffness: 460, damping: 22 } } : undefined}
-                whileTap={interactive ? { scale: 0.96, transition: { type: "spring", stiffness: 500, damping: 26 } } : undefined}
+                whileHover={interactive ? { scale: 1.035, transition: { type: "spring", stiffness: 320, damping: 28 } } : undefined}
+                whileTap={interactive ? { scale: 0.97, transition: { type: "spring", stiffness: 360, damping: 30 } } : undefined}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (!interactive || !item.href || !onNavigate) return;

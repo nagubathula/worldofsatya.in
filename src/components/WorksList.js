@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { smoothNavigate } from "@/lib/motion";
 import {
   ArrowUpRight,
   Code,
@@ -182,15 +183,15 @@ function AnimatedWorkRow({
         opacity: 0,
         y: -8 * direction,
         filter: "blur(0px)",
-        transition: { duration: 0.14, ease: [0.4, 0, 1, 1] },
+        transition: { duration: 0.32, ease: [0.4, 0, 0.2, 1] },
       }}
       transition={
         reduceMotion
           ? { duration: 0.16 }
           : {
-              y: { type: "spring", stiffness: 520, damping: 36, mass: 0.55, delay },
-              opacity: { duration: 0.38, ease: [0.22, 1, 0.36, 1], delay },
-              filter: { duration: 0.42, ease: [0.22, 1, 0.36, 1], delay },
+              y: { type: "spring", stiffness: 260, damping: 32, mass: 0.85, delay },
+              opacity: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay },
+              filter: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
             }
       }
     >
@@ -404,7 +405,7 @@ export default function WorksList() {
     if (destinationHref.startsWith("http")) {
       window.location.href = destinationHref;
     } else {
-      router.push(destinationHref);
+      smoothNavigate(router, destinationHref);
     }
   };
 
