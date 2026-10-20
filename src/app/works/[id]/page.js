@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight, BookOpen, Code, Briefcase, Video, Sparkles, Wrench } from "lucide-react";
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import { workMediaStyle } from "@/lib/motion";
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
@@ -84,12 +85,18 @@ export default async function WorkDetailPage({ params }) {
                 />
               </div>
             ) : work.image ? (
-              <div className="w-full relative rounded-3xl overflow-hidden mb-12 sm:mb-20 bg-[#f5f5f7] shadow-[0_4px_24px_rgba(0,0,0,0.04)] flex items-center justify-center border border-black/[0.06]">
+              <div
+                data-work-media
+                style={workMediaStyle(work.slug)}
+                className="w-full relative rounded-3xl overflow-hidden mb-12 sm:mb-20 bg-[#f5f5f7] shadow-[0_4px_24px_rgba(0,0,0,0.04)] flex items-center justify-center border border-black/[0.06]"
+              >
                 <Image 
                   src={work.image} 
                   alt={work.title} 
                   width={1920} 
                   height={1080} 
+                  loading="eager"
+                  fetchPriority="high"
                   className="w-full h-auto object-contain" 
                 />
               </div>

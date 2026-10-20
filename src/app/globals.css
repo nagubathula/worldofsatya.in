@@ -227,4 +227,48 @@ html.lenis, html.lenis-smooth {
   }
 }
 
-
+
+/* A work's image morphs between pages. Names come from workMediaStyle() in lib/motion.js. */
+@keyframes work-media-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*.work-media) {
+    animation-duration: 640ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-image-pair(*.work-media) {
+    overflow: hidden;
+    border-radius: 20px;
+  }
+
+  /* Both snapshots fill the morphing frame instead of keeping their own aspect ratio. */
+  ::view-transition-old(*.work-media),
+  ::view-transition-new(*.work-media) {
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    mix-blend-mode: normal;
+  }
+
+  /* The thumbnail stays solid underneath while the hero fades in over it. */
+  ::view-transition-old(*.work-media) {
+    animation: none;
+  }
+
+  ::view-transition-new(*.work-media) {
+    animation: 360ms cubic-bezier(0.22, 1, 0.36, 1) both work-media-in;
+  }
+
+  /* Images with no partner on the other page (the tiles you didn't click)
+     leave and enter with the rest of the page. */
+  ::view-transition-old(*.work-media):only-child {
+    animation: 460ms cubic-bezier(0.4, 0, 0.2, 1) both page-leave;
+  }
+
+  ::view-transition-new(*.work-media):only-child {
+    animation: 680ms cubic-bezier(0.22, 1, 0.36, 1) both page-enter;
+  }
+}

@@ -25,6 +25,7 @@ import {
 } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
 import { useNavbar } from "./NavbarContext";
+import { EASE_OUT, SPRING } from "@/lib/motion";
 
 const primaryNav = [
   {
@@ -93,9 +94,9 @@ const primaryNav = [
   },
 ];
 
-// Shared motion tokens so every part of the island moves as one system
-const islandSpring = { type: "spring", stiffness: 340, damping: 32, mass: 0.9 };
-const pillSpring = { type: "spring", stiffness: 520, damping: 38 };
+// The island uses the site-wide springs so it moves like everything else.
+const islandSpring = SPRING.enter;
+const pillSpring = SPRING.pill;
 
 const compactVariants = {
   initial: { opacity: 0, scale: 0.94, filter: "blur(6px)" },
@@ -103,7 +104,7 @@ const compactVariants = {
     opacity: 1,
     scale: 1,
     filter: "blur(0px)",
-    transition: { duration: 0.22, delay: 0.06, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.22, delay: 0.06, ease: EASE_OUT },
   },
   exit: {
     opacity: 0,
@@ -128,7 +129,7 @@ const expandedItemVariants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 380, damping: 30 },
+    transition: SPRING.enter,
   },
   exit: { opacity: 0, y: -4, transition: { duration: 0.1 } },
 };
@@ -279,12 +280,7 @@ export default function AppleNavbar() {
           initial={{ opacity: 0, y: -16, x: "-50%", scale: 0.96 }}
           animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
           exit={{ opacity: 0, y: -16, x: "-50%", scale: 0.96 }}
-          transition={{
-            type: "spring",
-            stiffness: 280,
-            damping: 34,
-            mass: 0.9,
-          }}
+          transition={SPRING.enter}
           className="fixed top-3.5 sm:top-5 left-1/2 z-50 pointer-events-auto select-none"
           onMouseLeave={handleMouseLeaveNav}
         >

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { SPRING } from "@/lib/motion";
 
 export default function Footer() {
   return (
@@ -65,7 +66,7 @@ export default function Footer() {
                 rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 whileHover={{ y: -2, scale: 1.05 }}
                 whileTap={{ scale: 0.94 }}
-                transition={{ type: "spring", stiffness: 450, damping: 18 }}
+                transition={SPRING.press}
                 className="px-3 py-1 rounded-full text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
               >
                 {link.label}

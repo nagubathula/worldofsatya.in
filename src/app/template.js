@@ -28,52 +28,26 @@ export default function Template({ children }) {
     } catch {
       window.scrollTo(0, 0);
     }
-    // Wait two frames, and cancel on cleanup, so Strict Mode's first mount
-    // does not snapshot the page before the real one is painted.
-    let outer = 0;
-    let inner = 0;
-    outer = window.requestAnimationFrame(() => {
-      inner = window.requestAnimationFrame(() => {
-        window.dispatchEvent(new Event("page-ready"));
-      });
-    });
-    return () => {
-      window.cancelAnimationFrame(outer);
-      window.cancelAnimationFrame(inner);
-    };
+    // A timer, not requestAnimationFrame: the browser pauses frames while a view
+    // transition waits for the new page, so a frame callback would never fire.
+    // Cancelling on cleanup keeps Strict Mode's first mount from signalling early.
+    const timer = window.setTimeout(() => {
+      window.dispatchEvent(new Event("page-ready"));
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [pathname]);
 
+  // Browsers with view transitions get the CSS page-enter in globals.css.
+  // Everyone else gets a plain fade, so there is only ever one page animation.
   return (
-    <>
-      <motion.div
-        key={`beam-${pathname}`}
-        initial={{ scaleX: 0, opacity: reduceMotion ? 0 : 0.7 }}
-        animate={{ scaleX: 1, opacity: 0 }}
-        transition={{ duration: reduceMotion ? 0 : 0.9, ease: EASE_OUT }}
-        style={{ transformOrigin: "0% 50%" }}
-        className="pointer-events-none fixed left-0 right-0 top-0 z-[9999] h-[2px] bg-gradient-to-r from-transparent via-[#1d1d1f] to-transparent"
-      />
-
-      {!reduceMotion && (
-        <motion.div
-          key={`wash-${pathname}`}
-          aria-hidden
-          initial={{ opacity: crossfade ? 0 : 0.28 }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: 0.72, ease: EASE_OUT }}
-          className="pointer-events-none fixed inset-0 z-[70] bg-[#f4f4f4]"
-        />
-      )}
-
-      <motion.div
-        key={`page-${pathname}`}
-        initial={reduceMotion || crossfade ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.68, ease: EASE_OUT }}
-        className="relative min-h-screen w-full"
-      >
-        {children}
-      </motion.div>
-    </>
+    <motion.div
+      key={`page-${pathname}`}
+      initial={reduceMotion || crossfade ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.68, ease: EASE_OUT }}
+      className="relative min-h-screen w-full"
+    >
+      {children}
+    </motion.div>
   );
 }

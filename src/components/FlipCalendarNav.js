@@ -14,6 +14,7 @@ import { ArrowUpRight } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
 import { play8BitBlipSound } from "./SoundEffects";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
+import { EASE_IN, EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
 
 export const calendarSections = [
   {
@@ -35,6 +36,7 @@ export const calendarSections = [
         title: "OpenWeave",
         image: "/openweave-app.png",
         href: "/works/openweave",
+        slug: "openweave",
       },
       {
         id: "notbad",
@@ -47,12 +49,14 @@ export const calendarSections = [
         title: "Toothpaste",
         image: "/toothpaste-panel.png",
         href: "/works/toothpaste",
+        slug: "toothpaste",
       },
       {
         id: "tailus",
         title: "Tailus",
         image: "/tailus.png",
         href: "/works/tailus",
+        slug: "tailus",
       },
     ],
   },
@@ -72,7 +76,7 @@ const tileReveal = {
     y: 0,
     scale: 1,
     filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 280, damping: 32, mass: 0.82 },
+    transition: SPRING.enter,
   },
 };
 
@@ -98,37 +102,28 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
             initial={reduceMotion ? false : "hidden"}
             animate="show"
           >
-            {section.previewItems.map((item, idx) => (
+            {section.previewItems.map((item) => (
               <motion.div
                 key={item.id}
                 variants={reduceMotion ? undefined : tileReveal}
-                whileHover={interactive ? { scale: 1.035, transition: { type: "spring", stiffness: 320, damping: 28 } } : undefined}
-                whileTap={interactive ? { scale: 0.97, transition: { type: "spring", stiffness: 360, damping: 30 } } : undefined}
+                whileHover={interactive ? { scale: 1.035, transition: SPRING.press } : undefined}
+                whileTap={interactive ? { scale: 0.97, transition: SPRING.press } : undefined}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (!interactive || !item.href || !onNavigate) return;
                   onNavigate(item.href, { x: e.clientX, y: e.clientY });
                 }}
-                className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] cursor-pointer"
+                className="group/tile relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] cursor-pointer"
+                style={workMediaStyle(item.slug)}
               >
-                <motion.div
-                  className="absolute inset-0"
-                  animate={reduceMotion ? { scale: 1 } : { scale: [1, 1.06, 1] }}
-                  transition={reduceMotion ? undefined : {
-                    duration: 8.4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.55 + idx * 0.55,
-                  }}
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 768px) 45vw, 220px"
-                    className="object-cover object-top"
-                  />
-                </motion.div>
+                {/* Still at rest; the image only drifts while you point at it. */}
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 768px) 45vw, 220px"
+                  className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/tile:scale-[1.06] motion-reduce:transition-none"
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -138,21 +133,19 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
             className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2"
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduceMotion ? 0 : 0.42, type: "spring", stiffness: 380, damping: 28 }}
+            transition={{ ...SPRING.enter, delay: reduceMotion ? 0 : 0.42 }}
           >
             <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
               {section.title}
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1 group-hover:text-black transition-colors">
               <span>All works</span>
-              <motion.span
+              <span
                 aria-hidden="true"
-                className="inline-flex"
-                animate={reduceMotion ? undefined : { x: [0, 3.5, 0], y: [0, -3.5, 0] }}
-                transition={{ duration: 1.45, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
+                className="inline-flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[3px] group-hover:-translate-y-[3px] motion-reduce:transition-none"
               >
                 <ArrowUpRight size={12} />
-              </motion.span>
+              </span>
             </span>
           </motion.div>
         </div>
@@ -162,7 +155,13 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
 }
 
 export default function FlipCalendarNav({ initialSection = "avatar", onSectionChange }) {
-  const reduceMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  // useReducedMotion() is null on the server. Render the motion variants first so
+  // hydration matches the HTML, then switch once the real setting is known.
+  const [reduceMotion, setReduceMotion] = useState(false);
+  useEffect(() => {
+    setReduceMotion(prefersReducedMotion === true);
+  }, [prefersReducedMotion]);
   const initialIndex = Math.max(0, calendarSections.findIndex(section => section.id === initialSection));
   const { navigate: blackHoleNavigate } = useBlackHoleTransition();
   const [currIndex, setCurrIndex] = useState(initialIndex);
@@ -611,7 +610,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
           Drag and the 3D turn live on the inner layers so they don't fight layout. */}
       <motion.div
         layout={reduceMotion ? false : true}
-        transition={{ layout: { type: "spring", stiffness: 280, damping: 30, mass: 0.82 } }}
+        transition={{ layout: SPRING.enter }}
         animate={{
           backgroundColor: currSection.isAvatar ? "rgba(255,255,255,0)" : "#ffffff",
           boxShadow: currSection.isAvatar
@@ -628,7 +627,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         className="absolute inset-0"
         style={{ perspective: 1400 }}
         animate={isDeparting ? { opacity: 0, scale: 1.045 } : { opacity: 1, scale: 1 }}
-        transition={{ duration: reduceMotion ? 0.12 : 0.34, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduceMotion ? 0.12 : 0.34, ease: EASE_OUT }}
       >
       <motion.div
         drag="y"
@@ -692,19 +691,14 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
                 y: 0,
                 opacity: 1,
                 filter: "blur(0px)",
-                transition: {
-                  type: "spring",
-                  stiffness: 290,
-                  damping: 26,
-                  mass: 0.78,
-                },
+                transition: SPRING.enter,
               },
               exit: (dir) => ({
                 rotateX: dir === "down" ? -28 : 28,
                 y: dir === "down" ? -22 : 22,
                 opacity: 0,
                 filter: "blur(3px)",
-                transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
+                transition: { duration: 0.22, ease: EASE_IN },
               }),
             }}
             initial="enter"

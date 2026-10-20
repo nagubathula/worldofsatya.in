@@ -5,6 +5,7 @@ import { Github, Instagram, Linkedin, Mail, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { play8BitTapSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
+import { SPRING } from "@/lib/motion";
 
 function MediumIcon({ size = 20 }) {
   return (
@@ -140,7 +141,7 @@ export default function SocialBurst({ open, onToggle }) {
           transition={
             open
               ? { duration: SHOT_INTERVAL, delay: WIND_UP, times: [0, 0.4, 0.75, 1], ease: "easeInOut", repeat: socials.length - 1 }
-              : { type: "spring", stiffness: 400, damping: 18 }
+              : SPRING.pop
           }
           className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden ${
             open ? "border-[#1d1d1f] bg-[#1d1d1f] text-white" : "border-black/[0.08] bg-white text-[#1d1d1f]"
@@ -295,10 +296,7 @@ export default function SocialBurst({ open, onToggle }) {
                   scale: 1,
                   rotate: 0,
                   transition: {
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 20,
-                    mass: 0.7,
+                    ...SPRING.pop,
                     delay: WIND_UP + index * SHOT_INTERVAL,
                   },
                 }}
@@ -317,7 +315,7 @@ export default function SocialBurst({ open, onToggle }) {
                 whileHover={{
                   y: -4,
                   scale: 1.08,
-                  transition: { type: "spring", stiffness: 450, damping: 18 },
+                  transition: SPRING.press,
                 }}
                 whileTap={{
                   scale: 0.92,

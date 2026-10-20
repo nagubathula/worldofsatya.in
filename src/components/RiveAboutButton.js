@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useSpring, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
+import { SPRING } from "@/lib/motion";
 
 export default function RiveAboutButton({ showFace = false }) {
   const buttonRef = useRef(null);
@@ -116,11 +117,7 @@ export default function RiveAboutButton({ showFace = false }) {
               ? { scaleX: 1.03, scaleY: 1.03, y: -1 }
               : { scaleX: 1, scaleY: 1, y: 0 }
           }
-          transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 18,
-          }}
+          transition={SPRING.pop}
           className="relative flex items-center justify-center w-full h-full pointer-events-none"
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -290,7 +287,7 @@ export default function RiveAboutButton({ showFace = false }) {
                       : { scale: 1, rotate: 0 }
                   }
                   transition={{
-                    scale: { type: "spring", stiffness: 400, damping: 20 },
+                    scale: SPRING.press,
                     rotate: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
                   }}
                   className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center"

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { smoothNavigate } from "@/lib/motion";
+import { EASE_OUT, SPRING, smoothNavigate } from "@/lib/motion";
 import {
   ArrowUpRight,
   Code,
@@ -189,9 +189,9 @@ function AnimatedWorkRow({
         reduceMotion
           ? { duration: 0.16 }
           : {
-              y: { type: "spring", stiffness: 260, damping: 32, mass: 0.85, delay },
-              opacity: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay },
-              filter: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
+              y: { ...SPRING.enter, delay },
+              opacity: { duration: 0.55, ease: EASE_OUT, delay },
+              filter: { duration: 0.6, ease: EASE_OUT, delay },
             }
       }
     >
@@ -202,7 +202,12 @@ function AnimatedWorkRow({
 
 export default function WorksList() {
   const router = useRouter();
-  const reduceMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  // useReducedMotion() is null on the server. Match the HTML first, then switch.
+  const [reduceMotion, setReduceMotion] = useState(false);
+  useEffect(() => {
+    setReduceMotion(prefersReducedMotion === true);
+  }, [prefersReducedMotion]);
   const [filter, setFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [listDirection, setListDirection] = useState(1);
@@ -443,7 +448,7 @@ export default function WorksList() {
               }}
               whileHover={{ scale: 1.03, y: -0.5 }}
               whileTap={{ scale: 0.96 }}
-              transition={{ type: "spring", stiffness: 450, damping: 22 }}
+              transition={SPRING.press}
               aria-pressed={isActive}
               className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
                 isActive ? "text-[#1d1d1f]" : "text-[#86868b] hover:text-[#1d1d1f]"
@@ -453,7 +458,7 @@ export default function WorksList() {
                 <motion.div
                   layoutId="activeFilterPill"
                   className="absolute inset-0 rounded-full bg-white shadow-sm border border-black/[0.04]"
-                  transition={{ type: "spring", stiffness: 500, damping: 32 }}
+                  transition={SPRING.pill}
                 />
               )}
               <span className="relative z-10">{tab.label}</span>
@@ -697,7 +702,7 @@ export default function WorksList() {
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 540, damping: 36, mass: 0.55 }}
+                transition={SPRING.press}
                 className="fixed left-0 top-0 z-[60] pointer-events-none rounded-2xl overflow-hidden shadow-[0_20px_56px_rgba(0,0,0,0.18)] border border-black/[0.08] bg-[#f5f5f7] hidden md:block"
                 style={{
                   width: PREVIEW_W,
@@ -774,7 +779,7 @@ export default function WorksList() {
               }}
               whileHover={validCurrentPage > 1 ? { scale: 1.06, y: -0.5 } : {}}
               whileTap={validCurrentPage > 1 ? { scale: 0.94 } : {}}
-              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              transition={SPRING.press}
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
                 validCurrentPage <= 1
                   ? "opacity-30 cursor-not-allowed text-[#86868b]"
@@ -799,7 +804,7 @@ export default function WorksList() {
                   }}
                   whileHover={{ scale: 1.06, y: -0.5 }}
                   whileTap={{ scale: 0.94 }}
-                  transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                  transition={SPRING.press}
                   aria-label={`Page ${pageNum}`}
                   aria-current={isActive ? "page" : undefined}
                   className={`relative flex h-8 min-w-8 sm:h-9 sm:min-w-9 items-center justify-center px-3 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
@@ -810,7 +815,7 @@ export default function WorksList() {
                     <motion.div
                       layoutId="activePagePill"
                       className="absolute inset-0 rounded-full bg-white shadow-sm border border-black/[0.04]"
-                      transition={{ type: "spring", stiffness: 500, damping: 32 }}
+                      transition={SPRING.pill}
                     />
                   )}
                   <span className="relative z-10">{pageNum}</span>
@@ -833,7 +838,7 @@ export default function WorksList() {
               }}
               whileHover={validCurrentPage < totalPages ? { scale: 1.06, y: -0.5 } : {}}
               whileTap={validCurrentPage < totalPages ? { scale: 0.94 } : {}}
-              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              transition={SPRING.press}
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
                 validCurrentPage >= totalPages
                   ? "opacity-30 cursor-not-allowed text-[#86868b]"

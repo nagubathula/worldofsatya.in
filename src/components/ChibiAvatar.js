@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
+import { SPRING } from "@/lib/motion";
 
 export default function ChibiAvatar({ className = "" }) {
   const containerRef = useRef(null);
@@ -110,9 +111,9 @@ export default function ChibiAvatar({ className = "" }) {
         }
         transition={
           isPressed
-            ? { type: "spring", stiffness: 450, damping: 15 }
+            ? SPRING.press
             : isHovered
-            ? { type: "spring", stiffness: 350, damping: 18 }
+            ? SPRING.pop
             : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
         }
       >
@@ -144,7 +145,7 @@ export default function ChibiAvatar({ className = "" }) {
               ? { scaleY: 1.08, scaleX: 1.02, y: -0.5 }
               : { scaleY: 1, scaleX: 1, y: 0 }
           }
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          transition={SPRING.press}
           style={{ originX: "220px", originY: "420px" }}
         >
           <path d="M179.277 431.519C172.057 433.349 164.056 426.129 167.146 423.909C168.816 422.709 172.077 429.869 179.247 428.469C205.557 423.349 231.417 419.199 257.917 415.459C266.717 414.219 276.287 411.359 279.537 404.189C281.667 405.039 282.457 406.879 282.087 408.589C280.697 414.979 268.417 417.229 258.827 418.279C231.847 421.249 205.607 424.839 179.277 431.529V431.519Z" fill="#181616"/>

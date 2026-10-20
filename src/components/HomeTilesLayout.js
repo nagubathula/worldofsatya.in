@@ -8,6 +8,7 @@ import RiveAboutButton from "./RiveAboutButton";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { playPopSound } from "./SoundEffects";
 import { useNavbar } from "./NavbarContext";
+import { SPRING } from "@/lib/motion";
 
 export default function HomeTilesLayout() {
   const [currentSection, setCurrentSection] = useState("avatar");
@@ -91,12 +92,7 @@ export default function HomeTilesLayout() {
                 initial={{ opacity: 0, scale: 0.8, rotate: -10, y: 12 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
                 exit={{ opacity: 0, scale: 0.85, y: -8 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 380,
-                  damping: 18, // Rubber-band bounce
-                  mass: 0.6,
-                }}
+                transition={SPRING.pop}
                 className="absolute -top-3 sm:-top-5 left-[62%] sm:left-[66%] md:left-[70%] flex items-center gap-1.5 sm:gap-2.5 whitespace-nowrap pointer-events-none select-none z-20 scale-[0.85] sm:scale-100 origin-left"
               >
                 <svg
@@ -138,12 +134,7 @@ export default function HomeTilesLayout() {
                 initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 320,
-                  damping: 22, // Momentum snap and settle
-                  mass: 0.7,
-                }}
+                transition={SPRING.enter}
                 className="w-full flex flex-col items-start text-left"
               >
                 <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12] text-[#111111]">
@@ -175,11 +166,7 @@ export default function HomeTilesLayout() {
           </AnimatePresence>
           <motion.div
             layout
-            transition={{
-              type: "spring",
-              stiffness: 350,
-              damping: 24, // Rubber-band positioning
-            }}
+            transition={SPRING.enter}
             ref={contactContainerRef}
             className={`${isAvatarVisible ? "mt-6 sm:mt-8" : "mt-2"} flex flex-wrap items-center ${isAvatarVisible ? "justify-start" : "justify-center"} gap-3.5`}
           >
@@ -193,7 +180,7 @@ export default function HomeTilesLayout() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
-                transition={{ type: "spring", stiffness: 380, damping: 28, delay: 0.48 }}
+                transition={{ ...SPRING.enter, delay: 0.48 }}
                 className="mt-4 text-[12px] font-sans tracking-wide text-[#8e8e93]"
               >
                 Scroll to continue
