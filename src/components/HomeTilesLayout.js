@@ -173,20 +173,6 @@ export default function HomeTilesLayout() {
             <RiveAboutButton showFace={!isAvatarVisible} />
             <SocialBurst open={isContactOpen} onToggle={toggleContact} />
           </motion.div>
-          <AnimatePresence>
-            {!isAvatarVisible && (
-              <motion.p
-                key="works-continue"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 6 }}
-                transition={{ ...SPRING.enter, delay: 0.48 }}
-                className="mt-4 text-[12px] font-sans tracking-wide text-[#8e8e93]"
-              >
-                Scroll to continue
-              </motion.p>
-            )}
-          </AnimatePresence>
         </div>
       </section>
     </div>

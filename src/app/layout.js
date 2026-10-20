@@ -1,7 +1,6 @@
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import AppleNavbar from "@/components/AppleNavbar";
 import { BlackHoleTransitionProvider } from "@/components/BlackHoleTransition";
 import { NavbarProvider } from "@/components/NavbarContext";
 import { Inter, EB_Garamond } from "next/font/google";
@@ -104,7 +103,6 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <BlackHoleTransitionProvider>
             <NavbarProvider>
-              <AppleNavbar />
               <SmoothScroll>
                 {children}
               </SmoothScroll>

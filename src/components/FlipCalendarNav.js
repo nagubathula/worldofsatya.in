@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
 import {
   motion,
   AnimatePresence,
@@ -10,11 +9,11 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import ChibiAvatar from "./ChibiAvatar";
+import WorksIndex from "./WorksIndex";
 import { play8BitBlipSound } from "./SoundEffects";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
-import { EASE_IN, EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
+import { EASE_IN, EASE_OUT, SPRING } from "@/lib/motion";
 
 export const calendarSections = [
   {
@@ -37,12 +36,14 @@ export const calendarSections = [
         image: "/openweave-app.png",
         href: "/works/openweave",
         slug: "openweave",
+        blurb: "Design editor",
       },
       {
         id: "notbad",
         title: "NotBad",
         image: "/notbad-editor.png",
         href: "/works/case-studies/notbad-design",
+        blurb: "Markdown writer",
       },
       {
         id: "toothpaste",
@@ -50,6 +51,7 @@ export const calendarSections = [
         image: "/toothpaste-panel.png",
         href: "/works/toothpaste",
         slug: "toothpaste",
+        blurb: "Premiere Pro extension",
       },
       {
         id: "tailus",
@@ -57,33 +59,16 @@ export const calendarSections = [
         image: "/tailus.png",
         href: "/works/tailus",
         slug: "tailus",
+        blurb: "Tailwind UI kit",
       },
     ],
   },
 ];
 
-const tileContainer = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.16 },
-  },
-};
-
-const tileReveal = {
-  hidden: { opacity: 0, y: 22, scale: 0.9, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: SPRING.enter,
-  },
-};
-
 // Renders the complete, uncut card face for each section
 function CardFace({ section, onNavigate, interactive, reduceMotion }) {
   return (
-    <div className={`relative w-full h-full text-[#111111] flex flex-col justify-between select-none overflow-hidden ${section.isAvatar ? "bg-transparent p-0" : "bg-white p-4 sm:p-5 lg:p-6"}`}>
+    <div className={`relative w-full h-full text-[#111111] flex flex-col justify-between select-none ${section.isAvatar ? "overflow-hidden" : "px-1 sm:px-2"}`}>
       {section.isAvatar ? (
         <div className="relative w-full h-full flex flex-col items-center justify-center overflow-visible">
           {/* Interactive SVG Chibi Character */}
@@ -94,61 +79,12 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
           </div>
         </div>
       ) : (
-        <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
-          {/* 2x2 Bento Preview Grid of 4 Works */}
-          <motion.div
-            className="relative flex-1 w-full my-1.5 sm:my-2 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2.5"
-            variants={reduceMotion ? undefined : tileContainer}
-            initial={reduceMotion ? false : "hidden"}
-            animate="show"
-          >
-            {section.previewItems.map((item) => (
-              <motion.div
-                key={item.id}
-                variants={reduceMotion ? undefined : tileReveal}
-                whileHover={interactive ? { scale: 1.035, transition: SPRING.press } : undefined}
-                whileTap={interactive ? { scale: 0.97, transition: SPRING.press } : undefined}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!interactive || !item.href || !onNavigate) return;
-                  onNavigate(item.href, { x: e.clientX, y: e.clientY });
-                }}
-                className="group/tile relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#f4f4f6] cursor-pointer"
-                style={workMediaStyle(item.slug)}
-              >
-                {/* Still at rest; the image only drifts while you point at it. */}
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 45vw, 220px"
-                  className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/tile:scale-[1.06] motion-reduce:transition-none"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Bottom Title — arrives after the tiles, then the arrow keeps moving */}
-          <motion.div
-            className="w-full flex items-center justify-between z-10 pt-1 sm:pt-2"
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...SPRING.enter, delay: reduceMotion ? 0 : 0.42 }}
-          >
-            <span className="text-base sm:text-xl font-semibold tracking-tight text-[#111111] font-sans">
-              {section.title}
-            </span>
-            <span className="text-[10px] sm:text-xs font-mono text-[#999999] tracking-widest uppercase inline-flex items-center gap-1 group-hover:text-black transition-colors">
-              <span>All works</span>
-              <span
-                aria-hidden="true"
-                className="inline-flex transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[3px] group-hover:-translate-y-[3px] motion-reduce:transition-none"
-              >
-                <ArrowUpRight size={12} />
-              </span>
-            </span>
-          </motion.div>
-        </div>
+        <WorksIndex
+          items={section.previewItems}
+          onNavigate={onNavigate}
+          interactive={interactive}
+          reduceMotion={reduceMotion}
+        />
       )}
     </div>
   );
@@ -606,21 +542,15 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       data-flip-calendar="true"
       className="relative w-full h-full flex flex-col items-center justify-center select-none"
     >
-      {/* Shell size springs between the portrait and the works card.
+      {/* Shell size springs between the portrait and the works index.
           Drag and the 3D turn live on the inner layers so they don't fight layout. */}
       <motion.div
         layout={reduceMotion ? false : true}
         transition={{ layout: SPRING.enter }}
-        animate={{
-          backgroundColor: currSection.isAvatar ? "rgba(255,255,255,0)" : "#ffffff",
-          boxShadow: currSection.isAvatar
-            ? "0 0 0 rgba(0,0,0,0)"
-            : "0 16px 40px rgba(0,0,0,0.06)",
-        }}
-        className={`relative rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] ${
+        className={`relative ${
           currSection.isAvatar
             ? "w-[min(220px,72vw)] sm:w-[240px] lg:w-[250px] aspect-square"
-            : "w-[min(300px,84vw)] sm:w-[340px] lg:w-[370px] xl:w-[390px] aspect-[4/4.1] max-h-[420px]"
+            : "w-[min(520px,88vw)] h-[290px] sm:h-[320px]"
         }`}
       >
       <motion.div
@@ -710,7 +640,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
             }}
-            className={`absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] overflow-hidden ${currSection.isAvatar ? "bg-transparent" : "bg-white"}`}
+            className={`absolute inset-0 w-full h-full ${currSection.isAvatar ? "rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] overflow-hidden" : ""}`}
           >
             <CardFace
               section={currSection}
