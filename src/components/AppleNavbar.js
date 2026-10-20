@@ -17,7 +17,12 @@ import {
   Mail,
   Sparkles,
 } from "lucide-react";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  LayoutGroup,
+  MotionConfig,
+} from "framer-motion";
 import { playPopSound } from "./SoundEffects";
 import { useNavbar } from "./NavbarContext";
 
@@ -88,6 +93,52 @@ const primaryNav = [
   },
 ];
 
+// Shared motion tokens so every part of the island moves as one system
+const islandSpring = { type: "spring", stiffness: 340, damping: 32, mass: 0.9 };
+const pillSpring = { type: "spring", stiffness: 520, damping: 38 };
+
+const compactVariants = {
+  initial: { opacity: 0, scale: 0.94, filter: "blur(6px)" },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: 0.22, delay: 0.06, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.94,
+    filter: "blur(6px)",
+    transition: { duration: 0.12, ease: "easeIn" },
+  },
+};
+
+const expandedVariants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: { staggerChildren: 0.045, delayChildren: 0.08 },
+  },
+  exit: { opacity: 0, transition: { duration: 0.12, ease: "easeIn" } },
+};
+
+const expandedItemVariants = {
+  initial: { opacity: 0, y: 10, filter: "blur(4px)" },
+  animate: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { type: "spring", stiffness: 380, damping: 30 },
+  },
+  exit: { opacity: 0, y: -4, transition: { duration: 0.1 } },
+};
+
+const dropdownContentVariants = {
+  initial: (dir) => ({ opacity: 0, x: dir * 24, filter: "blur(4px)" }),
+  animate: { opacity: 1, x: 0, filter: "blur(0px)" },
+  exit: (dir) => ({ opacity: 0, x: dir * -24, filter: "blur(4px)" }),
+};
+
 const socialLinks = [
   {
     name: "LinkedIn",
@@ -110,6 +161,8 @@ export default function AppleNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const containerRef = useRef(null);
   const hoverTimeoutRef = useRef(null);
+  const prevHoverIndexRef = useRef(-1);
+  const [hoverDirection, setHoverDirection] = useState(0);
 
   // Close expanded island on route change
   useEffect(() => {
@@ -184,12 +237,18 @@ export default function AppleNavbar() {
 
   const handleMouseEnterNav = (key) => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    // Direction lets the dropdown content slide the way the cursor moved
+    const nextIndex = primaryNav.findIndex((item) => item.key === key);
+    const prevIndex = prevHoverIndexRef.current;
+    setHoverDirection(prevIndex === -1 ? 0 : Math.sign(nextIndex - prevIndex));
+    prevHoverIndexRef.current = nextIndex;
     setHoveredNavKey(key);
   };
 
   const handleMouseLeaveNav = () => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     hoverTimeoutRef.current = setTimeout(() => {
+      prevHoverIndexRef.current = -1;
       setHoveredNavKey(null);
     }, 220);
   };
@@ -209,6 +268,7 @@ export default function AppleNavbar() {
   const isShowingWorks = !isHome || homeSection === "works";
 
   return (
+    <MotionConfig reducedMotion="user">
     <AnimatePresence>
       {isShowingWorks && (
         <motion.div
@@ -231,18 +291,16 @@ export default function AppleNavbar() {
           <LayoutGroup id="apple-dynamic-island">
         <motion.div
           layout
-          transition={{
-            type: "spring",
-            stiffness: 280,
-            damping: 34,
-            mass: 0.9,
-          }}
+          transition={islandSpring}
+          // Radius lives in style so framer can scale-correct it mid-morph;
+          // class-based radii get stretched by the layout transform.
+          style={{ borderRadius: isExpanded ? 32 : 26 }}
           className={`relative bg-black/90 backdrop-blur-2xl text-white border border-white/[0.14] shadow-[0_16px_48px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.18)] overflow-hidden ${
             isExpanded
-              ? "w-[92vw] max-w-[440px] rounded-[32px] p-5 sm:p-6"
+              ? "w-[92vw] max-w-[440px] p-5 sm:p-6"
               : scrolled
-              ? "rounded-full px-2.5 sm:px-3 py-1.5"
-              : "rounded-full px-3 sm:px-3.5 py-1.5 sm:py-2"
+              ? "px-2.5 sm:px-3 py-1.5"
+              : "px-3 sm:px-3.5 py-1.5 sm:py-2"
           }`}
         >
           {/* ============================================================
@@ -253,10 +311,10 @@ export default function AppleNavbar() {
               <motion.div
                 key="compact-island"
                 layout="position"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.16, ease: "easeOut" }}
+                variants={compactVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
                 className="flex items-center gap-2 sm:gap-3"
               >
               {/* Left Island Accessory: Mini Avatar */}
@@ -291,6 +349,7 @@ export default function AppleNavbar() {
                 aria-label="Global"
                 data-nav-cluster="nav"
                 className="hidden md:flex items-center gap-0.5 px-1 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.08]"
+                onMouseLeave={handleMouseLeaveNav}
               >
                 {primaryNav.map((item) => {
                   const isActive = item.match(pathname);
@@ -309,19 +368,39 @@ export default function AppleNavbar() {
                             : "text-neutral-400 hover:text-white"
                         }`}
                       >
+                        {/* Hover pill glides between items instead of fading per-item */}
+                        <AnimatePresence>
+                          {isHovered && !isActive && (
+                            <motion.span
+                              layoutId="island-hover-pill"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                              transition={pillSpring}
+                              className="absolute inset-0 rounded-full bg-white/[0.08]"
+                            />
+                          )}
+                        </AnimatePresence>
                         {isActive && (
                           <motion.span
                             layoutId="island-active-pill"
-                            transition={{
-                              type: "spring",
-                              stiffness: 280,
-                              damping: 32,
-                              mass: 0.85,
-                            }}
+                            transition={pillSpring}
                             className="absolute inset-0 rounded-full bg-white/20 border border-white/20 shadow-sm"
                           />
                         )}
                         <span className="relative z-10">{item.label}</span>
+                        {item.subItems.length > 1 && (
+                          <motion.span
+                            className="relative z-10 -mr-1 inline-flex"
+                            animate={{
+                              rotate: isHovered ? 180 : 0,
+                              opacity: isHovered ? 1 : 0.5,
+                            }}
+                            transition={pillSpring}
+                          >
+                            <ChevronDown className="w-3 h-3" aria-hidden="true" />
+                          </motion.span>
+                        )}
                       </Link>
                     </div>
                   );
@@ -329,14 +408,16 @@ export default function AppleNavbar() {
               </nav>
 
               {/* Mobile Active Page Capsule Indicator */}
-              <div
+              <motion.div
                 data-nav-cluster="mobile-pill"
                 onClick={toggleExpand}
-                className="md:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-neutral-200 cursor-pointer active:scale-95 transition-transform"
+                whileTap={{ scale: 0.94 }}
+                transition={pillSpring}
+                className="md:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-neutral-200 cursor-pointer"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>{activeLabel}</span>
-              </div>
+              </motion.div>
 
               {/* Right Island Accessory: CTA & Dynamic Expand Trigger */}
               <div
@@ -344,24 +425,44 @@ export default function AppleNavbar() {
                 className="flex items-center gap-1.5 sm:gap-2 shrink-0"
               >
                 {/* Desktop Let's Talk CTA */}
-                <a
+                <motion.a
                   href="mailto:nagubathula.satyasai@gmail.com"
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 sm:py-1.5 rounded-full bg-white text-black text-xs font-semibold hover:bg-neutral-200 active:scale-95 transition-all shadow-sm"
+                  initial="rest"
+                  whileHover="hover"
+                  whileTap={{ scale: 0.95 }}
+                  transition={pillSpring}
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 sm:py-1.5 rounded-full bg-white text-black text-xs font-semibold hover:bg-neutral-200 transition-colors shadow-sm"
                 >
                   <span>Let&apos;s Talk</span>
-                  <ArrowUpRight className="w-3 h-3 opacity-80" aria-hidden="true" />
-                </a>
+                  <motion.span
+                    className="inline-flex"
+                    variants={{ rest: { x: 0, y: 0 }, hover: { x: 1.5, y: -1.5 } }}
+                    transition={pillSpring}
+                  >
+                    <ArrowUpRight className="w-3 h-3 opacity-80" aria-hidden="true" />
+                  </motion.span>
+                </motion.a>
 
                 {/* Island Morph Toggle Button */}
-                <button
+                <motion.button
                   type="button"
                   onClick={toggleExpand}
                   aria-expanded={isExpanded}
                   aria-label="Expand Dynamic Island navigation"
-                  className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 hover:bg-white/20 text-white/90 transition-all active:scale-90"
+                  initial="rest"
+                  whileHover="hover"
+                  whileTap={{ scale: 0.88 }}
+                  transition={pillSpring}
+                  className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 hover:bg-white/20 text-white/90 transition-colors"
                 >
-                  <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200" />
-                </button>
+                  <motion.span
+                    className="inline-flex"
+                    variants={{ rest: { y: 0 }, hover: { y: 1.5 } }}
+                    transition={pillSpring}
+                  >
+                    <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </motion.span>
+                </motion.button>
               </div>
             </motion.div>
           ) : (
@@ -369,14 +470,17 @@ export default function AppleNavbar() {
                 key="expanded-island"
                 layout="position"
                 data-nav-cluster="expanded"
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
+                variants={expandedVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
                 className="flex flex-col gap-4 w-full"
               >
               {/* Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <motion.div
+                variants={expandedItemVariants}
+                className="flex items-center justify-between pb-3 border-b border-white/10"
+              >
                 <div className="flex items-center gap-3">
                   <div className="relative w-10 h-10 rounded-2xl overflow-hidden bg-neutral-900 border border-white/20 shrink-0">
                     <Image
@@ -409,12 +513,12 @@ export default function AppleNavbar() {
                 >
                   <X className="w-4 h-4" />
                 </button>
-              </div>
+              </motion.div>
 
               {/* Grouped Navigation */}
               <div className="flex flex-col gap-3.5">
                 {/* 1. Works Group */}
-                <div>
+                <motion.div variants={expandedItemVariants}>
                   <div className="text-[10px] uppercase font-mono tracking-wider text-neutral-400 px-1 mb-1.5">
                     Works & AI Videos
                   </div>
@@ -446,10 +550,10 @@ export default function AppleNavbar() {
                       );
                     })}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* 2. About Group (About, Experience, Achievements) */}
-                <div>
+                <motion.div variants={expandedItemVariants}>
                   <div className="text-[10px] uppercase font-mono tracking-wider text-neutral-400 px-1 mb-1.5">
                     About Satya
                   </div>
@@ -479,10 +583,10 @@ export default function AppleNavbar() {
                       );
                     })}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* 3. Gallery Group */}
-                <div>
+                <motion.div variants={expandedItemVariants}>
                   <div className="text-[10px] uppercase font-mono tracking-wider text-neutral-400 px-1 mb-1.5">
                     Visual Archive
                   </div>
@@ -506,11 +610,14 @@ export default function AppleNavbar() {
                     </div>
                     <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100" />
                   </Link>
-                </div>
+                </motion.div>
               </div>
 
               {/* Actions & Socials */}
-              <div className="pt-2 flex flex-col gap-2.5">
+              <motion.div
+                variants={expandedItemVariants}
+                className="pt-2 flex flex-col gap-2.5"
+              >
                 <a
                   href="mailto:nagubathula.satyasai@gmail.com"
                   className="w-full py-2.5 px-4 rounded-2xl bg-white text-black font-semibold text-xs flex items-center justify-center gap-2 hover:bg-neutral-200 active:scale-[0.98] transition-all shadow-md"
@@ -539,7 +646,7 @@ export default function AppleNavbar() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -551,14 +658,36 @@ export default function AppleNavbar() {
         <AnimatePresence>
           {!isExpanded && activeHoverMenu && (
             <motion.div
-              initial={{ opacity: 0, y: -6, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -6, scale: 0.96 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-              className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 sm:w-80 rounded-2xl bg-black/95 backdrop-blur-2xl border border-white/15 p-2 shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-50 flex flex-col gap-1"
+              key="hover-dropdown"
+              layout
+              initial={{ opacity: 0, y: -8, scale: 0.95, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              exit={{
+                opacity: 0,
+                y: -6,
+                scale: 0.97,
+                filter: "blur(4px)",
+                transition: { duration: 0.14, ease: "easeIn" },
+              }}
+              transition={islandSpring}
+              // x lives in style: framer's transform would override a translate class
+              style={{ x: "-50%", originY: 0, borderRadius: 16 }}
+              className="absolute left-1/2 top-full mt-2 w-72 sm:w-80 overflow-hidden bg-black/95 backdrop-blur-2xl border border-white/15 p-2 shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-50"
               onMouseEnter={() => handleMouseEnterNav(hoveredNavKey)}
               onMouseLeave={handleMouseLeaveNav}
             >
+              <AnimatePresence mode="popLayout" initial={false} custom={hoverDirection}>
+              <motion.div
+                key={activeHoverMenu.key}
+                layout="position"
+                custom={hoverDirection}
+                variants={dropdownContentVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={islandSpring}
+                className="flex flex-col gap-1"
+              >
               {activeHoverMenu.subItems.map((sub) => {
                 const Icon = sub.icon;
                 return (
@@ -585,6 +714,8 @@ export default function AppleNavbar() {
                   </Link>
                 );
               })}
+              </motion.div>
+              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>
@@ -592,5 +723,6 @@ export default function AppleNavbar() {
         </motion.div>
       )}
     </AnimatePresence>
+    </MotionConfig>
   );
 }
