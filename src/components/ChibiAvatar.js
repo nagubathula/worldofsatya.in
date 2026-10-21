@@ -1,16 +1,74 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useEffect, useState, useSyncExternalStore } from "react";
+import { animate, motion, useMotionValue, useSpring } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
-import { SPRING } from "@/lib/motion";
+import { prefersReducedMotion, SPRING } from "@/lib/motion";
+
+// The face opens the page: it pops up, opens its eyes and glances down at the
+// name as the bio arrives. It plays once per page load; later mounts (flipping
+// back from Works, coming home) start awake.
+let introPlayed = false;
+
+// Seconds from mount until the face has landed and the bio should follow.
+const INTRO_LANDS_AT = 0.62;
+
+export function faceIntroDelay() {
+  return introPlayed || prefersReducedMotion() ? 0 : INTRO_LANDS_AT;
+}
+
+// The bio tells the face when someone is reading it, and the face puts its
+// reading glasses on. A tiny store, since the face sits deep inside the card.
+let reading = false;
+const readingListeners = new Set();
+
+export function setFaceReading(next) {
+  if (reading === next) return;
+  reading = next;
+  readingListeners.forEach((listener) => listener());
+}
+
+function subscribeReading(listener) {
+  readingListeners.add(listener);
+  return () => readingListeners.delete(listener);
+}
+
+// Lip line poses, pivoting on the left corner. The open mouth sits under the
+// line, so it stays as the upper lip. A smile swaps the line for an arc.
+const LIP = {
+  rest: { scaleX: 1, x: 0, y: 0, rotate: 0 },
+  smile: { scaleX: 1, x: 0, y: -1, rotate: 0 },
+  smirk: { scaleX: 0.96, x: 4, y: 2, rotate: -8 },
+  open: { scaleX: 1.03, x: 0, y: -1, rotate: 0 },
+};
+
+const SMILE_ARC = "M172 419C192 442 248 444 281 403";
+
+// Idle expressions the mouth drifts into between blinks.
+const MOODS = ["smile", "smirk", "oh"];
+
+const MOUTH_OPEN =
+  "M181 429C206 424.5 232 420.5 258 417C266 415.8 272 413 276 409C275 437 252 461 221 462C196 463 182 449 181 429Z";
 
 export default function ChibiAvatar({ className = "" }) {
   const containerRef = useRef(null);
+  const svgRef = useRef(null);
   const [isAstonished, setIsAstonished] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
+  const [mood, setMood] = useState("rest");
+  const isReading = useSyncExternalStore(subscribeReading, () => reading, () => false);
+
+  // Intro state. The face starts hidden with its eyes shut until the intro runs.
+  const [startAsleep] = useState(() => !introPlayed);
+  const [eyesClosed, setEyesClosed] = useState(startAsleep);
+  const [isSmiling, setIsSmiling] = useState(false);
+  const introRunning = useRef(startAsleep);
+  const popY = useMotionValue(startAsleep ? 56 : 0);
+  const popScaleX = useMotionValue(1);
+  const popScaleY = useMotionValue(1);
+  const popOpacity = useMotionValue(startAsleep ? 0 : 1);
 
   // Eye movement physics (silky spring with responsive tracking)
   const rawEyeX = useMotionValue(0);
@@ -22,24 +80,87 @@ export default function ChibiAvatar({ className = "" }) {
 
   // Natural spontaneous blinking interval
   useEffect(() => {
-    let blinkTimeout;
+    let timer;
     const scheduleNextBlink = () => {
       const delay = Math.random() * 3200 + 2200; // blink every 2.2 to 5.4 seconds
-      blinkTimeout = setTimeout(() => {
-        setIsBlinking(true);
-        setTimeout(() => {
-          setIsBlinking(false);
-          scheduleNextBlink();
-        }, 160);
-      }, delay);
+      // One in five blinks is a double blink.
+      timer = setTimeout(() => blink(Math.random() < 0.2 ? 2 : 1), delay);
+    };
+    const blink = (times) => {
+      setIsBlinking(true);
+      timer = setTimeout(() => {
+        setIsBlinking(false);
+        if (times > 1) timer = setTimeout(() => blink(times - 1), 120);
+        else scheduleNextBlink();
+      }, 160);
     };
     scheduleNextBlink();
-    return () => clearTimeout(blinkTimeout);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Every few seconds the mouth drifts into a smile, a smirk or a little "oh".
+  useEffect(() => {
+    let timer;
+    const scheduleNextMood = () => {
+      timer = setTimeout(() => {
+        // The intro owns the face until it finishes.
+        if (!introRunning.current) setMood(MOODS[Math.floor(Math.random() * MOODS.length)]);
+        timer = setTimeout(() => {
+          setMood("rest");
+          scheduleNextMood();
+        }, 900);
+      }, Math.random() * 3500 + 3000);
+    };
+    scheduleNextMood();
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
+    if (!startAsleep) return;
+    const finish = () => {
+      introRunning.current = false;
+      introPlayed = true;
+    };
+
+    if (prefersReducedMotion()) {
+      popY.jump(0);
+      popOpacity.jump(1);
+      setEyesClosed(false);
+      finish();
+      return;
+    }
+
+    // Rise past the resting spot, drop back, squash on landing, settle.
+    const pop = { duration: 0.8, times: [0, 0.5, 0.82, 0.92, 1] };
+    const controls = [
+      animate(popOpacity, 1, { duration: 0.22 }),
+      animate(popY, [56, -16, 0, 0, 0], { ...pop, ease: ["easeOut", "easeIn", "linear", "linear"] }),
+      animate(popScaleY, [1.14, 1.02, 1, 0.9, 1], { ...pop, ease: "easeOut" }),
+      animate(popScaleX, [0.9, 0.98, 1, 1.07, 1], { ...pop, ease: "easeOut" }),
+    ];
+
+    const beats = [
+      [480, () => setEyesClosed(false)],
+      // Glance down-left at the name as it arrives.
+      [780, () => { rawEyeX.set(-9); rawEyeY.set(8); }],
+      [1380, () => { rawEyeX.set(0); rawEyeY.set(0); setIsSmiling(true); }],
+      [1560, () => setIsBlinking(true)],
+      [1720, () => setIsBlinking(false)],
+      [2200, () => { setIsSmiling(false); finish(); }],
+    ];
+    const timers = beats.map(([ms, beat]) => setTimeout(beat, ms));
+
+    // Strict Mode runs this twice in dev; the second run restarts the intro cleanly.
+    return () => {
+      controls.forEach((control) => control.stop());
+      timers.forEach(clearTimeout);
+    };
+  }, [startAsleep, popY, popScaleX, popScaleY, popOpacity, rawEyeX, rawEyeY]);
+
+  useEffect(() => {
     const handlePointerMove = (e) => {
-      if (!containerRef.current) return;
+      // The intro owns the eyes until it finishes.
+      if (introRunning.current || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
 
       // Avatar face center in viewport coords (around 45% width, 60% height)
@@ -52,7 +173,8 @@ export default function ChibiAvatar({ className = "" }) {
 
       // Astonished / attentive trigger: when cursor is close to the chibi (within 240px)
       setIsAstonished(dist < 240);
-      setIsHovered(dist < 160);
+      // On the face itself, not just near it: the mouth opens.
+      setIsHovered(!!svgRef.current?.contains(e.target));
 
       // Eyeball deflection inside eye socket
       const maxEyeX = 14.0;
@@ -88,13 +210,28 @@ export default function ChibiAvatar({ className = "" }) {
     setTimeout(() => setIsPressed(false), 380);
   };
 
+  // The mouth opens on the face or on a tap; otherwise it shows its mood.
+  const mouthOpen = isPressed || isHovered;
+  const openAmount = mouthOpen ? 1 : mood === "oh" ? 0.4 : 0;
+  const smiling = !mouthOpen && (isSmiling || mood === "smile");
+  const lipPose = mouthOpen ? LIP.open : smiling ? LIP.smile : mood === "smirk" ? LIP.smirk : LIP.rest;
+
   return (
-    <div
+    <motion.div
       ref={containerRef}
       onClick={handleTap}
       className="relative w-full h-full flex items-center justify-center select-none cursor-pointer"
+      style={{
+        y: popY,
+        scaleX: popScaleX,
+        scaleY: popScaleY,
+        opacity: popOpacity,
+        originX: 0.5,
+        originY: 1,
+      }}
     >
       <motion.svg
+        ref={svgRef}
         className={className}
         viewBox="0 0 483 523"
         fill="none"
@@ -114,7 +251,9 @@ export default function ChibiAvatar({ className = "" }) {
             ? SPRING.press
             : isHovered
             ? SPRING.pop
-            : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+            // Only the bob loops. Scale and tilt settle once after a hover, or they'd
+            // replay the settle every loop and snap back to the hover size.
+            : { y: { duration: 3.2, repeat: Infinity, ease: "easeInOut" }, default: SPRING.pop }
         }
       >
         {/* Hair and Head Silhouette */}
@@ -136,19 +275,41 @@ export default function ChibiAvatar({ className = "" }) {
         {/* Nose Feature */}
         <path d="M189.106 359.149C184.806 367.289 193.126 373.109 197.426 381.949C190.346 378.629 185.226 373.499 180.706 367.819C177.836 364.209 178.646 359.939 180.986 356.309C187.876 345.639 193.586 334.839 196.766 322.809C201.396 333.049 194.477 348.949 189.097 359.149H189.106Z" fill="#060403"/>
 
-        {/* Clean Reactive Smirk / Mouth */}
+        {/* Open mouth, growing down from the lip line */}
+        <defs>
+          <clipPath id="chibi-mouth">
+            <path d={MOUTH_OPEN} />
+          </clipPath>
+        </defs>
         <motion.g
-          animate={
-            isPressed
-              ? { scaleY: 1.15, scaleX: 1.05, y: -1 }
-              : isHovered
-              ? { scaleY: 1.08, scaleX: 1.02, y: -0.5 }
-              : { scaleY: 1, scaleX: 1, y: 0 }
-          }
-          transition={SPRING.press}
-          style={{ originX: "220px", originY: "420px" }}
+          initial={false}
+          animate={{ scaleY: openAmount, scaleX: 0.7 + 0.3 * openAmount, opacity: openAmount > 0 ? 1 : 0 }}
+          transition={{ ...SPRING.press, opacity: { duration: 0.12 } }}
+          style={{ originY: 0 }}
         >
-          <path d="M179.277 431.519C172.057 433.349 164.056 426.129 167.146 423.909C168.816 422.709 172.077 429.869 179.247 428.469C205.557 423.349 231.417 419.199 257.917 415.459C266.717 414.219 276.287 411.359 279.537 404.189C281.667 405.039 282.457 406.879 282.087 408.589C280.697 414.979 268.417 417.229 258.827 418.279C231.847 421.249 205.607 424.839 179.277 431.529V431.519Z" fill="#181616"/>
+          <path d={MOUTH_OPEN} fill="#241818" />
+          <ellipse cx="226" cy="452" rx="27" ry="13" fill="#e98a8f" clipPath="url(#chibi-mouth)" />
+        </motion.g>
+
+        {/* Lip line: rests, smiles, smirks */}
+        <motion.g animate={lipPose} transition={SPRING.press} style={{ originX: 0 }}>
+          <motion.path
+            d="M179.277 431.519C172.057 433.349 164.056 426.129 167.146 423.909C168.816 422.709 172.077 429.869 179.247 428.469C205.557 423.349 231.417 419.199 257.917 415.459C266.717 414.219 276.287 411.359 279.537 404.189C281.667 405.039 282.457 406.879 282.087 408.589C280.697 414.979 268.417 417.229 258.827 418.279C231.847 421.249 205.607 424.839 179.277 431.529V431.519Z"
+            fill="#181616"
+            initial={false}
+            animate={{ opacity: smiling ? 0 : 1 }}
+            transition={{ duration: 0.12 }}
+          />
+          <motion.path
+            d={SMILE_ARC}
+            stroke="#181616"
+            strokeWidth="4.5"
+            strokeLinecap="round"
+            fill="none"
+            initial={false}
+            animate={{ opacity: smiling ? 1 : 0 }}
+            transition={{ duration: 0.12 }}
+          />
         </motion.g>
 
         {/* Frames, Shadows and Cheek Accents */}
@@ -169,7 +330,7 @@ export default function ChibiAvatar({ className = "" }) {
         <motion.g
           style={{ x: eyeX, y: eyeY }}
           animate={{
-            scaleY: isPressed ? 0.2 : isBlinking ? 0.08 : 1,
+            scaleY: isPressed ? 0.2 : isBlinking || eyesClosed ? 0.08 : 1,
             originX: "135px",
             originY: "331px",
           }}
@@ -187,7 +348,7 @@ export default function ChibiAvatar({ className = "" }) {
         <motion.g
           style={{ x: eyeX, y: eyeY }}
           animate={{
-            scaleY: isPressed ? 0.2 : isBlinking ? 0.08 : 1,
+            scaleY: isPressed ? 0.2 : isBlinking || eyesClosed ? 0.08 : 1,
             originX: "304px",
             originY: "316px",
           }}
@@ -200,7 +361,24 @@ export default function ChibiAvatar({ className = "" }) {
           {/* Sparkle 2 */}
           <path d="M319.135 334.5C319.135 335.881 318.015 337 316.635 337C315.254 337 314.135 335.881 314.135 334.5C314.135 333.119 315.254 332 316.635 332C318.015 332 319.135 333.119 319.135 334.5Z" fill="white"/>
         </motion.g>
+
+        {/* Reading glasses: drop on while the bio is hovered. Lenses follow the face's tilt. */}
+        <motion.g
+          initial={false}
+          animate={isReading ? { opacity: 1, y: 0, rotate: 0 } : { opacity: 0, y: -40, rotate: -8 }}
+          transition={{ ...SPRING.pop, opacity: { duration: 0.15 } }}
+          stroke="#111111"
+          strokeWidth="7"
+          strokeLinecap="round"
+        >
+          <rect x="83" y="297" width="96" height="76" rx="34" transform="rotate(-5 131 335)" fill="#dcefff" fillOpacity="0.3" />
+          <rect x="256" y="280" width="96" height="76" rx="34" transform="rotate(-5 304 318)" fill="#dcefff" fillOpacity="0.3" />
+          {/* Bridge and the two arms */}
+          <path d="M178 330Q217 298 257 322M84 339L67 336M352 314L388 307" fill="none" />
+          {/* Glints */}
+          <path d="M158 360L169 347M329 343L340 330" stroke="#ffffff" strokeWidth="4" opacity="0.9" />
+        </motion.g>
       </motion.svg>
-    </div>
+    </motion.div>
   );
 }

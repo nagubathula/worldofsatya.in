@@ -10,7 +10,7 @@ import {
   useTransform,
 } from "framer-motion";
 import ChibiAvatar from "./ChibiAvatar";
-import WorksIndex from "./WorksIndex";
+import WorksFan from "./WorksFan";
 import { play8BitBlipSound } from "./SoundEffects";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
 import { EASE_IN, EASE_OUT, SPRING } from "@/lib/motion";
@@ -79,7 +79,7 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
           </div>
         </div>
       ) : (
-        <WorksIndex
+        <WorksFan
           items={section.previewItems}
           onNavigate={onNavigate}
           interactive={interactive}
@@ -550,7 +550,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         className={`relative ${
           currSection.isAvatar
             ? "w-[min(220px,72vw)] sm:w-[240px] lg:w-[250px] aspect-square"
-            : "w-[min(520px,88vw)] h-[290px] sm:h-[320px]"
+            : "w-[min(780px,94vw)] aspect-[780/380]"
         }`}
       >
       <motion.div

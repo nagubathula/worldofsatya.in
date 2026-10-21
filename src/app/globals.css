@@ -191,16 +191,6 @@ html.lenis, html.lenis-smooth {
   }
 }
 
-#site-navbar {
-  view-transition-name: site-navbar;
-}
-
-::view-transition-group(site-navbar),
-::view-transition-old(site-navbar),
-::view-transition-new(site-navbar) {
-  animation: none;
-}
-
 @keyframes page-leave {
   to {
     opacity: 0;

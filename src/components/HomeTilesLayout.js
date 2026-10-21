@@ -6,25 +6,62 @@ import { motion, AnimatePresence } from "framer-motion";
 import SocialBurst from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import FlipCalendarNav from "./FlipCalendarNav";
+import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
 import { playPopSound } from "./SoundEffects";
-import { useNavbar } from "./NavbarContext";
-import { SPRING } from "@/lib/motion";
+import { EASE_OUT, SPRING } from "@/lib/motion";
+
+const bioReveal = {
+  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: SPRING.enter },
+};
+
+const bioText = "text-[13px] sm:text-[14px] leading-[1.6] tracking-[-0.01em] text-[#8e8e93]";
+
+const highlight =
+  "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
+
+// A highlighted phrase in the bio. Outside links open in a new tab.
+function BioLink({ href, children }) {
+  if (href.startsWith("http")) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={highlight}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={highlight}>
+      {children}
+    </Link>
+  );
+}
+
+// The "…" that ends a line: there's more of it on another page.
+function MoreLink({ href, label }) {
+  return (
+    <Link
+      href={href}
+      aria-label={label}
+      title={label}
+      className="font-semibold text-[#2ec4f0] transition-colors hover:text-[#0b9fd0]"
+    >
+      …
+    </Link>
+  );
+}
 
 export default function HomeTilesLayout() {
   const [currentSection, setCurrentSection] = useState("avatar");
-  const { setHomeSection } = useNavbar();
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
 
   const isAvatarVisible = currentSection === "avatar";
+  // On the first visit the face lands first and everything else follows it.
+  // Read each render: it drops to 0 once the intro has played.
+  const introDelay = faceIntroDelay();
 
-  // Sync section with global navbar context
-  useEffect(() => {
-    setHomeSection(currentSection);
-    return () => {
-      setHomeSection("avatar");
-    };
-  }, [currentSection, setHomeSection]);
+  // Take the reading glasses off when the bio leaves, even mid-hover.
+  useEffect(() => () => setFaceReading(false), [isAvatarVisible]);
 
   // Close contact menu on Escape key
   useEffect(() => {
@@ -71,109 +108,74 @@ export default function HomeTilesLayout() {
   return (
     <div
       data-lenis-prevent="true"
-      className="relative w-full min-h-screen bg-[#f4f4f4] text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
+      className="relative w-full min-h-screen bg-white text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
     >
-      <section className="relative w-full max-w-3xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-6 sm:px-10 pt-20 pb-12 select-none">
-        {/* 3D Flip Card Widget + Floating Hand-drawn Annotation */}
-        <div className="relative flex items-center justify-center z-10 mb-5 sm:mb-7">
+      <section className="relative w-full max-w-5xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-10 pt-16 pb-12 select-none">
+        {/* The face, or the fanned works once the card turns */}
+        <div className="relative order-2 z-10 flex w-full items-center justify-center">
           <FlipCalendarNav
             initialSection="avatar"
-            onSectionChange={(sectionId) => {
-              setCurrentSection(sectionId);
-              setHomeSection(sectionId);
-            }}
+            onSectionChange={setCurrentSection}
           />
-
-          {/* Floating 'AI + Design Engineer' Handwritten Annotation with Curved Blue Arrow */}
-          <AnimatePresence>
-            {isAvatarVisible && (
-              <motion.div
-                key="avatar-annotation"
-                initial={{ opacity: 0, scale: 0.8, rotate: -10, y: 12 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
-                exit={{ opacity: 0, scale: 0.85, y: -8 }}
-                transition={SPRING.pop}
-                className="absolute -top-3 sm:-top-5 left-[62%] sm:left-[66%] md:left-[70%] flex items-center gap-1.5 sm:gap-2.5 whitespace-nowrap pointer-events-none select-none z-20 scale-[0.85] sm:scale-100 origin-left"
-              >
-                <svg
-                  width="34"
-                  height="26"
-                  viewBox="0 0 34 26"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-[#20a8e3] shrink-0 -rotate-6 sm:-rotate-3"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M3 21C9 12 18 7 30 5"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M22 3.5L30 5L25 12.5"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="font-handwriting text-xl sm:text-2xl text-[#111111] font-semibold tracking-wide">
-                  AI + Design Engineer
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
-        <div className={`w-full max-w-[560px] flex flex-col ${isAvatarVisible ? "items-start text-left" : "items-center text-center"} justify-center px-0 z-20`}>
-          <AnimatePresence mode="wait">
-            {isAvatarVisible && (
-              <motion.div
-                key="home-bio-content"
-                initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
-                transition={SPRING.enter}
-                className="w-full flex flex-col items-start text-left"
-              >
-                <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12] text-[#111111]">
-                  Satya Sai Nagubathula
-                </h1>
-                <p className="mt-4 sm:mt-5 text-base sm:text-[17px] leading-relaxed text-[#515154]">
-                  I turn design ideas into working software — interfaces, interactive prototypes, and AI-powered tools. My work brings together product design, frontend engineering, and generative AI, from the first interaction to the systems behind it.
-                </p>
-                <p className="mt-3.5 sm:mt-4 text-sm sm:text-base text-[#6e6e73] tracking-tight">
-                  <span className="inline-block mr-1 text-[#111111] font-normal">→</span>
-                  Currently building{" "}
-                  <Link
-                    href="/works/openweave"
-                    className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
-                  >
-                    OpenWeave
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    href="/works/case-studies/notbad-design"
-                    className="text-[#111111] font-medium underline decoration-black/25 underline-offset-4 hover:decoration-[#111111] transition-colors"
-                  >
-                    NotBad
-                  </Link>
-                  .
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <motion.div
-            layout
-            transition={SPRING.enter}
-            ref={contactContainerRef}
-            className={`${isAvatarVisible ? "mt-6 sm:mt-8" : "mt-2"} flex flex-wrap items-center ${isAvatarVisible ? "justify-start" : "justify-center"} gap-3.5`}
-          >
-            <RiveAboutButton showFace={!isAvatarVisible} />
-            <SocialBurst open={isContactOpen} onToggle={toggleContact} />
-          </motion.div>
-        </div>
+        {/* popLayout: the bio steps out of the flow as it leaves, so the cards don't wait for it. */}
+        <AnimatePresence mode="popLayout">
+          {isAvatarVisible && (
+            <motion.div
+              key="home-bio-content"
+              initial="hidden"
+              animate="show"
+              exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
+              variants={{
+                hidden: {},
+                show: { transition: { delayChildren: introDelay, staggerChildren: 0.08 } },
+              }}
+              // Reading the bio puts the face's reading glasses on. Mouse and pen only.
+              onPointerEnter={(e) => e.pointerType !== "touch" && setFaceReading(true)}
+              onPointerLeave={() => setFaceReading(false)}
+              className="order-3 z-20 mt-5 sm:mt-7 w-full max-w-[500px] flex flex-col items-start text-left"
+            >
+              <motion.h1 variants={bioReveal} className="text-[34px] sm:text-[40px] lg:text-[44px] font-semibold tracking-[-0.045em] leading-[1.05] text-[#111111]">
+                Satya Sai Nagubathula
+              </motion.h1>
+              <motion.p variants={bioReveal} className={`mt-5 ${bioText}`}>
+                I have <BioLink href="/experience">6 years of experience</BioLink> in Design and Engineering and worked across software and hardware{" "}
+                <MoreLink href="/about" label="More about Satya" />
+              </motion.p>
+              <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
+                Apart from work I <BioLink href="/experience">train and educate</BioLink> people in Design & Technology to make them build better products currently.
+              </motion.p>
+              <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
+                I actively contribute to open-source software and hardware building{" "}
+                <BioLink href="/works/openweave">OpenWeave</BioLink> and{" "}
+                <BioLink href="/works/case-studies/notbad-design">NotBad</BioLink>{" "}
+                <MoreLink href="/open-source" label="More open-source work" />
+              </motion.p>
+              <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
+                Not boasting but I have 10k+ followers on{" "}
+                <BioLink href="https://www.instagram.com/engineerudu">instagram</BioLink>
+              </motion.p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* About and contact: under the bio on the face, above the cards on works. */}
+        <motion.div
+          layout
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            ...SPRING.enter,
+            opacity: { duration: 0.5, ease: EASE_OUT, delay: introDelay + 0.4 },
+            y: { ...SPRING.enter, delay: introDelay + 0.4 },
+          }}
+          ref={contactContainerRef}
+          className={`${isAvatarVisible ? "order-4 mt-8 sm:mt-10" : "order-1 mb-4 sm:mb-6"} z-30 flex items-center justify-center gap-4`}
+        >
+          <RiveAboutButton showFace={!isAvatarVisible} />
+          <SocialBurst open={isContactOpen} onToggle={toggleContact} />
+        </motion.div>
       </section>
     </div>
   );
