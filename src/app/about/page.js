@@ -1,6 +1,7 @@
 import AboutMe from "@/components/AboutMe";
 import Achievements from "@/components/Achievements";
 import Footer from "@/components/Footer";
+import PageTurn from "@/components/PageTurn";
 
 export const metadata = {
   title: "About | Satya Sai Nagubathula — AI + Design Engineer",
@@ -16,6 +17,7 @@ export default function AboutPage() {
         <section id="achievements" aria-label="Achievements and honors" className="scroll-mt-28 border-t border-black/[0.08] pt-16 sm:pt-20 w-full">
           <Achievements />
         </section>
+        <PageTurn prev={{ href: "/", title: "Home" }} next={{ href: "/works", title: "Works" }} />
       </main>
       <Footer />
     </div>

@@ -1,5 +1,6 @@
 import WorksList from "@/components/WorksList";
 import Footer from "@/components/Footer";
+import PageTurn from "@/components/PageTurn";
 import { Sparkles } from "lucide-react";
 
 export const metadata = {
@@ -28,6 +29,7 @@ export default function Works() {
         <section id="collection" aria-label="Work collection" className="scroll-mt-24">
           <WorksList />
         </section>
+        <PageTurn prev={{ href: "/about", title: "About" }} next={{ href: "/gallery", title: "Gallery" }} />
       </main>
       <Footer />
     </div>

@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, Code, Briefcase, Video, Sparkles, Wrench } from "lucide-react";
 import Footer from "@/components/Footer";
+import PageTurn from "@/components/PageTurn";
 import Image from "next/image";
 import { workMediaStyle } from "@/lib/motion";
 
@@ -23,6 +24,11 @@ export default async function WorkDetailPage({ params }) {
   if (id !== work.slug) {
     permanentRedirect(`/works/${work.slug}`);
   }
+
+  // Neighbours in the works list, wrapping round at the ends.
+  const index = allWorks.indexOf(work);
+  const prevWork = allWorks[(index - 1 + allWorks.length) % allWorks.length];
+  const nextWork = allWorks[(index + 1) % allWorks.length];
 
   const getIcon = (category) => {
     switch (category) {
@@ -112,6 +118,11 @@ export default async function WorkDetailPage({ params }) {
                 </div>
               )}
             </div>
+
+            <PageTurn
+              prev={{ href: `/works/${prevWork.slug}`, title: prevWork.title }}
+              next={{ href: `/works/${nextWork.slug}`, title: nextWork.title }}
+            />
           </div>
         </div>
       </main>

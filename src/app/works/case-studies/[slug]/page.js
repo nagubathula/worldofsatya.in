@@ -2,6 +2,7 @@ import { caseStudiesData } from '@/data/caseStudies';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import PageTurn from '@/components/PageTurn';
 
 export async function generateStaticParams() {
   return caseStudiesData.map((study) => ({
@@ -16,6 +17,8 @@ export default async function CaseStudyPage({ params }) {
   if (!study) {
     notFound();
   }
+
+  const nextStudy = caseStudiesData[(caseStudiesData.indexOf(study) + 1) % caseStudiesData.length];
 
   return (
     <div className="min-h-screen relative max-w-4xl mx-auto w-full px-4 sm:px-12">
@@ -53,6 +56,11 @@ export default async function CaseStudyPage({ params }) {
             </section>
           ))}
         </article>
+
+        <PageTurn
+          prev={{ href: "/works", title: "All works" }}
+          next={nextStudy !== study ? { href: `/works/case-studies/${nextStudy.slug}`, title: nextStudy.title } : undefined}
+        />
       </main>
       
       <Footer />

@@ -115,7 +115,13 @@ export default function ChibiAvatarButton({
 
   if (href) {
     return (
-      <Link href={href} onClick={onClick} className="inline-block no-underline">
+      <Link
+        href={href}
+        onClick={onClick}
+        aria-label={showLabel ? undefined : label}
+        title={showLabel ? undefined : label}
+        className="inline-block no-underline"
+      >
         {content}
       </Link>
     );
@@ -125,6 +131,8 @@ export default function ChibiAvatarButton({
     <button
       type="button"
       onClick={onClick}
+      aria-label={showLabel ? undefined : label}
+      title={showLabel ? undefined : label}
       className="bg-transparent border-none p-0 inline-block text-left"
     >
       {content}

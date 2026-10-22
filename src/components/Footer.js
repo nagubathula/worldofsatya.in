@@ -1,7 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SPRING } from "@/lib/motion";
+
+const MotionLink = motion.create(Link);
+
+// The way round the site, for whoever reaches the bottom of a page.
+const siteLinks = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Works", href: "/works" },
+  { label: "Gallery", href: "/gallery" },
+];
 
 export default function Footer() {
   return (
@@ -50,6 +61,21 @@ export default function Footer() {
         
         {/* Subtle Minimal Apple Divider */}
         <div className="w-full h-px bg-black/[0.06] my-10 sm:my-14" />
+
+        <nav aria-label="Site" className="mb-6 flex flex-wrap justify-center gap-1 sm:mb-8 sm:gap-2">
+          {siteLinks.map((link) => (
+            <MotionLink
+              key={link.label}
+              href={link.href}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.94 }}
+              transition={SPRING.press}
+              className="px-3 py-1.5 rounded-full text-sm sm:text-base font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
+            >
+              {link.label}
+            </MotionLink>
+          ))}
+        </nav>
 
         <div className="w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-sans text-[#86868b]" suppressHydrationWarning>
           <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>

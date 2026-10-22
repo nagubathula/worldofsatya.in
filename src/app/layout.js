@@ -2,6 +2,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { BlackHoleTransitionProvider } from "@/components/BlackHoleTransition";
+import HomeFace from "@/components/HomeFace";
 import { Inter, EB_Garamond } from "next/font/google";
 
 const sansFont = Inter({ 
@@ -101,6 +102,7 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <BlackHoleTransitionProvider>
+            <HomeFace />
             <SmoothScroll>
               {children}
             </SmoothScroll>
