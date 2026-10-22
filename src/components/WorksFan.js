@@ -9,6 +9,10 @@ import { EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
 // so the fan always spans the row edge to edge with the cards overlapping.
 const CARD_W = 32;
 
+// Lifting and stepping aside: slower than a tap and with no overshoot, so the
+// hand glides between cards instead of bouncing.
+const SHUFFLE = { type: "spring", duration: 0.6, bounce: 0 };
+
 // A deckled paper edge: a rounded card outline roughed up by noise. It's used as
 // a mask, so only the edge frays and the screenshot inside stays crisp.
 function deckleMask(seed) {
@@ -29,6 +33,9 @@ const DECKLES = Array.from({ length: 8 }, (_, i) => deckleMask(i + 3));
 export default function WorksFan({ items, onNavigate, interactive, reduceMotion }) {
   const [active, setActive] = useState(null);
   const count = items.length;
+  const activeIndex = items.findIndex((item) => item.id === active);
+
+  const drop = (id) => setActive((current) => (current === id ? null : current));
   const step = count > 1 ? (100 - CARD_W) / (count - 1) : 0;
 
   const go = (event, href) => {
@@ -50,12 +57,20 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
           const fromCenter = ((50 - CARD_W / 2 - left) / CARD_W) * 100;
           const mask = DECKLES[index % DECKLES.length];
           const lifted = active === item.id;
+          // While one card is up, the rest step aside from it and sink back,
+          // so it rises clear of them and a card let go slips behind its neighbours.
+          const side = activeIndex < 0 || lifted ? 0 : Math.sign(index - activeIndex);
+          const depth = activeIndex < 0 ? index + 1 : count - Math.abs(index - activeIndex);
 
           return (
             <motion.div
               key={item.id}
               className="absolute top-[3%] aspect-[25/27]"
-              style={{ left: `${left}%`, width: `${CARD_W}%`, zIndex: lifted ? count + 1 : index + 1 }}
+              style={{
+                left: `${left}%`,
+                width: `${CARD_W}%`,
+                zIndex: lifted ? count + 1 : depth,
+              }}
               initial={reduceMotion ? false : { x: `${fromCenter}%`, y: "12%", rotate: 0, opacity: 0 }}
               animate={{ x: "0%", y: `${arc}%`, rotate: tilt, opacity: 1 }}
               transition={{ ...SPRING.enter, delay: 0.06 + index * 0.05 }}
@@ -65,16 +80,20 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
                 type="button"
                 aria-label={`${item.title}: ${item.blurb}`}
                 onPointerEnter={(event) => event.pointerType === "mouse" && setActive(item.id)}
-                onPointerLeave={() => setActive(null)}
+                onPointerLeave={() => drop(item.id)}
                 onFocus={(event) => event.currentTarget.matches(":focus-visible") && setActive(item.id)}
-                onBlur={() => setActive(null)}
+                onBlur={() => drop(item.id)}
                 onClick={(event) => go(event, item.href)}
                 animate={
-                  lifted && !reduceMotion
-                    ? { y: "-7%", rotate: -tilt * 0.7, scale: 1.05 }
-                    : { y: "0%", rotate: 0, scale: 1 }
+                  reduceMotion
+                    ? { x: "0%", y: "0%", rotate: 0, scale: 1 }
+                    : lifted
+                    ? { x: "0%", y: "-7%", rotate: -tilt * 0.7, scale: 1.05 }
+                    : side
+                    ? { x: `${side * 16}%`, y: "3%", rotate: side * 2, scale: 0.94 }
+                    : { x: "0%", y: "0%", rotate: 0, scale: 1 }
                 }
-                transition={SPRING.press}
+                transition={SHUFFLE}
                 className="group/card relative block h-full w-full cursor-pointer outline-none"
                 style={{ filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.13)) drop-shadow(0 2px 5px rgba(0,0,0,0.06))" }}
               >

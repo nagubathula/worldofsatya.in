@@ -2,15 +2,15 @@
 
 import { Component, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { CameraControls, CameraControlsImpl, Html, RoundedBox } from "@react-three/drei";
+import { CameraControls, CameraControlsImpl, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { galleryWorks, layoutGallery, viewForCluster } from "@/data/galleryWorks";
 
 const ACTION = CameraControlsImpl.ACTION;
-const BACKGROUND = "#f7f6f3";
-const FRAME_PAD = 0.1;
-const FRAME_DEPTH = 0.12;
-const FRAME_RADIUS = 0.034;
+const BACKGROUND = "#ffffff";
+// Works hang as the landing fan's cards: the picture runs to a deckled edge, no frame.
+const FRAME_PAD = 0;
+const CARD_BASE = "#e5e5e5";
 const LOAD_DISTANCE = 48;
 
 function makeShadowTexture() {
@@ -19,13 +19,95 @@ function makeShadowTexture() {
   canvas.height = 128;
   const ctx = canvas.getContext("2d");
   const gradient = ctx.createRadialGradient(64, 70, 6, 64, 64, 64);
-  gradient.addColorStop(0, "rgba(36, 32, 28, 0.38)");
-  gradient.addColorStop(0.42, "rgba(36, 32, 28, 0.14)");
-  gradient.addColorStop(1, "rgba(36, 32, 28, 0)");
+  gradient.addColorStop(0, "rgba(0, 0, 0, 0.26)");
+  gradient.addColorStop(0.42, "rgba(0, 0, 0, 0.09)");
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 128, 128);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+// Seeded so every card keeps the same edge between visits.
+function seededRandom(seed) {
+  let value = seed % 2147483647 || 1;
+  return () => {
+    value = (value * 16807) % 2147483647;
+    return (value - 1) / 2147483646;
+  };
+}
+
+// The fan's deckled paper edge as an alpha map: a rounded card outline whose
+// border wanders in and out a few pixels, so only the edge frays.
+function makeDeckleTexture(aspect, seed) {
+  const width = 512;
+  const height = Math.round(width / aspect);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, width, height);
+
+  const random = seededRandom(seed * 9301 + 49297);
+  const inset = 6;
+  const radius = Math.min(width, height) * 0.07;
+  const w = width - inset * 2;
+  const h = height - inset * 2;
+  const straight = [w - radius * 2, h - radius * 2];
+  const arc = (Math.PI * radius) / 2;
+  const perimeter = (straight[0] + straight[1]) * 2 + arc * 4;
+  const steps = Math.round(perimeter / 3);
+  // Coarse wobble plus fine grain, like torn paper.
+  const knots = Array.from({ length: Math.ceil(steps / 14) + 2 }, () => random());
+
+  const corner = (cx, cy, start) => (d) => {
+    const a = start + d / radius;
+    return [cx + Math.cos(a) * radius, cy + Math.sin(a) * radius];
+  };
+  const segments = [
+    [straight[0], (d) => [inset + radius + d, inset]],
+    [arc, corner(inset + w - radius, inset + radius, -Math.PI / 2)],
+    [straight[1], (d) => [inset + w, inset + radius + d]],
+    [arc, corner(inset + w - radius, inset + h - radius, 0)],
+    [straight[0], (d) => [inset + w - radius - d, inset + h]],
+    [arc, corner(inset + radius, inset + h - radius, Math.PI / 2)],
+    [straight[1], (d) => [inset, inset + h - radius - d]],
+    [arc, corner(inset + radius, inset + radius, Math.PI)],
+  ];
+  const pointAt = (distance) => {
+    let left = distance;
+    for (const [length, at] of segments) {
+      if (left <= length) return at(left);
+      left -= length;
+    }
+    return segments[0][1](0);
+  };
+
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i += 1) {
+    const [x, y] = pointAt((i / steps) * perimeter);
+    const k = i / 14;
+    const j = Math.floor(k);
+    const f = (1 - Math.cos((k - j) * Math.PI)) / 2;
+    const wobble = knots[j] * (1 - f) + knots[j + 1] * f;
+    const bite = wobble * 4.5 + random() * 1.6;
+    // Pull each edge point toward the middle by its bite.
+    const dx = width / 2 - x;
+    const dy = height / 2 - y;
+    const length = Math.hypot(dx, dy) || 1;
+    const px = x + (dx / length) * bite;
+    const py = y + (dy / length) * bite;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
   return texture;
 }
 
@@ -36,22 +118,18 @@ function makePlaceholderTexture(item) {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "#161513";
+  // A work without a picture yet: the landing's grey card, name and cyan rule.
+  const sans = "Inter, -apple-system, 'Segoe UI', sans-serif";
+  ctx.fillStyle = "#f5f5f7";
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = "#e6d3ae";
-  ctx.fillRect(0, 0, Math.round(width * 0.045), height);
-  ctx.strokeStyle = "rgba(230, 211, 174, 0.55)";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(48, 48, width - 96, height - 96);
-  ctx.fillStyle = "#e6d3ae";
-  ctx.font = "500 28px Georgia, 'Times New Roman', serif";
-  ctx.fillText("ENTRANCE CAMPAIGN", 88, height * 0.38);
-  ctx.fillStyle = "#f7f4ee";
-  ctx.font = "600 120px Georgia, 'Times New Roman', serif";
-  ctx.fillText(String(item.title || "POSTER").toUpperCase(), 84, height * 0.5);
-  ctx.fillStyle = "rgba(247, 244, 238, 0.72)";
-  ctx.font = "400 26px Georgia, 'Times New Roman', serif";
-  ctx.fillText(String(item.category || "").toUpperCase(), 88, height * 0.58);
+  ctx.fillStyle = "#111111";
+  ctx.font = `600 120px ${sans}`;
+  ctx.fillText(String(item.title || "Poster"), 84, height * 0.5);
+  ctx.fillStyle = "#2ec4f0";
+  ctx.fillRect(88, height * 0.5 + 44, 160, 6);
+  ctx.fillStyle = "#86868b";
+  ctx.font = `500 30px ${sans}`;
+  ctx.fillText(String(item.category || ""), 88, height * 0.5 + 110);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 8;
@@ -95,8 +173,42 @@ function coverTexture(texture, imageAspect, planeAspect) {
   texture.wrapT = THREE.ClampToEdgeWrapping;
 }
 
-function loadArtwork(item, anisotropy) {
-  if (!item.src) return Promise.resolve(makePlaceholderTexture(item));
+// A texture holds one still, and an <img> hands over an animation's first frame.
+// Motion pieces often open on a blank frame, so take the middle one instead.
+async function middleFrame(src) {
+  if (!/\.(webp|gif)$/i.test(src) || typeof ImageDecoder === "undefined") return null;
+  try {
+    const response = await fetch(src);
+    const type = response.headers.get("content-type") || "";
+    if (!(await ImageDecoder.isTypeSupported(type))) return null;
+    const decoder = new ImageDecoder({ data: await response.arrayBuffer(), type });
+    await decoder.tracks.ready;
+    const frames = decoder.tracks.selectedTrack?.frameCount || 1;
+    if (frames < 2) {
+      decoder.close();
+      return null;
+    }
+    const { image } = await decoder.decode({ frameIndex: Math.floor(frames / 2) });
+    const canvas = document.createElement("canvas");
+    canvas.width = image.displayWidth;
+    canvas.height = image.displayHeight;
+    canvas.getContext("2d").drawImage(image, 0, 0);
+    image.close();
+    decoder.close();
+    return canvas;
+  } catch {
+    return null;
+  }
+}
+
+async function loadArtwork(item, anisotropy) {
+  if (!item.src) return makePlaceholderTexture(item);
+  const still = await middleFrame(item.src);
+  if (still) {
+    const texture = textureFromImage(still, anisotropy);
+    coverTexture(texture, still.width / still.height, item.art.w / item.art.h);
+    return texture;
+  }
   return new Promise((resolve) => {
     const image = new Image();
     image.decoding = "async";
@@ -138,10 +250,11 @@ function fitDistance(width, height, fovRad, aspect) {
 
 // Three.js compiles the program from the material's first state. Changing
 // `map` or `transparent` later is ignored until `needsUpdate` bumps the version.
+// Deckled cards stay transparent: their alpha map only applies while blending.
 function applyFade(material, opacity) {
   if (!material) return;
   const solid = opacity > 0.97;
-  if (material.transparent !== !solid) {
+  if (!material.alphaMap && material.transparent !== !solid) {
     material.transparent = !solid;
     material.needsUpdate = true;
   }
@@ -169,10 +282,9 @@ class GalleryErrorBoundary extends Component {
   }
 }
 
-function Poster({ item, active, selected, reduceMotion, shadowMap, anisotropy, onSelect }) {
+function Poster({ item, index, active, selected, reduceMotion, shadowMap, anisotropy, onSelect }) {
   const group = useRef(null);
-  const frameMat = useRef(null);
-  const lipMat = useRef(null);
+  const cardMat = useRef(null);
   const imageMat = useRef(null);
   const shadowMat = useRef(null);
   const [texture, setTexture] = useState(null);
@@ -184,6 +296,9 @@ function Poster({ item, active, selected, reduceMotion, shadowMap, anisotropy, o
   const hoverCount = useRef(0);
   const pointer = useRef(null);
   const gl = useThree((state) => state.gl);
+  const deckle = useMemo(() => makeDeckleTexture(item.art.w / item.art.h, index + 3), [item.art.w, item.art.h, index]);
+
+  useEffect(() => () => deckle.dispose(), [deckle]);
 
   useEffect(() => {
     if (!shouldLoad) return undefined;
@@ -242,8 +357,7 @@ function Poster({ item, active, selected, reduceMotion, shadowMap, anisotropy, o
     groupObject.scale.setScalar(nextScale);
 
     const imageOpacity = shown * revealed.current;
-    applyFade(frameMat.current, shown);
-    applyFade(lipMat.current, shown);
+    applyFade(cardMat.current, shown);
     applyFade(imageMat.current, imageOpacity);
     if (shadowMat.current) shadowMat.current.opacity = shown;
   });
@@ -289,27 +403,20 @@ function Poster({ item, active, selected, reduceMotion, shadowMap, anisotropy, o
         <meshBasicMaterial ref={shadowMat} map={shadowMap} transparent depthWrite={false} toneMapped={false} />
       </mesh>
 
-      <RoundedBox
-        args={[frameW + 0.028, frameH + 0.028, 0.1]}
-        radius={0.028}
-        smoothness={2}
-        bevelSegments={1}
-        position={[0, 0, -0.016]}
-        raycast={() => null}
-      >
-        <meshStandardMaterial ref={lipMat} color="#1c1c1e" roughness={0.74} metalness={0.04} />
-      </RoundedBox>
-
-      <RoundedBox args={[frameW, frameH, FRAME_DEPTH]} radius={FRAME_RADIUS} smoothness={2} bevelSegments={2} creaseAngle={0.35}>
-        <meshStandardMaterial ref={frameMat} color="#fbfaf8" roughness={0.46} metalness={0.05} />
-      </RoundedBox>
+      {/* The card: grey paper until the picture arrives, both cut to the same deckled edge. */}
+      <mesh>
+        <planeGeometry args={[frameW, frameH]} />
+        <meshBasicMaterial ref={cardMat} color={CARD_BASE} alphaMap={deckle} alphaTest={0.02} transparent toneMapped={false} />
+      </mesh>
 
       {texture && (
-        <mesh position={[0, 0, FRAME_DEPTH / 2 + 0.004]}>
+        <mesh position={[0, 0, 0.004]}>
           <planeGeometry args={[item.art.w, item.art.h]} />
           <meshBasicMaterial
             ref={imageMat}
             map={texture}
+            alphaMap={deckle}
+            alphaTest={0.02}
             toneMapped={false}
             transparent
             opacity={0}
@@ -345,7 +452,7 @@ function ClusterLabel({ cluster, dim }) {
       wrapperClass="pointer-events-none"
       style={{ pointerEvents: "none" }}
     >
-      <div ref={el} className="select-none whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.28em] text-[#6e6e73]">
+      <div ref={el} className="select-none whitespace-nowrap text-[13px] font-medium tracking-[-0.01em] text-[#86868b]">
         {cluster.category}
       </div>
     </Html>
@@ -541,10 +648,6 @@ function GalleryWorld({ nav, reduceMotion, onSelect, onUserNavigate }) {
     <>
       <color attach="background" args={[BACKGROUND]} />
       <fog attach="fog" args={[BACKGROUND, 32, 82]} />
-      <hemisphereLight args={["#fffaf3", "#e3ddd4", 0.48]} />
-      <ambientLight intensity={0.32} />
-      <directionalLight position={[8, 12, 10]} intensity={0.55} color="#fffdf8" />
-      <directionalLight position={[-10, 3.5, 6]} intensity={0.18} color="#e6eef8" />
 
       <CameraControls
         ref={controls}
@@ -553,10 +656,11 @@ function GalleryWorld({ nav, reduceMotion, onSelect, onUserNavigate }) {
         onControl={releaseSelection}
       />
 
-      {layout.items.map((item) => (
+      {layout.items.map((item, index) => (
         <Poster
           key={item.id}
           item={item}
+          index={index}
           active={nav.category === "All" || item.category === nav.category}
           selected={nav.selectedId === item.id}
           reduceMotion={reduceMotion}
@@ -591,7 +695,7 @@ export default function CanvasGallery({ nav, reduceMotion, onSelect, onDismiss, 
 
   if (failed) {
     return (
-      <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-[#626267]">
+      <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-[#86868b]">
         This browser can’t open the 3D archive. Try a current desktop browser with WebGL enabled.
       </div>
     );

@@ -17,8 +17,12 @@ function MediumIcon({ size = 20 }) {
   );
 }
 
-const SHOT_INTERVAL = 0.15;
-const WIND_UP = 0.12;
+// Opening slides the contact row left first, then the shots fire once it lands.
+export const SLIDE = { type: "spring", duration: 0.6, bounce: 0.2 };
+const SHOT_INTERVAL = 0.08;
+const WIND_UP = SLIDE.duration;
+const LINK_SIZE = 48;
+const LINK_GAP = 10;
 const socials = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/satyasainagubathula", icon: Linkedin, color: "#0077b5" },
   { label: "Instagram", href: "https://www.instagram.com/engineerudu", icon: Instagram, color: "#d62976" },
@@ -26,6 +30,25 @@ const socials = [
   { label: "GitHub", href: "https://github.com/nagubathula", icon: Github, color: "#24292f" },
   { label: "Medium", href: "https://hippogriff.medium.com", icon: MediumIcon, color: "#24292f" },
 ];
+
+// Phones lay the links out in two rows of three, wider screens in one row.
+function useCompact() {
+  const [compact, setCompact] = useState(true);
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 640px)");
+    const sync = () => setCompact(!query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
+  return compact;
+}
+
+// How far the opened links reach past the button, so the row can recentre on them.
+export function useBurstWidth() {
+  const columns = useCompact() ? 3 : socials.length;
+  return LINK_GAP + columns * LINK_SIZE + (columns - 1) * LINK_GAP;
+}
 
 export default function SocialBurst({ open, onToggle }) {
   const trigger = useRef(null);
@@ -93,14 +116,7 @@ export default function SocialBurst({ open, onToggle }) {
     onToggle();
   };
 
-  const [compact, setCompact] = useState(true);
-  useEffect(() => {
-    const query = window.matchMedia("(min-width: 640px)");
-    const sync = () => setCompact(!query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
+  const compact = useCompact();
 
   const launchX = (index) => -((compact ? index % 3 : index) + 1) * 52 - 6;
   const launchY = (index) => (compact ? -Math.floor(index / 3) * 52 : 0);

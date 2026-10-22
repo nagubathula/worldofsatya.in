@@ -2,17 +2,22 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import SocialBurst from "./SocialBurst";
+import SocialBurst, { SLIDE, useBurstWidth } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
+import GalleryButton from "./GalleryButton";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
 import { playPopSound } from "./SoundEffects";
-import { EASE_OUT, SPRING } from "@/lib/motion";
+import { SPRING } from "@/lib/motion";
+
+// A gentle ease-out cubic: no snap at the start, a long soft settle.
+const SMOOTH = { duration: 0.8, ease: [0.33, 1, 0.68, 1] };
 
 const bioReveal = {
-  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: SPRING.enter },
+  hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: SMOOTH },
 };
 
 // Small print under a big name, as in the design. Phones get a size up to stay readable.
@@ -37,6 +42,43 @@ function BioLink({ href, children }) {
   );
 }
 
+// A project link that floats its thumbnail above it on hover or keyboard focus.
+function ProjectLink({ href, image, children }) {
+  const [isShown, setIsShown] = useState(false);
+
+  return (
+    <span className="relative inline-block">
+      <Link
+        href={href}
+        className={highlight}
+        // Mouse and pen only: a tap on a phone just follows the link.
+        onPointerEnter={(e) => e.pointerType !== "touch" && setIsShown(true)}
+        onPointerLeave={() => setIsShown(false)}
+        onFocus={() => setIsShown(true)}
+        onBlur={() => setIsShown(false)}
+      >
+        {children}
+      </Link>
+      <AnimatePresence>
+        {isShown && (
+          <motion.span
+            initial={{ opacity: 0, y: 8, scale: 0.96, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, scale: 1, x: "-50%" }}
+            exit={{ opacity: 0, y: 6, scale: 0.96, x: "-50%", transition: { ...SMOOTH, duration: 0.25 } }}
+            transition={{ ...SMOOTH, duration: 0.45 }}
+            style={{ transformOrigin: "50% 100%" }}
+            className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-3 block w-64 rounded-2xl border border-black/[0.08] bg-white p-2 shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+          >
+            <span className="relative block aspect-[16/10] w-full overflow-hidden rounded-xl border border-black/[0.04] bg-[#f5f5f7]">
+              <Image src={image} alt="" fill sizes="256px" unoptimized={image.endsWith(".gif")} className="object-cover object-top" />
+            </span>
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </span>
+  );
+}
+
 // The "…" that ends a line: there's more of it on another page.
 function MoreLink({ href, label }) {
   return (
@@ -55,6 +97,7 @@ export default function HomeTilesLayout() {
   const [currentSection, setCurrentSection] = useState("avatar");
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
+  const burstWidth = useBurstWidth();
 
   const isAvatarVisible = currentSection === "avatar";
   // On the first visit the face lands first and everything else follows it.
@@ -127,10 +170,10 @@ export default function HomeTilesLayout() {
               key="home-bio-content"
               initial="hidden"
               animate="show"
-              exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
+              exit={{ opacity: 0, y: -8, filter: "blur(4px)", transition: { ...SMOOTH, duration: 0.5 } }}
               variants={{
                 hidden: {},
-                show: { transition: { delayChildren: introDelay, staggerChildren: 0.08 } },
+                show: { transition: { delayChildren: introDelay, staggerChildren: 0.12 } },
               }}
               // Reading the bio puts the face's reading glasses on. Mouse and pen only.
               onPointerEnter={(e) => e.pointerType !== "touch" && setFaceReading(true)}
@@ -141,16 +184,21 @@ export default function HomeTilesLayout() {
                 Satya Sai Nagubathula
               </motion.h1>
               <motion.p variants={bioReveal} className={`mt-5 ${bioText}`}>
-                I have <BioLink href="/experience">6 years of experience</BioLink> in Design and Engineering and worked across software and hardware{" "}
+                I have <BioLink href="/about">6 years of experience</BioLink> in Design and Engineering and worked across software and hardware{" "}
                 <MoreLink href="/about" label="More about Satya" />
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
-                Apart from work I <BioLink href="/experience">train and educate</BioLink> people in Design & Technology to make them build better products currently.
+                Apart from work I <BioLink href="/about">train and educate</BioLink> people in Design & Technology to make them build better products currently.
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
                 I actively contribute to open-source software and hardware building{" "}
-                <BioLink href="/works/openweave">OpenWeave</BioLink> and{" "}
-                <BioLink href="/works/case-studies/notbad-design">NotBad</BioLink>{" "}
+                <ProjectLink href="/works/openweave" image="/openweave-app.png">
+                  OpenWeave
+                </ProjectLink>{" "}
+                and{" "}
+                <ProjectLink href="/works/case-studies/notbad-design" image="/notbad-demo.gif">
+                  NotBad
+                </ProjectLink>{" "}
                 <MoreLink href="/open-source" label="More open-source work" />
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
@@ -161,20 +209,24 @@ export default function HomeTilesLayout() {
           )}
         </AnimatePresence>
 
-        {/* About and contact: under the bio on the face, above the cards on works. */}
+        {/* About, gallery and contact: under the bio on the face, above the cards on works. */}
         <motion.div
           layout
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 8 }}
+          // Opening contact slides the row left so the links land centred, not past the bio.
+          animate={{ opacity: 1, y: 0, x: isContactOpen ? -burstWidth / 2 : 0 }}
           transition={{
             ...SPRING.enter,
-            opacity: { duration: 0.5, ease: EASE_OUT, delay: introDelay + 0.4 },
-            y: { ...SPRING.enter, delay: introDelay + 0.4 },
+            // Closing waits for the links to fly back in before the row returns.
+            x: { ...SLIDE, delay: isContactOpen ? 0 : 0.2 },
+            opacity: { ...SMOOTH, delay: introDelay + 0.5 },
+            y: { ...SMOOTH, delay: introDelay + 0.5 },
           }}
           ref={contactContainerRef}
           className={`${isAvatarVisible ? "order-4 mt-8 sm:mt-10" : "order-1 mb-4 sm:mb-6"} z-30 flex items-center justify-center gap-4`}
         >
           <RiveAboutButton showFace={!isAvatarVisible} />
+          <GalleryButton />
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
       </section>

@@ -68,7 +68,7 @@ export const calendarSections = [
 // Renders the complete, uncut card face for each section
 function CardFace({ section, onNavigate, interactive, reduceMotion }) {
   return (
-    <div className={`relative w-full h-full text-[#111111] flex flex-col justify-between select-none ${section.isAvatar ? "overflow-hidden" : "px-1 sm:px-2"}`}>
+    <div className={`relative w-full h-full text-[#111111] flex flex-col justify-between select-none ${section.isAvatar ? "" : "px-1 sm:px-2"}`}>
       {section.isAvatar ? (
         <div className="relative w-full h-full flex flex-col items-center justify-center overflow-visible">
           {/* Interactive SVG Chibi Character */}
@@ -151,8 +151,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     }, Math.min(ms, 720));
   }, []);
 
-  // The works card is the last face. The next gesture opens the archive
-  // instead of wrapping back to the portrait.
+  // Opens the archive from the works card (click or Enter).
   const continueToArchive = useCallback(() => {
     if (isFlippingRef.current || isDepartingRef.current) return;
     const section = calendarSections[currIndexRef.current];
@@ -182,10 +181,8 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
   const flipToNext = useCallback(() => {
     if (isFlippingRef.current || isDepartingRef.current) return;
     if (Date.now() < gestureLockUntil.current) return;
-    if (currIndexRef.current >= total - 1) {
-      continueToArchive();
-      return;
-    }
+    // The works card is the last face; scrolling past it stays put.
+    if (currIndexRef.current >= total - 1) return;
     const target = currIndexRef.current + 1;
     currIndexRef.current = target;
     setDirection("down");
@@ -201,7 +198,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         navigator.vibrate(20);
       } catch {}
     }
-  }, [total, continueToArchive, holdGestures]);
+  }, [total, holdGestures]);
 
   const flipToPrev = useCallback(() => {
     if (isFlippingRef.current || isDepartingRef.current) return;
@@ -600,7 +597,8 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         }}
         className="absolute inset-0 cursor-grab active:cursor-grabbing touch-none select-none group"
       >
-        {/* Card turn. Exit is a short glide; the next face springs in and the shell keeps growing. */}
+        {/* Card turn. Exit is a short glide; the next face springs in and the shell keeps growing.
+            The face is clipped only at the bottom, so it rises out of the card without losing its hair. */}
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={currIndex}
@@ -640,7 +638,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
             }}
-            className={`absolute inset-0 w-full h-full ${currSection.isAvatar ? "rounded-[24px] sm:rounded-[28px] lg:rounded-[32px] overflow-hidden" : ""}`}
+            className={`absolute inset-0 w-full h-full ${currSection.isAvatar ? "[clip-path:inset(-30%_-30%_0_-30%)]" : ""}`}
           >
             <CardFace
               section={currSection}

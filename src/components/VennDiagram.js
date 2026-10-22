@@ -458,29 +458,25 @@ export default function VennDiagram() {
                 )}
                 <path
                   d="M 367.7 280.0 C 367.2 285.8, 363.9 292.1, 360.8 296.9 C 357.6 301.7, 353.1 305.4, 348.9 308.9 C 344.7 312.4, 340.6 315.5, 335.8 318.0 C 330.9 320.6, 325.5 323.3, 320.0 324.0 C 314.5 324.6, 307.8 324.1, 302.6 322.0 C 297.4 319.9, 292.3 315.7, 288.6 311.4 C 284.9 307.2, 282.3 301.7, 280.2 296.5 C 278.1 291.3, 276.4 285.7, 275.9 280.0 C 275.4 274.3, 275.3 267.7, 277.2 262.3 C 279.1 256.8, 282.9 250.9, 287.2 247.2 C 291.6 243.5, 298.0 241.3, 303.5 240.1 C 308.9 238.8, 314.6 239.5, 320.0 239.9 C 325.4 240.3, 330.3 240.9, 335.6 242.4 C 340.9 243.8, 346.8 245.2, 351.6 248.4 C 356.3 251.7, 361.3 256.5, 364.0 261.8 C 366.5 267.1, 367.2 274.2, 366.7 280.0 Z"
-                  fill="#111111"
-                  stroke="#ffffff"
+                  fill="#ffffff"
+                  stroke="#111111"
                   strokeWidth="2"
                   filter="url(#brush-filter-subtle)"
                   className="transition-transform duration-200 group-hover/center:scale-105"
                   style={{ transformOrigin: "320px 280px" }}
                 />
-                <text
-                  x="320"
-                  y="276"
-                  textAnchor="middle"
-                  className="font-sans text-[11px] font-bold fill-white tracking-[0.2em] pointer-events-none"
-                >
-                  SATYA
-                </text>
-                <text
-                  x="320"
-                  y="291"
-                  textAnchor="middle"
-                  className="font-mono text-[7.5px] fill-white/80 font-semibold uppercase tracking-[0.22em] pointer-events-none"
-                >
-                  AI + DESIGN
-                </text>
+                {/* Satya's face at the core. The blob is white so the black hair keeps its outline. */}
+                <title>Satya</title>
+                <image
+                  href="/images/hero/SVG/vector-avatar.png"
+                  x="287"
+                  y="247"
+                  width="66"
+                  height="66"
+                  preserveAspectRatio="xMidYMid meet"
+                  className="pointer-events-none transition-transform duration-200 group-hover/center:scale-105"
+                  style={{ transformOrigin: "320px 280px" }}
+                />
               </g>
             </svg>
           </div>

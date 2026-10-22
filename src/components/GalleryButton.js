@@ -1,0 +1,138 @@
+"use client";
+
+import { useRef, useState } from "react";
+import Link from "next/link";
+import { motion, useSpring, useMotionValue, useTransform } from "framer-motion";
+import { play8BitTapSound, playPopSound } from "./SoundEffects";
+import { SPRING } from "@/lib/motion";
+
+// Opens the gallery. Same tile as About and contact; the icon is a small stack
+// of prints that fans out on hover, like the works fan.
+export default function GalleryButton() {
+  const buttonRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+
+  // Magnetic cursor spring tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 15, stiffness: 260, mass: 0.2 };
+  const magneticX = useSpring(mouseX, springConfig);
+  const magneticY = useSpring(mouseY, springConfig);
+  const printX = useTransform(magneticX, (val) => val * 0.45);
+  const printY = useTransform(magneticY, (val) => val * 0.45);
+
+  const handleMouseMove = (e) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    mouseX.set(Math.max(-10, Math.min(10, (e.clientX - centerX) * 0.25)));
+    mouseY.set(Math.max(-10, Math.min(10, (e.clientY - centerY) * 0.25)));
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    try {
+      play8BitTapSound();
+    } catch {}
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setIsPressed(false);
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  const handleMouseDown = () => {
+    setIsPressed(true);
+    try {
+      playPopSound(620, 0.08);
+    } catch {}
+  };
+
+  return (
+    <motion.div style={{ x: magneticX, y: magneticY }} className="relative shrink-0 select-none">
+      <Link
+        ref={buttonRef}
+        href="/gallery"
+        aria-label="Gallery"
+        title="Gallery"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseDown={handleMouseDown}
+        onMouseUp={() => setIsPressed(false)}
+        className="group relative flex h-14 w-14 items-center justify-center rounded-2xl border border-black/[0.08] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden"
+      >
+        {/* Ambient Glow on Hover */}
+        <motion.div
+          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8 }}
+          transition={{ duration: 0.25 }}
+          className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#2ec4f0]/10 via-transparent to-[#2ec4f0]/5 pointer-events-none"
+        />
+
+        {/* Button body with squash and stretch */}
+        <motion.div
+          animate={
+            isPressed
+              ? { scaleX: 1.08, scaleY: 0.88, y: 2 }
+              : isHovered
+              ? { scaleX: 1.03, scaleY: 1.03, y: -1 }
+              : { scaleX: 1, scaleY: 1, y: 0 }
+          }
+          transition={SPRING.pop}
+          className="relative flex h-full w-full items-center justify-center pointer-events-none"
+        >
+          <motion.svg
+            width="26"
+            height="26"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="overflow-visible"
+            style={{ x: printX, y: printY }}
+          >
+            {/* Back print: tips out to the left */}
+            <motion.rect
+              x="7"
+              y="7"
+              width="16"
+              height="19"
+              rx="3"
+              fill="#ffffff"
+              stroke="#1d1d1f"
+              strokeWidth="2"
+              style={{ originX: "50%", originY: "100%" }}
+              animate={{ rotate: isHovered ? -16 : -8, x: isHovered ? -2.5 : -1 }}
+              transition={SPRING.pop}
+            />
+
+            {/* Front print: a little picture of hills and a sun */}
+            <motion.g
+              style={{ originX: "50%", originY: "100%" }}
+              animate={{ rotate: isHovered ? 9 : 4, x: isHovered ? 2 : 1, y: isHovered ? -1 : 0 }}
+              transition={SPRING.pop}
+            >
+              <rect x="9" y="6" width="16" height="20" rx="3" fill="#ffffff" stroke="#1d1d1f" strokeWidth="2" />
+              <path d="M11.5 21.5L15 17.5L17.5 20L19.5 18L22.5 21.5" stroke="#1d1d1f" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              <motion.circle
+                cx="20"
+                cy="11.5"
+                r="1.8"
+                fill="#2ec4f0"
+                animate={{ scale: isHovered ? [1, 1.25, 1] : 1 }}
+                transition={{ duration: 1.6, repeat: isHovered ? Infinity : 0, ease: "easeInOut" }}
+              />
+            </motion.g>
+          </motion.svg>
+        </motion.div>
+
+        {/* Micro Bevel Gloss Highlight */}
+        <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
+      </Link>
+    </motion.div>
+  );
+}
