@@ -15,7 +15,8 @@ const bioReveal = {
   show: { opacity: 1, y: 0, filter: "blur(0px)", transition: SPRING.enter },
 };
 
-const bioText = "text-[13px] sm:text-[14px] leading-[1.6] tracking-[-0.01em] text-[#8e8e93]";
+// Small print under a big name, as in the design. Phones get a size up to stay readable.
+const bioText = "text-[13px] sm:text-[12px] leading-[1.6] tracking-[-0.01em] text-[#86868b]";
 
 const highlight =
   "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
@@ -134,9 +135,9 @@ export default function HomeTilesLayout() {
               // Reading the bio puts the face's reading glasses on. Mouse and pen only.
               onPointerEnter={(e) => e.pointerType !== "touch" && setFaceReading(true)}
               onPointerLeave={() => setFaceReading(false)}
-              className="order-3 z-20 mt-5 sm:mt-7 w-full max-w-[500px] flex flex-col items-start text-left"
+              className="order-3 z-20 mt-5 sm:mt-7 w-full max-w-[570px] flex flex-col items-start text-left"
             >
-              <motion.h1 variants={bioReveal} className="text-[34px] sm:text-[40px] lg:text-[44px] font-semibold tracking-[-0.045em] leading-[1.05] text-[#111111]">
+              <motion.h1 variants={bioReveal} className="text-[34px] sm:text-[44px] lg:text-[48px] font-semibold tracking-[-0.045em] leading-[1.05] text-[#111111]">
                 Satya Sai Nagubathula
               </motion.h1>
               <motion.p variants={bioReveal} className={`mt-5 ${bioText}`}>

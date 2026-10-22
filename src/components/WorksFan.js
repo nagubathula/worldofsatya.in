@@ -24,7 +24,8 @@ function deckleMask(seed) {
 const DECKLES = Array.from({ length: 8 }, (_, i) => deckleMask(i + 3));
 
 // Selected work as a hand of cards. Hover lifts a card out of the fan; a click
-// morphs its screenshot into the project page (see workMediaStyle).
+// morphs its screenshot into the project page (see workMediaStyle). The card group
+// is named: the flip card around the fan is a `group` too.
 export default function WorksFan({ items, onNavigate, interactive, reduceMotion }) {
   const [active, setActive] = useState(null);
   const count = items.length;
@@ -74,7 +75,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
                     : { y: "0%", rotate: 0, scale: 1 }
                 }
                 transition={SPRING.press}
-                className="group relative block h-full w-full cursor-pointer outline-none"
+                className="group/card relative block h-full w-full cursor-pointer outline-none"
                 style={{ filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.13)) drop-shadow(0 2px 5px rgba(0,0,0,0.06))" }}
               >
                 <span
@@ -91,7 +92,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
                     />
                   </span>
                   {/* Touch screens can't hover, so the names show there all the time. */}
-                  <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:opacity-100">
+                  <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
                     {item.title}
                   </span>
                 </span>
