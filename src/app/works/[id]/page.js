@@ -4,12 +4,30 @@ import Link from "next/link";
 import { ArrowUpRight, BookOpen, Code, Briefcase, Video, Sparkles, Wrench } from "lucide-react";
 import Footer from "@/components/Footer";
 import PageTurn from "@/components/PageTurn";
+import BackToWorks from "@/components/BackToWorks";
 import Image from "next/image";
 import { workMediaStyle } from "@/lib/motion";
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
   return allWorks.flatMap((work) => [{ id: work.slug }, { id: work.id }]);
+}
+
+// Each project gets its own title, so tabs, history and shared links tell them apart.
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const work = allWorks.find((entry) => entry.slug === id) || allWorks.find((entry) => entry.id === id);
+  if (!work) return {};
+
+  const title = `${work.title} | Satya Sai Nagubathula`;
+  const images = work.poster || work.image ? [{ url: work.poster || work.image, alt: work.title }] : undefined;
+  return {
+    title,
+    description: work.description,
+    alternates: { canonical: `/works/${work.slug}` },
+    openGraph: { title, description: work.description, url: `/works/${work.slug}`, images },
+    twitter: { title, description: work.description, images },
+  };
 }
 
 export default async function WorkDetailPage({ params }) {
@@ -52,7 +70,7 @@ export default async function WorkDetailPage({ params }) {
     <div className="min-h-screen relative w-full">
       <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-12 sm:pb-20">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 mb-8 sm:mb-16">
-          <Link href="/works" className="mb-8 inline-block text-sm text-[#515154] hover:text-black">← All works</Link>
+          <BackToWorks className="mb-8 inline-block text-sm text-[#515154] hover:text-black" />
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6 sm:mb-8">
             <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#f5f5f7] text-xs sm:text-[13px] font-sans font-medium text-[#86868b] uppercase tracking-wider border border-black/[0.04]">
               {getIcon(work.category)}
@@ -108,7 +126,8 @@ export default async function WorkDetailPage({ params }) {
               </div>
             ) : null}
             
-            <div className="prose prose-base sm:prose-lg font-sans text-[#515154] leading-relaxed max-w-none sm:columns-2 lg:columns-3 gap-8 sm:gap-12 mt-8 sm:mt-12">
+            {/* One column at a comfortable reading width. */}
+            <div className="prose prose-base sm:prose-lg font-sans text-[#515154] leading-relaxed max-w-3xl mx-auto mt-8 sm:mt-12">
               {work.content ? (
                 <div dangerouslySetInnerHTML={{ __html: work.content }} />
               ) : (

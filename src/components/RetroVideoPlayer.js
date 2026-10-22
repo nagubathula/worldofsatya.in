@@ -89,6 +89,9 @@ export default function RetroVideoPlayer({ src, poster, title, onClose }) {
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 10 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title || "Video Player"}
         className="relative w-full max-w-5xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >

@@ -106,7 +106,8 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
                       src={item.image}
                       alt=""
                       fill
-                      sizes="(min-width: 840px) 250px, 30vw"
+                      // Landscape shots cover a portrait card, so they draw ~1.6x wider than it.
+                      sizes="(min-width: 840px) 400px, 50vw"
                       className="object-cover object-top"
                     />
                   </span>

@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { EASE_OUT, SPRING, smoothNavigate } from "@/lib/motion";
+import { saveWorksPlace, takeWorksPlace } from "@/lib/worksReturn";
+import { useLenis } from "lenis/react";
 import {
   ArrowUpRight,
   Code,
@@ -249,12 +251,37 @@ export default function WorksList() {
         searchInputRef.current?.focus();
       } else if (e.key === "Escape" && document.activeElement === searchInputRef.current) {
         searchInputRef.current?.blur();
+      } else if (e.key === "Escape") {
+        setLockedTool(null);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  // Coming back from a project: put the list back as it was, then scroll to the
+  // same spot once the page has settled (the route change resets scroll first).
+  const lenis = useLenis();
+  const returnScroll = useRef(null);
+  useEffect(() => {
+    const place = takeWorksPlace();
+    if (!place) return;
+    setFilter(place.filter);
+    setCurrentPage(place.currentPage);
+    setSearchQuery(place.searchQuery);
+    returnScroll.current = place.scrollY;
+  }, []);
+
+  useEffect(() => {
+    if (!lenis || returnScroll.current == null) return;
+    const y = returnScroll.current;
+    const timer = window.setTimeout(() => {
+      returnScroll.current = null;
+      lenis.scrollTo(y, { immediate: true, force: true });
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, [lenis]);
 
   // Sync filter with URL hash (e.g. #ai-videos, #projects, #internal-tools, etc.)
   useEffect(() => {
@@ -384,11 +411,9 @@ export default function WorksList() {
   const openWork = (work) => {
     const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
     const isInternal = work.category === "Internal Tools" || work.isInternal;
+    // Every work opens its own page first; the outside link (repo, store, article)
+    // is the button on that page.
     const destinationHref = work.link?.startsWith("/works/case-studies/")
-      ? work.link
-      : isAIVideo
-      ? `/works/${work.slug}`
-      : work.link?.startsWith("http")
       ? work.link
       : `/works/${work.slug}`;
 
@@ -407,11 +432,8 @@ export default function WorksList() {
       return;
     }
     try { playPopSound(520, 0.06); } catch {}
-    if (destinationHref.startsWith("http")) {
-      window.location.href = destinationHref;
-    } else {
-      smoothNavigate(router, destinationHref);
-    }
+    saveWorksPlace({ filter, currentPage: validCurrentPage, searchQuery });
+    smoothNavigate(router, destinationHref);
   };
 
   const placePreview = (clientX, clientY) => {
@@ -880,6 +902,9 @@ export default function WorksList() {
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="bg-white border border-black/[0.08] shadow-[0_24px_64px_rgba(0,0,0,0.12)] rounded-3xl p-6 sm:p-8 max-w-md w-[92vw] relative"
               onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Restricted access"
             >
               <button
                 onClick={() => setLockedTool(null)}

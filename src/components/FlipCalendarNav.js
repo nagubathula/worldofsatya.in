@@ -620,6 +620,9 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
                 opacity: 1,
                 filter: "blur(0px)",
                 transition: SPRING.enter,
+                // Drop the filter once settled: even blur(0px) inside the 3D turn makes
+                // phones paint the face as a flat, low-resolution layer.
+                transitionEnd: { filter: "none" },
               },
               exit: (dir) => ({
                 rotateX: dir === "down" ? -28 : 28,

@@ -207,6 +207,42 @@ html.lenis, html.lenis-smooth {
   }
 }
 
+/* Page turns follow the way you travel (pageTurn() in lib/motion.js):
+   in: the page sinks back and the next rises in front of it.
+   out: the reverse; the page drops away and the one behind comes forward.
+   next/prev: pages slide sideways, like turning one. */
+@keyframes page-sink {
+  to { opacity: 0; transform: scale(0.94); filter: blur(4px); }
+}
+
+@keyframes page-rise {
+  from { opacity: 0; transform: translateY(56px) scale(0.98); }
+}
+
+@keyframes page-drop {
+  to { opacity: 0; transform: translateY(56px) scale(0.98); }
+}
+
+@keyframes page-surface {
+  from { opacity: 0; transform: scale(0.94); filter: blur(4px); }
+}
+
+@keyframes page-off-left {
+  to { opacity: 0; transform: translateX(-16%); }
+}
+
+@keyframes page-on-right {
+  from { opacity: 0; transform: translateX(16%); }
+}
+
+@keyframes page-off-right {
+  to { opacity: 0; transform: translateX(16%); }
+}
+
+@keyframes page-on-left {
+  from { opacity: 0; transform: translateX(-16%); }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
     animation: 460ms cubic-bezier(0.4, 0, 0.2, 1) both page-leave;
@@ -214,6 +250,43 @@ html.lenis, html.lenis-smooth {
 
   ::view-transition-new(root) {
     animation: 680ms cubic-bezier(0.22, 1, 0.36, 1) both page-enter;
+  }
+
+  html[data-page-turn="in"]::view-transition-old(root) {
+    animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both page-sink;
+  }
+
+  html[data-page-turn="in"]::view-transition-new(root) {
+    animation: 640ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both page-rise;
+  }
+
+  html[data-page-turn="out"]::view-transition-old(root) {
+    animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both page-drop;
+  }
+
+  html[data-page-turn="out"]::view-transition-new(root) {
+    animation: 640ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both page-surface;
+  }
+
+  html[data-page-turn="next"]::view-transition-old(root) {
+    animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both page-off-left;
+  }
+
+  html[data-page-turn="next"]::view-transition-new(root) {
+    animation: 600ms cubic-bezier(0.22, 1, 0.36, 1) 40ms both page-on-right;
+  }
+
+  html[data-page-turn="prev"]::view-transition-old(root) {
+    animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both page-off-right;
+  }
+
+  html[data-page-turn="prev"]::view-transition-new(root) {
+    animation: 600ms cubic-bezier(0.22, 1, 0.36, 1) 40ms both page-on-left;
+  }
+
+  /* The corner face holds still while the page turns under it. */
+  ::view-transition-group(home-face) {
+    animation-duration: 0s;
   }
 }
 
@@ -261,4 +334,9 @@ html.lenis, html.lenis-smooth {
   ::view-transition-new(*.work-media):only-child {
     animation: 680ms cubic-bezier(0.22, 1, 0.36, 1) both page-enter;
   }
+}
+
+/* The 404 page shows the face large, so the corner home face steps aside. */
+body:has([data-not-found]) [data-home-face] {
+  display: none;
 }

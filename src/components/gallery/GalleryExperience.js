@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ZoomIn } from "lucide-react";
 import { galleryCategories, galleryWorks } from "@/data/galleryWorks";
+import { useBlackHoleTransition } from "../BlackHoleTransition";
 
 const CanvasGallery = dynamic(() => import("@/components/gallery/CanvasGallery"), {
   ssr: false,
@@ -18,6 +19,7 @@ const CanvasGallery = dynamic(() => import("@/components/gallery/CanvasGallery")
 const categories = galleryCategories(galleryWorks);
 
 export default function GalleryExperience() {
+  const { navigate } = useBlackHoleTransition();
   const [nav, setNav] = useState({
     type: "frame",
     category: "All",
@@ -53,7 +55,11 @@ export default function GalleryExperience() {
         setNav((current) => ({ ...current, controlsEnabled: true }));
         return;
       }
-      if (!nav.selectedId) return;
+      // Nothing open: Esc leaves the gallery for home.
+      if (!nav.selectedId) {
+        if (!event.defaultPrevented) navigate("/");
+        return;
+      }
       setNav((current) => ({
         ...current,
         type: "restore",
@@ -64,7 +70,7 @@ export default function GalleryExperience() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [fullSize, nav.selectedId]);
+  }, [fullSize, nav.selectedId, navigate]);
 
   const selectCategory = (category) => {
     setFullSize(false);

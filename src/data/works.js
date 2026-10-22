@@ -338,20 +338,20 @@ export const allWorks = [
   {
     id: "c3",
     title: "Zero-Cost Automation",
-    description: "Building an internal productivity suite using Google Colab, Supabase, and lightweight web extensions.",
+    description: "Designing an internal automation tool around the browser, where the work already happens, on an infrastructure budget of zero.",
     category: "Case Study",
-    tag: "Architecture Breakdown",
+    tag: "Internal Tool Design",
     link: "/works/case-studies/zero-cost-automation",
-    actionText: "Read Breakdown",
+    actionText: "Read Case Study",
     content: `
       <div class="flex flex-col gap-12">
         <section>
           <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The premise</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">SaaS automation tooling gets expensive fast. This architecture breakdown shows how I built a full internal productivity suite — AI content generation, task queues, real-time updates — for exactly $0/month: Google Colab as free compute, Supabase's free tier as the database and real-time layer, and lightweight Chrome extensions as the client.</p>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Automating AI work usually comes with a monthly bill. This case study shows how I designed an internal tool that starts AI content and data tasks from the browser in a click and reports results back on its own — built entirely on free tiers: Chrome extensions as the interface, Supabase as the shared queue, and Google Colab as the engine.</p>
         </section>
         <section>
           <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The result</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The stack processed over 5,000 automated tasks in its first month while saving roughly $300/month in subscriptions. The full architecture — how the pieces connect and where the sharp edges are — is in the breakdown.</p>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The stack processed over 5,000 automated tasks in its first month while saving roughly $300/month in subscriptions. The design decisions behind it, and how the pieces fit together, are in the case study.</p>
         </section>
       </div>
     `,

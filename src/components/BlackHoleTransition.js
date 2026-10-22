@@ -60,7 +60,9 @@ export function BlackHoleTransitionProvider({ children }) {
       if (!href) return;
       event.preventDefault();
       event.stopPropagation();
-      smoothNavigate(router, href);
+      // Back/Next links turn the page sideways.
+      const rel = anchor.relList.contains("next") ? "next" : anchor.relList.contains("prev") ? "prev" : undefined;
+      smoothNavigate(router, href, { rel });
     };
 
     document.addEventListener("pointerdown", onPointerDown, { passive: true });

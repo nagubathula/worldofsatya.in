@@ -42,6 +42,7 @@ export default function Template({ children }) {
   return (
     <motion.div
       key={`page-${pathname}`}
+      data-page-root
       initial={reduceMotion || crossfade ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.68, ease: EASE_OUT }}

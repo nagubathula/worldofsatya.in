@@ -1,3 +1,5 @@
+import { playTransitionScreen, usesTransitionScreen } from "./transitionScreen";
+
 export const EASE_OUT = [0.22, 1, 0.36, 1];
 export const EASE_IN = [0.4, 0, 1, 1];
 
@@ -75,7 +77,30 @@ function finishOnce(resolve) {
   };
 }
 
-export function smoothNavigate(router, href) {
+// Pages sit on a map: home, then its sections side by side, then the works
+// inside Works. A page change moves the way you travel on it (see globals.css).
+const SECTIONS = ["/", "/about", "/works", "/gallery"];
+
+function pathOf(href) {
+  return href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
+}
+
+function depthOf(path) {
+  return path.split("/").filter(Boolean).length;
+}
+
+export function pageTurn(from, to, rel) {
+  if (rel === "next" || rel === "prev") return rel;
+  const a = pathOf(from);
+  const b = pathOf(to);
+  if (depthOf(b) > depthOf(a)) return "in";
+  if (depthOf(b) < depthOf(a)) return "out";
+  const i = SECTIONS.indexOf(a);
+  const j = SECTIONS.indexOf(b);
+  return i >= 0 && j >= 0 && j < i ? "prev" : "next";
+}
+
+export function smoothNavigate(router, href, { rel } = {}) {
   if (!href || !router) return;
   if (/^(https?:|mailto:|tel:)/.test(href)) {
     haptic("tap");
@@ -85,12 +110,25 @@ export function smoothNavigate(router, href) {
 
   haptic("navigate");
   const go = () => router.push(href);
-  if (prefersReducedMotion() || !canViewTransition()) {
+  if (prefersReducedMotion()) {
+    go();
+    return;
+  }
+
+  // Between sections the transition screen covers the change.
+  if (usesTransitionScreen(window.location.pathname, href.split(/[?#]/)[0]) && playTransitionScreen({ href, go })) {
+    return;
+  }
+
+  if (!canViewTransition()) {
     go();
     return;
   }
 
   const current = `${window.location.pathname}${window.location.search}`;
+  const root = document.documentElement;
+  root.dataset.pageTurn = pageTurn(window.location.pathname, href, rel);
+  const settle = () => delete root.dataset.pageTurn;
   try {
     const transition = document.startViewTransition(() => new Promise((resolve) => {
       const done = finishOnce(resolve);
@@ -114,8 +152,9 @@ export function smoothNavigate(router, href) {
     // Skipping a running transition rejects these. Nothing is awaiting them.
     transition.ready?.catch(() => {});
     transition.updateCallbackDone?.catch(() => {});
-    transition.finished?.catch(() => {});
+    transition.finished?.then(settle, settle);
   } catch {
+    settle();
     go();
   }
 }
