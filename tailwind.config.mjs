@@ -14,12 +14,13 @@ export default {
         canvas: "rgb(var(--background-rgb) / <alpha-value>)",
         offwhite: "rgb(var(--foreground-rgb) / <alpha-value>)",
       },
+      // One typeface across the site: every family, mono included, is Inter.
       fontFamily: {
-        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "SF Pro Display", "SF Pro Text", "system-ui", "sans-serif"],
-        mono: ["SFMono-Regular", "ui-monospace", "Menlo", "Monaco", "monospace"],
+        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
+        mono: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
         pixel: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
-        editorial: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "SF Pro Display", "system-ui", "sans-serif"],
-        handwriting: ["Caveat", "Virgil", "Kalam", "Segoe Print", "Architects Daughter", "cursive", "sans-serif"],
+        editorial: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
+        handwriting: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
       },
     },
   },

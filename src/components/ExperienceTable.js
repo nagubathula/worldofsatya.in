@@ -196,7 +196,7 @@ export default function ExperienceTable() {
                         <h3 className="text-sm sm:text-base font-semibold text-[#111111] tracking-tight">
                           {exp.role}
                         </h3>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-black/[0.04] text-[#6e6e73] font-medium shrink-0">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-black/[0.04] text-[#6e6e73] font-medium shrink-0 whitespace-nowrap">
                           {exp.type}
                         </span>
                       </div>
@@ -261,7 +261,7 @@ export default function ExperienceTable() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-semibold text-[#111111]">{exp.role}</h3>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-black/[0.04] text-[#6e6e73]">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-black/[0.04] text-[#6e6e73] shrink-0 whitespace-nowrap">
                     {exp.type}
                   </span>
                 </div>

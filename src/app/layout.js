@@ -5,19 +5,13 @@ import { BlackHoleTransitionProvider } from "@/components/BlackHoleTransition";
 import HomeFace from "@/components/HomeFace";
 import KeyboardNav from "@/components/KeyboardNav";
 import TransitionScreen from "@/components/TransitionScreen";
-import { Inter, EB_Garamond } from "next/font/google";
+import { Inter } from "next/font/google";
 
 const sansFont = Inter({ 
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
-const garamondFont = EB_Garamond({
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  variable: '--font-editorial',
-});
 
 export const metadata = {
   metadataBase: new URL("https://worldofsatya.in"),
@@ -59,7 +53,6 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -99,7 +92,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${sansFont.variable} ${garamondFont.variable} font-sans text-foreground bg-background tracking-normal w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-base`}
+        className={`${sansFont.variable} font-sans text-foreground bg-background tracking-normal w-full max-w-full relative antialiased selection:bg-foreground selection:text-background text-base`}
         suppressHydrationWarning
       >
         <ThemeProvider>

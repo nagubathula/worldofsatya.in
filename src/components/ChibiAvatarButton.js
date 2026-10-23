@@ -19,6 +19,8 @@ export default function ChibiAvatarButton({
   size = 64, // button diameter in pixels
   className = "",
   sound = true,
+  tooltip = true, // the browser's own label on hover; off when a menu does that job
+  expanded, // set when the button opens something, for screen readers
   ...props
 }) {
   const buttonRef = useRef(null);
@@ -119,7 +121,8 @@ export default function ChibiAvatarButton({
         href={href}
         onClick={onClick}
         aria-label={showLabel ? undefined : label}
-        title={showLabel ? undefined : label}
+        title={showLabel || !tooltip ? undefined : label}
+        aria-expanded={expanded}
         className="inline-block no-underline"
       >
         {content}
@@ -132,7 +135,8 @@ export default function ChibiAvatarButton({
       type="button"
       onClick={onClick}
       aria-label={showLabel ? undefined : label}
-      title={showLabel ? undefined : label}
+      title={showLabel || !tooltip ? undefined : label}
+      aria-expanded={expanded}
       className="bg-transparent border-none p-0 inline-block text-left"
     >
       {content}

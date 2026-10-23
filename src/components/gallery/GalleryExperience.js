@@ -156,14 +156,16 @@ export default function GalleryExperience() {
         initial={false}
         animate={{ opacity: selected ? 0 : 1, y: selected ? -10 : 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-none absolute left-0 top-0 z-20 max-w-[640px] px-5 pt-20 sm:px-10 sm:pt-24"
+        className="pointer-events-none absolute left-0 top-0 z-20 max-w-[640px] px-5 pt-24 sm:px-10 sm:pt-28"
       >
         {/* Set like the landing bio: a big tight name over small grey print. */}
         <h1 className="text-[34px] font-semibold leading-[1.05] tracking-[-0.045em] text-[#111111] sm:text-[44px] lg:text-[48px]" style={{ textShadow: "0 0 18px #fff, 0 0 36px #fff" }}>
           Gallery
         </h1>
         <p className="mt-4 max-w-md text-[13px] leading-[1.6] tracking-[-0.01em] text-[#86868b]" style={{ textShadow: "0 0 12px #fff, 0 0 24px #fff" }}>
-          Posters, visual identities, design artifacts, motion studies, and 3D renders. Drag to move through the room. Scroll to come closer.
+          Posters, visual identities, design artifacts, motion studies, and 3D renders. Drag to move through the room.{" "}
+          <span className="[@media(hover:none)]:hidden">Scroll to come closer.</span>
+          <span className="hidden [@media(hover:none)]:inline">Pinch to come closer.</span>
         </p>
         <div className={`mt-5 flex flex-wrap gap-2 ${selected ? "pointer-events-none" : "pointer-events-auto"}`}>
           {categories.map((category) => {

@@ -156,6 +156,7 @@ export default function TransitionScreen() {
       {/* Mounted only while showing: the face plays its intro once per load, and that belongs to home. */}
       {label && (
         <div className="flex h-full w-full flex-col items-center justify-center px-4">
+          {/* The same size as the face on the home page, so the two feel like one face. */}
           <div data-screen-face className="h-24 w-24 opacity-0 sm:h-28 sm:w-28">
             <ChibiAvatar className="h-full w-full" />
           </div>

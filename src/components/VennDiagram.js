@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
 
 const DOMAINS = {
@@ -10,9 +10,9 @@ const DOMAINS = {
     id: "core",
     name: "SATYA Core",
     badge: "Convergence",
-    title: "AI + Design Convergence",
+    title: "Where design, code, and AI meet",
     description:
-      "Operating at the bleeding edge where craft, fullstack engineering, and generative models meet. Building sovereign tools and design-first AI systems that remove friction between human intent and running software.",
+      "I work where design, fullstack engineering, and generative AI overlap: designing products, building them, and wiring in the AI that makes them useful.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Generative AI Engineer & Creative Lead" },
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Product Engineer" },
@@ -26,7 +26,7 @@ const DOMAINS = {
     badge: "UI / UX · Typography",
     title: "Product & Visual Systems",
     description:
-      "Obsessive focus on typography, spatial balance, micro-interactions, and design systems. Translating ambiguous human problems into intuitive, tactile, and memorable digital artifacts.",
+      "Typography, layout, micro-interactions, and design systems. Turning unclear problems into interfaces people find easy to use.",
     companies: [
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Product Design & Branding" },
       { name: "Redantio", logo: "/images/redantio-icon.png", role: "Brand Identity & UI Sprint" },
@@ -40,7 +40,7 @@ const DOMAINS = {
     badge: "Fullstack · Hardware",
     title: "Fullstack & Systems Engineering",
     description:
-      "Writing resilient, high-performance software with clean paradigms. From Dart/Flutter desktop runtimes and WebAssembly layout engines to robust web architectures and security tooling.",
+      "Fast, maintainable software, from Flutter desktop apps and WebAssembly layout engines to web platforms and security tooling.",
     companies: [
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Frontend & Architecture" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Fullstack Web Infrastructure" },
@@ -54,7 +54,7 @@ const DOMAINS = {
     badge: "GenAI · Pipelines",
     title: "Generative AI & Model Pipelines",
     description:
-      "Architecting end-to-end generative media workflows, LLM orchestration, model evaluations, and automation pipelines that turn cutting-edge AI research into production utilities.",
+      "End-to-end generative media workflows, LLM orchestration, model evaluation, and automation pipelines that run in production.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Generative AI Lead" },
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Automated Data Systems" },
@@ -68,7 +68,7 @@ const DOMAINS = {
     badge: "Design + Code",
     title: "Design Engineering",
     description:
-      "Eliminating the gap between design mockups and production code. Engineering component libraries with Radix primitives, Tailwind CSS, accessible states, and sub-pixel alignment.",
+      "Closing the gap between design files and production code: component libraries built with Radix primitives and Tailwind CSS, with accessible states and pixel-accurate layout.",
     companies: [
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Chaya UI Design System" },
       { name: "Redantio", logo: "/images/redantio-icon.png", role: "Design-to-Code Velocity" },
@@ -82,7 +82,7 @@ const DOMAINS = {
     badge: "Design + AI",
     title: "Creative AI & Media",
     description:
-      "Where visual imagination meets synthetic generation. Building creative canvases with text-to-vector engines, automated video synthesis (Veo 3), and custom diffusion pipelines.",
+      "Creative tools built on generation: text-to-vector canvases, automated video with Veo 3, and custom diffusion pipelines.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Generative AI Video & Creative" },
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Synthetic Brand Assets" },
@@ -96,7 +96,7 @@ const DOMAINS = {
     badge: "Code + AI",
     title: "AI Systems & Automation",
     description:
-      "Designing autonomous agent tools, Model Context Protocol (MCP) servers, background queues, and reliable pipelines that enable AI models to interface with real software environments.",
+      "Agent tooling, Model Context Protocol (MCP) servers, background queues, and pipelines that let AI models work with real software.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Model Pipelines & Tooling" },
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Background Task Queues" },
@@ -106,12 +106,68 @@ const DOMAINS = {
   },
 };
 
+// The hover card's size, for keeping it on screen beside the cursor.
+const CARD_W = 320;
+const CARD_H = 270;
+const CURSOR_GAP = 18;
+
+// What a region of the Venn stands for: title, description and the companies
+// where that work happened. Shown on demand, not beside the diagram.
+function DomainCard({ domain }) {
+  return (
+    <div className="rounded-3xl border border-black/[0.08] bg-white/95 p-5 shadow-[0_18px_48px_rgba(0,0,0,0.10)] backdrop-blur-xl">
+      <h3 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-[#111111]">{domain.title}</h3>
+      <p className="mt-2 text-[13px] leading-relaxed text-[#515154]">{domain.description}</p>
+      <div className="mt-4 flex items-center gap-2">
+        {domain.companies.map((company) => (
+          <div
+            key={company.name}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.08] bg-white p-2"
+          >
+            <Image src={company.logo} alt="" width={24} height={24} className="h-full w-full object-contain" />
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 text-[11px] text-[#86868b]">{domain.companies.map((company) => company.name).join(" · ")}</p>
+    </div>
+  );
+}
+
 export default function VennDiagram() {
   const [activeDomain, setActiveDomain] = useState("core");
-  const [hoveredCompany, setHoveredCompany] = useState(null);
+  // The card shows only while a region is hovered (or, on a phone, tapped).
+  const [showCard, setShowCard] = useState(false);
+  const [touch, setTouch] = useState(false);
   const current = DOMAINS[activeDomain] || DOMAINS.core;
 
+  // The card trails the cursor on a soft spring.
+  const cardX = useMotionValue(0);
+  const cardY = useMotionValue(0);
+  const springX = useSpring(cardX, { stiffness: 500, damping: 40, mass: 0.4 });
+  const springY = useSpring(cardY, { stiffness: 500, damping: 40, mass: 0.4 });
+
+  useEffect(() => {
+    const media = window.matchMedia("(hover: none)");
+    const sync = () => setTouch(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  // Beside the cursor, flipped to the other side near the edges of the screen.
+  const placeCard = (e, jump) => {
+    const x = e.clientX + CURSOR_GAP + CARD_W > window.innerWidth ? e.clientX - CURSOR_GAP - CARD_W : e.clientX + CURSOR_GAP;
+    const y = Math.min(Math.max(e.clientY - CARD_H / 2, 12), window.innerHeight - CARD_H - 12);
+    cardX.set(x);
+    cardY.set(y);
+    if (jump) {
+      springX.jump(x);
+      springY.jump(y);
+    }
+  };
+
   const selectDomain = (id) => {
+    setShowCard(true);
     setActiveDomain((prev) => {
       if (prev !== id) {
         try {
@@ -125,66 +181,18 @@ export default function VennDiagram() {
 
   return (
     <section aria-label="Me in Venn" className="w-full py-4 sm:py-8 select-none">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-20 items-center">
-        
+      <div className="flex flex-col items-center">
         {/* =========================================================
-            LEFT COLUMN: "me in venn" annotation + Venn Diagram
+            The Venn Diagram, on its own. Hovering a region shows what it means.
            ========================================================= */}
-        <div className="relative w-full flex items-center justify-center">
-          {/* Handwritten Annotation "me in venn" with curved arrow pointing to diagram */}
-          <div className="hidden sm:flex absolute -left-2 md:-left-8 lg:-left-14 top-4 lg:top-8 flex-col items-end z-20 pointer-events-none select-none">
-            <span
-              className="text-2xl lg:text-3xl text-[#515154] leading-tight"
-              style={{ fontFamily: "var(--font-editorial)", fontStyle: "italic" }}
-            >
-              me in
-            </span>
-            <span
-              className="text-2xl lg:text-3xl text-[#515154] leading-tight -mt-1 mr-2"
-              style={{ fontFamily: "var(--font-editorial)", fontStyle: "italic" }}
-            >
-              venn
-            </span>
-            <svg
-              width="58"
-              height="38"
-              viewBox="0 0 58 38"
-              fill="none"
-              className="text-[#6e6e73] mt-0.5 mr-0.5"
-            >
-              <path
-                d="M6 6 C 20 6, 38 20, 52 26"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                fill="none"
-              />
-              <path
-                d="M44 20 L 52 26 L 43 30"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-          </div>
-
-          {/* Mobile minimal annotation */}
-          <div className="flex sm:hidden absolute top-0 left-0 items-center gap-2 z-20 pointer-events-none">
-            <span
-              className="text-xl text-[#515154]"
-              style={{ fontFamily: "var(--font-editorial)", fontStyle: "italic" }}
-            >
-              me in venn
-            </span>
-            <svg width="24" height="16" viewBox="0 0 24 16" fill="none" className="text-[#6e6e73]">
-              <path d="M2 8 L 20 8 M 14 3 L 20 8 L 14 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-
+        <div
+          className="relative w-full flex items-center justify-center"
+          onPointerEnter={(e) => e.pointerType === "mouse" && placeCard(e, true)}
+          onPointerMove={(e) => e.pointerType === "mouse" && placeCard(e, false)}
+          onPointerLeave={(e) => e.pointerType === "mouse" && setShowCard(false)}
+        >
           {/* Minimal Architectural Venn Diagram */}
-          <div className="relative w-full max-w-[460px] sm:max-w-[490px] lg:max-w-[510px] aspect-[600/570] select-none mx-auto lg:mx-0">
+          <div className="relative w-full max-w-[460px] sm:max-w-[490px] lg:max-w-[510px] aspect-[600/570] select-none mx-auto">
             <svg
               viewBox="20 20 600 570"
               className="w-full h-full overflow-visible"
@@ -464,86 +472,60 @@ export default function VennDiagram() {
                   filter="url(#brush-filter-subtle)"
                   className="transition-transform duration-200 group-hover/center:scale-105"
                   style={{ transformOrigin: "320px 280px" }}
+                  // The socket the site's notch (HomeFace) sits in while the diagram is in view.
+                  data-venn-core
                 />
-                {/* Satya's face at the core. The blob is white so the black hair keeps its outline. */}
                 <title>Satya</title>
-                <image
-                  href="/images/hero/SVG/vector-avatar.png"
-                  x="287"
-                  y="247"
-                  width="66"
-                  height="66"
-                  preserveAspectRatio="xMidYMid meet"
-                  className="pointer-events-none transition-transform duration-200 group-hover/center:scale-105"
-                  style={{ transformOrigin: "320px 280px" }}
-                />
               </g>
             </svg>
           </div>
         </div>
 
-        {/* =========================================================
-            RIGHT COLUMN: Title + Description + 4 Company Circles
-           ========================================================= */}
-        <div className="flex flex-col justify-center max-w-xl">
+        {/* Phones: a tapped region's card sits under the diagram. */}
+        {touch && (
           <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col"
-            >
-              {/* Domain Heading */}
-              <h3 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-[-0.03em] text-[#111111] leading-[1.12]">
-                {current.title}
-              </h3>
-
-              {/* Domain Description */}
-              <p className="mt-4 text-base sm:text-lg text-[#515154] leading-relaxed font-normal">
-                {current.description}
-              </p>
-
-              {/* Row of 4 Circular Company Logos matching user sketch ○ ○ ○ ○ */}
-              <div className="mt-8 flex flex-col gap-3">
-                <div className="flex items-center gap-3.5 sm:gap-4.5">
-                  {current.companies.map((company, idx) => (
-                    <div
-                      key={idx}
-                      onMouseEnter={() => setHoveredCompany(company)}
-                      onMouseLeave={() => setHoveredCompany(null)}
-                      className="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border border-black/[0.08] p-2.5 sm:p-3 flex items-center justify-center shadow-2xs hover:scale-110 hover:border-black/25 hover:shadow-xs transition-all duration-200 cursor-pointer"
-                      title={`${company.name} — ${company.role}`}
-                    >
-                      <Image
-                        src={company.logo}
-                        alt={company.name}
-                        width={36}
-                        height={36}
-                        className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-200"
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Company Role Micro-label */}
-                <div className="h-5 flex items-center">
-                  <p className="text-xs text-[#6e6e73] tracking-tight transition-opacity duration-200">
-                    {hoveredCompany ? (
-                      <span>
-                        <strong className="text-[#111111] font-medium">{hoveredCompany.name}</strong> — {hoveredCompany.role}
-                      </span>
-                    ) : (
-                      <span className="text-[#8e8e93]">Hover a company to inspect role</span>
-                    )}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+            {showCard && (
+              <motion.div
+                key={current.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-6 w-full max-w-md"
+              >
+                <DomainCard domain={current} />
+              </motion.div>
+            )}
           </AnimatePresence>
-        </div>
+        )}
 
+        {/* Mouse: the card follows the cursor while a region is hovered. */}
+        <AnimatePresence>
+          {!touch && showCard && (
+            <motion.div
+              key="domain-card"
+              aria-live="polite"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.12 } }}
+              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              style={{ x: springX, y: springY, width: CARD_W }}
+              className="pointer-events-none fixed left-0 top-0 z-[60]"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={current.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.12 }}
+                >
+                  <DomainCard domain={current} />
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

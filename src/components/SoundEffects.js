@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 
 let globalAudioCtx = null;
-let soundEnabled = true;
+// Off: a portfolio is often opened at work, where a page that beeps on hover
+// gets closed. Every sound below checks this, so it is the one switch.
+let soundEnabled = false;
 
 function getAudioContext() {
   if (typeof window === "undefined") return null;
@@ -206,12 +208,8 @@ export default function SoundEffects() {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("portfolio-sound");
-      if (stored === "false") {
-        soundEnabled = false;
-      } else {
-        soundEnabled = true;
-      }
+      // Only a visitor who turned sound on gets it back.
+      soundEnabled = localStorage.getItem("portfolio-sound") === "true";
     } catch {}
 
     const handlePointerDown = (e) => {

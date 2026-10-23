@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
-import { Github, Instagram, Linkedin, Mail, X } from "lucide-react";
+import { Github, Instagram, Linkedin, Mail, MessageCircle, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { play8BitTapSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
@@ -27,6 +27,7 @@ const socials = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/satyasainagubathula", icon: Linkedin, color: "#0077b5" },
   { label: "Instagram", href: "https://www.instagram.com/engineerudu", icon: Instagram, color: "#d62976" },
   { label: "Email", href: "mailto:nagubathula.satyasai@gmail.com", icon: Mail, color: "#d84a3c" },
+  { label: "WhatsApp", href: "https://wa.me/918499888133", icon: MessageCircle, color: "#25d366" },
   { label: "GitHub", href: "https://github.com/nagubathula", icon: Github, color: "#24292f" },
   { label: "Medium", href: "https://hippogriff.medium.com", icon: MediumIcon, color: "#24292f" },
 ];

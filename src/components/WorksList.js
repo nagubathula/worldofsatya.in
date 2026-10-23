@@ -455,7 +455,9 @@ export default function WorksList() {
   return (
     <div id="ai-videos" className="w-full max-w-5xl mx-auto flex flex-col gap-6 sm:gap-8 pb-20 scroll-mt-28">
       {/* Category Segmented Control & Inline Search */}
-      <div className="flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-full bg-[#f5f5f7] border border-black/[0.04] max-w-fit mx-auto mb-4 sm:mb-6 shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
+      {/* Phones: the tabs scroll in one row and search takes the line below. */}
+      <div className="flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-[22px] sm:rounded-full bg-[#f5f5f7] border border-black/[0.04] w-full sm:w-auto sm:max-w-fit mx-auto mb-4 sm:mb-6 shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
+        <div className="flex min-w-0 max-w-full gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,black_82%,transparent)] sm:[mask-image:none]">
         {CATEGORY_TABS.map((tab) => {
           const isActive = filter === tab.key;
           const count = counts[tab.key] || 0;
@@ -472,7 +474,7 @@ export default function WorksList() {
               whileTap={{ scale: 0.96 }}
               transition={SPRING.press}
               aria-pressed={isActive}
-              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
+              className={`relative flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3 py-2 sm:py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
                 isActive ? "text-[#1d1d1f]" : "text-[#86868b] hover:text-[#1d1d1f]"
               }`}
             >
@@ -496,12 +498,13 @@ export default function WorksList() {
             </motion.button>
           );
         })}
+        </div>
 
         {/* Subtle Vertical Divider */}
         <div className="hidden sm:block h-5 w-[1px] bg-black/[0.08] mx-0.5" />
 
         {/* Inline Search Bar */}
-        <div className="relative flex items-center rounded-full bg-white/70 focus-within:bg-white border border-black/[0.06] focus-within:border-black/[0.25] shadow-sm transition-all duration-300 w-36 sm:w-44 md:w-52 focus-within:sm:w-56 md:focus-within:w-64 h-8 px-2.5">
+        <div className="relative flex items-center rounded-full bg-white/70 focus-within:bg-white border border-black/[0.06] focus-within:border-black/[0.25] shadow-sm transition-all duration-300 w-full sm:w-44 md:w-52 focus-within:sm:w-56 md:focus-within:w-64 h-9 sm:h-8 px-2.5">
           <Search size={13} className="text-[#86868b] shrink-0 mr-1.5" />
           <input
             ref={searchInputRef}
@@ -704,12 +707,13 @@ export default function WorksList() {
                         {isInternal && <Lock size={10} className="text-orange-500 shrink-0" />}
                         {isAIVideo && <Play size={10} className="text-purple-500 fill-purple-500 shrink-0" />}
                       </div>
-                      <p className="text-[12px] text-[#86868b] truncate">{work.description}</p>
+                      <p className="text-[12px] leading-snug text-[#86868b] line-clamp-2">{work.description}</p>
+                      {/* Under the text, not beside it, so the description keeps the width. */}
+                      <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-[#6e6e73]">
+                        {getCategoryIcon(work.category)}
+                        {work.category}
+                      </span>
                     </div>
-                    <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#f5f5f7] border border-black/[0.04] text-[#515154]">
-                      {getCategoryIcon(work.category)}
-                      {work.category}
-                    </span>
                   </AnimatedWorkRow>
                 );
               })}

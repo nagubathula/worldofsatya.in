@@ -128,7 +128,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
         initial={reduceMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.35 }}
-        className="relative z-10 pb-1 text-[13px] font-medium tracking-[-0.01em] text-[#2ec4f0] outline-none transition-colors hover:text-[#0b9fd0] focus-visible:underline"
+        className="relative z-10 px-3 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#2ec4f0] outline-none transition-colors hover:text-[#0b9fd0] focus-visible:underline"
       >
         view more works
       </motion.button>

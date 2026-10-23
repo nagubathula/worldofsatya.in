@@ -26,7 +26,7 @@ export default function Footer() {
       <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
         <div suppressHydrationWarning>
           <p className="text-xs sm:text-sm font-sans text-[#86868b] mb-3 sm:mb-4 tracking-wider uppercase font-medium">
-            Open for AI + Design Engineer roles
+            Open to AI Design Engineering and Product Design roles
           </p>
           <motion.a
             href="mailto:nagubathula.satyasai@gmail.com"
@@ -84,6 +84,7 @@ export default function Footer() {
               { label: "LinkedIn", href: "https://www.linkedin.com/in/satyasainagubathula" },
               { label: "Medium", href: "https://hippogriff.medium.com" },
               { label: "Email", href: "mailto:nagubathula.satyasai@gmail.com" },
+              { label: "WhatsApp", href: "https://wa.me/918499888133" },
             ].map((link) => (
               <motion.a
                 key={link.label}

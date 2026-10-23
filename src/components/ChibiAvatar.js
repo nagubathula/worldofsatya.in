@@ -59,6 +59,8 @@ export default function ChibiAvatar({ className = "" }) {
   const [isBlinking, setIsBlinking] = useState(false);
   const [mood, setMood] = useState("rest");
   const isReading = useSyncExternalStore(subscribeReading, () => reading, () => false);
+  // The pointer handler reads this, so it needn't re-subscribe on every change.
+  const readingRef = useRef(false);
 
   // Intro state. The face starts hidden with its eyes shut until the intro runs.
   const [startAsleep] = useState(() => !introPlayed);
@@ -176,9 +178,10 @@ export default function ChibiAvatar({ className = "" }) {
       // On the face itself, not just near it: the mouth opens.
       setIsHovered(!!svgRef.current?.contains(e.target));
 
-      // Eyeball deflection inside eye socket
-      const maxEyeX = 14.0;
-      const maxEyeY = 9.0;
+      // Eyeball deflection inside eye socket. Behind the reading glasses the
+      // eyes only drift a little, so they stay inside the lenses.
+      const maxEyeX = readingRef.current ? 5 : 14.0;
+      const maxEyeY = readingRef.current ? 3 : 9.0;
       const influence = Math.min(dist / 280, 1);
       const angle = Math.atan2(dy, dx);
 
@@ -201,6 +204,14 @@ export default function ChibiAvatar({ className = "" }) {
       window.removeEventListener("pointerleave", handlePointerLeave);
     };
   }, [rawEyeX, rawEyeY]);
+
+  // Glasses on: pull the eyes in to their reading range straight away.
+  useEffect(() => {
+    readingRef.current = isReading;
+    if (!isReading) return;
+    rawEyeX.set(Math.max(-5, Math.min(5, rawEyeX.get())));
+    rawEyeY.set(Math.max(-3, Math.min(3, rawEyeY.get())));
+  }, [isReading, rawEyeX, rawEyeY]);
 
   const handleTap = () => {
     try {
@@ -362,21 +373,30 @@ export default function ChibiAvatar({ className = "" }) {
           <path d="M319.135 334.5C319.135 335.881 318.015 337 316.635 337C315.254 337 314.135 335.881 314.135 334.5C314.135 333.119 315.254 332 316.635 332C318.015 332 319.135 333.119 319.135 334.5Z" fill="white"/>
         </motion.g>
 
-        {/* Reading glasses: drop on while the bio is hovered. Lenses follow the face's tilt. */}
+        {/* Reading glasses: slide down onto the nose while the bio is hovered, and
+            lift off when it isn't. Round, clear lenses centred on each eye and
+            tilted with the face, below the brows; the arms run back to the ears. */}
         <motion.g
           initial={false}
-          animate={isReading ? { opacity: 1, y: 0, rotate: 0 } : { opacity: 0, y: -40, rotate: -8 }}
-          transition={{ ...SPRING.pop, opacity: { duration: 0.15 } }}
+          animate={isReading ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -22, scale: 0.97 }}
+          transition={{
+            y: { type: "spring", stiffness: 340, damping: 26 },
+            scale: { type: "spring", stiffness: 340, damping: 26 },
+            opacity: { duration: isReading ? 0.12 : 0.18 },
+          }}
+          style={{ transformBox: "fill-box", originX: 0.5, originY: 0.5 }}
+          fill="none"
           stroke="#111111"
-          strokeWidth="7"
+          strokeWidth="5.5"
           strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          <rect x="83" y="297" width="96" height="76" rx="34" transform="rotate(-5 131 335)" fill="#dcefff" fillOpacity="0.3" />
-          <rect x="256" y="280" width="96" height="76" rx="34" transform="rotate(-5 304 318)" fill="#dcefff" fillOpacity="0.3" />
-          {/* Bridge and the two arms */}
-          <path d="M178 330Q217 298 257 322M84 339L67 336M352 314L388 307" fill="none" />
-          {/* Glints */}
-          <path d="M158 360L169 347M329 343L340 330" stroke="#ffffff" strokeWidth="4" opacity="0.9" />
+          {/* Lenses sit round where the eyes rest while reading, with room around them. */}
+          <ellipse cx="135" cy="333" rx="44" ry="40" transform="rotate(-5 135 333)" />
+          <ellipse cx="304" cy="318" rx="44" ry="40" transform="rotate(-5 304 318)" />
+          {/* Bridge over the nose, then the arms back towards the ears */}
+          <path d="M178 326Q219 307 261 311" />
+          <path d="M91 338L60 331M348 310L394 302" />
         </motion.g>
       </motion.svg>
     </motion.div>

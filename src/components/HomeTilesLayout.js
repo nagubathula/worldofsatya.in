@@ -3,10 +3,11 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import SocialBurst, { SLIDE, useBurstWidth } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
+import HomeAnnotation from "./HomeAnnotation";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
 import { playPopSound } from "./SoundEffects";
@@ -86,7 +87,8 @@ function MoreLink({ href, label }) {
       href={href}
       aria-label={label}
       title={label}
-      className="font-semibold text-[#2ec4f0] transition-colors hover:text-[#0b9fd0]"
+      // Padding grows the tap area without moving the dots.
+      className="-mx-2 -my-2 inline-block px-2 py-2 font-semibold text-[#2ec4f0] transition-colors hover:text-[#0b9fd0]"
     >
       …
     </Link>
@@ -98,6 +100,7 @@ export default function HomeTilesLayout() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
   const burstWidth = useBurstWidth();
+  const reduceMotion = useReducedMotion();
 
   const isAvatarVisible = currentSection === "avatar";
   // On the first visit the face lands first and everything else follows it.
@@ -154,13 +157,19 @@ export default function HomeTilesLayout() {
       data-lenis-prevent="true"
       className="relative w-full min-h-screen bg-white text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
     >
-      <section className="relative w-full max-w-5xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-10 pt-16 pb-12 select-none">
+      <section className="relative w-full max-w-5xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-10 pt-28 lg:pt-16 pb-12 select-none">
         {/* The face, or the fanned works once the card turns */}
         <div className="relative order-2 z-10 flex w-full items-center justify-center">
           <FlipCalendarNav
             initialSection="avatar"
             onSectionChange={setCurrentSection}
           />
+          {/* The handwritten note scribbles in once the face has landed. */}
+          <AnimatePresence>
+            {isAvatarVisible && (
+              <HomeAnnotation key="note" delay={introDelay + 0.35} reduceMotion={reduceMotion === true} />
+            )}
+          </AnimatePresence>
         </div>
 
         {/* popLayout: the bio steps out of the flow as it leaves, so the cards don't wait for it. */}
@@ -205,6 +214,31 @@ export default function HomeTilesLayout() {
                 Not boasting but I have 10k+ followers on{" "}
                 <BioLink href="https://www.instagram.com/engineerudu">instagram</BioLink>
               </motion.p>
+              {/* Availability, in words: the first thing a hiring manager looks for. */}
+              <motion.p
+                variants={bioReveal}
+                className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] sm:text-[12px] tracking-[-0.01em]"
+              >
+                {/* The dot sits on the first line when the text wraps on a phone. */}
+                <span className="inline-flex items-start gap-2 font-medium text-[#1d1d1f]">
+                  <span aria-hidden="true" className="mt-[0.45em] h-2 w-2 shrink-0 rounded-full bg-[#34c759]" />
+                  Open to AI Design Engineering and Product Design roles
+                </span>
+                <a
+                  href="mailto:nagubathula.satyasai@gmail.com"
+                  className="font-medium text-[#0071e3] transition-colors hover:text-[#0058b0]"
+                >
+                  Email me →
+                </a>
+                <a
+                  href="https://wa.me/918499888133"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-[#0071e3] transition-colors hover:text-[#0058b0]"
+                >
+                  WhatsApp →
+                </a>
+              </motion.p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -229,6 +263,31 @@ export default function HomeTilesLayout() {
           <GalleryButton />
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
+
+        {/* Touch screens get no hover cue that the face card turns, so say it. */}
+        <AnimatePresence>
+          {isAvatarVisible && (
+            <motion.button
+              key="swipe-hint"
+              type="button"
+              onClick={() => window.flipCalendarNext?.()}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
+              transition={{ ...SMOOTH, delay: introDelay + 0.9 }}
+              className="order-5 mt-6 hidden items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#86868b] [@media(hover:none)]:flex"
+            >
+              <motion.span
+                aria-hidden="true"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                ↑
+              </motion.span>
+              Swipe up for works
+            </motion.button>
+          )}
+        </AnimatePresence>
       </section>
     </div>
   );

@@ -73,7 +73,7 @@ function CardFace({ section, onNavigate, interactive, reduceMotion }) {
         <div className="relative w-full h-full flex flex-col items-center justify-center overflow-visible">
           {/* Interactive SVG Chibi Character */}
           <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
-            <div className="relative w-44 sm:w-52 lg:w-56 aspect-square max-h-[260px]">
+            <div className="relative h-full w-full">
               <ChibiAvatar className="w-full h-full object-contain" />
             </div>
           </div>
@@ -546,7 +546,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         transition={{ layout: SPRING.enter }}
         className={`relative ${
           currSection.isAvatar
-            ? "w-[min(220px,72vw)] sm:w-[240px] lg:w-[250px] aspect-square"
+            ? "w-24 sm:w-28 aspect-square"
             : "w-[min(780px,94vw)] aspect-[780/380]"
         }`}
       >
