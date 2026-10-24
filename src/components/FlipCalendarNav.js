@@ -547,7 +547,8 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
         className={`relative ${
           currSection.isAvatar
             ? "w-24 sm:w-28 aspect-square"
-            : "w-[min(780px,94vw)] aspect-[780/380]"
+            : // Phones deal the works as a 2×2 hand, so the shell turns portrait there.
+              "w-[min(400px,88vw)] aspect-[100/124] sm:w-[min(780px,94vw)] sm:aspect-[780/380]"
         }`}
       >
       <motion.div

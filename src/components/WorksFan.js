@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
@@ -27,11 +27,31 @@ function deckleMask(seed) {
 
 const DECKLES = Array.from({ length: 8 }, (_, i) => deckleMask(i + 3));
 
+// On a phone a row of four leaves each card thumbnail-sized, so the hand is dealt
+// two by two there. Matches Tailwind's sm breakpoint, which sizes the shell.
+const COMPACT_QUERY = "(max-width: 639px)";
+// Grid slots as % of the hand: the cards keep the fan's 25:27 shape.
+const GRID_W = 46;
+const GRID_TILT = [-3, 2.5, 2, -2.5];
+
+function useCompact() {
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia(COMPACT_QUERY);
+    const update = () => setCompact(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return compact;
+}
+
 // Selected work as a hand of cards. Hover lifts a card out of the fan; a click
 // morphs its screenshot into the project page (see workMediaStyle). The card group
 // is named: the flip card around the fan is a `group` too.
 export default function WorksFan({ items, onNavigate, interactive, reduceMotion }) {
   const [active, setActive] = useState(null);
+  const compact = useCompact();
   const count = items.length;
   const activeIndex = items.findIndex((item) => item.id === active);
 
@@ -46,15 +66,20 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
 
   return (
     <div className="relative flex h-full w-full flex-col items-center">
-      <div className="relative w-full flex-1">
+      <div className="relative w-full flex-1 [container-type:inline-size]">
         {items.map((item, index) => {
           const t = count > 1 ? index / (count - 1) : 0.5;
-          const left = count > 1 ? index * step : (100 - CARD_W) / 2;
+          const width = compact ? GRID_W : CARD_W;
+          const left = compact
+            ? (index % 2 ? 100 - GRID_W - 2 : 2)
+            : count > 1 ? index * step : (100 - CARD_W) / 2;
+          // The fan's second row sits one card height down; top is a share of the hand's width.
+          const top = compact ? `${2 + Math.floor(index / 2) * (GRID_W * 1.08 + 4)}cqw` : "3%";
           // The tilt fans out left to right, and the middle cards ride a little higher.
-          const tilt = -7 + 13.5 * t;
-          const arc = 6 * (2 * t - 1) ** 2;
-          // Cards are dealt from the middle of the row out to their slots.
-          const fromCenter = ((50 - CARD_W / 2 - left) / CARD_W) * 100;
+          const tilt = compact ? GRID_TILT[index % GRID_TILT.length] : -7 + 13.5 * t;
+          const arc = compact ? 0 : 6 * (2 * t - 1) ** 2;
+          // Cards are dealt from the middle of the hand out to their slots.
+          const fromCenter = ((50 - width / 2 - left) / width) * 100;
           const mask = DECKLES[index % DECKLES.length];
           const lifted = active === item.id;
           // While one card is up, the rest step aside from it and sink back,
@@ -65,10 +90,11 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
           return (
             <motion.div
               key={item.id}
-              className="absolute top-[3%] aspect-[25/27]"
+              className="absolute aspect-[25/27]"
               style={{
+                top,
                 left: `${left}%`,
-                width: `${CARD_W}%`,
+                width: `${width}%`,
                 zIndex: lifted ? count + 1 : depth,
               }}
               initial={reduceMotion ? false : { x: `${fromCenter}%`, y: "12%", rotate: 0, opacity: 0 }}
@@ -112,7 +138,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
                     />
                   </span>
                   {/* Touch screens can't hover, so the names show there all the time. */}
-                  <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
+                  <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2.5 py-1 text-[12px] sm:px-2 sm:py-0.5 sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
                     {item.title}
                   </span>
                 </span>

@@ -10,13 +10,13 @@ export default function CaseStudies({ limit }) {
       title: "From Doodles to Design",
       description: "My journey bridging creative visual direction and deep technical automation.",
       type: "Medium Article",
-      link: "https://hippogriff.medium.com",
+      link: "/works/case-studies/from-doodles-to-design",
     },
     {
       title: "How I Built My Pseudo Fullstack Portfolio",
       description: "An in-depth breakdown of the design and development process for my portfolio website.",
       type: "Medium Article",
-      link: "https://medium.com/@hippogriff/how-i-built-my-psuedo-fullstack-portfolio-73cd1f6aecda",
+      link: "/works/case-studies/pseudo-fullstack-portfolio",
     },
     {
       title: "Zero-Cost Automation",
@@ -28,7 +28,7 @@ export default function CaseStudies({ limit }) {
       title: "Why Are You Still Confused When Turning Your Design To Code?",
       description: "A guide on bridging the gap between design and development, avoiding common handoff pitfalls.",
       type: "Medium Article",
-      link: "https://medium.com/design-bootcamp/why-are-you-still-confusing-when-turning-your-design-to-code-a7489d544deb",
+      link: "/works/case-studies/design-to-code",
     }
   ];
 

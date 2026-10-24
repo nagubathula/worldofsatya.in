@@ -14,6 +14,8 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  SlidersHorizontal,
   Sparkles,
   Play,
   Wrench,
@@ -455,9 +457,9 @@ export default function WorksList() {
   return (
     <div id="ai-videos" className="w-full max-w-5xl mx-auto flex flex-col gap-6 sm:gap-8 pb-20 scroll-mt-28">
       {/* Category Segmented Control & Inline Search */}
-      {/* Phones: the tabs scroll in one row and search takes the line below. */}
-      <div className="flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-[22px] sm:rounded-full bg-[#f5f5f7] border border-black/[0.04] w-full sm:w-auto sm:max-w-fit mx-auto mb-4 sm:mb-6 shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
-        <div className="flex min-w-0 max-w-full gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,black_82%,transparent)] sm:[mask-image:none]">
+      {/* Phones: search and a filter box share one row; the tabs take over from sm up. */}
+      <div className="flex items-center justify-center gap-1.5 p-1.5 rounded-full bg-[#f5f5f7] border border-black/[0.04] w-full sm:w-auto sm:max-w-fit mx-auto mb-2 sm:mb-6 shadow-[inset_0_1px_1px_rgba(0,0,0,0.03)]">
+        <div className="hidden sm:flex min-w-0 max-w-full gap-1.5">
         {CATEGORY_TABS.map((tab) => {
           const isActive = filter === tab.key;
           const count = counts[tab.key] || 0;
@@ -474,7 +476,7 @@ export default function WorksList() {
               whileTap={{ scale: 0.96 }}
               transition={SPRING.press}
               aria-pressed={isActive}
-              className={`relative flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3 py-2 sm:py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
+              className={`relative flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
                 isActive ? "text-[#1d1d1f]" : "text-[#86868b] hover:text-[#1d1d1f]"
               }`}
             >
@@ -504,7 +506,7 @@ export default function WorksList() {
         <div className="hidden sm:block h-5 w-[1px] bg-black/[0.08] mx-0.5" />
 
         {/* Inline Search Bar */}
-        <div className="relative flex items-center rounded-full bg-white/70 focus-within:bg-white border border-black/[0.06] focus-within:border-black/[0.25] shadow-sm transition-all duration-300 w-full sm:w-44 md:w-52 focus-within:sm:w-56 md:focus-within:w-64 h-9 sm:h-8 px-2.5">
+        <div className="relative flex items-center rounded-full bg-white/70 focus-within:bg-white border border-black/[0.06] focus-within:border-black/[0.25] shadow-sm transition-all duration-300 min-w-0 flex-1 sm:flex-none sm:w-44 md:w-52 focus-within:sm:w-56 md:focus-within:w-64 h-9 sm:h-8 px-2.5">
           <Search size={13} className="text-[#86868b] shrink-0 mr-1.5" />
           <input
             ref={searchInputRef}
@@ -536,6 +538,24 @@ export default function WorksList() {
             </div>
           )}
         </div>
+
+        {/* Filter box (phones): a native select, so the OS picker does the work. */}
+        <label className="relative flex sm:hidden shrink-0 items-center h-9 rounded-full bg-white border border-black/[0.06] shadow-sm focus-within:border-black/[0.25]">
+          <span className="sr-only">Filter by category</span>
+          <SlidersHorizontal size={13} className="pointer-events-none absolute left-3 text-[#86868b]" />
+          <select
+            value={filter}
+            onChange={(e) => handleFilterClick(e.target.value)}
+            className="h-full appearance-none bg-transparent pl-8 pr-8 text-xs font-sans font-medium text-[#1d1d1f] outline-none"
+          >
+            {CATEGORY_TABS.map((tab) => (
+              <option key={tab.key} value={tab.key}>
+                {tab.label} ({counts[tab.key] || 0})
+              </option>
+            ))}
+          </select>
+          <ChevronDown size={13} className="pointer-events-none absolute right-3 text-[#86868b]" />
+        </label>
       </div>
 
       {/* Search Result Feedback Indicator */}
@@ -689,31 +709,36 @@ export default function WorksList() {
                     role="link"
                     tabIndex={0}
                     aria-label={work.title}
-                    className="flex items-start gap-3 px-4 py-3.5 cursor-pointer active:bg-[#f5f5f7] border-b border-black/[0.05] last:border-b-0"
+                    className="flex items-center gap-3.5 px-4 py-4 cursor-pointer active:bg-[#f5f5f7] border-b border-black/[0.05] last:border-b-0"
                     onClick={() => openWork(work)}
                   >
-                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-[#f5f5f7] border border-black/[0.05] shrink-0">
-                      {work.image ? (
-                        <Image src={work.image} alt="" fill className="object-cover" sizes="48px" />
+                    <div className="relative w-[72px] h-[72px] rounded-2xl overflow-hidden bg-[#f5f5f7] border border-black/[0.05] shrink-0">
+                      {work.image || work.poster ? (
+                        <Image src={work.image || work.poster} alt="" fill className="object-cover" sizes="72px" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          {getCategoryIcon(work.category) || <Sparkles size={18} className="text-neutral-400" />}
+                        <div className="w-full h-full flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5">
+                          {getCategoryIcon(work.category) || <Sparkles size={20} className="text-neutral-400" />}
                         </div>
+                      )}
+                      {isAIVideo && (
+                        <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+                          <Play size={16} className="text-white fill-white" />
+                        </span>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className="font-semibold text-[13px] text-[#1d1d1f] truncate">{work.title}</span>
-                        {isInternal && <Lock size={10} className="text-orange-500 shrink-0" />}
-                        {isAIVideo && <Play size={10} className="text-purple-500 fill-purple-500 shrink-0" />}
-                      </div>
-                      <p className="text-[12px] leading-snug text-[#86868b] line-clamp-2">{work.description}</p>
-                      {/* Under the text, not beside it, so the description keeps the width. */}
-                      <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-[#6e6e73]">
+                      {/* Under the title, not beside it, so the description keeps the width. */}
+                      <span className="inline-flex max-w-full items-center gap-1 text-[10px] font-medium uppercase tracking-[0.08em] text-[#86868b]">
                         {getCategoryIcon(work.category)}
-                        {work.category}
+                        <span className="truncate">{work.tag || work.category}</span>
                       </span>
+                      <div className="mt-0.5 flex items-center gap-1.5">
+                        <span className="font-semibold text-[15px] leading-snug tracking-[-0.01em] text-[#1d1d1f] line-clamp-1">{work.title}</span>
+                        {isInternal && <Lock size={11} className="text-orange-500 shrink-0" />}
+                      </div>
+                      <p className="mt-0.5 text-[13px] leading-snug text-[#6e6e73] line-clamp-2">{work.description}</p>
                     </div>
+                    <ChevronRight size={16} className="shrink-0 text-[#c7c7cc]" aria-hidden />
                   </AnimatedWorkRow>
                 );
               })}

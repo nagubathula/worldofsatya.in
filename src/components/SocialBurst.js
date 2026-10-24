@@ -287,7 +287,7 @@ export default function SocialBurst({ open, onToggle }) {
       )}
 
       {/* Projectile Social Icons Shooting into Place */}
-      <div id="social-burst-links" className="pointer-events-none absolute left-full ml-2.5 top-0 grid w-max grid-cols-3 gap-2.5 pt-1 sm:grid-cols-5">
+      <div id="social-burst-links" className="pointer-events-none absolute left-full ml-2.5 top-0 grid w-max grid-cols-3 gap-2.5 pt-1 sm:grid-cols-6">
         <AnimatePresence>
           {open &&
             socials.map(({ label, href, icon: Icon, color }, index) => (

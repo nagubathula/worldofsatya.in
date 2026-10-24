@@ -1,4 +1,6 @@
-export const caseStudiesData = [
+import { articlesData } from "./articles";
+
+const studies = [
   {
     slug: "notbad-design",
     title: "NotBad — The Words Are the Interface",
@@ -98,3 +100,6 @@ export const caseStudiesData = [
     ]
   }
 ];
+
+// Hand-written studies first, then the writing imported from Medium.
+export const caseStudiesData = [...studies, ...articlesData];

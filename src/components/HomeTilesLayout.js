@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Mail, MessageCircle } from "lucide-react";
 import SocialBurst, { SLIDE, useBurstWidth } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
@@ -26,6 +27,9 @@ const bioText = "text-[13px] sm:text-[12px] leading-[1.6] tracking-[-0.01em] tex
 
 const highlight =
   "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
+
+const contactButton =
+  "inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white px-3.5 py-1.5 font-medium text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:border-black/[0.16] hover:bg-[#f5f5f7]";
 
 // A highlighted phrase in the bio. Outside links open in a new tab.
 function BioLink({ href, children }) {
@@ -215,30 +219,35 @@ export default function HomeTilesLayout() {
                 <BioLink href="https://www.instagram.com/engineerudu">instagram</BioLink>
               </motion.p>
               {/* Availability, in words: the first thing a hiring manager looks for. */}
-              <motion.p
+              {/* A status line, then the two ways to reach out as buttons of equal weight. */}
+              <motion.div
                 variants={bioReveal}
-                className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] sm:text-[12px] tracking-[-0.01em]"
+                className="mt-6 flex flex-col items-start gap-3 text-[13px] sm:text-[12px] tracking-[-0.01em]"
               >
-                {/* The dot sits on the first line when the text wraps on a phone. */}
-                <span className="inline-flex items-start gap-2 font-medium text-[#1d1d1f]">
-                  <span aria-hidden="true" className="mt-[0.45em] h-2 w-2 shrink-0 rounded-full bg-[#34c759]" />
+                <p className="flex items-start gap-2 font-medium text-[#1d1d1f] [text-wrap:balance]">
+                  {/* A soft ping around the dot: available now. Sits on the first line when the text wraps. */}
+                  <span aria-hidden="true" className="relative mt-[0.4em] flex h-2 w-2 shrink-0">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-[#34c759] opacity-60 motion-safe:animate-ping" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#34c759]" />
+                  </span>
                   Open to AI Design Engineering and Product Design roles
-                </span>
-                <a
-                  href="mailto:nagubathula.satyasai@gmail.com"
-                  className="font-medium text-[#0071e3] transition-colors hover:text-[#0058b0]"
-                >
-                  Email me →
-                </a>
-                <a
-                  href="https://wa.me/918499888133"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-[#0071e3] transition-colors hover:text-[#0058b0]"
-                >
-                  WhatsApp →
-                </a>
-              </motion.p>
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a href="mailto:nagubathula.satyasai@gmail.com" className={contactButton}>
+                    <Mail size={13} aria-hidden="true" />
+                    Email me
+                  </a>
+                  <a
+                    href="https://wa.me/918499888133"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={contactButton}
+                  >
+                    <MessageCircle size={13} aria-hidden="true" />
+                    WhatsApp
+                  </a>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -259,8 +268,11 @@ export default function HomeTilesLayout() {
           ref={contactContainerRef}
           className={`${isAvatarVisible ? "order-4 mt-8 sm:mt-10" : "order-1 mb-4 sm:mb-6"} z-30 flex items-center justify-center gap-4`}
         >
-          <RiveAboutButton showFace={!isAvatarVisible} />
-          <GalleryButton />
+          {/* About and gallery stack, so the row stays narrow and the contact links have room. */}
+          <div className="flex flex-col gap-2.5">
+            <RiveAboutButton showFace={!isAvatarVisible} />
+            <GalleryButton />
+          </div>
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
 

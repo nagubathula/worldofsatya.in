@@ -6,7 +6,7 @@ export const allWorks = [
     description: "Designed a Startup in 6 Hours",
     category: "Project",
     tag: "Brand Design",
-    link: "https://hippogriff.medium.com/redantio-designing-a-startup-in-6-hours-4e24a593950f",
+    link: "/works/case-studies/redantio",
     actionText: "Read Story",
     content: `
       <div class="flex flex-col gap-12">
@@ -59,7 +59,7 @@ export const allWorks = [
     description: "Public Address System for K. L. University",
     category: "Project",
     tag: "Product Design",
-    link: "https://hippogriff.medium.com/ux-case-study-of-public-adressing-system-for-hoste-a84ce1583288",
+    link: "/works/case-studies/klu-public-address-system",
     actionText: "Read Story",
     content: `
       <div class="flex flex-col gap-12">
@@ -297,7 +297,7 @@ export const allWorks = [
     description: "My journey bridging creative visual direction and deep technical automation.",
     category: "Case Study",
     tag: "Medium Article",
-    link: "https://hippogriff.medium.com",
+    link: "/works/case-studies/from-doodles-to-design",
     actionText: "Read Article",
     content: `
       <div class="flex flex-col gap-12">
@@ -307,11 +307,11 @@ export const allWorks = [
         </section>
         <section>
           <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full article is on Medium, along with my other writing on design, engineering, and generative AI.</p>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full article is here on the site via the link above.</p>
         </section>
       </div>
     `,
-    image: "",
+    image: "/articles/from-doodles-to-design/01.png",
   },
   {
     id: "c2",
@@ -319,7 +319,7 @@ export const allWorks = [
     description: "An in-depth breakdown of the design and development process for my portfolio website.",
     category: "Case Study",
     tag: "Medium Article",
-    link: "https://medium.com/@hippogriff/how-i-built-my-psuedo-fullstack-portfolio-73cd1f6aecda",
+    link: "/works/case-studies/pseudo-fullstack-portfolio",
     actionText: "Read Article",
     content: `
       <div class="flex flex-col gap-12">
@@ -329,11 +329,11 @@ export const allWorks = [
         </section>
         <section>
           <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full write-up is on Medium — from concept and visual direction through implementation.</p>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full write-up is via the link above — from concept and visual direction through implementation.</p>
         </section>
       </div>
     `,
-    image: "",
+    image: "/articles/pseudo-fullstack-portfolio/01.png",
   },
   {
     id: "c3",
@@ -363,7 +363,7 @@ export const allWorks = [
     description: "A guide on bridging the gap between design and development, avoiding common handoff pitfalls.",
     category: "Case Study",
     tag: "Medium Article",
-    link: "https://medium.com/design-bootcamp/why-are-you-still-confusing-when-turning-your-design-to-code-a7489d544deb",
+    link: "/works/case-studies/design-to-code",
     actionText: "Read Article",
     content: `
       <div class="flex flex-col gap-12">
@@ -373,11 +373,11 @@ export const allWorks = [
         </section>
         <section>
           <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full article is on Medium via the link above.</p>
+          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full article is via the link above.</p>
         </section>
       </div>
     `,
-    image: "",
+    image: "/articles/design-to-code/01.png",
   },
 
   // Open Source

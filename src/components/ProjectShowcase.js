@@ -14,7 +14,7 @@ const projects = [
     image: "/redantio.webp",
     category: "Brand Design",
     text: "Case Study",
-    link: "https://hippogriff.medium.com/redantio-designing-a-startup-in-6-hours-4e24a593950f",
+    link: "/works/case-studies/redantio",
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ const projects = [
     description: "Public Address System for K. L. University",
     image: "/customamplifierbox.webp",
     category: "Product Design",
-    link: "https://hippogriff.medium.com/ux-case-study-of-public-adressing-system-for-hoste-a84ce1583288",
+    link: "/works/case-studies/klu-public-address-system",
     text: "Case Study",
   },
   {
