@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Mail, MessageCircle } from "lucide-react";
-import SocialBurst, { SLIDE, useBurstWidth } from "./SocialBurst";
+import SocialBurst, { SLIDE, useBurstWidth, useCompact } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
 import HomeAnnotation from "./HomeAnnotation";
@@ -104,6 +104,7 @@ export default function HomeTilesLayout() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const contactContainerRef = useRef(null);
   const burstWidth = useBurstWidth();
+  const hideSideButtons = useCompact() && isContactOpen;
   const reduceMotion = useReducedMotion();
 
   const isAvatarVisible = currentSection === "avatar";
@@ -268,17 +269,30 @@ export default function HomeTilesLayout() {
           ref={contactContainerRef}
           className={`${isAvatarVisible ? "order-4 mt-8 sm:mt-10" : "order-1 mb-4 sm:mb-6"} z-30 flex items-center justify-center gap-4`}
         >
-          {/* About and gallery stack, so the row stays narrow and the contact links have room. */}
-          <div className="flex flex-col gap-2.5">
+          {/* On a phone the contact links need the whole row, so about and gallery
+              tuck away while they're out. The negative margin takes back the row's gap. */}
+          <motion.div
+            initial={false}
+            animate={
+              hideSideButtons
+                ? { width: 0, opacity: 0, scale: 0.8, marginRight: -16 }
+                : { width: "auto", opacity: 1, scale: 1, marginRight: 0 }
+            }
+            transition={SLIDE}
+            aria-hidden={hideSideButtons || undefined}
+            inert={hideSideButtons || undefined}
+            className="flex shrink-0 items-center gap-4"
+          >
             <RiveAboutButton showFace={!isAvatarVisible} />
             <GalleryButton />
-          </div>
+          </motion.div>
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
 
         {/* Touch screens get no hover cue that the face card turns, so say it. */}
         <AnimatePresence>
-          {isAvatarVisible && (
+          {/* Out of the way while the contact links are open: their second row sits here. */}
+          {isAvatarVisible && !isContactOpen && (
             <motion.button
               key="swipe-hint"
               type="button"

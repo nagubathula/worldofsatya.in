@@ -182,7 +182,9 @@ function StatsRow() {
       style={{ height: `calc(100svh + ${distance}px)` }}
     >
       <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden">
-        <motion.div ref={trackRef} style={{ x }} className="flex w-max items-center gap-5 px-[6vw]">
+        {/* It opens on the heading, centred like the rest of the page (the intro is
+            280px wide), with the tiles waiting to its right; the scroll brings them in. */}
+        <motion.div ref={trackRef} style={{ x }} className="flex w-max items-center gap-5 pl-[max(6vw,calc(50vw-140px))] pr-[6vw]">
           <StatsIntro hint />
           {STATS.map((stat, i) => (
             <StatTile key={stat.label} stat={stat} index={i} total={STATS.length} />

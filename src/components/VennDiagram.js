@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
@@ -110,19 +110,111 @@ const DOMAINS = {
 const CARD_W = 320;
 const CARD_H = 270;
 const CURSOR_GAP = 18;
+// Breathing room between the face and the notch the card makes for it.
+const NOTCH_GAP = 8;
+
+// The face (HomeFace) docks in the Venn's centre on its own layer. Rather than
+// slide over or under it, the card bends around it: a round notch, kept in
+// step with both every frame.
+function useFaceNotch(ref, active) {
+  useEffect(() => {
+    if (!active) return;
+    let frame;
+    const track = () => {
+      const el = ref.current;
+      const face = document.querySelector("[data-home-face]");
+      if (el && face) {
+        const card = el.getBoundingClientRect();
+        const f = face.getBoundingClientRect();
+        // Mask coordinates are the card's own, before its enter/exit scale.
+        const scale = card.width / el.offsetWidth || 1;
+        const r = f.width / 2 + NOTCH_GAP;
+        const cx = (f.left + f.width / 2 - card.left) / scale;
+        const cy = (f.top + f.height / 2 - card.top) / scale;
+        // Distance from the face's centre to the card's nearest point.
+        const dx = Math.max(-cx, 0, cx - el.offsetWidth);
+        const dy = Math.max(-cy, 0, cy - el.offsetHeight);
+        const notched = f.width > 0 && Math.hypot(dx, dy) < r;
+        const mask = notched
+          ? `radial-gradient(circle at ${cx}px ${cy}px, transparent ${r}px, #000 ${r + 0.75}px)`
+          : "none";
+        el.style.maskImage = mask;
+        el.style.webkitMaskImage = mask;
+        flowAround(el.querySelector("[data-notch-float]"), el, notched, cx, cy, r);
+      }
+      frame = requestAnimationFrame(track);
+    };
+    frame = requestAnimationFrame(track);
+    return () => cancelAnimationFrame(frame);
+  }, [ref, active]);
+}
+
+// The card's border and padding: the float lives in its content box.
+const CARD_INSET = 21;
+// Space between the notch and the words that flow around it.
+const FLOW_GAP = 6;
+
+// The card's contents make way for the notch rather than vanish under it: an
+// empty float, shaped like the notch, that text and logos wrap around. It sits
+// on whichever side the face is nearer, and reaches down only as far as the notch.
+function flowAround(float, card, notched, cx, cy, r) {
+  if (!float) return;
+  const width = card.offsetWidth - CARD_INSET * 2;
+  const x = cx - CARD_INSET;
+  const y = cy - CARD_INSET;
+  const reach = r + FLOW_GAP;
+  const left = x < width / 2;
+  const floatW = left ? x + reach : width - (x - reach);
+  const floatH = y + reach;
+  if (!notched || floatW <= 0 || floatH <= 0) {
+    float.style.width = "0px";
+    float.style.height = "0px";
+    float.style.shapeOutside = "none";
+    return;
+  }
+  float.style.float = left ? "left" : "right";
+  float.style.width = `${Math.min(floatW, width)}px`;
+  float.style.height = `${floatH}px`;
+  float.style.shapeOutside = `circle(${reach}px at ${left ? x : x - (width - floatW)}px ${y}px)`;
+}
+
+// The notch may bite only the card's left or right edge. In the middle it
+// squeezes the words into strips either side of the face; in the top or bottom
+// edge it shoves a single line aside. So whenever the face reaches into the
+// card's top, middle or bottom, the card slides sideways, the shorter way that
+// stays on screen, until the face's centre sits on its edge: half a face in
+// the card, with the words flowing round it.
+function clearOfFace(x, y, height) {
+  const face = document.querySelector("[data-home-face]")?.getBoundingClientRect();
+  if (!face || face.width === 0) return [x, y];
+  const fx = face.left + face.width / 2;
+  const fy = face.top + face.height / 2;
+  const reach = face.width / 2 + NOTCH_GAP;
+  const overlapsY = fy > y - reach && fy < y + height + reach;
+  if (!overlapsY || fx <= x || fx >= x + CARD_W) return [x, y];
+  const fits = (nx) => nx >= 12 && nx + CARD_W <= window.innerWidth - 12;
+  const moves = [fx, fx - CARD_W].filter(fits);
+  if (!moves.length) return [x, y];
+  const nx = moves.reduce((best, m) => (Math.abs(m - x) < Math.abs(best - x) ? m : best));
+  return [nx, y];
+}
 
 // What a region of the Venn stands for: title, description and the companies
 // where that work happened. Shown on demand, not beside the diagram.
-function DomainCard({ domain }) {
+// `flat` drops the box shadow, for when a wrapper casts one that follows a notch.
+function DomainCard({ domain, flat = false }) {
   return (
-    <div className="rounded-3xl border border-black/[0.08] bg-white/95 p-5 shadow-[0_18px_48px_rgba(0,0,0,0.10)] backdrop-blur-xl">
+    <div className={`rounded-3xl border border-black/[0.08] bg-white/95 p-5 backdrop-blur-xl ${flat ? "" : "shadow-[0_18px_48px_rgba(0,0,0,0.10)]"}`}>
+      {/* Shaped by flowAround while the card meets the face; empty otherwise. */}
+      <div data-notch-float aria-hidden="true" className="h-0 w-0" />
       <h3 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-[#111111]">{domain.title}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-[#515154]">{domain.description}</p>
-      <div className="mt-4 flex items-center gap-2">
+      {/* Inline logos, not a flex row, so they can flow around the notch like words. */}
+      <div className="mt-4 -mb-2 leading-none">
         {domain.companies.map((company) => (
           <div
             key={company.name}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.08] bg-white p-2"
+            className="mb-2 mr-2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.08] bg-white p-2 align-middle"
           >
             <Image src={company.logo} alt="" width={24} height={24} className="h-full w-full object-contain" />
           </div>
@@ -139,12 +231,33 @@ export default function VennDiagram() {
   const [showCard, setShowCard] = useState(false);
   const [touch, setTouch] = useState(false);
   const current = DOMAINS[activeDomain] || DOMAINS.core;
+  const cardRef = useRef(null);
+  // Where the cursor wants the card, before it makes way for the face.
+  const cursorSpot = useRef(null);
+  useFaceNotch(cardRef, !touch && showCard);
 
   // The card trails the cursor on a soft spring.
   const cardX = useMotionValue(0);
   const cardY = useMotionValue(0);
   const springX = useSpring(cardX, { stiffness: 500, damping: 40, mass: 0.4 });
   const springY = useSpring(cardY, { stiffness: 500, damping: 40, mass: 0.4 });
+
+  // The face moves without the mouse (it rides the scroll into the Venn), so
+  // keep the card clear of it every frame, not just on pointer moves.
+  useEffect(() => {
+    if (touch || !showCard) return;
+    let frame;
+    const keepClear = () => {
+      if (cursorSpot.current) {
+        const [x, y] = clearOfFace(...cursorSpot.current, cardRef.current?.offsetHeight || CARD_H);
+        if (x !== cardX.get()) cardX.set(x);
+        if (y !== cardY.get()) cardY.set(y);
+      }
+      frame = requestAnimationFrame(keepClear);
+    };
+    frame = requestAnimationFrame(keepClear);
+    return () => cancelAnimationFrame(frame);
+  }, [touch, showCard, cardX, cardY]);
 
   useEffect(() => {
     const media = window.matchMedia("(hover: none)");
@@ -156,8 +269,10 @@ export default function VennDiagram() {
 
   // Beside the cursor, flipped to the other side near the edges of the screen.
   const placeCard = (e, jump) => {
-    const x = e.clientX + CURSOR_GAP + CARD_W > window.innerWidth ? e.clientX - CURSOR_GAP - CARD_W : e.clientX + CURSOR_GAP;
-    const y = Math.min(Math.max(e.clientY - CARD_H / 2, 12), window.innerHeight - CARD_H - 12);
+    let x = e.clientX + CURSOR_GAP + CARD_W > window.innerWidth ? e.clientX - CURSOR_GAP - CARD_W : e.clientX + CURSOR_GAP;
+    let y = Math.min(Math.max(e.clientY - CARD_H / 2, 12), window.innerHeight - CARD_H - 12);
+    cursorSpot.current = [x, y];
+    [x, y] = clearOfFace(x, y, cardRef.current?.offsetHeight || CARD_H);
     cardX.set(x);
     cardY.set(y);
     if (jump) {
@@ -197,16 +312,6 @@ export default function VennDiagram() {
               viewBox="20 20 600 570"
               className="w-full h-full overflow-visible"
             >
-              <defs>
-                <filter id="brush-filter" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
-                </filter>
-                <filter id="brush-filter-subtle" x="-15%" y="-15%" width="130%" height="130%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
-                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
-                </filter>
-              </defs>
 
               {/* 1. Designer (Top Left) */}
               <g
@@ -221,7 +326,6 @@ export default function VennDiagram() {
                   strokeWidth={activeDomain === "designer" ? "2.75" : "1.5"}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  filter="url(#brush-filter)"
                   className="transition-all duration-300"
                 />
               </g>
@@ -239,7 +343,6 @@ export default function VennDiagram() {
                   strokeWidth={activeDomain === "engineer" ? "2.75" : "1.5"}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  filter="url(#brush-filter)"
                   className="transition-all duration-300"
                 />
               </g>
@@ -257,7 +360,6 @@ export default function VennDiagram() {
                   strokeWidth={activeDomain === "ai" ? "2.75" : "1.5"}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  filter="url(#brush-filter)"
                   className="transition-all duration-300"
                 />
               </g>
@@ -466,13 +568,10 @@ export default function VennDiagram() {
                 )}
                 <path
                   d="M 367.7 280.0 C 367.2 285.8, 363.9 292.1, 360.8 296.9 C 357.6 301.7, 353.1 305.4, 348.9 308.9 C 344.7 312.4, 340.6 315.5, 335.8 318.0 C 330.9 320.6, 325.5 323.3, 320.0 324.0 C 314.5 324.6, 307.8 324.1, 302.6 322.0 C 297.4 319.9, 292.3 315.7, 288.6 311.4 C 284.9 307.2, 282.3 301.7, 280.2 296.5 C 278.1 291.3, 276.4 285.7, 275.9 280.0 C 275.4 274.3, 275.3 267.7, 277.2 262.3 C 279.1 256.8, 282.9 250.9, 287.2 247.2 C 291.6 243.5, 298.0 241.3, 303.5 240.1 C 308.9 238.8, 314.6 239.5, 320.0 239.9 C 325.4 240.3, 330.3 240.9, 335.6 242.4 C 340.9 243.8, 346.8 245.2, 351.6 248.4 C 356.3 251.7, 361.3 256.5, 364.0 261.8 C 366.5 267.1, 367.2 274.2, 366.7 280.0 Z"
-                  fill="#ffffff"
-                  stroke="#111111"
-                  strokeWidth="2"
-                  filter="url(#brush-filter-subtle)"
-                  className="transition-transform duration-200 group-hover/center:scale-105"
-                  style={{ transformOrigin: "320px 280px" }}
-                  // The socket the site's notch (HomeFace) sits in while the diagram is in view.
+                  // Unpainted: the face fills it, so it needs no outline of its own.
+                  // Still the hover target, and the socket the site's notch
+                  // (HomeFace) sits in while the diagram is in view.
+                  fill="transparent"
                   data-venn-core
                 />
                 <title>Satya</title>
@@ -512,17 +611,22 @@ export default function VennDiagram() {
               style={{ x: springX, y: springY, width: CARD_W }}
               className="pointer-events-none fixed left-0 top-0 z-[60]"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={current.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.12 }}
-                >
-                  <DomainCard domain={current} />
-                </motion.div>
-              </AnimatePresence>
+              {/* The shadow is a drop-shadow on the outside, so it follows the notch. */}
+              <div className="[filter:drop-shadow(0_18px_32px_rgba(0,0,0,0.10))_drop-shadow(0_2px_6px_rgba(0,0,0,0.05))]">
+                <div ref={cardRef}>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={current.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.12 }}
+                    >
+                      <DomainCard domain={current} flat />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

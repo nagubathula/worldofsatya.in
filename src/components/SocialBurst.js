@@ -33,7 +33,7 @@ const socials = [
 ];
 
 // Phones lay the links out in two rows of three, wider screens in one row.
-function useCompact() {
+export function useCompact() {
   const [compact, setCompact] = useState(true);
   useEffect(() => {
     const query = window.matchMedia("(min-width: 640px)");
