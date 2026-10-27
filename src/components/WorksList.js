@@ -673,7 +673,7 @@ export default function WorksList() {
                     </div>
                     <div className="py-4 px-6 min-w-0 flex items-center">
                       <span className="text-[11px] font-mono text-[#6e6e73] truncate">
-                        {work.tag || "—"}
+                        {work.tag}
                       </span>
                     </div>
                     <div className="py-4 px-6 min-w-0 flex items-center">

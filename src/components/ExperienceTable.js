@@ -25,7 +25,7 @@ const EXPERIENCES = [
   {
     company: "NxtWave",
     role: "Gen AI Engineer and Designer",
-    period: "05/2025 — Present",
+    period: "05/2025 – Present",
     isCurrent: true,
     location: "Hyderabad, India",
     type: "Full-Time",
@@ -37,7 +37,7 @@ const EXPERIENCES = [
   {
     company: "CrestLogic",
     role: "Product Engineer",
-    period: "11/2024 — 03/2025",
+    period: "11/2024 – 03/2025",
     isCurrent: false,
     location: "Hyderabad, India",
     type: "Contract",
@@ -49,7 +49,7 @@ const EXPERIENCES = [
   {
     company: "APSPCL",
     role: "Product & Design Engineer (Consultant)",
-    period: "07/2024 — 10/2024",
+    period: "07/2024 – 10/2024",
     isCurrent: false,
     location: "Andhra Pradesh, India",
     type: "Consultant",
@@ -61,7 +61,7 @@ const EXPERIENCES = [
   {
     company: "Traboda",
     role: "Product Engineer (Intern)",
-    period: "08/2023 — 07/2024",
+    period: "08/2023 – 07/2024",
     isCurrent: false,
     location: "Amritapuri / Remote",
     type: "Internship",
@@ -73,7 +73,7 @@ const EXPERIENCES = [
   {
     company: "Redantio",
     role: "Design and Development Engineer (Intern)",
-    period: "01/2022 — 02/2023",
+    period: "01/2022 – 02/2023",
     isCurrent: false,
     location: "Andhra Pradesh, India",
     type: "Internship",
@@ -84,7 +84,7 @@ const EXPERIENCES = [
   },
 ];
 
-// The year a role started: "05/2025 — Present" → "2025".
+// The year a role started: "05/2025 – Present" → "2025".
 function startYear(period) {
   return period.match(/\d{4}/)?.[0] ?? "";
 }

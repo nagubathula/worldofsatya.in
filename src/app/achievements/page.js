@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Achievements | Satya Sai Nagubathula — Honors & Milestones",
+  title: "Achievements | Satya Sai Nagubathula",
   description: "Recognitions, client milestones, and community honors achieved by Satya Sai Nagubathula.",
   path: "/achievements",
 });

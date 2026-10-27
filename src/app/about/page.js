@@ -5,7 +5,7 @@ import PageTurn from "@/components/PageTurn";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "About | Satya Sai Nagubathula — AI + Design Engineer",
+  title: "About Satya Sai Nagubathula | AI + Design Engineer",
   description:
     "Meet Satya Sai Nagubathula, an AI + Design Engineer connecting product design, frontend engineering, and generative AI to build working products.",
   path: "/about",
