@@ -24,15 +24,15 @@ function CompanyLogo({ logo, name, className = "w-10 h-10" }) {
 const EXPERIENCES = [
   {
     company: "NxtWave",
-    role: "Generative AI Engineer and Creative Lead",
+    role: "Gen AI Engineer and Designer",
     period: "05/2025 — Present",
     isCurrent: true,
     location: "Hyderabad, India",
     type: "Full-Time",
     logo: "/images/nxtwave-logo.svg",
     description:
-      "Led AI production, scaling channels to 100K+ followers and orchestrating 2,000+ videos. Pioneered structured JSON automation for models like Veo 3 & Wan 2.2. Built internal tools slashing asset creation time by 90%.",
-    tags: ["Generative AI", "Veo 3", "ComfyUI", "Automation", "Wan 2.2"],
+      "Work across product design, web development, and generative AI video. Design and build web products and internal tools, which cut asset creation time by 90%. Led AI video production, scaling channels to 100K+ followers across 2,000+ videos with Veo 3 and Wan 2.2.",
+    tags: ["Product Design", "Web Development", "Generative AI", "AI Video", "ComfyUI"],
   },
   {
     company: "CrestLogic",

@@ -14,7 +14,7 @@ const DOMAINS = {
     description:
       "I work where design, fullstack engineering, and generative AI overlap: designing products, building them, and wiring in the AI that makes them useful.",
     companies: [
-      { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Generative AI Engineer & Creative Lead" },
+      { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Gen AI Engineer & Designer" },
       { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Product Engineer" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Product Engineer" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Product & Design Engineer" },

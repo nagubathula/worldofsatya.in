@@ -2,11 +2,13 @@ import WorksList from "@/components/WorksList";
 import Footer from "@/components/Footer";
 import PageTurn from "@/components/PageTurn";
 import { Sparkles } from "lucide-react";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Works | Satya Sai Nagubathula",
   description: "Products, case studies, open-source systems, generative AI videos, and internal tools by Satya Sai Nagubathula. All the work, in one place.",
-};
+  path: "/works",
+});
 
 export default function Works() {
   return (

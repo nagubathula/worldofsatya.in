@@ -1,10 +1,12 @@
 import Achievements from "@/components/Achievements";
 import Footer from "@/components/Footer";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Achievements | Satya Sai Nagubathula — Honors & Milestones",
   description: "Recognitions, client milestones, and community honors achieved by Satya Sai Nagubathula.",
-};
+  path: "/achievements",
+});
 
 export default function AchievementsPage() {
   return (

@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Mail, MessageCircle } from "lucide-react";
 import SocialBurst, { SLIDE, useBurstWidth, useCompact } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
@@ -27,9 +26,6 @@ const bioText = "text-[13px] sm:text-[12px] leading-[1.6] tracking-[-0.01em] tex
 
 const highlight =
   "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
-
-const contactButton =
-  "inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white px-3.5 py-1.5 font-medium text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:border-black/[0.16] hover:bg-[#f5f5f7]";
 
 // A highlighted phrase in the bio. Outside links open in a new tab.
 function BioLink({ href, children }) {
@@ -220,7 +216,6 @@ export default function HomeTilesLayout() {
                 <BioLink href="https://www.instagram.com/engineerudu">instagram</BioLink>
               </motion.p>
               {/* Availability, in words: the first thing a hiring manager looks for. */}
-              {/* A status line, then the two ways to reach out as buttons of equal weight. */}
               <motion.div
                 variants={bioReveal}
                 className="mt-6 flex flex-col items-start gap-3 text-[13px] sm:text-[12px] tracking-[-0.01em]"
@@ -233,21 +228,6 @@ export default function HomeTilesLayout() {
                   </span>
                   Open to AI Design Engineering and Product Design roles
                 </p>
-                <div className="flex flex-wrap items-center gap-2">
-                  <a href="mailto:nagubathula.satyasai@gmail.com" className={contactButton}>
-                    <Mail size={13} aria-hidden="true" />
-                    Email me
-                  </a>
-                  <a
-                    href="https://wa.me/918499888133"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={contactButton}
-                  >
-                    <MessageCircle size={13} aria-hidden="true" />
-                    WhatsApp
-                  </a>
-                </div>
               </motion.div>
             </motion.div>
           )}
