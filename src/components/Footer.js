@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { SPRING } from "@/lib/motion";
-import AskAI from "./AskAI";
 
 const MotionLink = motion.create(Link);
 
@@ -59,8 +58,6 @@ export default function Footer() {
         
         {/* Subtle Minimal Apple Divider */}
         <div className="w-full h-px bg-black/[0.06] my-10 sm:my-14" />
-
-        <AskAI className="mb-6 sm:mb-8" />
 
         <nav aria-label="Site" className="mb-6 flex flex-wrap justify-center gap-1 sm:mb-8 sm:gap-2">
           {siteLinks.map((link) => (

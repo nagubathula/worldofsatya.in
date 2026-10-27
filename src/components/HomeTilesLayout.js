@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import SocialBurst, { SLIDE, useBurstWidth, useCompact } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
-import AskAI from "./AskAI";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
 import { playPopSound } from "./SoundEffects";
@@ -248,29 +247,6 @@ export default function HomeTilesLayout() {
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
 
-        {/* Ask AI, with the bio only. On a phone the contact links' second row lands
-            on it, so it fades out while they're open but keeps its room. */}
-        <AnimatePresence>
-          {isAvatarVisible && (
-            <motion.div
-              key="ask-ai"
-              initial={{ opacity: 0, y: 6 }}
-              animate={hideSideButtons ? "hidden" : "show"}
-              exit={{ opacity: 0, transition: { duration: 0.2 } }}
-              variants={{
-                hidden: { opacity: 0, transition: { duration: 0.15 } },
-                // On closing, this waits for the contact links to fly back in.
-                show: { opacity: 1, y: 0, transition: { ...SMOOTH, delay: introDelay + 0.7 } },
-              }}
-              aria-hidden={hideSideButtons || undefined}
-              inert={hideSideButtons || undefined}
-              className="order-5 mt-10 w-full sm:mt-12"
-            >
-              <AskAI />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Say that the face card turns: a scroll on desktop, a swipe on touch screens. */}
         <AnimatePresence>
           {/* Out of the way while the contact links are open: their second row sits here. */}
@@ -283,7 +259,7 @@ export default function HomeTilesLayout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ ...SMOOTH, delay: introDelay + 0.9 }}
-              className="order-6 mt-6 flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#86868b] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-3"
+              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#86868b] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
             >
               <span className="[@media(hover:none)]:hidden">Scroll down for works</span>
               <span className="hidden [@media(hover:none)]:inline">Swipe up for works</span>
