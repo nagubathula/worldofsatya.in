@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useSpring, useMotionValue, useTransform } from "framer-motion";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import HoverLabel from "./HoverLabel";
 
 // Opens the gallery. Same tile as About and contact; the icon is a small stack
 // of prints that fans out on hover, like the works fan.
@@ -54,12 +55,11 @@ export default function GalleryButton() {
   };
 
   return (
-    <motion.div style={{ x: magneticX, y: magneticY }} className="relative shrink-0 select-none">
+    <motion.div style={{ x: magneticX, y: magneticY }} className="group/label relative shrink-0 select-none">
       <Link
         ref={buttonRef}
         href="/gallery"
         aria-label="Gallery"
-        title="Gallery"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -133,6 +133,7 @@ export default function GalleryButton() {
         {/* Micro Bevel Gloss Highlight */}
         <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
       </Link>
+      <HoverLabel>Gallery</HoverLabel>
     </motion.div>
   );
 }

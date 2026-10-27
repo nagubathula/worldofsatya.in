@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { play8BitTapSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import HoverLabel from "./HoverLabel";
 
 function MediumIcon({ size = 20 }) {
   return (
@@ -135,7 +136,7 @@ export default function SocialBurst({ open, onToggle }) {
           x: magneticX,
           y: magneticY,
         }}
-        className="relative z-20 shrink-0 select-none"
+        className="group/label relative z-20 shrink-0 select-none"
       >
         <motion.button
           ref={trigger}
@@ -247,6 +248,8 @@ export default function SocialBurst({ open, onToggle }) {
           {/* Micro Bevel Gloss Highlight */}
           <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
         </motion.button>
+        {/* The links name themselves once they're out. */}
+        {!open && <HoverLabel>Contact</HoverLabel>}
       </motion.div>
 
       {/* Shockwave Radial Ring and Laser Ray Emitters */}

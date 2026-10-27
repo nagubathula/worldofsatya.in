@@ -3,11 +3,10 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import SocialBurst, { SLIDE, useBurstWidth, useCompact } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
-import HomeAnnotation from "./HomeAnnotation";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
 import { playPopSound } from "./SoundEffects";
@@ -101,7 +100,6 @@ export default function HomeTilesLayout() {
   const contactContainerRef = useRef(null);
   const burstWidth = useBurstWidth();
   const hideSideButtons = useCompact() && isContactOpen;
-  const reduceMotion = useReducedMotion();
 
   const isAvatarVisible = currentSection === "avatar";
   // On the first visit the face lands first and everything else follows it.
@@ -165,12 +163,6 @@ export default function HomeTilesLayout() {
             initialSection="avatar"
             onSectionChange={setCurrentSection}
           />
-          {/* The handwritten note scribbles in once the face has landed. */}
-          <AnimatePresence>
-            {isAvatarVisible && (
-              <HomeAnnotation key="note" delay={introDelay + 0.35} reduceMotion={reduceMotion === true} />
-            )}
-          </AnimatePresence>
         </div>
 
         {/* popLayout: the bio steps out of the flow as it leaves, so the cards don't wait for it. */}
@@ -215,20 +207,6 @@ export default function HomeTilesLayout() {
                 Not boasting but I have 10k+ followers on{" "}
                 <BioLink href="https://www.instagram.com/engineerudu">instagram</BioLink>
               </motion.p>
-              {/* Availability, in words: the first thing a hiring manager looks for. */}
-              <motion.div
-                variants={bioReveal}
-                className="mt-6 flex flex-col items-start gap-3 text-[13px] sm:text-[12px] tracking-[-0.01em]"
-              >
-                <p className="flex items-start gap-2 font-medium text-[#1d1d1f] [text-wrap:balance]">
-                  {/* A soft ping around the dot: available now. Sits on the first line when the text wraps. */}
-                  <span aria-hidden="true" className="relative mt-[0.4em] flex h-2 w-2 shrink-0">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-[#34c759] opacity-60 motion-safe:animate-ping" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#34c759]" />
-                  </span>
-                  Open to AI Design Engineering and Product Design roles
-                </p>
-              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -269,7 +247,7 @@ export default function HomeTilesLayout() {
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
 
-        {/* Touch screens get no hover cue that the face card turns, so say it. */}
+        {/* Say that the face card turns: a scroll on desktop, a swipe on touch screens. */}
         <AnimatePresence>
           {/* Out of the way while the contact links are open: their second row sits here. */}
           {isAvatarVisible && !isContactOpen && (
@@ -281,16 +259,18 @@ export default function HomeTilesLayout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ ...SMOOTH, delay: introDelay + 0.9 }}
-              className="order-5 mt-6 hidden items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#86868b] [@media(hover:none)]:flex"
+              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#86868b] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
             >
+              <span className="[@media(hover:none)]:hidden">Scroll down for works</span>
+              <span className="hidden [@media(hover:none)]:inline">Swipe up for works</span>
               <motion.span
                 aria-hidden="true"
-                animate={{ y: [0, -3, 0] }}
+                animate={{ y: [0, 3, 0] }}
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
               >
-                ↑
+                <span className="[@media(hover:none)]:hidden">↓</span>
+                <span className="hidden [@media(hover:none)]:inline">↑</span>
               </motion.span>
-              Swipe up for works
             </motion.button>
           )}
         </AnimatePresence>

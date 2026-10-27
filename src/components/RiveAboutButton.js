@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, useSpring, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import HoverLabel from "./HoverLabel";
 
 export default function RiveAboutButton({ showFace = false }) {
   const buttonRef = useRef(null);
@@ -84,13 +85,12 @@ export default function RiveAboutButton({ showFace = false }) {
         x: magneticX,
         y: magneticY,
       }}
-      className="relative shrink-0 select-none"
+      className="group/label relative shrink-0 select-none"
     >
       <Link
         ref={buttonRef}
         href="/about"
         aria-label="About Satya"
-        title="About Satya"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -309,6 +309,7 @@ export default function RiveAboutButton({ showFace = false }) {
         {/* Micro Bevel Gloss Highlight */}
         <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
       </Link>
+      <HoverLabel>About</HoverLabel>
     </motion.div>
   );
 }
