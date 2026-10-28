@@ -6,29 +6,9 @@ export const allWorks = [
     description: "Designed a Startup in 6 Hours",
     category: "Project",
     tag: "Brand Design",
-    link: "/works/case-studies/redantio",
-    actionText: "Read Story",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The challenge</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">I had six hours, working alone, to design Redantio, a cybersecurity brand aimed at a very specific audience of bureaucrats. It needed a complete identity and web presence (brand, interface, and experience) in a single sprint. It was a real taste of startup pressure: limited resources, an impossible deadline, and an idea that had to become pixels fast.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The process</h2>
-          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
-            <li><span class="font-semibold text-foreground">Wireframes first</span>: bare-bones black-and-white boxes to lock down layout and flow without overthinking.</li>
-            <li><span class="font-semibold text-foreground">Color check</span>: tested contrast, accessibility, and emotional tone. Vibrant reds (#C10206, #A50113) over soft grays: bold, urgent, memorable.</li>
-            <li><span class="font-semibold text-foreground">Micro animations</span>: AOS.js scroll reveals, hover feedback on buttons and cards, subtle input highlights, used sparingly.</li>
-            <li><span class="font-semibold text-foreground">Type system</span>: Poppins for a clean base, Kanit for bold headers, Pathway Extreme for flair.</li>
-          </ul>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What I learned</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Built with Figma, Tailwind CSS, and raw HTML/CSS/JS, picking speed over polish. What I learned: the six-hour limit pushed me to try things I wouldn't have tried with more time. The full breakdown is in the case study.</p>
-        </section>
-      </div>
-    `,
+    link: "",
+    actionText: "",
+    study: "redantio",
     image: "/redantio.webp",
   },
   {
@@ -59,28 +39,9 @@ export const allWorks = [
     description: "Public Address System for K. L. University",
     category: "Project",
     tag: "Product Design",
-    link: "/works/case-studies/klu-public-address-system",
-    actionText: "Read Story",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The problem</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">K L University's hostels ran announcements manually, with microphones, speakers, and trained operators. The result: missed wake-up calls, last-minute panic during emergencies, and total dependency on whoever knew how to work the equipment. The university needed a centralized public address system that hostel wardens (many of them not tech-savvy, some over 60) could operate confidently without assistance.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The approach</h2>
-          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
-            <li><span class="font-semibold text-foreground">Research</span>: interviews with five hostel wardens and two supervisors, distilled into personas, an empathy map, and a user journey.</li>
-            <li><span class="font-semibold text-foreground">Deliberately "old-school" UI</span>: the interface was designed to feel like a radio or landline phone: large buttons, minimal text, clear visual feedback, keyboard shortcuts. Familiarity over flash, to eliminate fear of technology.</li>
-            <li><span class="font-semibold text-foreground">Hardware design</span>: a desk unit with a comfortable viewing angle, grippy tactile knobs, reliable switches with satisfying feedback, and color-coded labels.</li>
-          </ul>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Outcomes</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">In trial runs: 100% task completion by wardens on first try, zero scheduling errors over a month, and new-warden onboarding in under five minutes. Wardens reported feeling "empowered" and "confident", including those who had long stayed away from tech.</p>
-        </section>
-      </div>
-    `,
+    link: "",
+    actionText: "",
+    study: "klu-public-address-system",
     image: "/customamplifierbox.webp",
   },
   {
@@ -238,29 +199,7 @@ export const allWorks = [
     image: "/wiredctf.png",
   },
 
-  // Case Studies
-  {
-    id: "c5",
-    title: "NotBad: The Words Are the Interface",
-    description: "Designing a cross-platform Markdown writer where the chrome disappears: concealment, tokens, and the decisions behind a pure-Flutter port of a macOS-only app.",
-    category: "Case Study",
-    tag: "Product Design",
-    link: "/works/case-studies/notbad-design",
-    actionText: "Read Case Study",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The brief</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Port Trace, a beloved macOS-only Markdown writer built on a web engine, to every desktop as a pure-Flutter app, without losing the one thing that makes it special: an interface that gets out of the way of the words. The case study covers the full design system (color, type, motion, and layout tokens), the concealment engine's UX, the state machines behind the document trust model, and a decision log of what was chosen and why.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The condensed case study is on this site; the fully detailed version, with Mermaid diagrams, complete token tables, and the element inventory, lives in the repository's docs.</p>
-        </section>
-      </div>
-    `,
-    image: "/notbad-palette.png",
-  },
+  // More projects and writing
   {
     id: "c0",
     title: "ContentFlow",
@@ -295,89 +234,65 @@ export const allWorks = [
     id: "c1",
     title: "From Doodles to Design",
     description: "My journey bridging creative visual direction and deep technical automation.",
-    category: "Case Study",
+    category: "Writing",
     tag: "Medium Article",
-    link: "/works/case-studies/from-doodles-to-design",
-    actionText: "Read Article",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The story</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">How does someone go from sketching doodles to architecting AI pipelines? This piece traces that path from pure visual design into deep technical automation, and why the most interesting work happens where the two overlap. It's the origin story behind "The AI/UI Guy."</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full article is here on the site via the link above.</p>
-        </section>
-      </div>
-    `,
+    link: "",
+    actionText: "",
+    study: "from-doodles-to-design",
     image: "/articles/from-doodles-to-design/01.png",
   },
   {
     id: "c2",
     title: "How I Built My Pseudo Fullstack Portfolio",
     description: "An in-depth breakdown of the design and development process for my portfolio website.",
-    category: "Case Study",
+    category: "Writing",
     tag: "Medium Article",
-    link: "/works/case-studies/pseudo-fullstack-portfolio",
-    actionText: "Read Article",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it covers</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">An in-depth breakdown of how this very website was designed and built using the "pseudo fullstack" approach of getting dynamic-feeling behavior out of a lean static architecture, and the design and engineering decisions behind it.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full write-up, from concept and visual direction through implementation, is via the link above.</p>
-        </section>
-      </div>
-    `,
+    link: "",
+    actionText: "",
+    study: "pseudo-fullstack-portfolio",
     image: "/articles/pseudo-fullstack-portfolio/01.png",
   },
   {
     id: "c3",
     title: "Zero-Cost Automation",
     description: "Designing an internal automation tool around the browser, where the work already happens, on an infrastructure budget of zero.",
-    category: "Case Study",
+    category: "Project",
     tag: "Internal Tool Design",
-    link: "/works/case-studies/zero-cost-automation",
-    actionText: "Read Case Study",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The premise</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Automating AI work usually comes with a monthly bill. This case study shows how I designed an internal tool that starts AI content and data tasks from the browser in a click and reports results back on its own. It's built entirely on free tiers: Chrome extensions as the interface, Supabase as the shared queue, and Google Colab as the engine.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">The result</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The stack processed over 5,000 automated tasks in its first month while saving roughly $300/month in subscriptions. The design decisions behind it, and how the pieces fit together, are in the case study.</p>
-        </section>
-      </div>
-    `,
+    link: "",
+    actionText: "",
+    study: "zero-cost-automation",
     image: "",
   },
   {
     id: "c4",
     title: "Why Are You Still Confused When Turning Your Design To Code?",
     description: "A guide on bridging the gap between design and development, avoiding common handoff pitfalls.",
-    category: "Case Study",
+    category: "Writing",
     tag: "Medium Article",
-    link: "/works/case-studies/design-to-code",
-    actionText: "Read Article",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it covers</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The design-to-development handoff is where good work goes to die: spacing drifts, states get missed, and both sides blame each other. Published in Design Bootcamp, this guide walks through the common pitfalls of turning designs into code and how to structure your work so the translation is faithful.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Read it</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The full article is via the link above.</p>
-        </section>
-      </div>
-    `,
+    link: "",
+    actionText: "",
+    study: "design-to-code",
     image: "/articles/design-to-code/01.png",
+  },
+  {
+    id: "c6",
+    title: "ATS-Friendly Resume vs. Custom Resume",
+    description: "ATS-friendly or custom-designed? Navigating which resume to send in modern job applications.",
+    category: "Writing",
+    tag: "Medium Article",
+    link: "",
+    actionText: "",
+    study: "ats-vs-custom-resume",
+  },
+  {
+    id: "c7",
+    title: "Why I Choose Minimal Design",
+    description: "Why I keep coming back to minimal design, and what restraint does for the people using what I make.",
+    category: "Writing",
+    tag: "Medium Article",
+    link: "",
+    actionText: "",
+    study: "why-i-choose-minimal-design",
   },
 
   // Open Source
@@ -389,29 +304,7 @@ export const allWorks = [
     tag: "Creator",
     link: "https://github.com/nagubathula/NotBad",
     actionText: "View Repository",
-    content: `
-      <div class="flex flex-col gap-12">
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">A quiet place to write, on every desktop</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">Markdown editors make you choose: stare at raw syntax, or split the screen with a preview pane. NotBad does neither. Marks like <code class="font-mono text-sm">**</code> and <code class="font-mono text-sm">#</code> fade as you type, what remains reads like the finished piece, and every bit of chrome recedes until you reach for it. It's a from-scratch, pure-Flutter port of the macOS-only Trace, with no web view and no CodeMirror, so one Dart codebase behaves identically on Windows, macOS, and Linux.</p>
-          <img src="/notbad-demo.gif" alt="NotBad demo: sidebar, command palette, view modes, live styling, focus mode, and accent colors" class="w-full rounded-2xl mt-6 border border-foreground/[0.05]" loading="lazy" />
-          <p class="text-xs sm:text-sm font-mono text-foreground/50 mt-3">The app driving itself: sidebar, command palette, three view modes, live styling, focus mode, find, and accent switching.</p>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">What it does</h2>
-          <ul class="flex flex-col gap-3 text-base sm:text-lg leading-relaxed text-foreground/70 list-disc pl-5">
-            <li><span class="font-semibold text-foreground">Concealed syntax with a caret-line reveal</span>: three view modes one keystroke apart: styled with marks hidden (the caret's line reveals its marks so editing stays predictable), styled with marks visible, and plain monospace source.</li>
-            <li><span class="font-semibold text-foreground">Everything within reach, nothing in view</span>: a fuzzy command palette, keyboard-driven file sidebar, hover table of contents, find &amp; replace with live highlights, and a floating toolbar that fades while you type.</li>
-            <li><span class="font-semibold text-foreground">Trustworthy with files</span>: session restore, autosave, crash-safe untitled drafts, external-change detection, CRLF/LF preservation, and single-instance document handoff. Plain .md files, no lock-in.</li>
-            <li><span class="font-semibold text-foreground">A writer's editor</span>: smart list continuation, auto-pairing, focus mode with typewriter scrolling, smart typography, Copy as Rich Text, and HTML export.</li>
-          </ul>
-        </section>
-        <section>
-          <h2 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight mb-4">Under the hood</h2>
-          <p class="text-base sm:text-lg leading-relaxed text-foreground/70">The upstream app is ~28k lines of Swift wrapped around ~14.6k lines of TypeScript; NotBad re-imagines it in ~3.5k lines of Dart. A custom <code class="font-mono text-sm">TextEditingController</code> styles Markdown live with per-line span caching, concealed marks stay in the text (painted invisible) so caret math never drifts from the file, and the chrome (hidden title bar, custom caption buttons, receding toolbar) is drawn by the app itself. Ships with an Inno Setup installer, "Open with NotBad" shell integration, CI builds for all three platforms, and an in-app update check against GitHub releases.</p>
-        </section>
-      </div>
-    `,
+    study: "notbad-design",
     image: "/notbad-editor.png",
   },
   {
@@ -843,6 +736,8 @@ function slugifyTitle(title) {
 // The design-system page and the open-source library are both named Chaya UI.
 const slugOverrides = {
   o2: "chaya",
+  c6: "ats-vs-custom-resume",
+  c7: "why-i-choose-minimal-design",
 };
 
 const seenSlugs = new Map();
