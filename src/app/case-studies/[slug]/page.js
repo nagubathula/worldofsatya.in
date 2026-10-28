@@ -1,13 +1,14 @@
-import { permanentRedirect } from "next/navigation";
-import { caseStudiesData } from "@/data/caseStudies";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import { allWorks } from "@/data/works";
 
 export function generateStaticParams() {
-  return caseStudiesData.map(({ slug }) => ({ slug }));
+  return allWorks.filter((work) => work.study).map((work) => ({ slug: work.study }));
 }
 
+// Case studies now live on their work's own page.
 export default async function LegacyCaseStudy({ params }) {
   const { slug } = await params;
-  if (!caseStudiesData.some((study) => study.slug === slug)) notFound();
-  permanentRedirect(`/works/case-studies/${slug}`);
+  const work = allWorks.find((entry) => entry.study === slug);
+  if (!work) notFound();
+  permanentRedirect(`/works/${work.slug}`);
 }

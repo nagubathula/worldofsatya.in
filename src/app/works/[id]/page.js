@@ -7,6 +7,10 @@ import PageTurn from "@/components/PageTurn";
 import BackToWorks from "@/components/BackToWorks";
 import Image from "next/image";
 import { workMediaStyle } from "@/lib/motion";
+import { caseStudiesData } from "@/data/caseStudies";
+import CaseStudyBody from "@/components/CaseStudyBody";
+
+const findStudy = (work) => work.study && caseStudiesData.find((study) => study.slug === work.study);
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
@@ -19,14 +23,17 @@ export async function generateMetadata({ params }) {
   const work = allWorks.find((entry) => entry.slug === id) || allWorks.find((entry) => entry.id === id);
   if (!work) return {};
 
-  const title = `${work.title} | Satya Sai Nagubathula`;
-  const images = work.poster || work.image ? [{ url: work.poster || work.image, alt: work.title }] : undefined;
+  const study = findStudy(work);
+  const title = `${study?.title || work.title} | Satya Sai Nagubathula`;
+  const description = study?.heroDescription || work.description;
+  const image = study?.image || work.poster || work.image;
+  const images = image ? [{ url: image, alt: work.title }] : undefined;
   return {
     title,
-    description: work.description,
+    description,
     alternates: { canonical: `/works/${work.slug}` },
-    openGraph: { title, description: work.description, url: `/works/${work.slug}`, images },
-    twitter: { title, description: work.description, images },
+    openGraph: { title, description, url: `/works/${work.slug}`, images },
+    twitter: { title, description, images },
   };
 }
 
@@ -65,6 +72,26 @@ export default async function WorkDetailPage({ params }) {
   const linkProps = isExternal
     ? { href: work.link, target: "_blank", rel: "noopener noreferrer" }
     : { href: work.link };
+
+  const study = findStudy(work);
+  if (study) {
+    return (
+      <CaseStudy
+        study={study}
+        work={work}
+        action={hasLink && (
+          <LinkComponent
+            {...linkProps}
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-150 hover:bg-[#333336] active:scale-95"
+          >
+            {work.actionText} <ArrowUpRight size={17} />
+          </LinkComponent>
+        )}
+        prevWork={prevWork}
+        nextWork={nextWork}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen relative w-full">
@@ -149,6 +176,89 @@ export default async function WorkDetailPage({ params }) {
       <div className="border-t border-black/[0.06]">
         <Footer />
       </div>
+    </div>
+  );
+}
+
+// A work with a written case study reads as one long column instead.
+function CaseStudy({ study, work, action, prevWork, nextWork }) {
+  const image = study.image || work.image;
+  return (
+    <div className="min-h-screen relative w-full">
+      <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-16">
+        {/* One reading column; only the image runs wider. */}
+        <div className="mx-auto w-full max-w-2xl px-4 sm:px-0">
+          <BackToWorks className="mb-10 inline-block text-sm text-[#515154] hover:text-black" />
+          <header>
+            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#86868b]">{study.type}</p>
+            <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#1d1d1f] sm:text-5xl">
+              {study.title}
+            </h1>
+            <p className="mt-5 text-lg leading-relaxed text-[#515154]">
+              {study.heroDescription}
+            </p>
+            {action}
+          </header>
+
+          {study.meta && (
+            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-black/[0.08] py-6 sm:grid-cols-4">
+              {study.meta.map((item) => (
+                <div key={item.label}>
+                  <dt className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#86868b]">{item.label}</dt>
+                  <dd className="mt-1.5 text-sm leading-snug text-[#1d1d1f]">{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+
+        {image && (
+          <div data-work-media style={workMediaStyle(work.slug)} className="mx-auto mt-12 w-full max-w-4xl px-4 sm:px-8">
+            <Image
+              src={image}
+              alt={study.title}
+              width={1280}
+              height={800}
+              priority
+              className="h-auto w-full rounded-2xl border border-black/[0.06] bg-[#f5f5f7]"
+            />
+          </div>
+        )}
+
+        <article className="mx-auto mt-16 flex w-full max-w-2xl flex-col gap-14 px-4 sm:mt-20 sm:gap-16 sm:px-0">
+          {study.content.map((section, idx) => (
+            <section key={idx}>
+              <p className="text-[11px] font-medium tabular-nums tracking-[0.16em] text-[#86868b]">
+                {String(idx + 1).padStart(2, "0")}
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">
+                {section.section}
+              </h2>
+              <div className="mt-4 flex flex-col gap-4 text-[17px] leading-[1.7] text-[#515154]">
+                <CaseStudyBody text={section.body} />
+              </div>
+            </section>
+          ))}
+          {study.source && (
+            <p className="border-t border-black/[0.08] pt-6 text-sm text-[#86868b]">
+              Originally published on{" "}
+              <a href={study.source} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-black">
+                Medium
+              </a>
+              .
+            </p>
+          )}
+        </article>
+
+        <div className="px-4 sm:px-8">
+          <PageTurn
+            prev={{ href: `/works/${prevWork.slug}`, title: prevWork.title }}
+            next={{ href: `/works/${nextWork.slug}`, title: nextWork.title }}
+          />
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

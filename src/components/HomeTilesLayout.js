@@ -201,7 +201,7 @@ export default function HomeTilesLayout() {
                   OpenWeave
                 </ProjectLink>{" "}
                 and{" "}
-                <ProjectLink href="/works/case-studies/notbad-design" image="/notbad-demo.gif">
+                <ProjectLink href="/works/notbad" image="/notbad-demo.gif">
                   NotBad
                 </ProjectLink>{" "}
                 <MoreLink href="/open-source" label="More open-source work" />

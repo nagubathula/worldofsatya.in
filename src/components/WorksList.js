@@ -47,6 +47,9 @@ const CATEGORY_PRIORITY = {
 };
 const ITEMS_PER_PAGE = 12;
 
+// Case studies cut across categories: any work with a written study counts.
+const hasCaseStudy = (work) => work.category === "Case Study" || Boolean(work.study);
+
 function VideoCardPreview({ work }) {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -317,7 +320,7 @@ export default function WorksList() {
   const counts = {
     All: allWorks.length,
     Project: allWorks.filter((w) => w.category === "Project").length,
-    "Case Study": allWorks.filter((w) => w.category === "Case Study").length,
+    "Case Study": allWorks.filter(hasCaseStudy).length,
     "Open Source": allWorks.filter((w) => w.category === "Open Source").length,
     "AI Videos": allWorks.filter((w) => w.category === "AI Videos").length,
     "Internal Tools": allWorks.filter((w) => w.category === "Internal Tools").length,
@@ -328,7 +331,8 @@ export default function WorksList() {
   );
 
   const filteredWorks = sortedWorks.filter((work) => {
-    const matchesCategory = filter === "All" || work.category === filter;
+    const matchesCategory =
+      filter === "All" || (filter === "Case Study" ? hasCaseStudy(work) : work.category === filter);
     if (!matchesCategory) return false;
 
     if (!searchQuery.trim()) return true;
@@ -415,9 +419,7 @@ export default function WorksList() {
     const isInternal = work.category === "Internal Tools" || work.isInternal;
     // Every work opens its own page first; the outside link (repo, store, article)
     // is the button on that page.
-    const destinationHref = work.link?.startsWith("/works/case-studies/")
-      ? work.link
-      : `/works/${work.slug}`;
+    const destinationHref = `/works/${work.slug}`;
 
     if (isAIVideo) {
       try { playPopSound(600, 0.08); } catch {}

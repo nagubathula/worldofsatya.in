@@ -42,7 +42,8 @@ export const calendarSections = [
         id: "notbad",
         title: "NotBad",
         image: "/notbad-editor.png",
-        href: "/works/case-studies/notbad-design",
+        href: "/works/notbad",
+        slug: "notbad",
         blurb: "Markdown writer",
       },
       {
