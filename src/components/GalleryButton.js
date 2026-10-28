@@ -1,37 +1,25 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { motion, useSpring, useMotionValue, useTransform } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
 // Opens the gallery. Same tile as About and contact; the icon is a small stack
 // of prints that fans out on hover, like the works fan.
 export default function GalleryButton() {
-  const buttonRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
-  // Magnetic cursor spring tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 260, mass: 0.2 };
-  const magneticX = useSpring(mouseX, springConfig);
-  const magneticY = useSpring(mouseY, springConfig);
+  // Leans toward the cursor; the icon inside follows by a fraction for parallax.
+  const magnet = useMagnetic();
+  const magneticX = magnet.x;
+  const magneticY = magnet.y;
   const printX = useTransform(magneticX, (val) => val * 0.45);
   const printY = useTransform(magneticY, (val) => val * 0.45);
-
-  const handleMouseMove = (e) => {
-    if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    mouseX.set(Math.max(-10, Math.min(10, (e.clientX - centerX) * 0.25)));
-    mouseY.set(Math.max(-10, Math.min(10, (e.clientY - centerY) * 0.25)));
-  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -43,8 +31,7 @@ export default function GalleryButton() {
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPressed(false);
-    mouseX.set(0);
-    mouseY.set(0);
+    magnet.reset();
   };
 
   const handleMouseDown = () => {
@@ -57,10 +44,9 @@ export default function GalleryButton() {
   return (
     <motion.div style={{ x: magneticX, y: magneticY }} className="group/label relative shrink-0 select-none">
       <Link
-        ref={buttonRef}
         href="/gallery"
         aria-label="Gallery"
-        onMouseMove={handleMouseMove}
+        onPointerMove={magnet.move}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}

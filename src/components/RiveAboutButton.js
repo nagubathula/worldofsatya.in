@@ -1,26 +1,23 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useSpring, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useTransform, AnimatePresence } from "framer-motion";
 import { play8BitTapSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
 export default function RiveAboutButton({ showFace = false }) {
-  const buttonRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [blink, setBlink] = useState(false);
 
-  // Magnetic cursor spring tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 260, mass: 0.2 };
-  const magneticX = useSpring(mouseX, springConfig);
-  const magneticY = useSpring(mouseY, springConfig);
+  // Leans toward the cursor; the icon inside follows by a fraction for parallax.
+  const magnet = useMagnetic();
+  const magneticX = magnet.x;
+  const magneticY = magnet.y;
 
   // Parallax shifts for interior vector layers
   const faceX = useTransform(magneticX, (val) => val * 0.45);
@@ -44,16 +41,6 @@ export default function RiveAboutButton({ showFace = false }) {
     return () => clearInterval(interval);
   }, []);
 
-  const handleMouseMove = (e) => {
-    if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    // Normalized magnetic pull (-10px to +10px)
-    mouseX.set(Math.max(-10, Math.min(10, (e.clientX - centerX) * 0.25)));
-    mouseY.set(Math.max(-10, Math.min(10, (e.clientY - centerY) * 0.25)));
-  };
-
   const handleMouseEnter = () => {
     setIsHovered(true);
     try {
@@ -64,8 +51,7 @@ export default function RiveAboutButton({ showFace = false }) {
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPressed(false);
-    mouseX.set(0);
-    mouseY.set(0);
+    magnet.reset();
   };
 
   const handleMouseDown = () => {
@@ -88,10 +74,9 @@ export default function RiveAboutButton({ showFace = false }) {
       className="group/label relative shrink-0 select-none"
     >
       <Link
-        ref={buttonRef}
         href="/about"
         aria-label="About Satya"
-        onMouseMove={handleMouseMove}
+        onPointerMove={magnet.move}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}

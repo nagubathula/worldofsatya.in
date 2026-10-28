@@ -1,11 +1,12 @@
 "use client";
 
-import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Github, Instagram, Linkedin, Mail, MessageCircle, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { play8BitTapSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
 function MediumIcon({ size = 20 }) {
@@ -58,22 +59,8 @@ export default function SocialBurst({ open, onToggle }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
-  // Magnetic cursor spring tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 260, mass: 0.2 };
-  const magneticX = useSpring(mouseX, springConfig);
-  const magneticY = useSpring(mouseY, springConfig);
-
-  const handleMouseMove = (e) => {
-    if (!trigger.current) return;
-    const rect = trigger.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    mouseX.set(Math.max(-10, Math.min(10, (e.clientX - centerX) * 0.25)));
-    mouseY.set(Math.max(-10, Math.min(10, (e.clientY - centerY) * 0.25)));
-  };
+  // Leans toward the cursor.
+  const magnet = useMagnetic();
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -85,8 +72,7 @@ export default function SocialBurst({ open, onToggle }) {
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPressed(false);
-    mouseX.set(0);
-    mouseY.set(0);
+    magnet.reset();
   };
 
   useEffect(() => {
@@ -133,8 +119,8 @@ export default function SocialBurst({ open, onToggle }) {
       {/* Rive-Style Laser Cannon Trigger Button */}
       <motion.div
         style={{
-          x: magneticX,
-          y: magneticY,
+          x: magnet.x,
+          y: magnet.y,
         }}
         className="group/label relative z-20 shrink-0 select-none"
       >
@@ -142,7 +128,7 @@ export default function SocialBurst({ open, onToggle }) {
           ref={trigger}
           type="button"
           onClick={handleToggle}
-          onMouseMove={handleMouseMove}
+          onPointerMove={magnet.move}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseDown={() => setIsPressed(true)}

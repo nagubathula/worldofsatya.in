@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import SocialBurst, { SLIDE, useBurstWidth, useCompact } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
+import Magnetic from "./Magnetic";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
 import { playPopSound } from "./SoundEffects";
@@ -82,15 +83,17 @@ function ProjectLink({ href, image, children }) {
 // The "…" that ends a line: there's more of it on another page.
 function MoreLink({ href, label }) {
   return (
-    <Link
-      href={href}
-      aria-label={label}
-      title={label}
-      // Padding grows the tap area without moving the dots.
-      className="-mx-2 -my-2 inline-block px-2 py-2 font-semibold text-[#2ec4f0] transition-colors hover:text-[#0b9fd0]"
-    >
-      …
-    </Link>
+    <Magnetic max={5} className="-mx-2 -my-2">
+      <Link
+        href={href}
+        aria-label={label}
+        title={label}
+        // Padding grows the tap area without moving the dots.
+        className="inline-block px-2 py-2 font-semibold text-[#2ec4f0] transition-colors hover:text-[#0b9fd0]"
+      >
+        …
+      </Link>
+    </Magnetic>
   );
 }
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { SPRING } from "@/lib/motion";
+import Magnetic from "./Magnetic";
 
 const MotionLink = motion.create(Link);
 
@@ -25,6 +26,7 @@ export default function Footer() {
     >
       <div className="py-16 sm:py-24 px-4 sm:px-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
         <div suppressHydrationWarning>
+          <Magnetic max={16} strength={0.12}>
           <motion.a
             href="mailto:nagubathula.satyasai@gmail.com"
             initial="rest"
@@ -54,6 +56,7 @@ export default function Footer() {
               ))}
             </span>
           </motion.a>
+          </Magnetic>
         </div>
         
         {/* Subtle Minimal Apple Divider */}
@@ -61,8 +64,8 @@ export default function Footer() {
 
         <nav aria-label="Site" className="mb-6 flex flex-wrap justify-center gap-1 sm:mb-8 sm:gap-2">
           {siteLinks.map((link) => (
+            <Magnetic key={link.label} max={6}>
             <MotionLink
-              key={link.label}
               href={link.href}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.94 }}
@@ -71,6 +74,7 @@ export default function Footer() {
             >
               {link.label}
             </MotionLink>
+            </Magnetic>
           ))}
         </nav>
 
@@ -83,8 +87,8 @@ export default function Footer() {
               { label: "Email", href: "mailto:nagubathula.satyasai@gmail.com" },
               { label: "WhatsApp", href: "https://wa.me/918499888133" },
             ].map((link) => (
+              <Magnetic key={link.label} max={6}>
               <motion.a
-                key={link.label}
                 href={link.href}
                 target={link.href.startsWith("http") ? "_blank" : undefined}
                 rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
@@ -95,6 +99,7 @@ export default function Footer() {
               >
                 {link.label}
               </motion.a>
+              </Magnetic>
             ))}
           </div>
         </div>
