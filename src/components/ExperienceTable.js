@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { playPopSound } from "./SoundEffects";
+import { useReducedMotionAfterHydration } from "@/lib/reducedMotion";
 
 function CompanyLogo({ logo, name, className = "w-10 h-10" }) {
   return (
@@ -175,7 +176,7 @@ function TimelineEntry({ exp, reduceMotion }) {
 
 export default function ExperienceTable() {
   const [filterTag, setFilterTag] = useState("All");
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionAfterHydration();
   const listRef = useRef(null);
   // The line fills in as the list scrolls past the middle of the screen.
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 70%", "end 55%"] });

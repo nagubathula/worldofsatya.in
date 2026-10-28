@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import VennDiagram from "./VennDiagram";
 import ExperienceTable from "./ExperienceTable";
+import { useReducedMotionAfterHydration } from "@/lib/reducedMotion";
 
 const STATS = [
   { value: "6", label: "Years Experience" },
@@ -137,7 +138,7 @@ function StatsTiles() {
 function StatsRow() {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionAfterHydration();
   // How far the row has to travel: its width beyond the screen's.
   const [distance, setDistance] = useState(0);
   const x = useMotionValue(0);
