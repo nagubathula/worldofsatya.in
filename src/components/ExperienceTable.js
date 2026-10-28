@@ -32,8 +32,8 @@ const EXPERIENCES = [
     type: "Full-Time",
     logo: "/images/nxtwave-logo.svg",
     description:
-      "Work across product design, web development, and generative AI video. Design and build web products and internal tools, which cut asset creation time by 90%. Led AI video production, scaling channels to 100K+ followers across 2,000+ videos with Veo 3 and Wan 2.2.",
-    tags: ["Product Design", "Web Development", "Generative AI", "AI Video", "ComfyUI"],
+      "Lead 3 engineers and 3 designers, supporting a creative team of 20+. Designed and built 14 full-stack apps with RAG and LLM pipelines, including an AI video editor that automates content creation and internal tools that cut production time by 90%. Scaled 14 channels from 0 to 100K+ followers, producing 1,000+ videos a month and 100+ character-consistent AI ads.",
+    tags: ["Generative AI", "Product Design", "Fullstack", "AI Video", "Team Leadership"],
   },
   {
     company: "CrestLogic",

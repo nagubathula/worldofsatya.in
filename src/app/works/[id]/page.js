@@ -1,5 +1,6 @@
 import { allWorks } from "@/data/works";
 import { notFound, permanentRedirect } from "next/navigation";
+import { Fragment } from "react";
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, Code, Briefcase, Video, Sparkles, Wrench } from "lucide-react";
 import Footer from "@/components/Footer";
@@ -9,8 +10,17 @@ import Image from "next/image";
 import { workMediaStyle } from "@/lib/motion";
 import { caseStudiesData } from "@/data/caseStudies";
 import CaseStudyBody from "@/components/CaseStudyBody";
+import Magnetic from "@/components/Magnetic";
+import { CaseStudyContents, CountUp, ReadingProgress, RevealOnScroll } from "@/components/CaseStudyChrome";
 
 const findStudy = (work) => work.study && caseStudiesData.find((study) => study.slug === work.study);
+
+// Exact slug or id first, then a loose match so hand-typed links like /works/KLUPas still land on klu-pas.
+const looseKey = (value) => String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
+const findWork = (id) =>
+  allWorks.find((entry) => entry.slug === id) ||
+  allWorks.find((entry) => entry.id === id) ||
+  allWorks.find((entry) => looseKey(entry.slug) === looseKey(id));
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
@@ -20,7 +30,7 @@ export function generateStaticParams() {
 // Each project gets its own title, so tabs, history and shared links tell them apart.
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const work = allWorks.find((entry) => entry.slug === id) || allWorks.find((entry) => entry.id === id);
+  const work = findWork(id);
   if (!work) return {};
 
   const study = findStudy(work);
@@ -40,7 +50,7 @@ export async function generateMetadata({ params }) {
 export default async function WorkDetailPage({ params }) {
   const { id } = await params;
 
-  const work = allWorks.find((entry) => entry.slug === id) || allWorks.find((entry) => entry.id === id);
+  const work = findWork(id);
 
   if (!work) {
     notFound();
@@ -80,12 +90,15 @@ export default async function WorkDetailPage({ params }) {
         study={study}
         work={work}
         action={hasLink && (
-          <LinkComponent
-            {...linkProps}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-150 hover:bg-[#333336] active:scale-95"
-          >
-            {work.actionText} <ArrowUpRight size={17} />
-          </LinkComponent>
+          <Magnetic max={6}>
+            <LinkComponent
+              {...linkProps}
+              className="group inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white shadow-[0_6px_20px_-8px_rgba(0,0,0,0.45)] transition-[background-color,transform,box-shadow] duration-200 hover:bg-[#333336] hover:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)] active:scale-95"
+            >
+              {work.actionText}
+              <ArrowUpRight size={17} className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </LinkComponent>
+          </Magnetic>
         )}
         prevWork={prevWork}
         nextWork={nextWork}
@@ -181,27 +194,69 @@ export default async function WorkDetailPage({ params }) {
 }
 
 // A work with a written case study reads as one long column instead.
+const sectionId = (title) => title.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+// Words rise into place one after another (see .cs-word in globals.css).
+function RisingWords({ text, from = 0 }) {
+  return text.split(" ").map((word, i) => (
+    <Fragment key={i}>
+      {i > 0 && " "}
+      <span className="cs-word">
+        <span style={{ "--cs-i": from + i }}>{word}</span>
+      </span>
+    </Fragment>
+  ));
+}
+
 function CaseStudy({ study, work, action, prevWork, nextWork }) {
   const image = study.image || work.image;
+  const sections = study.content.map((section) => ({ id: sectionId(section.section), title: section.section }));
+  const words = study.content.reduce((n, s) => n + s.body.split(/\s+/).length, 0);
+  const minutes = Math.max(1, Math.round(words / 230));
+  const titleWords = study.title.split(" ").length;
+
   return (
     <div className="min-h-screen relative w-full">
+      <ReadingProgress />
+      <RevealOnScroll />
       <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-16">
-        {/* One reading column; only the image runs wider. */}
-        <div className="mx-auto w-full max-w-2xl px-4 sm:px-0">
-          <BackToWorks className="mb-10 inline-block text-sm text-[#515154] hover:text-black" />
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-8">
+          <BackToWorks className="cs-rise mb-10 inline-block text-sm text-[#515154] hover:text-black" />
           <header>
-            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#86868b]">{study.type}</p>
-            <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#1d1d1f] sm:text-5xl">
-              {study.title}
+            <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-[#86868b]" style={{ "--cs-i": 1 }}>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.05] bg-[#f5f5f7] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#626267]">
+                <BookOpen size={11} className="text-[#8c9385]" /> {study.type}
+              </span>
+              <span className="whitespace-nowrap tabular-nums">
+                {minutes} min read <span aria-hidden="true" className="mx-1.5">·</span> {sections.length} sections
+              </span>
+            </div>
+            <h1 className="mt-6 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[#1d1d1f] [text-wrap:balance] sm:text-6xl lg:text-[4.25rem]">
+              <RisingWords text={study.title} from={2} />
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-[#515154]">
+            <p
+              className="cs-rise mt-6 max-w-2xl text-lg leading-relaxed text-[#515154] [text-wrap:pretty] sm:text-xl sm:leading-relaxed"
+              style={{ "--cs-i": titleWords + 3 }}
+            >
               {study.heroDescription}
             </p>
-            {action}
+            <div className="cs-rise mt-9 flex flex-wrap items-center gap-x-6 gap-y-4" style={{ "--cs-i": titleWords + 4 }}>
+              {action}
+              <a
+                href={`#${sections[0].id}`}
+                className="group inline-flex items-center gap-2 text-sm font-medium text-[#515154] transition-colors hover:text-[#1d1d1f]"
+              >
+                Start reading
+                <span aria-hidden="true" className="transition-transform duration-300 ease-out group-hover:translate-y-0.5">↓</span>
+              </a>
+            </div>
           </header>
 
           {study.meta && (
-            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-black/[0.08] py-6 sm:grid-cols-4">
+            <dl
+              className="cs-rise mt-12 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-black/[0.08] py-6 sm:grid-cols-4"
+              style={{ "--cs-i": titleWords + 5 }}
+            >
               {study.meta.map((item) => (
                 <div key={item.label}>
                   <dt className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#86868b]">{item.label}</dt>
@@ -210,45 +265,76 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
               ))}
             </dl>
           )}
+
+          {/* The results, for readers who stop here. */}
+          {study.highlights && (
+            <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {study.highlights.map((item, i) => (
+                <li
+                  key={item.label}
+                  className="cs-rise group rounded-2xl border border-black/[0.04] bg-[#f5f5f7] px-4 py-4 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_10px_30px_-16px_rgba(0,0,0,0.25)]"
+                  style={{ "--cs-i": titleWords + 6 + i }}
+                >
+                  <p className="text-2xl font-semibold tabular-nums tracking-[-0.03em] text-[#1d1d1f] sm:text-[1.75rem]">
+                    <CountUp value={item.value} delay={0.45 + (titleWords + 6 + i) * 0.045} />
+                  </p>
+                  <p className="mt-1 text-[13px] leading-snug text-[#86868b]">{item.label}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {image && (
-          <div data-work-media style={workMediaStyle(work.slug)} className="mx-auto mt-12 w-full max-w-4xl px-4 sm:px-8">
+          <div
+            data-work-media
+            style={workMediaStyle(work.slug)}
+            className="mx-auto mt-14 w-full max-w-5xl px-4 sm:mt-16 sm:px-8"
+          >
             <Image
               src={image}
               alt={study.title}
               width={1280}
               height={800}
               priority
-              className="h-auto w-full rounded-2xl border border-black/[0.06] bg-[#f5f5f7]"
+              className="h-auto w-full rounded-[1.25rem] border border-black/[0.06] bg-[#f5f5f7] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)]"
             />
           </div>
         )}
 
-        <article className="mx-auto mt-16 flex w-full max-w-2xl flex-col gap-14 px-4 sm:mt-20 sm:gap-16 sm:px-0">
-          {study.content.map((section, idx) => (
-            <section key={idx}>
-              <p className="text-[11px] font-medium tabular-nums tracking-[0.16em] text-[#86868b]">
-                {String(idx + 1).padStart(2, "0")}
+        {/* The contents sit in the left margin on wide screens; the reading column stays put. */}
+        <div className="relative mx-auto mt-20 w-full max-w-3xl px-4 sm:mt-28 sm:px-8">
+          <aside className="absolute inset-y-0 right-full hidden w-56 xl:block 2xl:w-64">
+            <CaseStudyContents sections={sections} />
+          </aside>
+
+          <article className="flex max-w-2xl flex-col gap-16 sm:gap-20">
+            {study.content.map((section, idx) => (
+              <section key={idx} id={sections[idx].id} data-cs-reveal="" className="scroll-mt-28">
+                <div className="flex items-baseline gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-[#86868b]">
+                  <span className="tabular-nums text-[#1d1d1f]">{String(idx + 1).padStart(2, "0")}</span>
+                  <span className="h-px w-8 bg-black/15" aria-hidden="true" />
+                  <span className="tabular-nums">{String(sections.length).padStart(2, "0")}</span>
+                </div>
+                <h2 className="mt-3 text-[1.65rem] font-semibold leading-tight tracking-[-0.035em] text-[#1d1d1f] [text-wrap:balance] sm:text-3xl">
+                  {section.section}
+                </h2>
+                <div className="mt-5 flex flex-col gap-5 text-[17px] leading-[1.75] text-[#515154] [text-wrap:pretty]">
+                  <CaseStudyBody text={section.body} />
+                </div>
+              </section>
+            ))}
+            {study.source && (
+              <p className="border-t border-black/[0.08] pt-6 text-sm text-[#86868b]">
+                Originally published on{" "}
+                <a href={study.source} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-black">
+                  Medium
+                </a>
+                .
               </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">
-                {section.section}
-              </h2>
-              <div className="mt-4 flex flex-col gap-4 text-[17px] leading-[1.7] text-[#515154]">
-                <CaseStudyBody text={section.body} />
-              </div>
-            </section>
-          ))}
-          {study.source && (
-            <p className="border-t border-black/[0.08] pt-6 text-sm text-[#86868b]">
-              Originally published on{" "}
-              <a href={study.source} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-black">
-                Medium
-              </a>
-              .
-            </p>
-          )}
-        </article>
+            )}
+          </article>
+        </div>
 
         <div className="px-4 sm:px-8">
           <PageTurn
