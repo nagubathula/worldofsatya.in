@@ -109,7 +109,7 @@ function TimelineEntry({ exp, reduceMotion }) {
       {/* Year, beside the line on wide screens */}
       <div className="hidden pt-5 text-right md:block">
         <p className="text-4xl font-semibold leading-none tracking-[-0.04em] text-[#111111]">{startYear(exp.period)}</p>
-        <p className="mt-2 text-[11px] text-[#86868b]">{exp.period}</p>
+        <p className="mt-2 text-[11px] text-[#6e6e73]">{exp.period}</p>
       </div>
 
       {/* The dot on the line; it fills in as the role comes into view */}
@@ -132,14 +132,14 @@ function TimelineEntry({ exp, reduceMotion }) {
         }`}
       >
         {/* Year and dates, above the card on phones */}
-        <p className={`mb-3 text-[11px] font-medium md:hidden ${dark ? "text-white/50" : "text-[#86868b]"}`}>{exp.period}</p>
+        <p className={`mb-3 text-[11px] font-medium md:hidden ${dark ? "text-white/50" : "text-[#6e6e73]"}`}>{exp.period}</p>
 
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <CompanyLogo logo={exp.logo} name={exp.company} className="h-10 w-10" />
             <div className="min-w-0">
               <h4 className="truncate text-sm font-semibold">{exp.company}</h4>
-              <p className={`truncate text-xs ${dark ? "text-white/50" : "text-[#86868b]"}`}>{exp.location}</p>
+              <p className={`truncate text-xs ${dark ? "text-white/50" : "text-[#6e6e73]"}`}>{exp.location}</p>
             </div>
           </div>
           {dark ? (

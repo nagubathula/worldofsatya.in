@@ -2,9 +2,15 @@
 
 import { Trophy, Star, Medal, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { hasHydrated } from "@/lib/motion";
 
-export default function Achievements({ limit }) {
+// `page` renders this as the whole page: an h1, and visible in the server HTML
+// when loaded directly, instead of waiting for scripts to reveal it on scroll.
+export default function Achievements({ limit, page = false }) {
+  const [reveal] = useState(() => !page || hasHydrated());
+  const Heading = page ? "h1" : "h2";
   const achievements = [
     {
       title: "GSOC 2024 Qualified",
@@ -52,20 +58,20 @@ export default function Achievements({ limit }) {
   return (
     <motion.section 
       variants={container}
-      initial="hidden"
+      initial={reveal ? "hidden" : false}
       whileInView="show"
       viewport={{ once: true, margin: "-80px" }}
       className="w-full"
     >
       <div className="py-12 sm:py-16 w-full flex flex-col gap-8 sm:gap-10" suppressHydrationWarning>
         <motion.div variants={itemAnim} className="mb-2 sm:mb-8" suppressHydrationWarning>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#86868b] text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]" suppressHydrationWarning>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#6e6e73] text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]" suppressHydrationWarning>
             <Trophy size={13} /> Recognition
           </div>
-          <h2 className="text-3xl sm:text-5xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.03em] mb-3 sm:mb-4">
+          <Heading className="text-3xl sm:text-5xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.03em] mb-3 sm:mb-4">
             Achievements
-          </h2>
-          <p className="text-base sm:text-lg text-[#86868b] max-w-2xl leading-relaxed font-sans">
+          </Heading>
+          <p className="text-base sm:text-lg text-[#6e6e73] max-w-2xl leading-relaxed font-sans">
             Milestones and awards from my journey in design and development.
           </p>
         </motion.div>
@@ -82,7 +88,7 @@ export default function Achievements({ limit }) {
                 <div className="flex justify-between items-start mb-3 sm:mb-4" suppressHydrationWarning>
                   <div suppressHydrationWarning className="p-2.5 rounded-full bg-[#f5f5f7] text-[#1d1d1f]">{item.icon}</div>
                   {isLink && (
-                    <ArrowUpRight size={16} className="text-[#86868b] group-hover:text-[#1d1d1f] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight size={16} className="text-[#6e6e73] group-hover:text-[#1d1d1f] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   )}
                 </div>
                 <h3 className="text-lg sm:text-xl font-sans font-semibold text-[#1d1d1f] tracking-tight mb-1.5 group-hover:text-black transition-colors">{item.title}</h3>

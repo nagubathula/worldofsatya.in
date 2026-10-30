@@ -25,10 +25,10 @@ function TurnLink({ href, title, direction }) {
       rel={direction}
       className={`group flex min-w-0 flex-col gap-1.5 rounded-2xl py-2 ${isNext ? "items-end text-right" : "items-start text-left"}`}
     >
-      <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#86868b]">
+      <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#6e6e73]">
         {isNext ? "Next" : "Back to"}
       </span>
-      <span className="flex max-w-full items-center gap-2 text-2xl font-semibold tracking-[-0.04em] text-[#1d1d1f] transition-colors group-hover:text-[#2ec4f0] sm:text-4xl">
+      <span className="flex max-w-full items-center gap-2 text-2xl font-semibold tracking-[-0.04em] text-[#1d1d1f] transition-colors group-hover:text-[#0879a0] sm:text-4xl">
         {!isNext && <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-x-1">←</span>}
         <span className="truncate">{title}</span>
         {isNext && <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>}

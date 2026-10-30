@@ -78,7 +78,7 @@ export default function Footer() {
           ))}
         </nav>
 
-        <div className="w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-sans text-[#86868b]" suppressHydrationWarning>
+        <div className="w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-sans text-[#6e6e73]" suppressHydrationWarning>
           <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>
           <div className="flex gap-2 sm:gap-3 mt-4 md:mt-0" suppressHydrationWarning>
             {[
@@ -95,7 +95,7 @@ export default function Footer() {
                 whileHover={{ y: -2, scale: 1.05 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING.press}
-                className="px-3 py-1 rounded-full text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
+                className="px-3 py-1 rounded-full text-[#6e6e73] hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
               >
                 {link.label}
               </motion.a>

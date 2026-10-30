@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  useDragControls,
 } from "framer-motion";
 import ChibiAvatar from "./ChibiAvatar";
 import WorksFan from "./WorksFan";
@@ -126,6 +127,9 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     damping: 20, // Elastic rubber-band snapback
     mass: 0.5,
   });
+
+  // The shell's drag starts by hand so a drag on the works deck doesn't also pull the card.
+  const dragControls = useDragControls();
 
   const liveRotateX = useTransform(pullSpring, [-120, 0, 120], [20, 0, -20]);
   const liveY = useTransform(pullSpring, [-120, 0, 120], [-26, 0, 26]);
@@ -270,14 +274,20 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     };
   }, [flipToNext, flipToPrev, pullY]);
 
-  // Touch swipe support with real-time rubber-band tracking
+  // Touch swipe support with real-time rubber-band tracking.
+  // Gestures that start on a [data-prevent-flip] area (the works deck) belong to it.
   useEffect(() => {
+    const ownedByChild = (e) => e.target instanceof Element && !!e.target.closest("[data-prevent-flip='true']");
+    let skipGesture = false;
+
     const handleGlobalTouchStart = (e) => {
+      skipGesture = ownedByChild(e);
       touchStartY.current = e.touches[0].clientY;
       touchStartX.current = e.touches[0].clientX;
     };
 
     const handleGlobalTouchMove = (e) => {
+      if (skipGesture) return;
       if (isFlippingRef.current || isDepartingRef.current || Date.now() < gestureLockUntil.current) return;
       const diffY = touchStartY.current - e.touches[0].clientY;
       const diffX = touchStartX.current - e.touches[0].clientX;
@@ -294,6 +304,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     };
 
     const handleGlobalTouchEnd = (e) => {
+      if (skipGesture) return;
       if (isFlippingRef.current || isDepartingRef.current || Date.now() < gestureLockUntil.current) {
         pullY.set(0);
         return;
@@ -560,6 +571,12 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
       >
       <motion.div
         drag="y"
+        dragControls={dragControls}
+        dragListener={false}
+        onPointerDown={(e) => {
+          if (e.target instanceof Element && e.target.closest("[data-prevent-flip='true']")) return;
+          dragControls.start(e);
+        }}
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.22}
         dragMomentum={false}

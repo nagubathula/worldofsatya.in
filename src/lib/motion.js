@@ -34,6 +34,20 @@ export function prefersReducedMotion() {
   );
 }
 
+// False on the server and through the first client render, true once the app has
+// hydrated. Entrance animations that start hidden check it, so a page loaded
+// straight from the server paints its content before any script runs, and only
+// pages reached in-app play their intro.
+let hydrated = false;
+
+export function markHydrated() {
+  hydrated = true;
+}
+
+export function hasHydrated() {
+  return hydrated;
+}
+
 export function canViewTransition() {
   return typeof document !== "undefined" && typeof document.startViewTransition === "function";
 }

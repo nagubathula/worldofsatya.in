@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { canViewTransition, EASE_OUT } from "@/lib/motion";
+import { canViewTransition, EASE_OUT, hasHydrated, markHydrated } from "@/lib/motion";
 
 // Template remounts on every navigation. This is set after the first client
 // mount so later pages can crossfade, while the hydrated page matches the HTML.
@@ -16,11 +16,17 @@ export default function Template({ children }) {
   // Keep the first paint identical, then apply the real setting.
   const [reduceMotion, setReduceMotion] = useState(false);
   const crossfade = viewTransitionsReady && !reduceMotion;
+  // A page straight from the server is already visible; only in-app arrivals fade.
+  const [fadeIn] = useState(hasHydrated);
 
   useEffect(() => {
     viewTransitionsReady = canViewTransition();
     setReduceMotion(prefersReducedMotion === true);
   }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    markHydrated();
+  }, []);
 
   useEffect(() => {
     try {
@@ -43,7 +49,7 @@ export default function Template({ children }) {
     <motion.div
       key={`page-${pathname}`}
       data-page-root
-      initial={reduceMotion || crossfade ? false : { opacity: 0 }}
+      initial={!fadeIn || reduceMotion || crossfade ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.68, ease: EASE_OUT }}
       className="relative min-h-screen w-full"

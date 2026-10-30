@@ -127,7 +127,7 @@ function makePlaceholderTexture(item) {
   ctx.fillText(String(item.title || "Poster"), 84, height * 0.5);
   ctx.fillStyle = "#2ec4f0";
   ctx.fillRect(88, height * 0.5 + 44, 160, 6);
-  ctx.fillStyle = "#86868b";
+  ctx.fillStyle = "#6e6e73";
   ctx.font = `500 30px ${sans}`;
   ctx.fillText(String(item.category || ""), 88, height * 0.5 + 110);
   const texture = new THREE.CanvasTexture(canvas);
@@ -201,6 +201,14 @@ async function middleFrame(src) {
   }
 }
 
+// Still posters go through Next's image optimizer: a 1080px WebP is plenty for a
+// texture and a fraction of the original JPG/PNG. Animations and remote files
+// load as they are (the middle-frame grab needs the original bytes).
+function optimizedSrc(src) {
+  if (!src.startsWith("/") || /\.(webp|gif|svg)$/i.test(src)) return null;
+  return `/_next/image?url=${encodeURIComponent(src)}&w=1080&q=75`;
+}
+
 async function loadArtwork(item, anisotropy) {
   if (!item.src) return makePlaceholderTexture(item);
   const still = await middleFrame(item.src);
@@ -209,6 +217,7 @@ async function loadArtwork(item, anisotropy) {
     coverTexture(texture, still.width / still.height, item.art.w / item.art.h);
     return texture;
   }
+  const optimized = optimizedSrc(item.src);
   return new Promise((resolve) => {
     const image = new Image();
     image.decoding = "async";
@@ -217,8 +226,15 @@ async function loadArtwork(item, anisotropy) {
       coverTexture(texture, image.width / image.height, item.art.w / item.art.h);
       resolve(texture);
     };
-    image.onerror = () => resolve(makePlaceholderTexture(item));
-    image.src = item.src;
+    image.onerror = () => {
+      // No optimizer (a static export, say): fall back to the original file once.
+      if (optimized && image.src.includes("/_next/image")) {
+        image.src = item.src;
+        return;
+      }
+      resolve(makePlaceholderTexture(item));
+    };
+    image.src = optimized || item.src;
   });
 }
 
@@ -452,7 +468,7 @@ function ClusterLabel({ cluster, dim }) {
       wrapperClass="pointer-events-none"
       style={{ pointerEvents: "none" }}
     >
-      <div ref={el} className="select-none whitespace-nowrap text-[13px] font-medium tracking-[-0.01em] text-[#86868b]">
+      <div ref={el} className="select-none whitespace-nowrap text-[13px] font-medium tracking-[-0.01em] text-[#6e6e73]">
         {cluster.category}
       </div>
     </Html>
@@ -695,7 +711,7 @@ export default function CanvasGallery({ nav, reduceMotion, onSelect, onDismiss, 
 
   if (failed) {
     return (
-      <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-[#86868b]">
+      <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-[#6e6e73]">
         This browser can’t open the 3D archive. Try a current desktop browser with WebGL enabled.
       </div>
     );

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
 
 // Each card takes this share of the row and the rest is split into equal steps,
@@ -27,12 +27,18 @@ function deckleMask(seed) {
 
 const DECKLES = Array.from({ length: 8 }, (_, i) => deckleMask(i + 3));
 
-// On a phone a row of four leaves each card thumbnail-sized, so the hand is dealt
-// two by two there. Matches Tailwind's sm breakpoint, which sizes the shell.
+// On a phone a row of four leaves each card thumbnail-sized, so the hand becomes
+// one stacked deck there. Matches Tailwind's sm breakpoint, which sizes the shell.
 const COMPACT_QUERY = "(max-width: 639px)";
-// Grid slots as % of the hand: the cards keep the fan's 25:27 shape.
-const GRID_W = 46;
-const GRID_TILT = [-3, 2.5, 2, -2.5];
+// Deck card width as % of the hand; each card behind peeks out a step to the right.
+const DECK_W = 62;
+const DECK_LEFT = 10;
+// How long the top card rests, and how long it spends lifted before tucking under.
+const DECK_REST = 2600;
+const DECK_LIFT = 420;
+// A swipe past this distance (px) or speed (px/s) changes the top card.
+const DECK_SWIPE = 50;
+const DECK_FLICK = 400;
 
 function useCompact() {
   const [compact, setCompact] = useState(false);
@@ -44,6 +50,162 @@ function useCompact() {
     return () => query.removeEventListener("change", update);
   }, []);
   return compact;
+}
+
+function CardFace({ item, mask, label = true }) {
+  return (
+    <span
+      className="relative block h-full w-full bg-[#e5e5e5]"
+      style={{ maskImage: mask, WebkitMaskImage: mask, maskSize: "100% 100%", WebkitMaskSize: "100% 100%" }}
+    >
+      <span className="absolute inset-0" style={workMediaStyle(item.slug)}>
+        <Image
+          src={item.image}
+          alt=""
+          fill
+          // Landscape shots cover a portrait card, so they draw ~1.6x wider than it.
+          sizes="(min-width: 840px) 400px, 50vw"
+          className="object-cover object-top"
+        />
+      </span>
+      {/* Touch screens can't hover, so the names show there all the time. */}
+      {label && (
+        <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2.5 py-1 text-[12px] sm:px-2 sm:py-0.5 sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
+          {item.title}
+        </span>
+      )}
+    </span>
+  );
+}
+
+// Phones: the work as a squared-up deck. Every few seconds the top card lifts,
+// swings up and tucks under the pile, so each project gets its turn on top.
+// Pressing the deck holds the shuffle so a tap lands on the card you see; swiping
+// the top card left tucks it under, swiping right pulls the bottom card back up.
+function WorksDeck({ items, go, reduceMotion }) {
+  const count = items.length;
+  const [front, setFront] = useState(0);
+  const [lifting, setLifting] = useState(false);
+  const [held, setHeld] = useState(false);
+  // The card under the finger follows it; it keeps the offset after letting go so
+  // it springs home (or into the pile) from where it was dropped.
+  const [draggedId, setDraggedId] = useState(null);
+  const dragX = useMotionValue(0);
+  const dragRotate = useTransform(dragX, [-200, 0, 200], [-14, 0, 14]);
+  const gesture = useRef(null);
+  // A drag ends in a click too; this swallows it so a swipe never opens the card.
+  const dragged = useRef(false);
+
+  const startDrag = (event) => {
+    setHeld(true);
+    if (count < 2) return;
+    dragged.current = false;
+    gesture.current = { id: event.pointerId, x: event.clientX, lastX: event.clientX, lastT: event.timeStamp, v: 0 };
+    animate(dragX, 0, { duration: 0 });
+    setDraggedId(items[front].id);
+  };
+
+  const moveDrag = (event) => {
+    const g = gesture.current;
+    if (!g || g.id !== event.pointerId) return;
+    const dx = event.clientX - g.x;
+    if (!dragged.current && Math.abs(dx) > 6) {
+      dragged.current = true;
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      } catch {}
+    }
+    if (!dragged.current) return;
+    const dt = event.timeStamp - g.lastT;
+    if (dt > 0) g.v = ((event.clientX - g.lastX) / dt) * 1000;
+    g.lastX = event.clientX;
+    g.lastT = event.timeStamp;
+    dragX.set(dx);
+  };
+
+  const endDrag = (event) => {
+    setHeld(false);
+    const g = gesture.current;
+    gesture.current = null;
+    if (!g || g.id !== event.pointerId || !dragged.current) return;
+    const dx = event.clientX - g.x;
+    const next = dx < -DECK_SWIPE || g.v < -DECK_FLICK;
+    const prev = dx > DECK_SWIPE || g.v > DECK_FLICK;
+    if (next || prev) {
+      setLifting(false);
+      setFront((current) => (current + (next ? 1 : count - 1)) % count);
+    }
+    animate(dragX, 0, SPRING.enter);
+  };
+
+  useEffect(() => {
+    if (reduceMotion || held || count < 2) return;
+    let liftTimer;
+    const restTimer = setTimeout(() => {
+      setLifting(true);
+      liftTimer = setTimeout(() => {
+        setFront((current) => (current + 1) % count);
+        setLifting(false);
+      }, DECK_LIFT);
+    }, DECK_REST);
+    return () => {
+      clearTimeout(restTimer);
+      clearTimeout(liftTimer);
+    };
+  }, [front, held, count, reduceMotion]);
+
+  return (
+    <div
+      // The calendar's own swipes would flip away from the works; they skip this.
+      data-prevent-flip="true"
+      className="relative w-full flex-1 touch-pan-y"
+      onPointerDown={startDrag}
+      onPointerMove={moveDrag}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+    >
+      {items.map((item, index) => {
+        const pos = (index - front + count) % count;
+        const top = pos === 0;
+        const up = top && lifting;
+        const mask = DECKLES[index % DECKLES.length];
+
+        return (
+          <motion.div
+            key={item.id}
+            className="absolute aspect-[4/5]"
+            style={{ top: "6%", left: `${DECK_LEFT}%`, width: `${DECK_W}%`, zIndex: count - pos, transformOrigin: "30% 90%" }}
+            initial={reduceMotion ? false : { y: "16%", rotate: 0, opacity: 0 }}
+            animate={
+              up
+                ? { x: "4%", y: "-24%", rotate: -9, scale: 1.04, opacity: 1 }
+                : { x: `${pos * 11}%`, y: `${pos * 1.5}%`, rotate: -3 + pos * 6, scale: 1 - pos * 0.05, opacity: 1 }
+            }
+            transition={up ? { type: "spring", duration: DECK_LIFT / 1000, bounce: 0 } : SPRING.enter}
+          >
+            <motion.button
+              type="button"
+              tabIndex={top ? 0 : -1}
+              aria-hidden={top ? undefined : true}
+              aria-label={`${item.title}: ${item.blurb}`}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (top && !dragged.current) go(event, item.href);
+              }}
+              className="group/card relative block h-full w-full cursor-pointer rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-[#0b9fd0] focus-visible:ring-offset-4"
+              style={{
+                x: item.id === draggedId ? dragX : 0,
+                rotate: item.id === draggedId ? dragRotate : 0,
+                filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.16)) drop-shadow(0 2px 5px rgba(0,0,0,0.07))",
+              }}
+            >
+              <CardFace item={item} mask={mask} label={top} />
+            </motion.button>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
 }
 
 // Selected work as a hand of cards. Hover lifts a card out of the fan; a click
@@ -66,18 +228,18 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
 
   return (
     <div className="relative flex h-full w-full flex-col items-center">
-      <div className="relative w-full flex-1 [container-type:inline-size]">
+      {compact ? (
+        <WorksDeck items={items} go={go} reduceMotion={reduceMotion} />
+      ) : (
+      <div className="relative w-full flex-1">
         {items.map((item, index) => {
           const t = count > 1 ? index / (count - 1) : 0.5;
-          const width = compact ? GRID_W : CARD_W;
-          const left = compact
-            ? (index % 2 ? 100 - GRID_W - 2 : 2)
-            : count > 1 ? index * step : (100 - CARD_W) / 2;
-          // The fan's second row sits one card height down; top is a share of the hand's width.
-          const top = compact ? `${2 + Math.floor(index / 2) * (GRID_W * 1.08 + 4)}cqw` : "3%";
+          const width = CARD_W;
+          const left = count > 1 ? index * step : (100 - CARD_W) / 2;
+          const top = "3%";
           // The tilt fans out left to right, and the middle cards ride a little higher.
-          const tilt = compact ? GRID_TILT[index % GRID_TILT.length] : -7 + 13.5 * t;
-          const arc = compact ? 0 : 6 * (2 * t - 1) ** 2;
+          const tilt = -7 + 13.5 * t;
+          const arc = 6 * (2 * t - 1) ** 2;
           // Cards are dealt from the middle of the hand out to their slots.
           const fromCenter = ((50 - width / 2 - left) / width) * 100;
           const mask = DECKLES[index % DECKLES.length];
@@ -123,30 +285,13 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
                 className="group/card relative block h-full w-full cursor-pointer outline-none"
                 style={{ filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.13)) drop-shadow(0 2px 5px rgba(0,0,0,0.06))" }}
               >
-                <span
-                  className="relative block h-full w-full bg-[#e5e5e5]"
-                  style={{ maskImage: mask, WebkitMaskImage: mask, maskSize: "100% 100%", WebkitMaskSize: "100% 100%" }}
-                >
-                  <span className="absolute inset-0" style={workMediaStyle(item.slug)}>
-                    <Image
-                      src={item.image}
-                      alt=""
-                      fill
-                      // Landscape shots cover a portrait card, so they draw ~1.6x wider than it.
-                      sizes="(min-width: 840px) 400px, 50vw"
-                      className="object-cover object-top"
-                    />
-                  </span>
-                  {/* Touch screens can't hover, so the names show there all the time. */}
-                  <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2.5 py-1 text-[12px] sm:px-2 sm:py-0.5 sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
-                    {item.title}
-                  </span>
-                </span>
+                <CardFace item={item} mask={mask} />
               </motion.button>
             </motion.div>
           );
         })}
       </div>
+      )}
 
       <motion.button
         type="button"
@@ -154,7 +299,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
         initial={reduceMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.35 }}
-        className="relative z-10 px-3 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#2ec4f0] outline-none transition-colors hover:text-[#0b9fd0] focus-visible:underline"
+        className="relative z-10 px-3 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#0879a0] outline-none transition-colors hover:text-[#065f7e] focus-visible:underline"
       >
         view more works
       </motion.button>

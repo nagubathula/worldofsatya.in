@@ -22,7 +22,7 @@ const bioReveal = {
 };
 
 // Small print under a big name, as in the design. Phones get a size up to stay readable.
-const bioText = "text-[13px] sm:text-[12px] leading-[1.6] tracking-[-0.01em] text-[#86868b]";
+const bioText = "text-[13px] sm:text-[12px] leading-[1.6] tracking-[-0.01em] text-[#6e6e73]";
 
 const highlight =
   "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
@@ -89,7 +89,7 @@ function MoreLink({ href, label }) {
         aria-label={label}
         title={label}
         // Padding grows the tap area without moving the dots.
-        className="inline-block px-2 py-2 font-semibold text-[#2ec4f0] transition-colors hover:text-[#0b9fd0]"
+        className="inline-block px-2 py-2 font-semibold text-[#0879a0] transition-colors hover:text-[#065f7e]"
       >
         …
       </Link>
@@ -262,7 +262,7 @@ export default function HomeTilesLayout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ ...SMOOTH, delay: introDelay + 0.9 }}
-              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#86868b] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
+              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#6e6e73] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
             >
               <span className="[@media(hover:none)]:hidden">Scroll down for works</span>
               <span className="hidden [@media(hover:none)]:inline">Swipe up for works</span>

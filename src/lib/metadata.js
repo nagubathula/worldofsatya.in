@@ -8,6 +8,7 @@ export function pageMetadata({ title, description, path }) {
     description,
     alternates: { canonical: path },
     openGraph: { title, description, url: path, siteName: "World of Satya", images: [SHARE_IMAGE], type: "website" },
-    twitter: { card: "summary_large_image", title, description, images: [SHARE_IMAGE.url] },
+    // The share image is a square portrait: the small card shows it whole, the large one crops it.
+    twitter: { card: "summary", title, description, images: [SHARE_IMAGE.url] },
   };
 }

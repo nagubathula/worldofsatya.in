@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { EASE_OUT, SPRING, smoothNavigate } from "@/lib/motion";
+import { EASE_OUT, SPRING, hasHydrated, smoothNavigate } from "@/lib/motion";
 import { saveWorksPlace, takeWorksPlace } from "@/lib/worksReturn";
 import { useLenis } from "lenis/react";
 import {
@@ -140,7 +140,7 @@ function CardPlaceholder({ category, tag }) {
         }}
       />
       <div className="relative z-10">
-        <span className="text-[10px] font-sans font-semibold tracking-widest text-[#86868b] uppercase">
+        <span className="text-[10px] font-sans font-semibold tracking-widest text-[#6e6e73] uppercase">
           {tag || category}
         </span>
       </div>
@@ -215,6 +215,9 @@ export default function WorksList() {
   useEffect(() => {
     setReduceMotion(prefersReducedMotion === true);
   }, [prefersReducedMotion]);
+  // Rows stagger in when you arrive from another page; loaded directly, they're
+  // already in the HTML and visible before scripts run.
+  const [intro] = useState(hasHydrated);
   const [filter, setFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [listDirection, setListDirection] = useState(1);
@@ -479,7 +482,7 @@ export default function WorksList() {
               transition={SPRING.press}
               aria-pressed={isActive}
               className={`relative flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
-                isActive ? "text-[#1d1d1f]" : "text-[#86868b] hover:text-[#1d1d1f]"
+                isActive ? "text-[#1d1d1f]" : "text-[#6e6e73] hover:text-[#1d1d1f]"
               }`}
             >
               {isActive && (
@@ -494,7 +497,7 @@ export default function WorksList() {
                 className={`relative z-10 text-[10px] font-sans px-1.5 py-0.2 rounded-full transition-colors ${
                   isActive
                     ? "bg-black/[0.07] text-[#1d1d1f] font-semibold"
-                    : "bg-black/[0.03] text-[#86868b]"
+                    : "bg-black/[0.03] text-[#6e6e73]"
                 }`}
               >
                 {count}
@@ -509,7 +512,7 @@ export default function WorksList() {
 
         {/* Inline Search Bar */}
         <div className="relative flex items-center rounded-full bg-white/70 focus-within:bg-white border border-black/[0.06] focus-within:border-black/[0.25] shadow-sm transition-all duration-300 min-w-0 flex-1 sm:flex-none sm:w-44 md:w-52 focus-within:sm:w-56 md:focus-within:w-64 h-9 sm:h-8 px-2.5">
-          <Search size={13} className="text-[#86868b] shrink-0 mr-1.5" />
+          <Search size={13} className="text-[#6e6e73] shrink-0 mr-1.5" />
           <input
             ref={searchInputRef}
             type="text"
@@ -519,7 +522,7 @@ export default function WorksList() {
               setCurrentPage(1);
             }}
             placeholder="Search..."
-            className="w-full text-xs font-sans placeholder-[#86868b] text-[#1d1d1f] bg-transparent outline-none pr-4"
+            className="w-full text-xs font-sans placeholder-[#6e6e73] text-[#1d1d1f] bg-transparent outline-none pr-4"
           />
           {searchQuery ? (
             <button
@@ -529,13 +532,13 @@ export default function WorksList() {
                 setCurrentPage(1);
                 searchInputRef.current?.focus();
               }}
-              className="absolute right-2 p-0.5 rounded-full text-[#86868b] hover:text-[#1d1d1f] transition-colors"
+              className="absolute right-2 p-0.5 rounded-full text-[#6e6e73] hover:text-[#1d1d1f] transition-colors"
               aria-label="Clear search"
             >
               <X size={12} />
             </button>
           ) : (
-            <div className="absolute right-2 pointer-events-none hidden sm:flex items-center text-[10px] font-mono text-[#86868b] bg-[#f5f5f7] rounded px-1 py-0.2 border border-black/[0.04]">
+            <div className="absolute right-2 pointer-events-none hidden sm:flex items-center text-[10px] font-mono text-[#6e6e73] bg-[#f5f5f7] rounded px-1 py-0.2 border border-black/[0.04]">
               <span>/</span>
             </div>
           )}
@@ -544,7 +547,7 @@ export default function WorksList() {
         {/* Filter box (phones): a native select, so the OS picker does the work. */}
         <label className="relative flex sm:hidden shrink-0 items-center h-9 rounded-full bg-white border border-black/[0.06] shadow-sm focus-within:border-black/[0.25]">
           <span className="sr-only">Filter by category</span>
-          <SlidersHorizontal size={13} className="pointer-events-none absolute left-3 text-[#86868b]" />
+          <SlidersHorizontal size={13} className="pointer-events-none absolute left-3 text-[#6e6e73]" />
           <select
             value={filter}
             onChange={(e) => handleFilterClick(e.target.value)}
@@ -556,13 +559,13 @@ export default function WorksList() {
               </option>
             ))}
           </select>
-          <ChevronDown size={13} className="pointer-events-none absolute right-3 text-[#86868b]" />
+          <ChevronDown size={13} className="pointer-events-none absolute right-3 text-[#6e6e73]" />
         </label>
       </div>
 
       {/* Search Result Feedback Indicator */}
       {searchQuery.trim() && (
-        <div className="flex items-center justify-between px-2 text-xs text-[#86868b] font-sans -mt-2 mb-1">
+        <div className="flex items-center justify-between px-2 text-xs text-[#6e6e73] font-sans -mt-2 mb-1">
           <span>
             Found <strong className="text-[#1d1d1f] font-medium">{filteredWorks.length}</strong>{" "}
             {filteredWorks.length === 1 ? "result" : "results"} for &ldquo;{searchQuery}&rdquo;
@@ -584,13 +587,13 @@ export default function WorksList() {
       {/* Grid of Works or Empty State */}
       {filteredWorks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center rounded-3xl bg-[#f5f5f7]/60 border border-black/[0.04] my-4">
-          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#86868b] mb-4 shadow-sm border border-black/[0.04]">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#6e6e73] mb-4 shadow-sm border border-black/[0.04]">
             <Search size={20} />
           </div>
           <h3 className="text-lg font-sans font-semibold text-[#1d1d1f] mb-1">
             No matching works found
           </h3>
-          <p className="text-sm text-[#86868b] max-w-sm font-sans mb-5 leading-relaxed">
+          <p className="text-sm text-[#6e6e73] max-w-sm font-sans mb-5 leading-relaxed">
             We couldn&apos;t find anything matching &ldquo;{searchQuery}&rdquo;
             {filter !== "All" ? ` in ${filter}` : ""}. Try adjusting your keywords or clearing the category filter.
           </p>
@@ -639,7 +642,7 @@ export default function WorksList() {
                 </div>
               ))}
             </div>
-            <AnimatePresence mode="popLayout" initial>
+            <AnimatePresence mode="popLayout" initial={intro}>
               {paginatedWorks.map((work, index) => {
                 const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
                 const isInternal = work.category === "Internal Tools" || work.isInternal;
@@ -697,7 +700,7 @@ export default function WorksList() {
 
           {/* ── Mobile Stacked List ───────────────────────────────────── */}
           {(isDesktop === null || !isDesktop) && <div className="md:hidden rounded-2xl border border-black/[0.08] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden">
-            <AnimatePresence mode="popLayout" initial>
+            <AnimatePresence mode="popLayout" initial={intro}>
               {paginatedWorks.map((work, index) => {
                 const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
                 const isInternal = work.category === "Internal Tools" || work.isInternal;
@@ -730,7 +733,7 @@ export default function WorksList() {
                     </div>
                     <div className="flex-1 min-w-0">
                       {/* Under the title, not beside it, so the description keeps the width. */}
-                      <span className="inline-flex max-w-full items-center gap-1 text-[10px] font-medium uppercase tracking-[0.08em] text-[#86868b]">
+                      <span className="inline-flex max-w-full items-center gap-1 text-[10px] font-medium uppercase tracking-[0.08em] text-[#6e6e73]">
                         {getCategoryIcon(work.category)}
                         <span className="truncate">{work.tag || work.category}</span>
                       </span>
@@ -807,7 +810,7 @@ export default function WorksList() {
       {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="mt-6 flex flex-col items-center gap-3 sm:mt-10 sm:gap-4">
-          <p className="text-xs text-[#86868b] font-sans">
+          <p className="text-xs text-[#6e6e73] font-sans">
             Showing <span className="font-medium text-[#1d1d1f]">{startIndex + 1}</span>–
             <span className="font-medium text-[#1d1d1f]">{endIndex}</span> of{" "}
             <span className="font-medium text-[#1d1d1f]">{filteredWorks.length}</span> productions
@@ -835,7 +838,7 @@ export default function WorksList() {
               transition={SPRING.press}
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
                 validCurrentPage <= 1
-                  ? "opacity-30 cursor-not-allowed text-[#86868b]"
+                  ? "opacity-30 cursor-not-allowed text-[#6e6e73]"
                   : "text-[#1d1d1f] hover:bg-white hover:shadow-sm"
               }`}
             >
@@ -861,7 +864,7 @@ export default function WorksList() {
                   aria-label={`Page ${pageNum}`}
                   aria-current={isActive ? "page" : undefined}
                   className={`relative flex h-8 min-w-8 sm:h-9 sm:min-w-9 items-center justify-center px-3 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
-                    isActive ? "text-[#1d1d1f]" : "text-[#86868b] hover:text-[#1d1d1f]"
+                    isActive ? "text-[#1d1d1f]" : "text-[#6e6e73] hover:text-[#1d1d1f]"
                   }`}
                 >
                   {isActive && (
@@ -894,7 +897,7 @@ export default function WorksList() {
               transition={SPRING.press}
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
                 validCurrentPage >= totalPages
-                  ? "opacity-30 cursor-not-allowed text-[#86868b]"
+                  ? "opacity-30 cursor-not-allowed text-[#6e6e73]"
                   : "text-[#1d1d1f] hover:bg-white hover:shadow-sm"
               }`}
             >
@@ -939,7 +942,7 @@ export default function WorksList() {
             >
               <button
                 onClick={() => setLockedTool(null)}
-                className="absolute top-5 right-5 text-[#86868b] hover:text-[#1d1d1f] transition-colors p-1"
+                className="absolute top-5 right-5 text-[#6e6e73] hover:text-[#1d1d1f] transition-colors p-1"
                 aria-label="Close"
               >
                 <X size={18} />
@@ -952,7 +955,7 @@ export default function WorksList() {
                 <h3 className="text-xl sm:text-2xl font-sans font-semibold text-[#1d1d1f] mb-1.5">
                   Restricted Access
                 </h3>
-                <p className="text-sm text-[#86868b] font-sans mb-6">
+                <p className="text-sm text-[#6e6e73] font-sans mb-6">
                   Enter the 6-digit access code to unlock{" "}
                   <span className="font-semibold text-[#1d1d1f]">{lockedTool.title}</span>.
                 </p>

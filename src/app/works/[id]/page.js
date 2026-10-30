@@ -43,7 +43,8 @@ export async function generateMetadata({ params }) {
     description,
     alternates: { canonical: `/works/${work.slug}` },
     openGraph: { title, description, url: `/works/${work.slug}`, images },
-    twitter: { title, description, images },
+    // Work images are wide screenshots, so the large card shows them uncropped.
+    twitter: { card: "summary_large_image", title, description, images },
   };
 }
 
@@ -112,7 +113,7 @@ export default async function WorkDetailPage({ params }) {
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 mb-8 sm:mb-16">
           <BackToWorks className="mb-8 inline-block text-sm text-[#515154] hover:text-black" />
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6 sm:mb-8">
-            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#f5f5f7] text-xs sm:text-[13px] font-sans font-medium text-[#86868b] uppercase tracking-wider border border-black/[0.04]">
+            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#f5f5f7] text-xs sm:text-[13px] font-sans font-medium text-[#6e6e73] uppercase tracking-wider border border-black/[0.04]">
               {getIcon(work.category)}
               {work.category}
             </span>
@@ -158,7 +159,9 @@ export default async function WorkDetailPage({ params }) {
                   src={work.image} 
                   alt={work.title} 
                   width={1920} 
-                  height={1080} 
+                  height={1080}
+                  // Full column width: phones fetch a phone-sized file, not the 2x desktop one.
+                  sizes="(min-width: 1280px) 1152px, 100vw"
                   loading="eager"
                   fetchPriority="high"
                   className="w-full h-auto object-contain" 
@@ -171,7 +174,7 @@ export default async function WorkDetailPage({ params }) {
               {work.content ? (
                 <div dangerouslySetInnerHTML={{ __html: work.content }} />
               ) : (
-                <div className="flex flex-col items-center justify-center py-20 text-center text-[#86868b] col-span-full">
+                <div className="flex flex-col items-center justify-center py-20 text-center text-[#6e6e73] col-span-full">
                   <BookOpen size={40} className="mb-4 text-neutral-300" />
                   <p className="text-lg">Detailed project notes and process breakdown coming soon.</p>
                 </div>
@@ -223,7 +226,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
         <div className="mx-auto w-full max-w-3xl px-4 sm:px-8">
           <BackToWorks className="cs-rise mb-10 inline-block text-sm text-[#515154] hover:text-black" />
           <header>
-            <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-[#86868b]" style={{ "--cs-i": 1 }}>
+            <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-[#6e6e73]" style={{ "--cs-i": 1 }}>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.05] bg-[#f5f5f7] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#626267]">
                 <BookOpen size={11} className="text-[#8c9385]" /> {study.type}
               </span>
@@ -259,7 +262,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
             >
               {study.meta.map((item) => (
                 <div key={item.label}>
-                  <dt className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#86868b]">{item.label}</dt>
+                  <dt className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#6e6e73]">{item.label}</dt>
                   <dd className="mt-1.5 text-sm leading-snug text-[#1d1d1f]">{item.value}</dd>
                 </div>
               ))}
@@ -278,7 +281,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
                   <p className="text-2xl font-semibold tabular-nums tracking-[-0.03em] text-[#1d1d1f] sm:text-[1.75rem]">
                     <CountUp value={item.value} delay={0.45 + (titleWords + 6 + i) * 0.045} />
                   </p>
-                  <p className="mt-1 text-[13px] leading-snug text-[#86868b]">{item.label}</p>
+                  <p className="mt-1 text-[13px] leading-snug text-[#6e6e73]">{item.label}</p>
                 </li>
               ))}
             </ul>
@@ -296,6 +299,8 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
               alt={study.title}
               width={1280}
               height={800}
+              // The hero tops out at max-w-5xl; below that it spans the screen.
+              sizes="(min-width: 1024px) 1024px, 100vw"
               priority
               className="h-auto w-full rounded-[1.25rem] border border-black/[0.06] bg-[#f5f5f7] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)]"
             />
@@ -311,7 +316,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
           <article className="flex max-w-2xl flex-col gap-16 sm:gap-20">
             {study.content.map((section, idx) => (
               <section key={idx} id={sections[idx].id} data-cs-reveal="" className="scroll-mt-28">
-                <div className="flex items-baseline gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-[#86868b]">
+                <div className="flex items-baseline gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-[#6e6e73]">
                   <span className="tabular-nums text-[#1d1d1f]">{String(idx + 1).padStart(2, "0")}</span>
                   <span className="h-px w-8 bg-black/15" aria-hidden="true" />
                   <span className="tabular-nums">{String(sections.length).padStart(2, "0")}</span>
@@ -325,7 +330,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
               </section>
             ))}
             {study.source && (
-              <p className="border-t border-black/[0.08] pt-6 text-sm text-[#86868b]">
+              <p className="border-t border-black/[0.08] pt-6 text-sm text-[#6e6e73]">
                 Originally published on{" "}
                 <a href={study.source} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-black">
                   Medium

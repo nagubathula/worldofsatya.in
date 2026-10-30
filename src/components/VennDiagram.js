@@ -220,7 +220,7 @@ function DomainCard({ domain, flat = false }) {
           </div>
         ))}
       </div>
-      <p className="mt-2 text-[11px] text-[#86868b]">{domain.companies.map((company) => company.name).join(" · ")}</p>
+      <p className="mt-2 text-[11px] text-[#6e6e73]">{domain.companies.map((company) => company.name).join(" · ")}</p>
     </div>
   );
 }

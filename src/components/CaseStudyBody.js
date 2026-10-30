@@ -1,5 +1,13 @@
 import { Fragment } from 'react';
 
+// Widths the column ever draws at, through Next's optimizer. GIFs, SVGs and
+// remote files are served as they are.
+const STILL_WIDTHS = [640, 1080, 1920];
+function stillSrcSet(src) {
+  if (!src.startsWith('/') || /\.(gif|svg)$/i.test(src)) return undefined;
+  return STILL_WIDTHS.map((w) => `/_next/image?url=${encodeURIComponent(src)}&w=${w}&q=75 ${w}w`).join(', ');
+}
+
 const INLINE = /(\*\*\*.+?\*\*\*|\*\*.+?\*\*|\[[^\]]+\]\([^)\s]+\)|\*[^*\s](?:[^*]*[^*\s])?\*)/g;
 
 // ***bold italic***, **bold**, *italic* and [links](url) inside a line of copy.
@@ -78,9 +86,10 @@ export default function CaseStudyBody({ text }) {
       const [, caption, src] = block.text.match(IMAGE);
       return (
         <figure key={i} className="my-2">
-          {/* Plain img: these are a mix of sizes and animated GIFs. */}
-          <img src={src} alt={caption} loading="lazy" className="h-auto w-full rounded-xl border border-black/[0.06] bg-[#f5f5f7]" />
-          {caption && <figcaption className="mt-2 text-center text-sm text-[#86868b]">{caption}</figcaption>}
+          {/* Plain img: these are a mix of sizes and animated GIFs. Stills still get
+              optimizer-sized sources so a phone doesn't pull a 1MB screenshot. */}
+          <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 704px, 100vw" alt={caption} loading="lazy" decoding="async" className="h-auto w-full rounded-xl border border-black/[0.06] bg-[#f5f5f7]" />
+          {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
         </figure>
       );
     }
@@ -97,7 +106,7 @@ export default function CaseStudyBody({ text }) {
     const List = block.kind;
     const marker = block.kind === 'ol' ? NUMBERED : BULLET;
     return (
-      <List key={i} className={`flex flex-col gap-3 pl-5 ${block.kind === 'ol' ? 'list-decimal' : 'list-disc'} marker:text-[#86868b]`}>
+      <List key={i} className={`flex flex-col gap-3 pl-5 ${block.kind === 'ol' ? 'list-decimal' : 'list-disc'} marker:text-[#6e6e73]`}>
         {block.items.map((item, j) => (
           <li key={j} className="pl-1"><Inline text={item.replace(marker, '')} /></li>
         ))}

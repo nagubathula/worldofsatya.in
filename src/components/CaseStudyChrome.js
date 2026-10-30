@@ -39,7 +39,7 @@ export function CaseStudyContents({ sections }) {
 
   return (
     <nav aria-label="Contents" className="sticky top-32">
-      <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.16em] text-[#86868b]">Contents</p>
+      <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.16em] text-[#6e6e73]">Contents</p>
       <ol className="flex flex-col">
         {sections.map(({ id, title }, i) => {
           const on = id === active;
@@ -55,7 +55,7 @@ export function CaseStudyContents({ sections }) {
               <a
                 href={`#${id}`}
                 aria-current={on ? "true" : undefined}
-                className={`flex gap-3 py-1.5 text-[13px] leading-snug transition-colors duration-200 ${on ? "text-[#1d1d1f]" : "text-[#86868b] hover:text-[#515154]"}`}
+                className={`flex gap-3 py-1.5 text-[13px] leading-snug transition-colors duration-200 ${on ? "text-[#1d1d1f]" : "text-[#6e6e73] hover:text-[#515154]"}`}
               >
                 <span className="w-4 shrink-0 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                 <span className="line-clamp-2">{title}</span>

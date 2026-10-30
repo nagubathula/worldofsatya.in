@@ -117,6 +117,8 @@ export default function RetroVideoPlayer({ src, poster, title, onClose }) {
             ref={videoRef}
             src={src}
             poster={poster}
+            // Only the duration until someone presses play: no multi-MB download on page load.
+            preload="metadata"
             playsInline
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
