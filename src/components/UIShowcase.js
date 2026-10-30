@@ -55,7 +55,7 @@ const PIECES = [
     id: "id-badge",
     title: "ID badge on a lanyard",
     description:
-      "A conference pass that hangs from the top of its stage. Drag it and it swings back on an underdamped spring; flick it sideways and it spins, twisting the strap, which winds up to two turns before it stops the card and unwinds. Tap it to turn it over.",
+      "A conference pass that hangs from the top of its stage. Drag it and it swings back on an underdamped spring; flick it sideways and it spins, twisting the strap, which winds up to a turn and a half before it stops the card and unwinds. Tap it to turn it over.",
     tags: ["Spring physics", "Drag", "Torsion", "3D flip", "Sound"],
     hint: "Drag or flick the badge sideways, or tap it to turn it over.",
     stage: "h-[440px] sm:h-[480px]",

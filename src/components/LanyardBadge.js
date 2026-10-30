@@ -16,11 +16,16 @@ const VIOLET = "#5b4cf0";
 // Underdamped: let go and the badge swings a few times before it settles.
 const SWING = { type: "spring", stiffness: 140, damping: 7, mass: 1 };
 const TAP_SLOP = 6;
-// The strap as a torsion spring, in degrees: soft, so a spin unwinds in a few
-// overshooting turns. It can only wind so far before it stops the card dead.
-const TORSION = { stiffness: 14, damping: 1.4 };
-const MAX_TWIST = 720;
-const MAX_SPIN = 2200;
+// The strap as a torsion spring, in degrees: soft, so a spin unwinds lazily,
+// overshooting once or twice. It can only wind so far before it stops the card
+// dead; only the hardest flicks get there.
+const TORSION = { stiffness: 6, damping: 3 };
+const MAX_TWIST = 540;
+const MAX_SPIN = 3000;
+// Sideways drag only spins the card past this many px per move, so a slow
+// drag just swings it; a flick turns it.
+const FLICK_SLOP = 4;
+const FLICK_SPIN = 4;
 // How far above the hook the strap runs, off the top of the stage.
 const RISE = 400;
 
@@ -135,7 +140,7 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
       return;
     }
     // A push toward the other side, so the turn starts briskly.
-    s.v += next ? 420 : -420;
+    s.v += next ? 400 : -400;
     s.ting = true;
     startSpin();
   };
@@ -167,8 +172,10 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
     // Dragged sideways, the card catches the air and turns on its strap.
     if (!reduceMotion) {
       const s = spin.current;
+      const step = event.clientX - g.lx;
+      const flick = Math.sign(step) * Math.max(0, Math.abs(step) - FLICK_SLOP);
       s.dragging = true;
-      s.v = Math.max(-MAX_SPIN, Math.min(MAX_SPIN, s.v + (event.clientX - g.lx) * 5));
+      s.v = Math.max(-MAX_SPIN, Math.min(MAX_SPIN, s.v + flick * FLICK_SPIN));
       startSpin();
     }
     g.lx = event.clientX;
