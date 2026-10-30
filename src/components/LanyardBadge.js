@@ -43,7 +43,7 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
   const rotate = useTransform([strapAngle, lean], ([a, l]) => a + l);
 
   // Redraw the strap as flat segments, each turned a share of the card's yaw:
-  // the hook end holds still and the twist grows down to the clip.
+  // the hook holds still and the twist grows down to the clip.
   useEffect(() => {
     const draw = () => {
       const points = strapPoints(x.get(), strap + y.get(), strap);
@@ -51,7 +51,9 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
       for (let i = 1; i < points.length; i++) {
         along.push(along[i - 1] + Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]));
       }
-      const total = along[along.length - 1] || 1;
+      // Twisted only below the hook, where the strap is on show.
+      const hook = along[RISE_STEPS];
+      const total = along[along.length - 1] - hook || 1;
       const twist = (yaw.get() * Math.PI) / 180;
       const edges = points.map((p, i) => {
         const a = points[Math.max(0, i - 1)];
@@ -60,7 +62,7 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
         const ty = b[1] - a[1];
         const l = Math.hypot(tx, ty) || 1;
         // Signed, so the edges cross where the strap turns edge-on.
-        const c = Math.cos((twist * along[i]) / total);
+        const c = Math.cos((twist * Math.max(0, along[i] - hook)) / total);
         return { p, nx: -ty / l, ny: tx / l, c: Math.sign(c || 1) * Math.max(Math.abs(c), 0.08) };
       });
       const quad = (i, half) => {
