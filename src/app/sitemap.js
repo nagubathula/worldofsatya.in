@@ -3,7 +3,7 @@ import { allWorks } from "@/data/works";
 const BASE_URL = "https://worldofsatya.in";
 
 export default function sitemap() {
-  const routes = ["", "/about", "/works", "/gallery", "/achievements",
+  const routes = ["", "/about", "/works", "/ui", "/gallery", "/achievements",
     ...allWorks.map(({ slug }) => `/works/${slug}`),
   ];
   return routes.map((route) => ({

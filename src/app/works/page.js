@@ -31,7 +31,7 @@ export default function Works() {
         <section id="collection" aria-label="Work collection" className="scroll-mt-24">
           <WorksList />
         </section>
-        <PageTurn prev={{ href: "/about", title: "About" }} next={{ href: "/gallery", title: "Gallery" }} />
+        <PageTurn prev={{ href: "/about", title: "About" }} next={{ href: "/ui", title: "UI" }} />
       </main>
       <Footer />
     </div>

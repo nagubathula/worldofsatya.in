@@ -94,7 +94,7 @@ function finishOnce(resolve) {
 
 // Pages sit on a map: home, then its sections side by side, then the works
 // inside Works. A page change moves the way you travel on it (see globals.css).
-const SECTIONS = ["/", "/about", "/works", "/gallery"];
+const SECTIONS = ["/", "/about", "/works", "/ui", "/gallery"];
 
 function pathOf(href) {
   return href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";

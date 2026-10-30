@@ -32,6 +32,7 @@ const PAGES = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Works", href: "/works" },
+  { label: "UI", href: "/ui" },
   { label: "Gallery", href: "/gallery" },
 ];
 
