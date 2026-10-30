@@ -80,7 +80,9 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
         const lit = Math.abs(c);
         strapPath.setAttribute("d", quad(i, width * 0.0375));
         // The face catches the light when it turns to us; the back stays duller.
-        strapPath.setAttribute("fill", c >= 0 ? shade(14, 46, lit) : shade(8, 30, lit));
+        const tone = c >= 0 ? shade(14, 46, lit) : shade(8, 30, lit);
+        strapPath.setAttribute("fill", tone);
+        strapPath.setAttribute("stroke", tone);
         stripePath.setAttribute("d", quad(i, width * 0.011));
         stripePath.setAttribute("opacity", c >= 0 ? (0.7 * lit).toFixed(3) : "0");
       }
@@ -202,10 +204,11 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
       {/* Filled every frame by the draw effect above. */}
       <svg className="absolute left-0 top-0 overflow-visible" width="1" height="1" aria-hidden="true">
         {Array.from({ length: SEGMENTS }, (_, i) => (
-          <path key={`s${i}`} ref={(node) => (strapRefs.current[i] = node)} />
+          // Stroked in its own fill, so neighbouring segments overlap and leave no seams.
+          <path key={`s${i}`} ref={(node) => (strapRefs.current[i] = node)} strokeWidth={0.6} strokeLinejoin="round" />
         ))}
         {Array.from({ length: SEGMENTS }, (_, i) => (
-          <path key={`t${i}`} ref={(node) => (stripeRefs.current[i] = node)} fill="#48484a" />
+          <path key={`t${i}`} ref={(node) => (stripeRefs.current[i] = node)} fill="#48484a" stroke="#48484a" strokeWidth={0.4} />
         ))}
       </svg>
 
