@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import LanyardBadge from "./LanyardBadge";
 import WorksFan from "./WorksFan";
+import ButtonLab from "./ButtonLab";
+import SensorLab from "./SensorLab";
 import { calendarSections } from "./FlipCalendarNav";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
 
@@ -58,6 +60,27 @@ const PIECES = [
     hint: "Drag the badge, or tap it to turn it over.",
     stage: "h-[440px] sm:h-[480px]",
     Demo: BadgeDemo,
+  },
+  {
+    id: "buttons",
+    title: "Buttons that answer back",
+    description:
+      "Six buttons, each with one interaction worth pressing twice: a pill that leans toward the cursor, a switch that squashes under your thumb, a like that bursts, a delete you have to hold, a download that becomes its own progress ring, and a copy that rolls over to say it worked.",
+    tags: ["Micro-interactions", "Springs", "Hold gesture", "Clipboard"],
+    hint: "Hover, press, hold. Every one of them does something.",
+    // The grid sets its own height; the padding leaves room for the hint.
+    stage: "pb-10",
+    Demo: ButtonLab,
+  },
+  {
+    id: "sensors",
+    title: "Tilt it, shake it",
+    description:
+      "Interfaces that answer to the phone itself, like the home card you can shake to turn. A foil card that leans as you tilt, dice that tumble when you shake, and a marble that rolls around a bowl like a spirit level. On a laptop, the mouse stands in for the sensors.",
+    tags: ["Device orientation", "Accelerometer", "Shake detection", "Haptics"],
+    hint: "Best on a phone. On desktop, move or whip the mouse over them.",
+    stage: "pb-10",
+    Demo: SensorLab,
   },
   {
     id: "works-hand",

@@ -1,41 +1,140 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { animate, motion, useMotionValue, useTransform, useVelocity, useSpring } from "framer-motion";
 import { playTingSound, playWhooshSound } from "./SoundEffects";
 
 // A conference badge on a lanyard, hung from the top edge of the page. Drag it
-// and it swings back on its strap; tap it to turn it over. The strap is drawn
-// from the hook to the clip every frame, so it always follows the card.
+// and it swings back on its strap; flick it sideways and it spins, twisting the
+// strap, which winds up to a limit and then unwinds; tap it to turn it over.
+// The strap is drawn from the hook to the clip every frame, so it always
+// follows the card.
 
 // The violet of the portrait's backdrop, so the photo sits in the card.
 const VIOLET = "#5b4cf0";
 // Underdamped: let go and the badge swings a few times before it settles.
 const SWING = { type: "spring", stiffness: 140, damping: 7, mass: 1 };
 const TAP_SLOP = 6;
+// The strap as a torsion spring, in degrees: soft, so a spin unwinds in a few
+// overshooting turns. It can only wind so far before it stops the card dead.
+const TORSION = { stiffness: 14, damping: 1.4 };
+const MAX_TWIST = 720;
+const MAX_SPIN = 2200;
+// How far above the hook the strap runs, off the top of the stage.
+const RISE = 400;
 
 export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = false }) {
   const height = Math.round(width * 1.36);
   // Where the clip hangs, relative to its resting point under the hook.
   const x = useMotionValue(0);
   const y = useMotionValue(reduceMotion ? 0 : -strap - height - 80);
+  // Turn about the strap, in degrees; 0 shows the front.
+  const yaw = useMotionValue(0);
   const [flipped, setFlipped] = useState(false);
   const gesture = useRef(null);
+  const spin = useRef({ v: 0, target: 0, raf: 0, dragging: false, ting: false });
+  const strapRefs = useRef([]);
+  const stripeRefs = useRef([]);
 
   // The card hangs along the strap, and leans a little further into fast swings.
   const strapAngle = useTransform([x, y], ([dx, dy]) => (-Math.atan2(dx, strap + dy) * 180) / Math.PI);
   const lean = useSpring(useTransform(useVelocity(x), [-1500, 0, 1500], [10, 0, -10]), { stiffness: 200, damping: 18 });
   const rotate = useTransform([strapAngle, lean], ([a, l]) => a + l);
 
-  // A ribbon from the hook (0,0) to the clip, sagging a touch when it goes slack.
-  const ribbon = useTransform([x, y], ([dx, dy]) => {
-    const ex = dx;
-    const ey = strap + dy;
-    const length = Math.hypot(ex, ey);
-    const slack = Math.max(0, strap - length) * 0.6;
-    return `M 0 -400 L 0 0 Q ${ex / 2 + slack} ${ey / 2} ${ex} ${ey}`;
-  });
+  // Redraw the strap as flat segments, each turned a share of the card's yaw:
+  // the hook end holds still and the twist grows down to the clip.
+  useEffect(() => {
+    const draw = () => {
+      const points = strapPoints(x.get(), strap + y.get(), strap);
+      const along = [0];
+      for (let i = 1; i < points.length; i++) {
+        along.push(along[i - 1] + Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]));
+      }
+      const total = along[along.length - 1] || 1;
+      const twist = (yaw.get() * Math.PI) / 180;
+      const edges = points.map((p, i) => {
+        const a = points[Math.max(0, i - 1)];
+        const b = points[Math.min(points.length - 1, i + 1)];
+        const tx = b[0] - a[0];
+        const ty = b[1] - a[1];
+        const l = Math.hypot(tx, ty) || 1;
+        // Signed, so the edges cross where the strap turns edge-on.
+        const c = Math.cos((twist * along[i]) / total);
+        return { p, nx: -ty / l, ny: tx / l, c: Math.sign(c || 1) * Math.max(Math.abs(c), 0.08) };
+      });
+      const quad = (i, half) => {
+        const a = edges[i];
+        const b = edges[i + 1];
+        const ha = half * a.c;
+        const hb = half * b.c;
+        return `M ${a.p[0] + a.nx * ha} ${a.p[1] + a.ny * ha} L ${b.p[0] + b.nx * hb} ${b.p[1] + b.ny * hb} L ${b.p[0] - b.nx * hb} ${b.p[1] - b.ny * hb} L ${a.p[0] - a.nx * ha} ${a.p[1] - a.ny * ha} Z`;
+      };
+      for (let i = 0; i < SEGMENTS; i++) {
+        const strapPath = strapRefs.current[i];
+        const stripePath = stripeRefs.current[i];
+        if (!strapPath || !stripePath) continue;
+        const c = (edges[i].c + edges[i + 1].c) / 2;
+        const lit = Math.abs(c);
+        strapPath.setAttribute("d", quad(i, width * 0.0375));
+        // The face catches the light when it turns to us; the back stays duller.
+        strapPath.setAttribute("fill", c >= 0 ? shade(14, 46, lit) : shade(8, 30, lit));
+        stripePath.setAttribute("d", quad(i, width * 0.011));
+        stripePath.setAttribute("opacity", c >= 0 ? (0.7 * lit).toFixed(3) : "0");
+      }
+    };
+    draw();
+    const stops = [x.on("change", draw), y.on("change", draw), yaw.on("change", draw)];
+    return () => stops.forEach((stop) => stop());
+  }, [strap, width, x, y, yaw]);
+
+  // Steps the strap's torsion until the card comes to rest facing its side.
+  const startSpin = useCallback(() => {
+    const s = spin.current;
+    if (s.raf) return;
+    let last = performance.now();
+    const step = (now) => {
+      const dt = Math.min(0.032, (now - last) / 1000);
+      last = now;
+      s.v += (-TORSION.stiffness * (yaw.get() - s.target) - TORSION.damping * s.v) * dt;
+      let angle = yaw.get() + s.v * dt;
+      // Wound as far as it goes: the strap stops the card and kicks it back.
+      const wound = angle - s.target;
+      if (Math.abs(wound) > MAX_TWIST) {
+        angle = s.target + Math.sign(wound) * MAX_TWIST;
+        if (Math.sign(s.v) === Math.sign(wound)) s.v *= -0.35;
+      }
+      yaw.set(angle);
+      if (!s.dragging && Math.abs(s.v) < 2 && Math.abs(angle - s.target) < 0.5) {
+        yaw.set(s.target);
+        s.raf = 0;
+        if (s.ting) {
+          s.ting = false;
+          playTingSound(1975, 0.04);
+        }
+        return;
+      }
+      s.raf = requestAnimationFrame(step);
+    };
+    s.raf = requestAnimationFrame(step);
+  }, [yaw]);
+
+  useEffect(() => () => cancelAnimationFrame(spin.current.raf), []);
+
+  const flip = () => {
+    const s = spin.current;
+    const next = !flipped;
+    setFlipped(next);
+    s.target = next ? 180 : 0;
+    if (reduceMotion) {
+      yaw.set(s.target);
+      return;
+    }
+    // A push toward the other side, so the turn starts briskly.
+    s.v += next ? 420 : -420;
+    s.ting = true;
+    startSpin();
+  };
 
   // Dropped in from above the page on arrival.
   useEffect(() => {
@@ -49,7 +148,7 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
     try {
       event.currentTarget.setPointerCapture(event.pointerId);
     } catch {}
-    gesture.current = { id: event.pointerId, sx: event.clientX, sy: event.clientY, ox: x.get(), oy: y.get(), moved: false };
+    gesture.current = { id: event.pointerId, sx: event.clientX, sy: event.clientY, lx: event.clientX, ox: x.get(), oy: y.get(), moved: false };
   };
 
   const onPointerMove = (event) => {
@@ -61,6 +160,14 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
     if (!g.moved) return;
     x.stop();
     y.stop();
+    // Dragged sideways, the card catches the air and turns on its strap.
+    if (!reduceMotion) {
+      const s = spin.current;
+      s.dragging = true;
+      s.v = Math.max(-MAX_SPIN, Math.min(MAX_SPIN, s.v + (event.clientX - g.lx) * 5));
+      startSpin();
+    }
+    g.lx = event.clientX;
     // The strap stretches a little, then pulls harder the further it goes.
     x.set(g.ox + dx);
     y.set(Math.max(-strap * 0.7, g.oy + (dy > 0 ? dy * 0.45 : dy)));
@@ -70,8 +177,9 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
     const g = gesture.current;
     gesture.current = null;
     if (!g || g.id !== event.pointerId) return;
+    spin.current.dragging = false;
     if (!g.moved) {
-      setFlipped((value) => !value);
+      flip();
       playWhooshSound({ pitch: 1.4, volume: 0.1, duration: 0.3 });
       return;
     }
@@ -84,15 +192,19 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
   const onKeyDown = (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
-    setFlipped((value) => !value);
+    flip();
   };
 
   return (
     <div className="pointer-events-none relative h-0 w-0" data-prevent-flip="true">
-      {/* Solid strokes: a gradient on a straight vertical path has no width to spread over. */}
+      {/* Filled every frame by the draw effect above. */}
       <svg className="absolute left-0 top-0 overflow-visible" width="1" height="1" aria-hidden="true">
-        <motion.path d={ribbon} fill="none" stroke="#1c1c1e" strokeWidth={width * 0.075} />
-        <motion.path d={ribbon} fill="none" stroke="#48484a" strokeWidth={width * 0.022} opacity={0.7} />
+        {Array.from({ length: SEGMENTS }, (_, i) => (
+          <path key={`s${i}`} ref={(node) => (strapRefs.current[i] = node)} />
+        ))}
+        {Array.from({ length: SEGMENTS }, (_, i) => (
+          <path key={`t${i}`} ref={(node) => (stripeRefs.current[i] = node)} fill="#48484a" />
+        ))}
       </svg>
 
       <motion.div
@@ -100,15 +212,17 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
         // Hung `strap` below the hook; it pivots on the clip, where the strap pulls.
         style={{ top: strap, x, y, rotate, transformOrigin: "0px 0px" }}
       >
-        {/* Clip and ring */}
-        <div
-          className="absolute -translate-x-1/2 rounded-[5px] border border-white/20 bg-gradient-to-b from-[#8e8e93] via-[#48484a] to-[#2c2c2e] shadow-md"
-          style={{ width: width * 0.13, height: width * 0.08, top: -width * 0.05 }}
-        />
-        <div
-          className="absolute -translate-x-1/2 rounded-full border-[2.5px] border-[#aeaeb2]"
-          style={{ width: width * 0.075, height: width * 0.1, top: width * 0.02 }}
-        />
+        {/* Clip and ring, turning with the card */}
+        <motion.div className="absolute left-0 top-0" style={{ rotateY: yaw, transformPerspective: 600 }}>
+          <div
+            className="absolute -translate-x-1/2 rounded-[5px] border border-white/20 bg-gradient-to-b from-[#8e8e93] via-[#48484a] to-[#2c2c2e] shadow-md"
+            style={{ width: width * 0.13, height: width * 0.08, top: -width * 0.05 }}
+          />
+          <div
+            className="absolute -translate-x-1/2 rounded-full border-[2.5px] border-[#aeaeb2]"
+            style={{ width: width * 0.075, height: width * 0.1, top: width * 0.02 }}
+          />
+        </motion.div>
 
         <div
           role="button"
@@ -125,10 +239,7 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
         >
           <motion.div
             className="relative h-full w-full"
-            style={{ transformStyle: "preserve-3d" }}
-            animate={{ rotateY: flipped ? 180 : 0 }}
-            transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 220, damping: 22 }}
-            onAnimationComplete={() => flipped && playTingSound(1975, 0.04)}
+            style={{ transformStyle: "preserve-3d", rotateY: yaw }}
           >
             <BadgeFront width={width} />
             <BadgeBack width={width} />
@@ -137,6 +248,32 @@ export default function LanyardBadge({ strap = 150, width = 220, reduceMotion = 
       </motion.div>
     </div>
   );
+}
+
+// The strap as a run of points: straight down off the top of the stage to the
+// hook, then a curve to the clip that sags a touch when it goes slack.
+const RISE_STEPS = 8;
+const CURVE_STEPS = 28;
+const SEGMENTS = RISE_STEPS + CURVE_STEPS;
+
+function strapPoints(ex, ey, strap) {
+  const points = [];
+  for (let i = 0; i <= RISE_STEPS; i++) points.push([0, -RISE + (RISE * i) / RISE_STEPS]);
+  const slack = Math.max(0, strap - Math.hypot(ex, ey)) * 0.6;
+  const cx = ex / 2 + slack;
+  const cy = ey / 2;
+  for (let i = 1; i <= CURVE_STEPS; i++) {
+    const t = i / CURVE_STEPS;
+    const m = 1 - t;
+    points.push([2 * m * t * cx + t * t * ex, 2 * m * t * cy + t * t * ey]);
+  }
+  return points;
+}
+
+// A grey from `dark` (edge-on) to `light` (face-on).
+function shade(dark, light, lit) {
+  const v = Math.round(dark + (light - dark) * lit);
+  return `rgb(${v},${v},${v + 2})`;
 }
 
 // Sizes scale with the card, so the phone badge is the desktop one shrunk.
