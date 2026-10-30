@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, useTransform } from "framer-motion";
-import { play8BitTapSound, playPopSound } from "./SoundEffects";
+import { playTickSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
@@ -24,7 +24,7 @@ export default function GalleryButton() {
   const handleMouseEnter = () => {
     setIsHovered(true);
     try {
-      play8BitTapSound();
+      playTickSound();
     } catch {}
   };
 

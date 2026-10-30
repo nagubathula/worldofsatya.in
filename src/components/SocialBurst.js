@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Github, Instagram, Linkedin, Mail, MessageCircle, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { play8BitTapSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
+import { playTickSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
@@ -65,7 +65,7 @@ export default function SocialBurst({ open, onToggle }) {
   const handleMouseEnter = () => {
     setIsHovered(true);
     try {
-      play8BitTapSound();
+      playTickSound();
     } catch {}
   };
 

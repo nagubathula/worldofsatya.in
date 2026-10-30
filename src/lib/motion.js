@@ -1,4 +1,5 @@
 import { playTransitionScreen, usesTransitionScreen } from "./transitionScreen";
+import { playWhooshSound } from "@/components/SoundEffects";
 
 export const EASE_OUT = [0.22, 1, 0.36, 1];
 export const EASE_IN = [0.4, 0, 1, 1];
@@ -123,6 +124,8 @@ export function smoothNavigate(router, href, { rel } = {}) {
   }
 
   haptic("navigate");
+  // Going deeper sounds a touch brighter than coming back out.
+  playWhooshSound({ pitch: pageTurn(window.location.pathname, href, rel) === "out" ? 0.85 : 1.1 });
   const go = () => router.push(href);
   if (prefersReducedMotion()) {
     go();

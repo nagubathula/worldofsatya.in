@@ -157,7 +157,7 @@ export default function HomeTilesLayout() {
   return (
     <div
       data-lenis-prevent="true"
-      className="relative w-full min-h-screen bg-white text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
+      className="relative w-full min-h-screen text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
     >
       <section className="relative w-full max-w-5xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-10 pt-28 lg:pt-16 pb-12 select-none">
         {/* The face, or the fanned works once the card turns */}
@@ -189,7 +189,7 @@ export default function HomeTilesLayout() {
                 Satya Sai Nagubathula
               </motion.h1>
               <motion.p variants={bioReveal} className={`mt-5 ${bioText}`}>
-                I have <BioLink href="/about">6 years of experience</BioLink> in Design and Engineering and worked across software and hardware{" "}
+                I have <BioLink href="/about">4 years of experience</BioLink> in Design and Engineering and worked across software and hardware{" "}
                 <MoreLink href="/about" label="More about Satya" />
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>

@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 let globalAudioCtx = null;
-// Off: a portfolio is often opened at work, where a page that beeps on hover
-// gets closed. Every sound below checks this, so it is the one switch.
-let soundEnabled = false;
+// On by default, but browsers keep a page silent until the first tap or key, so
+// nothing plays on arrival. M mutes (and remembers it); every sound checks this.
+let soundEnabled = true;
 
 function getAudioContext() {
   if (typeof window === "undefined") return null;
@@ -37,94 +37,141 @@ export function toggleSound() {
     window.dispatchEvent(new CustomEvent("portfolio-sound-change", { detail: soundEnabled }));
   }
   if (soundEnabled) {
-    play8BitCoinSound();
+    playTingSound();
   }
   return soundEnabled;
 }
 
+// One gesture often triggers a sound from two places (the global tap handler and
+// the component). A short gap per sound keeps that to one.
+const lastPlayed = {};
+function ready(name, gap) {
+  if (!soundEnabled) return null;
+  const now = typeof performance !== "undefined" ? performance.now() : Date.now();
+  if (now - (lastPlayed[name] || 0) < gap) return null;
+  lastPlayed[name] = now;
+  return getAudioContext();
+}
+
+function release(...nodes) {
+  return () => {
+    for (const node of nodes) {
+      try {
+        node.disconnect();
+      } catch {}
+    }
+  };
+}
+
+let noiseBuffer = null;
+function noise(ctx) {
+  if (!noiseBuffer || noiseBuffer.sampleRate !== ctx.sampleRate) {
+    noiseBuffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  }
+  const source = ctx.createBufferSource();
+  source.buffer = noiseBuffer;
+  return source;
+}
+
 /**
- * Retro 8-Bit Coin Ping — Super Mario / Game Boy style
+ * Whoosh — air moving past: noise through a band-pass that sweeps up and back
+ * down. Page changes, card flips and swipes. `pitch` > 1 is brighter and quicker.
  */
-export function play8BitCoinSound() {
-  if (!soundEnabled) return;
+export function playWhooshSound({ pitch = 1, volume = 0.16, duration = 0.42 } = {}) {
   try {
-    const ctx = getAudioContext();
+    const ctx = ready("whoosh", 120);
     if (!ctx) return;
     const now = ctx.currentTime;
+    const length = duration / Math.sqrt(pitch);
 
-    const osc = ctx.createOscillator();
+    const source = noise(ctx);
+    const band = ctx.createBiquadFilter();
     const gain = ctx.createGain();
 
-    osc.type = "square";
-    // B5 (987.77 Hz) to E6 (1318.51 Hz)
-    osc.frequency.setValueAtTime(987.77, now);
-    osc.frequency.setValueAtTime(1318.51, now + 0.08);
+    band.type = "bandpass";
+    band.Q.value = 1.1;
+    band.frequency.setValueAtTime(320 * pitch, now);
+    band.frequency.exponentialRampToValueAtTime(2600 * pitch, now + length * 0.45);
+    band.frequency.exponentialRampToValueAtTime(700 * pitch, now + length);
 
-    gain.gain.setValueAtTime(0.04, now);
-    gain.gain.setValueAtTime(0.04, now + 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(volume, now + length * 0.4);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + length);
 
-    osc.connect(gain);
+    source.connect(band);
+    band.connect(gain);
     gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.33);
+    source.start(now, Math.random() * 0.5);
+    source.stop(now + length + 0.02);
+    source.onended = release(source, band, gain);
   } catch {}
 }
 
 /**
- * Retro 8-Bit Menu Blip — Game Boy / Pokémon menu selection
+ * Ting — a small glass bell: a sine with two quiet inharmonic partials and a
+ * long soft tail. Opening something, turning sound on.
  */
-export function play8BitBlipSound(freq = 587.33) {
-  if (!soundEnabled) return;
+export function playTingSound(freq = 1568, volume = 0.07) {
   try {
-    const ctx = getAudioContext();
+    const ctx = ready("ting", 80);
     if (!ctx) return;
     const now = ctx.currentTime;
+    const out = ctx.createGain();
+    out.gain.setValueAtTime(0.0001, now);
+    out.gain.exponentialRampToValueAtTime(volume, now + 0.006);
+    out.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+    out.connect(ctx.destination);
 
+    const partials = [
+      [1, 1],
+      [2.76, 0.28],
+      [5.4, 0.1],
+    ];
+    const nodes = [out];
+    for (const [ratio, level] of partials) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq * ratio, now);
+      // Higher partials die first, so the ring settles onto the fundamental.
+      gain.gain.setValueAtTime(level, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9 / ratio ** 0.5);
+      osc.connect(gain);
+      gain.connect(out);
+      osc.start(now);
+      osc.stop(now + 0.95);
+      nodes.push(osc, gain);
+    }
+    nodes[1].onended = release(...nodes);
+  } catch {}
+}
+
+/**
+ * Tick — a soft, dry tap for ordinary buttons and links.
+ */
+export function playTickSound(freq = 1800, volume = 0.05) {
+  try {
+    const ctx = ready("tick", 60);
+    if (!ctx) return;
+    const now = ctx.currentTime;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = "square";
+    osc.type = "sine";
     osc.frequency.setValueAtTime(freq, now);
-    osc.frequency.exponentialRampToValueAtTime(freq * 1.8, now + 0.035);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, now + 0.018);
 
-    gain.gain.setValueAtTime(0.035, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.05);
-  } catch {}
-}
-
-/**
- * Retro 8-Bit Click / Tap
- */
-export function play8BitTapSound() {
-  if (!soundEnabled) return;
-  try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    const now = ctx.currentTime;
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "triangle";
-    osc.frequency.setValueAtTime(320, now);
-    osc.frequency.exponentialRampToValueAtTime(120, now + 0.03);
-
-    gain.gain.setValueAtTime(0.04, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(volume, now + 0.002);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
-
     osc.start(now);
     osc.stop(now + 0.035);
+    osc.onended = release(osc, gain);
   } catch {}
 }
 
@@ -204,44 +251,41 @@ export function playSocialBurstSound({ count = 5, interval = 0.15, delay = 0.12 
 }
 
 export default function SoundEffects() {
-  const lastPlayedRef = useRef(0);
-
   useEffect(() => {
     try {
-      // Only a visitor who turned sound on gets it back.
-      soundEnabled = localStorage.getItem("portfolio-sound") === "true";
+      // Only a visitor who muted keeps it muted.
+      soundEnabled = localStorage.getItem("portfolio-sound") !== "false";
     } catch {}
 
     const handlePointerDown = (e) => {
-      const now = Date.now();
-      if (now - lastPlayedRef.current < 40) return;
-
       const target = e.target;
       if (!target || typeof target.closest !== "function") return;
+      const interactiveEl = target.closest('button, a, [role="button"], input[type="button"], input[type="submit"]');
+      if (!interactiveEl || interactiveEl.closest("[data-sound='off']")) return;
 
-      const interactiveEl = target.closest(
-        'button, a, [role="button"], input[type="button"], input[type="submit"], .retro-btn, [data-retro-action]'
-      );
-
-      if (interactiveEl) {
-        lastPlayedRef.current = now;
-
-        const isPrimaryAction =
-          interactiveEl.classList?.contains("primaryPill") ||
-          interactiveEl.classList?.contains("retro-btn-primary") ||
-          interactiveEl.getAttribute("href")?.includes("mailto") ||
-          interactiveEl.getAttribute("data-retro-action") === "equip";
-
-        if (isPrimaryAction) {
-          play8BitCoinSound();
-        } else {
-          play8BitBlipSound();
-        }
+      const isPrimaryAction =
+        interactiveEl.classList?.contains("primaryPill") ||
+        interactiveEl.getAttribute("href")?.startsWith("mailto");
+      if (isPrimaryAction) {
+        playTingSound();
+      } else {
+        playTickSound();
       }
     };
 
+    const handleKeyDown = (e) => {
+      if (e.key !== "m" && e.key !== "M") return;
+      if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
+      if (e.target instanceof Element && e.target.closest("input, textarea, select, [contenteditable='true']")) return;
+      toggleSound();
+    };
+
     window.addEventListener("pointerdown", handlePointerDown, { passive: true });
-    return () => window.removeEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return null;

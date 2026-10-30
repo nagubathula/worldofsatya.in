@@ -7,7 +7,7 @@ import ExperienceTable from "./ExperienceTable";
 import { useReducedMotionAfterHydration } from "@/lib/reducedMotion";
 
 const STATS = [
-  { value: "6", label: "Years Experience" },
+  { value: "4", label: "Years Experience" },
   { value: "280+", label: "Clients Served" },
   // The biggest number gets the dark tile, so the row has one focal point.
   { value: "2,000+", label: "AI Video Pipelines", featured: true },
@@ -69,7 +69,7 @@ function StatsIntro({ hint }) {
   return (
     <div className="flex w-full flex-col justify-center pr-4 sm:w-[60vw] sm:max-w-[280px] sm:shrink-0">
       <h2 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#111111] sm:text-5xl">By the numbers</h2>
-      <p className="mt-3 text-sm text-[#6e6e73]">Six years of design, engineering, and AI work.</p>
+      <p className="mt-3 text-sm text-[#6e6e73]">Four years of design, engineering, and AI work.</p>
       {/* The row moves sideways as you scroll down; say so. */}
       {hint && (
         <p className="mt-6 flex items-center gap-2 text-xs font-medium text-[#6e6e73]">

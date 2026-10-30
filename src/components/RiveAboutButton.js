@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useTransform, AnimatePresence } from "framer-motion";
-import { play8BitTapSound, playPopSound } from "./SoundEffects";
+import { playTickSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
@@ -44,7 +44,7 @@ export default function RiveAboutButton({ showFace = false }) {
   const handleMouseEnter = () => {
     setIsHovered(true);
     try {
-      play8BitTapSound();
+      playTickSound();
     } catch {}
   };
 

@@ -5,6 +5,8 @@ import { BlackHoleTransitionProvider } from "@/components/BlackHoleTransition";
 import HomeFace from "@/components/HomeFace";
 import KeyboardNav from "@/components/KeyboardNav";
 import TransitionScreen from "@/components/TransitionScreen";
+import SoundEffects from "@/components/SoundEffects";
+import AmbientBackground from "@/components/AmbientBackground";
 import { Inter } from "next/font/google";
 
 const sansFont = Inter({ 
@@ -79,6 +81,8 @@ export default function RootLayout({ children }) {
             <HomeFace />
             <KeyboardNav />
             <TransitionScreen />
+            <SoundEffects />
+            <AmbientBackground />
             <SmoothScroll>
               {children}
             </SmoothScroll>

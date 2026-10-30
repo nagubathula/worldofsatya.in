@@ -26,7 +26,7 @@ import {
 import { motion, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 import { allWorks } from "@/data/works";
-import { playPopSound, play8BitTapSound } from "./SoundEffects";
+import { playPopSound, playTickSound } from "./SoundEffects";
 import RetroVideoPlayer from "./RetroVideoPlayer";
 
 const CATEGORY_TABS = [
@@ -474,7 +474,7 @@ export default function WorksList() {
               onClick={() => handleFilterClick(tab.key)}
               onMouseEnter={() => {
                 try {
-                  play8BitTapSound();
+                  playTickSound();
                 } catch {}
               }}
               whileHover={{ scale: 1.03, y: -0.5 }}
@@ -829,7 +829,7 @@ export default function WorksList() {
               onMouseEnter={() => {
                 if (validCurrentPage > 1) {
                   try {
-                    play8BitTapSound();
+                    playTickSound();
                   } catch {}
                 }
               }}
@@ -855,7 +855,7 @@ export default function WorksList() {
                   onClick={() => handlePageChange(pageNum)}
                   onMouseEnter={() => {
                     try {
-                      play8BitTapSound();
+                      playTickSound();
                     } catch {}
                   }}
                   whileHover={{ scale: 1.06, y: -0.5 }}
@@ -888,7 +888,7 @@ export default function WorksList() {
               onMouseEnter={() => {
                 if (validCurrentPage < totalPages) {
                   try {
-                    play8BitTapSound();
+                    playTickSound();
                   } catch {}
                 }
               }}

@@ -12,7 +12,7 @@ import {
 } from "framer-motion";
 import ChibiAvatar from "./ChibiAvatar";
 import WorksFan from "./WorksFan";
-import { play8BitBlipSound } from "./SoundEffects";
+import { playTingSound, playWhooshSound } from "./SoundEffects";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
 import { EASE_IN, EASE_OUT, SPRING } from "@/lib/motion";
 
@@ -169,7 +169,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     pullY.set(reduceMotion ? 0 : -70);
 
     try {
-      play8BitBlipSound(760);
+      playTingSound(1760);
     } catch {}
     if (typeof navigator !== "undefined" && navigator.vibrate) {
       try {
@@ -196,7 +196,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     holdGestures(1080);
 
     try {
-      play8BitBlipSound(620);
+      playWhooshSound({ pitch: 1.15, duration: 0.36 });
     } catch {}
     if (typeof navigator !== "undefined" && navigator.vibrate) {
       try {
@@ -217,7 +217,7 @@ export default function FlipCalendarNav({ initialSection = "avatar", onSectionCh
     holdGestures(1080);
 
     try {
-      play8BitBlipSound(520);
+      playWhooshSound({ pitch: 0.85, duration: 0.36 });
     } catch {}
     if (typeof navigator !== "undefined" && navigator.vibrate) {
       try {

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
+import { playWhooshSound } from "./SoundEffects";
 
 // Each card takes this share of the row and the rest is split into equal steps,
 // so the fan always spans the row edge to edge with the cards overlapping.
@@ -132,6 +133,7 @@ function WorksDeck({ items, go, reduceMotion }) {
     const next = dx < -DECK_SWIPE || g.v < -DECK_FLICK;
     const prev = dx > DECK_SWIPE || g.v > DECK_FLICK;
     if (next || prev) {
+      playWhooshSound({ pitch: next ? 1.2 : 0.95, volume: 0.12, duration: 0.32 });
       setLifting(false);
       setFront((current) => (current + (next ? 1 : count - 1)) % count);
     }
