@@ -215,7 +215,7 @@ export default function HomeTilesLayout() {
           )}
         </AnimatePresence>
 
-        {/* About, gallery, UI lab and contact: under the bio on the face, above the cards on works. */}
+        {/* About, gallery, UI Lab and contact: under the bio on the face, above the cards on works. */}
         <motion.div
           layout
           initial={{ opacity: 0, y: 8 }}
@@ -231,7 +231,7 @@ export default function HomeTilesLayout() {
           ref={contactContainerRef}
           className={`${isAvatarVisible ? "order-4 mt-8 sm:mt-10" : "order-1 mb-4 sm:mb-6"} z-30 flex items-center justify-center gap-4`}
         >
-          {/* On a phone the contact links need the whole row, so about, gallery and UI lab
+          {/* On a phone the contact links need the whole row, so about, gallery and UI Lab
               tuck away while they're out. The negative margin takes back the row's gap. */}
           <motion.div
             initial={false}

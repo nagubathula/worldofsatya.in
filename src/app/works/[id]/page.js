@@ -303,16 +303,29 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
           <div className="mx-auto mt-14 w-full max-w-5xl px-4 sm:mt-16 sm:px-8">
             <NoiseStage seed={work.slug} className="p-4 sm:p-12">
               <div data-work-media style={workMediaStyle(work.slug)} className="noise-stage-media">
-                <Image
-                  src={image}
-                  alt={study.title}
-                  width={1280}
-                  height={800}
-                  // The hero tops out at max-w-5xl; below that it spans the screen.
-                  sizes="(min-width: 1024px) 900px, 100vw"
-                  priority
-                  className="h-auto w-full"
-                />
+                {study.video ? (
+                  // A launch film leads when there is one; its poster lives in posters/ beside it.
+                  <video
+                    src={study.video}
+                    poster={study.video.replace(/([^/]+)\.mp4$/i, 'posters/$1.jpg')}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    aria-label={study.title}
+                    className="h-auto w-full"
+                  />
+                ) : (
+                  <Image
+                    src={image}
+                    alt={study.title}
+                    width={1280}
+                    height={800}
+                    // The hero tops out at max-w-5xl; below that it spans the screen.
+                    sizes="(min-width: 1024px) 900px, 100vw"
+                    priority
+                    className="h-auto w-full"
+                  />
+                )}
               </div>
             </NoiseStage>
           </div>

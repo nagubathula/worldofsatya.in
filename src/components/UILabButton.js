@@ -8,7 +8,7 @@ import { SPRING } from "@/lib/motion";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
-// Opens the UI lab. Same tile as About and Gallery; the icon is a little switch
+// Opens the UI Lab. Same tile as About and Gallery; the icon is a little switch
 // that a cursor clicks on when you hover, since everything in the lab is live.
 export default function UILabButton() {
   const [isHovered, setIsHovered] = useState(false);
@@ -45,7 +45,7 @@ export default function UILabButton() {
     <motion.div style={{ x: magneticX, y: magneticY }} className="group/label relative shrink-0 select-none">
       <Link
         href="/ui"
-        aria-label="UI lab"
+        aria-label="UI Lab"
         onPointerMove={magnet.move}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -121,7 +121,7 @@ export default function UILabButton() {
         {/* Micro Bevel Gloss Highlight */}
         <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
       </Link>
-      <HoverLabel>UI lab</HoverLabel>
+      <HoverLabel>UI Lab</HoverLabel>
     </motion.div>
   );
 }

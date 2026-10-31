@@ -25,7 +25,7 @@ export function usesTransitionScreen(from, to) {
   return !(isWorksPath(from) && isWorksPath(to));
 }
 
-const NAMES = { "/": "Home", "/about": "About", "/works": "Works", "/ui": "UI", "/gallery": "Gallery" };
+const NAMES = { "/": "Home", "/about": "About", "/works": "Works", "/ui": "UI Lab", "/gallery": "Gallery" };
 
 export function screenLabel(path) {
   if (NAMES[path]) return NAMES[path];
