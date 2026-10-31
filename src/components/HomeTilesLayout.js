@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import SocialBurst, { SLIDE, useBurstWidth, useCompact } from "./SocialBurst";
 import RiveAboutButton from "./RiveAboutButton";
 import GalleryButton from "./GalleryButton";
+import UILabButton from "./UILabButton";
 import Magnetic from "./Magnetic";
 import FlipCalendarNav from "./FlipCalendarNav";
 import { faceIntroDelay, setFaceReading } from "./ChibiAvatar";
@@ -22,7 +23,7 @@ const bioReveal = {
 };
 
 // Small print under a big name, as in the design. Phones get a size up to stay readable.
-const bioText = "text-[13px] sm:text-[12px] leading-[1.6] tracking-[-0.01em] text-[#6e6e73]";
+const bioText = "text-[15px] sm:text-[16px] leading-[1.6] tracking-[-0.01em] text-[#6e6e73]";
 
 const highlight =
   "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
@@ -183,9 +184,9 @@ export default function HomeTilesLayout() {
               // Reading the bio puts the face's reading glasses on. Mouse and pen only.
               onPointerEnter={(e) => e.pointerType !== "touch" && setFaceReading(true)}
               onPointerLeave={() => setFaceReading(false)}
-              className="order-3 z-20 mt-5 sm:mt-7 w-full max-w-[570px] flex flex-col items-start text-left"
+              className="order-3 z-20 mt-5 sm:mt-7 w-full max-w-[640px] flex flex-col items-start text-left"
             >
-              <motion.h1 variants={bioReveal} className="text-[34px] sm:text-[44px] lg:text-[48px] font-semibold tracking-[-0.045em] leading-[1.05] text-[#111111]">
+              <motion.h1 variants={bioReveal} className="text-[38px] sm:text-[52px] lg:text-[58px] font-semibold tracking-[-0.045em] leading-[1.05] text-[#111111]">
                 Satya Sai Nagubathula
               </motion.h1>
               <motion.p variants={bioReveal} className={`mt-5 ${bioText}`}>
@@ -214,7 +215,7 @@ export default function HomeTilesLayout() {
           )}
         </AnimatePresence>
 
-        {/* About, gallery and contact: under the bio on the face, above the cards on works. */}
+        {/* About, gallery, UI lab and contact: under the bio on the face, above the cards on works. */}
         <motion.div
           layout
           initial={{ opacity: 0, y: 8 }}
@@ -230,7 +231,7 @@ export default function HomeTilesLayout() {
           ref={contactContainerRef}
           className={`${isAvatarVisible ? "order-4 mt-8 sm:mt-10" : "order-1 mb-4 sm:mb-6"} z-30 flex items-center justify-center gap-4`}
         >
-          {/* On a phone the contact links need the whole row, so about and gallery
+          {/* On a phone the contact links need the whole row, so about, gallery and UI lab
               tuck away while they're out. The negative margin takes back the row's gap. */}
           <motion.div
             initial={false}
@@ -246,6 +247,7 @@ export default function HomeTilesLayout() {
           >
             <RiveAboutButton showFace={!isAvatarVisible} />
             <GalleryButton />
+            <UILabButton />
           </motion.div>
           <SocialBurst open={isContactOpen} onToggle={toggleContact} />
         </motion.div>
@@ -262,7 +264,7 @@ export default function HomeTilesLayout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ ...SMOOTH, delay: introDelay + 0.9 }}
-              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-[#6e6e73] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
+              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium text-[#6e6e73] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
             >
               <span className="[@media(hover:none)]:hidden">Scroll down for works</span>
               <span className="hidden [@media(hover:none)]:inline">Swipe up for works</span>
