@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import LanyardBadge from "./LanyardBadge";
+import dynamic from "next/dynamic";
 import WorksFan from "./WorksFan";
 import ButtonLab from "./ButtonLab";
 import SensorLab from "./SensorLab";
@@ -11,32 +11,8 @@ import { useBlackHoleTransition } from "./BlackHoleTransition";
 
 const worksPreview = calendarSections.find((section) => section.isWorks).previewItems;
 
-function useNarrow() {
-  const [narrow, setNarrow] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia("(max-width: 639px)");
-    const update = () => setNarrow(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-  return narrow;
-}
-
-function BadgeDemo({ reduceMotion }) {
-  const narrow = useNarrow();
-  return (
-    <div className="absolute left-1/2 top-0">
-      {/* Keyed on size so a resize re-hangs it at the new scale. */}
-      <LanyardBadge
-        key={narrow ? "s" : "l"}
-        width={narrow ? 190 : 220}
-        strap={narrow ? 70 : 90}
-        reduceMotion={reduceMotion}
-      />
-    </div>
-  );
-}
+// WebGL, so it loads in the browser only, after the page.
+const LanyardWall = dynamic(() => import("./LanyardWall"), { ssr: false });
 
 function WorksHandDemo({ reduceMotion }) {
   const { navigate } = useBlackHoleTransition();
@@ -53,13 +29,13 @@ function WorksHandDemo({ reduceMotion }) {
 const PIECES = [
   {
     id: "id-badge",
-    title: "ID badge on a lanyard",
+    title: "Badges on lanyards",
     description:
-      "A conference pass that hangs from the top of its stage. Drag it and it swings back on an underdamped spring; flick it sideways and it spins, twisting the strap, which winds up to a turn and a half before it stops the card and unwinds. Tap it to turn it over.",
-    tags: ["Spring physics", "Drag", "Torsion", "3D flip", "Sound"],
-    hint: "Drag or flick the badge sideways, or tap it to turn it over.",
-    stage: "h-[440px] sm:h-[480px]",
-    Demo: BadgeDemo,
+      "A pass from every job, hung on printed straps in WebGL. The strap is a simulated rope and the card a rigid body pinned to its end, so a drag swings it and knocks its neighbours. Each tap turns a badge over the same way, winding another half-twist into the strap and hitching it up; the seventh in a row lets the strap go, and it unwinds like a torsion spring.",
+    tags: ["Three.js", "Rope physics", "Rigid body", "Torsion", "Canvas textures"],
+    hint: "Drag a badge, or tap it to turn it over. Keep tapping.",
+    stage: "h-[560px] sm:h-[640px]",
+    Demo: LanyardWall,
   },
   {
     id: "buttons",

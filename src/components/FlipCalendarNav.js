@@ -43,6 +43,7 @@ export const calendarSections = [
         id: "notbad",
         title: "NotBad",
         image: "/notbad-editor.png",
+        logo: "/notbad-logo.png",
         href: "/works/notbad",
         slug: "notbad",
         blurb: "Markdown writer",

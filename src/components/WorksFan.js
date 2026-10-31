@@ -5,6 +5,7 @@ import Image from "next/image";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { EASE_OUT, SPRING, workMediaStyle } from "@/lib/motion";
 import { playWhooshSound } from "./SoundEffects";
+import { stageStyle } from "./NoiseStage";
 
 // Each card takes this share of the row and the rest is split into equal steps,
 // so the fan always spans the row edge to edge with the cards overlapping.
@@ -56,10 +57,27 @@ function useCompact() {
 function CardFace({ item, mask, label = true }) {
   return (
     <span
-      className="relative block h-full w-full bg-[#e5e5e5]"
-      style={{ maskImage: mask, WebkitMaskImage: mask, maskSize: "100% 100%", WebkitMaskSize: "100% 100%" }}
+      // The deckle mask sets the outline, so the stage drops its own rounding.
+      className="noise-stage relative block h-full w-full !rounded-none"
+      style={{
+        ...stageStyle(item.slug),
+        maskImage: mask,
+        WebkitMaskImage: mask,
+        maskSize: "100% 100%",
+        WebkitMaskSize: "100% 100%",
+      }}
     >
-      <span className="absolute inset-0" style={workMediaStyle(item.slug)}>
+      {/* The app's own icon sits over the top of the screenshot, like it does in a dock. */}
+      {item.logo && (
+        <span className="absolute left-[9%] top-[7%] z-[2] block w-[24%] drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]">
+          <Image src={item.logo} alt="" width={256} height={256} sizes="96px" className="h-auto w-full" />
+        </span>
+      )}
+      {/* The screenshot floats on the stage, as it does on the project page it morphs into. */}
+      <span
+        className={`noise-stage-media absolute inset-x-[9%] bottom-0 z-[1] !rounded-b-none ${item.logo ? "top-[24%]" : "top-[11%]"}`}
+        style={workMediaStyle(item.slug)}
+      >
         <Image
           src={item.image}
           alt=""
@@ -71,7 +89,7 @@ function CardFace({ item, mask, label = true }) {
       </span>
       {/* Touch screens can't hover, so the names show there all the time. */}
       {label && (
-        <span className="absolute bottom-[6%] left-[6%] rounded-full bg-white/90 px-2.5 py-1 text-[12px] sm:px-2 sm:py-0.5 sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
+        <span className="absolute bottom-[6%] left-[6%] z-[2] rounded-full bg-white/90 px-2.5 py-1 text-[12px] sm:px-2 sm:py-0.5 sm:text-[11px] font-medium tracking-[-0.01em] text-[#111111] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(hover:none)]:opacity-100">
           {item.title}
         </span>
       )}

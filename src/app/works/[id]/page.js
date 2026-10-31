@@ -10,6 +10,7 @@ import Image from "next/image";
 import { workMediaStyle } from "@/lib/motion";
 import { caseStudiesData } from "@/data/caseStudies";
 import CaseStudyBody from "@/components/CaseStudyBody";
+import NoiseStage from "@/components/NoiseStage";
 import Magnetic from "@/components/Magnetic";
 import { CaseStudyContents, CountUp, ReadingProgress, RevealOnScroll } from "@/components/CaseStudyChrome";
 
@@ -150,23 +151,22 @@ export default async function WorkDetailPage({ params }) {
                 />
               </div>
             ) : work.image ? (
-              <div
-                data-work-media
-                style={workMediaStyle(work.slug)}
-                className="w-full relative rounded-3xl overflow-hidden mb-12 sm:mb-20 bg-[#f5f5f7] shadow-[0_4px_24px_rgba(0,0,0,0.04)] flex items-center justify-center border border-black/[0.06]"
-              >
-                <Image 
-                  src={work.image} 
-                  alt={work.title} 
-                  width={1920} 
-                  height={1080}
-                  // Full column width: phones fetch a phone-sized file, not the 2x desktop one.
-                  sizes="(min-width: 1280px) 1152px, 100vw"
-                  loading="eager"
-                  fetchPriority="high"
-                  className="w-full h-auto object-contain" 
-                />
-              </div>
+              <NoiseStage seed={work.slug} className="mb-12 sm:mb-20 p-4 sm:p-12 lg:p-16">
+                {/* The screenshot carries the morph name, so the card's shot lands on this one. */}
+                <div data-work-media style={workMediaStyle(work.slug)} className="noise-stage-media">
+                  <Image
+                    src={work.image}
+                    alt={work.title}
+                    width={1920}
+                    height={1080}
+                    // Full column width: phones fetch a phone-sized file, not the 2x desktop one.
+                    sizes="(min-width: 1280px) 1024px, 100vw"
+                    loading="eager"
+                    fetchPriority="high"
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+              </NoiseStage>
             ) : null}
             
             {/* One column at a comfortable reading width. */}
@@ -226,6 +226,17 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
         <div className="mx-auto w-full max-w-3xl px-4 sm:px-8">
           <BackToWorks className="cs-rise mb-10 inline-block text-sm text-[#515154] hover:text-black" />
           <header>
+            {study.logo && (
+              <Image
+                src={study.logo}
+                alt=""
+                width={256}
+                height={256}
+                sizes="64px"
+                className="cs-rise mb-6 h-14 w-14 drop-shadow-[0_10px_20px_rgba(0,0,0,0.22)] sm:h-16 sm:w-16"
+                style={{ "--cs-i": 0 }}
+              />
+            )}
             <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-[#6e6e73]" style={{ "--cs-i": 1 }}>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.05] bg-[#f5f5f7] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#626267]">
                 <BookOpen size={11} className="text-[#8c9385]" /> {study.type}
@@ -289,21 +300,21 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
         </div>
 
         {image && (
-          <div
-            data-work-media
-            style={workMediaStyle(work.slug)}
-            className="mx-auto mt-14 w-full max-w-5xl px-4 sm:mt-16 sm:px-8"
-          >
-            <Image
-              src={image}
-              alt={study.title}
-              width={1280}
-              height={800}
-              // The hero tops out at max-w-5xl; below that it spans the screen.
-              sizes="(min-width: 1024px) 1024px, 100vw"
-              priority
-              className="h-auto w-full rounded-[1.25rem] border border-black/[0.06] bg-[#f5f5f7] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)]"
-            />
+          <div className="mx-auto mt-14 w-full max-w-5xl px-4 sm:mt-16 sm:px-8">
+            <NoiseStage seed={work.slug} className="p-4 sm:p-12">
+              <div data-work-media style={workMediaStyle(work.slug)} className="noise-stage-media">
+                <Image
+                  src={image}
+                  alt={study.title}
+                  width={1280}
+                  height={800}
+                  // The hero tops out at max-w-5xl; below that it spans the screen.
+                  sizes="(min-width: 1024px) 900px, 100vw"
+                  priority
+                  className="h-auto w-full"
+                />
+              </div>
+            </NoiseStage>
           </div>
         )}
 
@@ -325,7 +336,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
                   {section.section}
                 </h2>
                 <div className="mt-5 flex flex-col gap-5 text-[17px] leading-[1.75] text-[#515154] [text-wrap:pretty]">
-                  <CaseStudyBody text={section.body} />
+                  <CaseStudyBody text={section.body} seed={work.slug} />
                 </div>
               </section>
             ))}

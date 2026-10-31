@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import NoiseStage from './NoiseStage';
 
 // Widths the column ever draws at, through Next's optimizer. GIFs, SVGs and
 // remote files are served as they are.
@@ -56,7 +57,7 @@ function lineKind(line) {
 // A section body is plain text: blank lines split paragraphs, and lines
 // starting "1." or "-" are list items. Neighbouring items join one list.
 // "![caption](src)" is an image, "> " a quote and "#### " a subheading.
-export default function CaseStudyBody({ text }) {
+export default function CaseStudyBody({ text, seed }) {
   const blocks = [];
   for (const chunk of text.split(/\n{2,}/)) {
     let last = null;
@@ -84,11 +85,32 @@ export default function CaseStudyBody({ text }) {
     }
     if (block.kind === 'img') {
       const [, caption, src] = block.text.match(IMAGE);
+      // An .mp4 in the same syntax is a film, with its poster in posters/ beside it.
+      if (/\.mp4$/i.test(src)) {
+        return (
+          <figure key={i} className="my-2">
+            <NoiseStage seed={seed} className="p-3 sm:p-8">
+              <video
+                src={src}
+                poster={src.replace(/([^/]+)\.mp4$/i, 'posters/$1.jpg')}
+                controls
+                playsInline
+                preload="none"
+                aria-label={caption}
+                className="noise-stage-media h-auto w-full"
+              />
+            </NoiseStage>
+            {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
+          </figure>
+        );
+      }
       return (
         <figure key={i} className="my-2">
           {/* Plain img: these are a mix of sizes and animated GIFs. Stills still get
               optimizer-sized sources so a phone doesn't pull a 1MB screenshot. */}
-          <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 704px, 100vw" alt={caption} loading="lazy" decoding="async" className="h-auto w-full rounded-xl border border-black/[0.06] bg-[#f5f5f7]" />
+          <NoiseStage seed={seed} className="p-3 sm:p-8">
+            <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 640px, 100vw" alt={caption} loading="lazy" decoding="async" className="noise-stage-media h-auto w-full" />
+          </NoiseStage>
           {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
         </figure>
       );

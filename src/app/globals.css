@@ -464,3 +464,42 @@ body:has([data-not-found]) [data-home-face] {
     animation: none;
   }
 }
+
+/* A grainy gradient a screenshot floats on (see NoiseStage). Three soft blobs in
+   the work's palette, then film grain over the top so the colour reads as print,
+   not a flat CSS gradient. */
+.noise-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(60% 70% at 18% 22%, var(--stage-light) 0%, transparent 70%),
+    radial-gradient(55% 65% at 82% 78%, var(--stage-mid) 0%, transparent 72%),
+    radial-gradient(40% 50% at 70% 15%, color-mix(in srgb, var(--stage-light) 60%, var(--stage-mid)) 0%, transparent 70%),
+    var(--stage-deep);
+  box-shadow: 0 30px 80px -40px rgb(0 0 0 / 0.45);
+}
+
+.noise-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 -0.95'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.8;
+  mix-blend-mode: overlay;
+}
+
+/* The screenshot itself: a dark-edged panel lifted off the backdrop. */
+.noise-stage-media {
+  display: block;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #1c1c1e;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.14),
+    0 24px 60px -18px rgb(0 0 0 / 0.55),
+    0 4px 14px -4px rgb(0 0 0 / 0.3);
+}
