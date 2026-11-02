@@ -159,8 +159,8 @@ export const galleryWorks = [
     description: "Product interface for OpenWeave. Structure first, decoration last.",
   },
   {
-    id: "own-your-bill",
-    title: "Own Your Bill",
+    id: "billjot",
+    title: "Billjot",
     category: "UI/UX",
     src: "/ownyourbill.png",
     width: 2152,

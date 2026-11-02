@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" role="img" aria-labelledby="t d">
+  <title id="t">Lines added per week, August to October 2026</title>
+  <desc id="d">Week of Aug 10: 25,611. Aug 17: 15,974. Aug 24: 2,183. Aug 31: 4,655. Sep 7: 15,786. Sep 14: 0. Sep 21: 16,322. Sep 28: 5,688. Oct 5: 276. The first two weeks are the Vue to React migration; later peaks are the motion timeline and the shader, Dev Mode and prototype features.</desc>
+  <style>
+    text { font-family: Inter, "Segoe UI", -apple-system, system-ui, sans-serif; fill: #1d1d1f; }
+    .title { font-size: 26px; font-weight: 600; }
+    .subtitle { font-size: 20px; fill: #6e6e73; }
+    .axis { font-size: 19px; fill: #6e6e73; font-variant-numeric: tabular-nums; }
+    .phase { font-size: 20px; font-weight: 600; fill: #1d1d1f; }
+    .value { font-size: 19px; fill: #6e6e73; font-variant-numeric: tabular-nums; }
+    .grid { stroke: #ececf0; stroke-width: 1.5; }
+    .bar { fill: #2a78d6; }
+  </style>
+  <rect width="1200" height="650" fill="#ffffff"/>
+
+  <text class="title" x="40" y="48">Lines added per week</text>
+  <text class="subtitle" x="40" y="78">Whole repository, after the OpenPencil import · week starting</text>
+
+  <!-- y grid: 0 to 30k over y 560..120 -->
+  <line class="grid" x1="110" y1="120" x2="1160" y2="120"/>
+  <line class="grid" x1="110" y1="266.7" x2="1160" y2="266.7"/>
+  <line class="grid" x1="110" y1="413.3" x2="1160" y2="413.3"/>
+  <line x1="110" y1="560" x2="1160" y2="560" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="axis" x="96" y="126" text-anchor="end">30k</text>
+  <text class="axis" x="96" y="273" text-anchor="end">20k</text>
+  <text class="axis" x="96" y="419" text-anchor="end">10k</text>
+  <text class="axis" x="96" y="566" text-anchor="end">0</text>
+
+  <!-- Bars: 56 wide, 4px rounded tops, anchored to the baseline -->
+  <path class="bar" d="M140.3 560 V188.4 Q140.3 184.4 144.3 184.4 H192.3 Q196.3 184.4 196.3 188.4 V560 Z"/>
+  <path class="bar" d="M257 560 V329.7 Q257 325.7 261 325.7 H309 Q313 325.7 313 329.7 V560 Z"/>
+  <path class="bar" d="M373.7 560 V532 Q373.7 528 377.7 528 H425.7 Q429.7 528 429.7 532 V560 Z"/>
+  <path class="bar" d="M490.3 560 V495.7 Q490.3 491.7 494.3 491.7 H542.3 Q546.3 491.7 546.3 495.7 V560 Z"/>
+  <path class="bar" d="M607 560 V332.5 Q607 328.5 611 328.5 H659 Q663 328.5 663 332.5 V560 Z"/>
+  <path class="bar" d="M840.3 560 V324.6 Q840.3 320.6 844.3 320.6 H892.3 Q896.3 320.6 896.3 324.6 V560 Z"/>
+  <path class="bar" d="M957 560 V480.6 Q957 476.6 961 476.6 H1009 Q1013 476.6 1013 480.6 V560 Z"/>
+  <path class="bar" d="M1073.7 560 V556 Q1073.7 554 1076.7 554 H1126.7 Q1129.7 554 1129.7 556 V560 Z"/>
+
+  <!-- Selective labels: what each burst was -->
+  <text class="phase" x="168.3" y="148" text-anchor="middle">Vue → React</text>
+  <text class="value" x="168.3" y="174" text-anchor="middle">25.6k</text>
+  <text class="value" x="285" y="316" text-anchor="middle">16.0k</text>
+  <text class="phase" x="401.7" y="492" text-anchor="middle">Pen tool</text>
+  <text class="value" x="401.7" y="518" text-anchor="middle">2.2k</text>
+  <text class="phase" x="518.3" y="456" text-anchor="middle">Sharing</text>
+  <text class="value" x="518.3" y="482" text-anchor="middle">4.7k</text>
+  <text class="phase" x="635" y="292" text-anchor="middle">Motion</text>
+  <text class="value" x="635" y="318" text-anchor="middle">15.8k</text>
+  <text class="phase" x="868.3" y="261" text-anchor="middle">Shaders, Dev Mode,</text>
+  <text class="phase" x="868.3" y="285" text-anchor="middle">prototypes</text>
+  <text class="value" x="868.3" y="311" text-anchor="middle">16.3k</text>
+  <text class="phase" x="985" y="441" text-anchor="middle">Electron</text>
+  <text class="value" x="985" y="467" text-anchor="middle">5.7k</text>
+  <text class="value" x="1101.7" y="540" text-anchor="middle">0.3k</text>
+
+  <!-- x labels -->
+  <g class="axis" text-anchor="middle">
+    <text x="168.3" y="596">Aug 10</text>
+    <text x="285" y="596">Aug 17</text>
+    <text x="401.7" y="596">Aug 24</text>
+    <text x="518.3" y="596">Aug 31</text>
+    <text x="635" y="596">Sep 7</text>
+    <text x="751.7" y="596">Sep 14</text>
+    <text x="868.3" y="596">Sep 21</text>
+    <text x="985" y="596">Sep 28</text>
+    <text x="1101.7" y="596">Oct 5</text>
+  </g>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-labelledby="t d">
+  <title id="t">CompatrIoT's 20 labs by protocol, in the order you play them</title>
+  <desc id="d">Labs 0 to 2 cover UART (3 labs), labs 3 to 7 JTAG and SWD (5 labs), labs 8 to 10 I2C (3 labs), labs 11 to 13 SPI (3 labs), and labs 14 to 19 Bluetooth Low Energy (6 labs).</desc>
+  <style>
+    text { font-family: Inter, "Segoe UI", -apple-system, system-ui, sans-serif; fill: #1d1d1f; }
+    .title { font-size: 26px; font-weight: 600; }
+    .subtitle { font-size: 20px; fill: #6e6e73; }
+    .proto { font-size: 24px; font-weight: 700; fill: #ffffff; }
+    .count { font-size: 19px; fill: #ffffff; }
+    .what { font-size: 19px; fill: #424245; }
+    .axis { font-size: 18px; fill: #6e6e73; }
+  </style>
+  <rect width="1200" height="470" fill="#ffffff"/>
+  <text class="title" x="40" y="48">Twenty labs, one protocol at a time</text>
+  <text class="subtitle" x="40" y="78">Each block is one protocol; width is the number of labs. Difficulty rises left to right.</text>
+
+  <!-- 20 labs over x 40..1160 = 56px per lab, 2px gaps -->
+  <g>
+    <rect x="40" y="110" width="166" height="120" rx="12" fill="#2a78d6"/>
+    <text class="proto" x="58" y="158">UART</text>
+    <text class="count" x="58" y="190">Labs 0–2</text>
+
+    <rect x="208" y="110" width="278" height="120" rx="12" fill="#2a78d6"/>
+    <text class="proto" x="226" y="158">JTAG / SWD</text>
+    <text class="count" x="226" y="190">Labs 3–7</text>
+
+    <rect x="488" y="110" width="166" height="120" rx="12" fill="#2a78d6"/>
+    <text class="proto" x="506" y="158">I2C</text>
+    <text class="count" x="506" y="190">Labs 8–10</text>
+
+    <rect x="656" y="110" width="166" height="120" rx="12" fill="#2a78d6"/>
+    <text class="proto" x="674" y="158">SPI</text>
+    <text class="count" x="674" y="190">Labs 11–13</text>
+
+    <rect x="824" y="110" width="336" height="120" rx="12" fill="#2a78d6"/>
+    <text class="proto" x="842" y="158">BLE</text>
+    <text class="count" x="842" y="190">Labs 14–19</text>
+  </g>
+
+  <g class="what">
+    <text x="40" y="272">Find the port</text>
+    <text x="40" y="298">two ways, then</text>
+    <text x="40" y="324">talk to the target</text>
+
+    <text x="208" y="272">Pinout, firmware</text>
+    <text x="208" y="298">extraction, patching,</text>
+    <text x="208" y="324">peripheral access</text>
+
+    <text x="488" y="272">Chip recon,</text>
+    <text x="488" y="298">sniffing, memory</text>
+    <text x="488" y="324">dumping</text>
+
+    <text x="656" y="272">Chip recon,</text>
+    <text x="656" y="298">sniffing, flash</text>
+    <text x="656" y="324">extraction</text>
+
+    <text x="824" y="272">Scanning, GATT, sniffing,</text>
+    <text x="824" y="298">device control, and</text>
+    <text x="824" y="324">LTK cracking</text>
+  </g>
+
+  <line x1="40" y1="380" x2="1150" y2="380" stroke="#c7c7cc" stroke-width="2"/>
+  <path d="M1150 372 L1160 380 L1150 388 Z" fill="#c7c7cc"/>
+  <text class="axis" x="40" y="414">First contact</text>
+  <text class="axis" x="1160" y="414" text-anchor="end">Full compromise</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="t d">
+  <title id="t">What's in Chaya UI</title>
+  <desc id="d">Display components: 17. Input components: 16. Feedback components: 10. Hooks: 8. Navigation components: 7. Counted from the library's Storybook.</desc>
+  <style>
+    text { font-family: Inter, "Segoe UI", -apple-system, system-ui, sans-serif; fill: #1d1d1f; }
+    .title { font-size: 26px; font-weight: 600; }
+    .subtitle { font-size: 20px; fill: #6e6e73; }
+    .label { font-size: 22px; }
+    .value { font-size: 21px; fill: #424245; font-variant-numeric: tabular-nums; }
+    .bar { fill: #2a78d6; }
+  </style>
+  <rect width="1200" height="420" fill="#ffffff"/>
+  <text class="title" x="40" y="48">What's in the library</text>
+  <text class="subtitle" x="40" y="78">50 components and 8 hooks, counted from Storybook</text>
+  <line x1="250" y1="104" x2="250" y2="392" stroke="#c7c7cc" stroke-width="2"/>
+
+  <!-- 50px per item -->
+  <text class="label" x="230" y="135" text-anchor="end">Display</text>
+  <path class="bar" d="M250 112 H1096 Q1100 112 1100 116 V144 Q1100 148 1096 148 H250 Z"/>
+  <text class="value" x="1112" y="137">17</text>
+
+  <text class="label" x="230" y="191" text-anchor="end">Inputs</text>
+  <path class="bar" d="M250 168 H1046 Q1050 168 1050 172 V200 Q1050 204 1046 204 H250 Z"/>
+  <text class="value" x="1062" y="193">16</text>
+
+  <text class="label" x="230" y="247" text-anchor="end">Feedback</text>
+  <path class="bar" d="M250 224 H746 Q750 224 750 228 V256 Q750 260 746 260 H250 Z"/>
+  <text class="value" x="762" y="249">10</text>
+
+  <text class="label" x="230" y="303" text-anchor="end">Hooks</text>
+  <path class="bar" d="M250 280 H646 Q650 280 650 284 V312 Q650 316 646 316 H250 Z"/>
+  <text class="value" x="662" y="305">8</text>
+
+  <text class="label" x="230" y="359" text-anchor="end">Navigation</text>
+  <path class="bar" d="M250 336 H596 Q600 336 600 340 V368 Q600 372 596 372 H250 Z"/>
+  <text class="value" x="612" y="361">7</text>
+</svg>

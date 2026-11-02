@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t">
+  <title id="t">How sharing works: the host's local editor opens an ngrok tunnel, a guest's link goes through a join screen into a peer-to-peer room, MQTT brokers only pass the handshake, and the host's file autosaves to disk</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#2a78d6"/>
+    </marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#8e8e93"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Inter, "Segoe UI", -apple-system, system-ui, sans-serif; fill: #1d1d1f; }
+    .name { font-size: 26px; font-weight: 600; }
+    .sub { font-size: 21px; fill: #6e6e73; }
+    .edge { font-size: 20px; fill: #424245; font-weight: 500; }
+    .note { font-size: 20px; fill: #6e6e73; font-style: italic; }
+  </style>
+  <rect width="1200" height="720" fill="#ffffff"/>
+
+  <!-- Host -->
+  <rect x="40" y="60" width="330" height="170" rx="20" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+  <text class="name" x="205" y="122" text-anchor="middle">Your editor</text>
+  <text class="sub" x="205" y="158" text-anchor="middle">OpenWeave desktop,</text>
+  <text class="sub" x="205" y="188" text-anchor="middle">file on your disk</text>
+
+  <!-- Tunnel -->
+  <rect x="470" y="60" width="260" height="170" rx="20" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="name" x="600" y="122" text-anchor="middle">ngrok tunnel</text>
+  <text class="sub" x="600" y="158" text-anchor="middle">public link,</text>
+  <text class="sub" x="600" y="188" text-anchor="middle">copied in one click</text>
+
+  <!-- Guest -->
+  <rect x="830" y="60" width="330" height="170" rx="20" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="name" x="995" y="122" text-anchor="middle">Guest's browser</text>
+  <text class="sub" x="995" y="158" text-anchor="middle">opens the link,</text>
+  <text class="sub" x="995" y="188" text-anchor="middle">no install, no account</text>
+
+  <line x1="372" y1="145" x2="466" y2="145" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+  <line x1="732" y1="145" x2="826" y2="145" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+
+  <!-- Join screen -->
+  <rect x="830" y="300" width="330" height="140" rx="20" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="name" x="995" y="358" text-anchor="middle">Join screen</text>
+  <text class="sub" x="995" y="394" text-anchor="middle">name + optional password</text>
+  <line x1="995" y1="232" x2="995" y2="296" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+
+  <!-- Room -->
+  <rect x="40" y="300" width="690" height="140" rx="20" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+  <text class="name" x="385" y="358" text-anchor="middle">Shared room</text>
+  <text class="sub" x="385" y="394" text-anchor="middle">live cursors, follow mode, edits synced peer to peer (WebRTC)</text>
+  <line x1="828" y1="370" x2="734" y2="370" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+
+  <!-- Brokers -->
+  <rect x="470" y="530" width="260" height="140" rx="20" fill="#f2f2f4" stroke="#c7c7cc" stroke-width="2" stroke-dasharray="8 6"/>
+  <text class="name" x="600" y="588" text-anchor="middle">MQTT brokers</text>
+  <text class="sub" x="600" y="624" text-anchor="middle">handshake only</text>
+  <line x1="600" y1="442" x2="600" y2="526" stroke="#8e8e93" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#g)"/>
+  <text class="note" x="616" y="492">peers find each other</text>
+
+  <!-- Autosave -->
+  <rect x="40" y="530" width="330" height="140" rx="20" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="name" x="205" y="588" text-anchor="middle">Autosave to disk</text>
+  <text class="sub" x="205" y="624" text-anchor="middle">3 s after edits stop</text>
+  <line x1="205" y1="442" x2="205" y2="526" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+
+  <text class="note" x="830" y="590">The document never sits on a server.</text>
+  <text class="note" x="830" y="624">If the tunnel drops, the host keeps</text>
+  <text class="note" x="830" y="654">the saved file.</text>
+</svg>

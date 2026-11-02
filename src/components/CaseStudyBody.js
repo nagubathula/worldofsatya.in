@@ -45,8 +45,13 @@ const NUMBERED = /^\d+\.\s+/;
 const BULLET = /^-\s+/;
 const IMAGE = /^!\[(.*)\]\((\S+)\)$/;
 
+const TABLE_ROW = /^\|.*\|$/;
+const TABLE_RULE = /^\|(\s*:?-{3,}:?\s*\|)+$/;
+const cells = (row) => row.slice(1, -1).split('|').map((cell) => cell.trim());
+
 function lineKind(line) {
   if (IMAGE.test(line)) return 'img';
+  if (TABLE_ROW.test(line)) return 'table';
   if (line.startsWith('> ')) return 'quote';
   if (line.startsWith('#### ')) return 'h3';
   if (NUMBERED.test(line)) return 'ol';
@@ -57,6 +62,8 @@ function lineKind(line) {
 // A section body is plain text: blank lines split paragraphs, and lines
 // starting "1." or "-" are list items. Neighbouring items join one list.
 // "![caption](src)" is an image, "> " a quote and "#### " a subheading.
+// Lines wrapped in "|" are a table: the first row is the header, a "|---|" rule
+// row is skipped, and a "Table: caption" line right after it captions it.
 export default function CaseStudyBody({ text, seed }) {
   const blocks = [];
   for (const chunk of text.split(/\n{2,}/)) {
@@ -64,7 +71,11 @@ export default function CaseStudyBody({ text, seed }) {
     for (const line of chunk.split('\n').filter(Boolean)) {
       const kind = lineKind(line);
       const prev = blocks[blocks.length - 1];
-      if ((kind === 'ol' || kind === 'ul') && prev?.kind === kind) prev.items.push(line);
+      if (kind === 'table' && prev?.kind === 'table' && prev === last) {
+        if (!TABLE_RULE.test(line)) prev.rows.push(cells(line));
+      } else if (kind === 'table') blocks.push({ kind, rows: [cells(line)] });
+      else if (kind === 'p' && last?.kind === 'table' && line.startsWith('Table: ')) last.caption = line.slice(7);
+      else if ((kind === 'ol' || kind === 'ul') && prev?.kind === kind) prev.items.push(line);
       else if (kind === 'ol' || kind === 'ul') blocks.push({ kind, items: [line] });
       // Lines of one paragraph stay one paragraph, broken where the text breaks.
       else if (kind === 'p' && last?.kind === 'p' && prev === last) last.lines.push(line);
@@ -97,7 +108,7 @@ export default function CaseStudyBody({ text, seed }) {
                 playsInline
                 preload="none"
                 aria-label={caption}
-                className="noise-stage-media h-auto w-full"
+                className="noise-stage-media h-auto max-h-[80vh] w-full"
               />
             </NoiseStage>
             {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
@@ -107,11 +118,41 @@ export default function CaseStudyBody({ text, seed }) {
       return (
         <figure key={i} className="my-2">
           {/* Plain img: these are a mix of sizes and animated GIFs. Stills still get
-              optimizer-sized sources so a phone doesn't pull a 1MB screenshot. */}
+              optimizer-sized sources so a phone doesn't pull a 1MB screenshot.
+              Tall phone shots are capped to the screen and letterboxed. */}
           <NoiseStage seed={seed} className="p-3 sm:p-8">
-            <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 640px, 100vw" alt={caption} loading="lazy" decoding="async" className="noise-stage-media h-auto w-full" />
+            <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 640px, 100vw" alt={caption} loading="lazy" decoding="async" className="noise-stage-media h-auto max-h-[80vh] w-full object-contain" />
           </NoiseStage>
           {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
+        </figure>
+      );
+    }
+    if (block.kind === 'table') {
+      const [head, ...rows] = block.rows;
+      return (
+        <figure key={i} className="my-2">
+          {/* Wide tables scroll inside their own box instead of the page. */}
+          <div className="overflow-x-auto rounded-2xl border border-black/[0.08] bg-white/70">
+            <table className="w-full min-w-[520px] border-collapse text-left text-[15px] leading-snug">
+              <thead>
+                <tr className="border-b border-black/[0.08] bg-black/[0.03]">
+                  {head.map((cell, j) => (
+                    <th key={j} scope="col" className="px-4 py-3 font-semibold text-[#1d1d1f]"><Inline text={cell} /></th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, r) => (
+                  <tr key={r} className="border-b border-black/[0.06] last:border-0">
+                    {row.map((cell, j) => (
+                      <td key={j} className={`px-4 py-3 align-top ${j === 0 ? 'font-medium text-[#1d1d1f]' : ''}`}><Inline text={cell} /></td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {block.caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{block.caption}</figcaption>}
         </figure>
       );
     }

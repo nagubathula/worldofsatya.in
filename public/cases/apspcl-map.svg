@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="t">
+  <title id="t">The APSPCL menu grouped by who it serves: citizens learning about the corporation, vendors doing business with it, and people holding it accountable, with quick links out to sixteen related bodies</title>
+  <style>
+    text { font-family: Inter, "Segoe UI", -apple-system, system-ui, sans-serif; fill: #1d1d1f; }
+    .head { font-size: 24px; font-weight: 700; }
+    .who { font-size: 20px; fill: #6e6e73; }
+    .item { font-size: 22px; font-weight: 500; }
+    .pill { fill: #ffffff; stroke: #d2d2d7; stroke-width: 1.5; }
+  </style>
+  <rect width="1200" height="600" fill="#ffffff"/>
+
+  <rect x="40" y="40" width="1120" height="70" rx="16" fill="#1d1d1f"/>
+  <text x="600" y="84" text-anchor="middle" style="font-size:22px;font-weight:600;fill:#ffffff;letter-spacing:0.08em">HOME · ONE MENU, TWELVE ITEMS</text>
+
+  <path d="M600 112 V140 M226 140 H974 M226 140 V168 M600 140 V168 M974 140 V168" stroke="#c7c7cc" stroke-width="2.5" fill="none"/>
+
+  <g>
+    <rect x="40" y="170" width="372" height="380" rx="20" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+    <text class="head" x="226" y="214" text-anchor="middle">Learn</text>
+    <text class="who" x="226" y="244" text-anchor="middle">citizens and the press</text>
+    <rect class="pill" x="76" y="268" width="300" height="46" rx="23"/><text class="item" x="226" y="298" text-anchor="middle">About Us · Background</text>
+    <rect class="pill" x="76" y="326" width="300" height="46" rx="23"/><text class="item" x="226" y="356" text-anchor="middle">Solar Parks</text>
+    <rect class="pill" x="76" y="384" width="300" height="46" rx="23"/><text class="item" x="226" y="414" text-anchor="middle">Solar Policies</text>
+    <rect class="pill" x="76" y="442" width="300" height="46" rx="23"/><text class="item" x="226" y="472" text-anchor="middle">Gallery</text>
+  </g>
+
+  <g>
+    <rect x="414" y="170" width="372" height="380" rx="20" fill="#fdf0e9" stroke="#eb6834" stroke-width="2"/>
+    <text class="head" x="600" y="214" text-anchor="middle">Do business</text>
+    <text class="who" x="600" y="244" text-anchor="middle">vendors and contractors</text>
+    <rect class="pill" x="450" y="268" width="300" height="46" rx="23"/><text class="item" x="600" y="298" text-anchor="middle">Tenders</text>
+    <rect class="pill" x="450" y="326" width="300" height="46" rx="23"/><text class="item" x="600" y="356" text-anchor="middle">Downloads</text>
+    <rect class="pill" x="450" y="384" width="300" height="46" rx="23"/><text class="item" x="600" y="414" text-anchor="middle">Financials</text>
+    <rect class="pill" x="450" y="442" width="300" height="46" rx="23"/><text class="item" x="600" y="472" text-anchor="middle">16 quick links out</text>
+  </g>
+
+  <g>
+    <rect x="788" y="170" width="372" height="380" rx="20" fill="#e6f6f0" stroke="#1baf7a" stroke-width="2"/>
+    <text class="head" x="974" y="214" text-anchor="middle">Hold to account</text>
+    <text class="who" x="974" y="244" text-anchor="middle">the public and staff</text>
+    <rect class="pill" x="824" y="268" width="300" height="46" rx="23"/><text class="item" x="974" y="298" text-anchor="middle">RTI</text>
+    <rect class="pill" x="824" y="326" width="300" height="46" rx="23"/><text class="item" x="974" y="356" text-anchor="middle">Contact Us</text>
+    <rect class="pill" x="824" y="384" width="300" height="46" rx="23"/><text class="item" x="974" y="414" text-anchor="middle">Employee log in</text>
+  </g>
+</svg>

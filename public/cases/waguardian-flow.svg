@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 230" role="img" aria-labelledby="t">
+  <title id="t">WA-Guardian: the extension scans the chat page as it renders, checks links with on-device heuristics, scores messages with a lightweight classifier, and warns before the click, without sending data anywhere</title>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 1 L9 5 L0 9 Z" fill="#2a78d6"/></marker></defs>
+  <style>text{font-family:Inter,"Segoe UI",-apple-system,system-ui,sans-serif;fill:#1d1d1f}.n{font-size:16px;font-weight:700;letter-spacing:.08em;fill:#2a78d6}.name{font-size:24px;font-weight:600}.sub{font-size:19px;fill:#6e6e73}</style>
+  <rect width="1200" height="230" fill="#ffffff"/>
+  <rect x="40.0" y="40" width="192.0" height="150" rx="18" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+  <text class="n" x="136.0" y="80" text-anchor="middle">01</text>
+  <text class="name" x="136.0" y="122" text-anchor="middle">Chat page</text>
+  <text class="sub" x="136.0" y="154" text-anchor="middle">in the browser</text>
+  <line x1="235.0" y1="115.0" x2="268.0" y2="115.0" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="272.0" y="40" width="192.0" height="150" rx="18" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="n" x="368.0" y="80" text-anchor="middle">02</text>
+  <text class="name" x="368.0" y="122" text-anchor="middle">DOM scan</text>
+  <text class="sub" x="368.0" y="154" text-anchor="middle">as messages render</text>
+  <line x1="467.0" y1="115.0" x2="500.0" y2="115.0" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="504.0" y="40" width="192.0" height="150" rx="18" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="n" x="600.0" y="80" text-anchor="middle">03</text>
+  <text class="name" x="600.0" y="122" text-anchor="middle">URL heuristics</text>
+  <text class="sub" x="600.0" y="154" text-anchor="middle">on the device</text>
+  <line x1="699.0" y1="115.0" x2="732.0" y2="115.0" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="736.0" y="40" width="192.0" height="150" rx="18" fill="#ffffff" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="n" x="832.0" y="80" text-anchor="middle">04</text>
+  <text class="name" x="832.0" y="122" text-anchor="middle">Classifier</text>
+  <text class="sub" x="832.0" y="154" text-anchor="middle">lightweight ML</text>
+  <line x1="931.0" y1="115.0" x2="964.0" y2="115.0" stroke="#2a78d6" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="968.0" y="40" width="192.0" height="150" rx="18" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+  <text class="n" x="1064.0" y="80" text-anchor="middle">05</text>
+  <text class="name" x="1064.0" y="122" text-anchor="middle">Warning</text>
+  <text class="sub" x="1064.0" y="154" text-anchor="middle">before the click</text>
+</svg>

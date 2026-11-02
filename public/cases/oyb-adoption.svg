@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="t d">
+  <title id="t">Feature use across the 8 restaurants running Billjot</title>
+  <desc id="d">Out of 8 restaurants: offline mode 8, receipt printing 8, inventory 8, sales analytics 8, sync when online 8, role-based access 8, custom domain 8, Raspberry Pi server 6, cloud backup 5, customer management 3, barcode and QR scanning 3, tabs 3, payment gateway 0, virtual wallet 0, custom website 0. Stats as of 29 December 2024.</desc>
+  <style>
+    text { font-family: Inter, "Segoe UI", -apple-system, system-ui, sans-serif; fill: #1d1d1f; }
+    .title { font-size: 26px; font-weight: 600; }
+    .subtitle { font-size: 20px; fill: #6e6e73; }
+    .label { font-size: 20px; }
+    .value { font-size: 19px; fill: #424245; font-variant-numeric: tabular-nums; }
+    .note { font-size: 18px; fill: #6e6e73; font-style: italic; }
+    .axis { font-size: 18px; fill: #6e6e73; }
+    .bar { fill: #2a78d6; }
+    .grid { stroke: #ececf0; stroke-width: 1.5; }
+  </style>
+  <rect width="1200" height="760" fill="#ffffff"/>
+  <text class="title" x="40" y="48">Restaurants using each feature, out of 8</text>
+  <text class="subtitle" x="40" y="78">Deployment stats as of 29 December 2024</text>
+
+  <!-- x scale: 0..8 over x 330..890 (70px per restaurant) -->
+  <line class="grid" x1="610" y1="104" x2="610" y2="712"/>
+  <line class="grid" x1="890" y1="104" x2="890" y2="712"/>
+  <line x1="330" y1="104" x2="330" y2="712" stroke="#c7c7cc" stroke-width="2"/>
+  <text class="axis" x="330" y="740" text-anchor="middle">0</text>
+  <text class="axis" x="610" y="740" text-anchor="middle">4</text>
+  <text class="axis" x="890" y="740" text-anchor="middle">8</text>
+
+  <g>
+    <text class="label" x="310" y="131" text-anchor="end">Offline mode</text>
+    <path class="bar" d="M330 112 H886 Q890 112 890 116 V136 Q890 140 886 140 H330 Z"/>
+    <text class="value" x="902" y="133">8</text>
+
+    <text class="label" x="310" y="171" text-anchor="end">Receipt printing</text>
+    <path class="bar" d="M330 152 H886 Q890 152 890 156 V176 Q890 180 886 180 H330 Z"/>
+    <text class="value" x="902" y="173">8</text>
+
+    <text class="label" x="310" y="211" text-anchor="end">Inventory</text>
+    <path class="bar" d="M330 192 H886 Q890 192 890 196 V216 Q890 220 886 220 H330 Z"/>
+    <text class="value" x="902" y="213">8</text>
+
+    <text class="label" x="310" y="251" text-anchor="end">Sales analytics</text>
+    <path class="bar" d="M330 232 H886 Q890 232 890 236 V256 Q890 260 886 260 H330 Z"/>
+    <text class="value" x="902" y="253">8</text>
+
+    <text class="label" x="310" y="291" text-anchor="end">Sync when online</text>
+    <path class="bar" d="M330 272 H886 Q890 272 890 276 V296 Q890 300 886 300 H330 Z"/>
+    <text class="value" x="902" y="293">8</text>
+
+    <text class="label" x="310" y="331" text-anchor="end">Role-based access</text>
+    <path class="bar" d="M330 312 H886 Q890 312 890 316 V336 Q890 340 886 340 H330 Z"/>
+    <text class="value" x="902" y="333">8</text>
+
+    <text class="label" x="310" y="371" text-anchor="end">Custom domain</text>
+    <path class="bar" d="M330 352 H886 Q890 352 890 356 V376 Q890 380 886 380 H330 Z"/>
+    <text class="value" x="902" y="373">8</text>
+
+    <text class="label" x="310" y="411" text-anchor="end">Raspberry Pi server</text>
+    <path class="bar" d="M330 392 H746 Q750 392 750 396 V416 Q750 420 746 420 H330 Z"/>
+    <text class="value" x="762" y="413">6</text>
+    <text class="note" x="930" y="413">2 kept their own systems</text>
+
+    <text class="label" x="310" y="451" text-anchor="end">Cloud backup</text>
+    <path class="bar" d="M330 432 H676 Q680 432 680 436 V456 Q680 460 676 460 H330 Z"/>
+    <text class="value" x="692" y="453">5</text>
+    <text class="note" x="930" y="453">others save manually</text>
+
+    <text class="label" x="310" y="491" text-anchor="end">Customer management</text>
+    <path class="bar" d="M330 472 H536 Q540 472 540 476 V496 Q540 500 536 500 H330 Z"/>
+    <text class="value" x="552" y="493">3</text>
+
+    <text class="label" x="310" y="531" text-anchor="end">Barcode / QR scanning</text>
+    <path class="bar" d="M330 512 H536 Q540 512 540 516 V536 Q540 540 536 540 H330 Z"/>
+    <text class="value" x="552" y="533">3</text>
+    <text class="note" x="930" y="533">packaged goods only</text>
+
+    <text class="label" x="310" y="571" text-anchor="end">Customer tabs</text>
+    <path class="bar" d="M330 552 H536 Q540 552 540 556 V576 Q540 580 536 580 H330 Z"/>
+    <text class="value" x="552" y="573">3</text>
+    <text class="note" x="930" y="573">for regular customers</text>
+
+    <text class="label" x="310" y="611" text-anchor="end">Payment gateway</text>
+    <text class="value" x="342" y="613">0</text>
+    <text class="note" x="930" y="613">used their own UPI</text>
+
+    <text class="label" x="310" y="651" text-anchor="end">Virtual wallet</text>
+    <text class="value" x="342" y="653">0</text>
+    <text class="note" x="930" y="653">unnecessary</text>
+
+    <text class="label" x="310" y="691" text-anchor="end">Custom website</text>
+    <text class="value" x="342" y="693">0</text>
+    <text class="note" x="930" y="693">not required</text>
+  </g>
+</svg>

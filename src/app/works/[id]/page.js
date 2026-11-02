@@ -16,16 +16,18 @@ import { CaseStudyContents, CountUp, ReadingProgress, RevealOnScroll } from "@/c
 
 const findStudy = (work) => work.study && caseStudiesData.find((study) => study.slug === work.study);
 
-// Exact slug or id first, then a loose match so hand-typed links like /works/KLUPas still land on klu-pas.
+// Exact slug or id first, then a renamed work's old slug, then a loose match so
+// hand-typed links like /works/KLUPas still land on klu-pas.
 const looseKey = (value) => String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
 const findWork = (id) =>
   allWorks.find((entry) => entry.slug === id) ||
   allWorks.find((entry) => entry.id === id) ||
+  allWorks.find((entry) => entry.aliases?.includes(id)) ||
   allWorks.find((entry) => looseKey(entry.slug) === looseKey(id));
 
 // Pre-generate routes at build time
 export function generateStaticParams() {
-  return allWorks.flatMap((work) => [{ id: work.slug }, { id: work.id }]);
+  return allWorks.flatMap((work) => [{ id: work.slug }, { id: work.id }, ...(work.aliases || []).map((id) => ({ id }))]);
 }
 
 // Each project gets its own title, so tabs, history and shared links tell them apart.
@@ -323,7 +325,8 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
                     // The hero tops out at max-w-5xl; below that it spans the screen.
                     sizes="(min-width: 1024px) 900px, 100vw"
                     priority
-                    className="h-auto w-full"
+                    // Portrait stills (vertical video posters) stay within the screen.
+                    className="h-auto max-h-[80vh] w-full object-contain"
                   />
                 )}
               </div>

@@ -47,6 +47,14 @@ const CATEGORY_PRIORITY = {
 };
 const ITEMS_PER_PAGE = 12;
 
+// SHA-256 of the access code for locked works, so the code itself isn't in the bundle.
+const ACCESS_CODE_HASH = "8c46ec847fa9848854e8f3ef3c720acf04f6aa508ed8bde8c3102508a3201dfe";
+
+async function sha256Hex(text) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 // Case studies cut across categories: any work with a written study counts.
 const hasCaseStudy = (work) => work.category === "Case Study" || Boolean(work.study);
 
@@ -409,12 +417,20 @@ export default function WorksList() {
     if (pinError) setPinError(false);
   };
 
-  const handlePinSubmit = (e) => {
+  const handlePinSubmit = async (e) => {
     e.preventDefault();
-    if (pin.length === 6) {
-      setPinError(true);
-      setTimeout(() => setPin(""), 600);
+    if (pin.length !== 6 || !lockedTool) return;
+    if ((await sha256Hex(pin)) === ACCESS_CODE_HASH) {
+      const work = lockedTool;
+      setLockedTool(null);
+      setPin("");
+      try { playPopSound(520, 0.06); } catch {}
+      saveWorksPlace({ filter, currentPage: validCurrentPage, searchQuery });
+      smoothNavigate(router, `/works/${work.slug}`);
+      return;
     }
+    setPinError(true);
+    setTimeout(() => setPin(""), 600);
   };
 
   const openWork = (work) => {
