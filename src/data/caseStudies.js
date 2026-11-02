@@ -94,6 +94,79 @@ const studies = [
     ]
   },
   {
+    slug: "openweave-design",
+    title: "OpenWeave: A Design Tool You Can Open Up",
+    type: "Product Design Case Study",
+    heroDescription: "Taking an open-source Figma-compatible editor and pushing it toward the work designers do after the static frame: motion, prototypes on real devices, handoff, and live shader layers, while keeping the file on your own disk.",
+    image: "/openweave-shader.png",
+    meta: [
+      { label: "Product", value: "Open-source design editor and toolkit" },
+      { label: "Role", value: "Product design and engineering, on top of an open-source fork" },
+      { label: "Platforms", value: "Windows, macOS, Linux, and the browser" },
+      { label: "Built", value: "August to October 2026, now at 0.13" }
+    ],
+    highlights: [
+      { value: "2", label: "Months from fork to 0.13" },
+      { value: "~68,000", label: "Lines added on top of the fork" },
+      { value: "6", label: "Live shader presets, plus custom SkSL" },
+      { value: "3", label: "Code targets for every animation" }
+    ],
+    content: [
+      {
+        section: "Overview",
+        body: "OpenWeave is a design editor that opens native Figma (.fig) and Pencil (.pen) files, keeps them on your disk, and lets you program the editor itself: a command-line tool, an MCP server for AI agents, and a headless SDK for building your own editing surfaces.\n\nIt didn't start from a blank page. OpenWeave is a fork of OpenPencil, Danila Poyarkov's MIT-licensed editor, which already had the hard foundation: a Skia renderer, a Figma file codec, auto layout on Yoga, and the CLI. I want to be clear about that line, because the interesting part of this project is what I did with a foundation I didn't have to pour.\n\nMy part: I moved the app and its SDK from Vue to React and Next.js, moved the desktop app from Tauri to Electron, and designed and built the features that take the editor past static frames: a motion timeline, prototyping on device frames, Dev Mode, live shader layers, vector path editing, and sharing a local file with someone across the internet."
+      },
+      {
+        section: "The Problem: Design Stops at the Static Frame",
+        body: "Open-source design tools usually chase parity with the static canvas: frames, auto layout, components. That is the part of design that is most solved. The work that eats a designer's week happens after it: making a toggle feel springy, showing a flow on an actual phone, handing a developer the exact values, and getting a reviewer into the file.\n\nIn most teams each of those lives in a different tool. Motion goes to an animation app, prototypes to a viewer, specs to a handoff plugin, and the file sits in someone's cloud. Every hop is an export, and every export is a copy that drifts.\n\nThe brief I set: keep all of that in the one file, on your own machine, in the same editor you drew it in."
+      },
+      {
+        section: "Key Decision: Rebuild the Shell in React",
+        body: "The fork's app and its headless SDK were written in Vue. Before adding anything, I moved both to React and the app to Next.js: the editor shell, every panel, and the SDK's components and hooks, one family at a time, with the old Vue files kept recoverable from history in case a port missed something.\n\nThis was the slowest and least visible month of the project, and the one everything else stands on. The SDK is the piece other people build with, and React is where most teams who would embed a design canvas already live. It is also the stack I design and build in every day, which meant every feature after this could go from sketch to working panel without switching mental models.\n\nThe engine underneath (scene graph, renderer, file codecs) didn't move. The split between a framework-free core and a thin UI layer is what made a migration this size possible at all."
+      },
+      {
+        section: "Key Decision: Motion Lives Next to the Layers",
+        body: "Animation is where I wanted OpenWeave to feel most different, so it got the deepest design work.\n\nThe Motion tab sits beside Design and Prototype in the inspector, and a timeline docks under the canvas. Each animated layer gets a row; each property (position, scale, rotation, width, opacity) gets its own track of keyframes. You can scrub, loop, change playback speed, or turn on recording and simply move things on the canvas to write keyframes, which is how most people think about motion anyway.\n\n![The Motion tab and timeline: six animated layers, each property on its own keyframe track](/openweave-motion.png)\n\nThree details carry most of the feel:\n\n- **Easing you can see.** A bezier curve editor and spring presets sit in the keyframe popover, and the path a layer travels is drawn on the canvas as a trajectory, so you adjust motion where it happens.\n- **Presets as a starting point.** Fade in, slide up, scale pop, spring bounce, and pulse drop a working animation on any layer; then you edit the tracks like any other.\n- **Motion that leaves as code.** Any track exports as CSS keyframes, Framer Motion, or the Web Animations API, with easings mapped to each format, so an animation is a spec a developer can paste, not a video they have to imitate.\n\nMotion tracks are saved inside the document and survive save and reopen. That sounds obvious; it was a bug I had to fix, and it's the difference between a demo and a tool."
+      },
+      {
+        section: "Key Decision: Prototypes on Real Hardware",
+        body: "A phone screen on a white canvas doesn't read as a phone. So prototypes can sit inside device frames (iPhone 16 Pro and Pro Max, Pixel 9, iPad Pro, MacBook Pro), in dark, light, or titanium finishes and either orientation.\n\n![Presenting a prototype inside an iPhone frame](/openweave-prototype.png)\n\nThe frame is a property of the page, not a layer, so it can't get nudged or deleted by accident while you edit the screens inside it. Prototype links round-trip through the .fig format, including hotspot connections and transition curves, so a flow wired in OpenWeave still works when the file goes back to Figma."
+      },
+      {
+        section: "Key Decision: Zoom That Means Real Size",
+        body: "A device frame gets the shape right, but not the size. A screen at 83% zoom tells you nothing about how big a button will feel under a thumb. The usual check is a screenshot sent to your phone, or opening the file on mobile and waiting for it to load. Both work, and both break the flow.\n\nSo I added a calibration step. You hold any standard card against the screen (a bank card or an ID, which are all 85.60 × 53.98 mm) and drag a slider until the outline on screen matches the card in your hand. That one measurement gives the display's real pixel density.\n\n![Calibrating against a real card: the outline matches at 93.5 PPI on this monitor](/openweave-calibration.webp)\n\nFrom there, zoom finally means something. One command jumps to 1:1 physical size (97% on my monitor) and another to the size the selected frame would be on an actual phone (61%). The editor remembers the calibration for that display, and there are presets for ten common laptops, MacBooks, and monitors for anyone who doesn't want to hunt for a card.\n\nIt was a small feature that quickly became the one I use most. Seeing designs at true size is slightly rude in a useful way: buttons that looked fine at a random zoom suddenly look huge, and type that felt premium reads like a poster. I [wrote about it on LinkedIn](https://www.linkedin.com/posts/satyasainagubathula_figma-uxdesign-productdesign-share-7510938266267844608-cLmG) when it shipped."
+      },
+      {
+        section: "Key Decision: Handoff Without Leaving the File",
+        body: "Dev Mode is one shortcut away (Shift+D). The inspector swaps from editing controls to code: CSS, Tailwind, and JSX for the selection, measurements on the canvas, and redline annotations a designer can leave for whoever builds it.\n\n![Dev Mode: the selected card as CSS, with its measurements on the canvas](/openweave-devmode.png)\n\nI kept it a mode of the same editor rather than a separate viewer on purpose. A developer looking at Dev Mode is looking at the real file, not a snapshot exported last Tuesday, and switching back to editing is the same keystroke."
+      },
+      {
+        section: "Key Decision: Shaders as Layers",
+        body: "Gradients and blurs cover most backgrounds, but the backgrounds people actually ship now move: animated gradients, noise fields, particles that drift toward the cursor. Designers usually fake these with a looping video.\n\nOpenWeave renders with Skia, and Skia can run small GPU programs (SkSL). So any layer can take a shader as its fill, live on the canvas. There are six presets (animated gradient, noise field, particles, metaballs, lighting, and displacement) and a custom slot for your own SkSL.\n\n![A shader layer behind the hero: an animated gradient running live on the canvas](/openweave-shader.png)\n\nEvery preset shares the same handful of controls (four colors, speed, scale, intensity, complexity, and how strongly it follows the pointer), so learning one teaches all of them. They run live on the canvas and react to the pointer, so a reviewer sees the background moving instead of reading a note that says it will."
+      },
+      {
+        section: "Sharing a File That Lives on Your Disk",
+        body: "Local-first has a catch: if the file is on your machine, how does a reviewer get in?\n\nThis was the biggest roadblock of the project. The standard answer is a server, and a small cloud instance runs about $20 a month. But the whole point of OpenWeave is that it runs on your own machine, offline, for free. Paying rent on a server just so two people could look at one canvas would have broken that promise on day one.\n\nCollaboration is peer-to-peer over WebRTC, with live cursors and follow mode, so the document travels directly between people and is never stored on a server. Peers find each other through public MQTT brokers, which only pass the handshake. That covers people who can reach your machine. For everyone else, I used ngrok: the desktop app can run local commands, so it opens a tunnel to your local editor and copies a public link in one click. A local, offline app becomes a shared workspace without deploying anything.\n\nOpening that link doesn't drop a stranger straight onto your canvas. They land on a join screen first and can be asked for a room password, because a link that leaks shouldn't mean a file that leaks.\n\nA tunnel also brings an obvious risk: what if your Wi-Fi drops mid-session? The host's copy is the real one, and it autosaves to disk three seconds after the edits stop, so a dead tunnel costs the connection, not the work. To make sure there is a file to autosave into, a new document's first save now goes straight to Documents/openweave without a file dialog. I also made the tunnel recover on its own when ngrok reports an endpoint is already online, the most common way it failed in testing. I [wrote about this roadblock on LinkedIn](https://www.linkedin.com/posts/satyasainagubathula_figma-aws-ngrok-ugcPost-7500806039735386113-_Tp7) while building it."
+      },
+      {
+        section: "Key Decision: Trading Size for a Working Clipboard",
+        body: "The fork shipped as a Tauri app, around 7 MB. Small is good, and I didn't want to give that up lightly.\n\nWhat changed my mind was the clipboard. Copying layers out of Figma puts them on the system clipboard as HTML, and on Windows Tauri's clipboard plugin could only read plain text. I wrote a Rust command to read the HTML format directly, and it worked, but it was one more piece of native code next to the Rust that ran the ngrok tunnel, and the list was only going to grow.\n\nElectron has all of that built in, so I moved. The size cost is real, and I accepted it. To keep the move from rippling through the app, the Electron preload speaks the same IPC protocol the Tauri bridge did, so the editor code didn't have to change at all to run in the new shell."
+      },
+      {
+        section: "Also on the Canvas",
+        body: "Smaller pieces that make everyday editing feel finished:\n\n- **Vector networks and path editing.** Edit points and handles directly on the canvas, with a curvature pen tool for drawing smooth paths without dragging handles.\n- **Image crop in place.** Crop, move, and transform an image inside its fill on the canvas instead of in a dialog.\n- **Starter templates.** The home screen opens with working files (a motion showcase, a mobile app, a landing page, a design system, a slide deck) so the first thing you see is the editor doing something."
+      },
+      {
+        section: "What This Project Taught Me",
+        body: "**Credit the foundation, then build past it.** Starting from someone else's open-source engine let me spend my time on the parts designers feel. Being clear about where their work ends and mine begins made it easier to decide what to build, too.\n\n**Do the invisible migration first.** Moving the app to React delivered nothing a user could see. Every feature after it shipped faster because of it.\n\n**Export is a design surface.** Motion that exports as code, prototypes that round-trip to .fig, Dev Mode on the live file: the features that mattered most were about what leaves the editor, not what happens inside it."
+      },
+      {
+        section: "What's Still Missing",
+        body: "- **The download is no longer small.** Electron costs far more disk than the 7 MB Tauri build. The README and docs still describe the old build and need to catch up.\n- **Motion is in beta.** Tracks cover the common properties, and exported code covers one layer at a time, so a multi-layer sequence still has to be stitched together by hand.\n- **Collaboration leans on public brokers.** The handshake runs through free public MQTT servers, which is fine for a demo and not something a team should depend on. A self-hostable signaling option is the next step. And autosave only starts once a document has been saved once, so sharing a brand-new file should save it first.\n- **Shaders stay in OpenWeave.** Shader settings are saved inside the .fig file, so they survive save and reopen, but Figma can't render them and Dev Mode doesn't generate code for them yet."
+      }
+    ]
+  },
+  {
     slug: "zero-cost-automation",
     title: "Zero-Cost Automation",
     type: "Internal Tool Design",
