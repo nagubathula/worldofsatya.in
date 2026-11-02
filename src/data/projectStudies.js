@@ -108,7 +108,7 @@ export const projectStudies = [
     image: "/cases/oyb-v2.webp",
     meta: [
       { label: "Product", value: "Point-of-sale and billing system" },
-      { label: "Role", value: "Research, design, development, and testing, solo" },
+      { label: "Role", value: "Research, design, development, and testing; solo on the first version" },
       { label: "For", value: "Family restaurants up to 3-star hotels" },
       { label: "Status", value: "Deployed in 8 restaurants, December 2024" }
     ],
@@ -133,7 +133,7 @@ export const projectStudies = [
       },
       {
         section: "Constraints and the Market",
-        body: "The big players were already there: Petpooja, RanceLab, Posiflex, Vyapar, and Gofrugal. The target was everyone they priced out: basic, locally famous family restaurants up to 3-star hotels.\n\nI wrote down my own limits as plainly as the market's, because they shaped every decision after.\n\n| Constraint | What it meant |\n|---|---|\n| Money | No budget for travel, more research, or prototype hardware |\n| People | A solo project: research, design, build, and test, alone |\n| Time | Final year of a B.Tech, so academics came first and travel was limited |\n| Market | Going against established products, so the audience had to be hooked from day one |\nTable: The ground reality, as I wrote it down"
+        body: "The big players were already there: Petpooja, RanceLab, Posiflex, Vyapar, and Gofrugal. The target was everyone they priced out: basic, locally famous family restaurants up to 3-star hotels.\n\nI wrote down my own limits as plainly as the market's, because they shaped every decision after.\n\n| Constraint | What it meant |\n|---|---|\n| Money | No budget for travel, more research, or prototype hardware |\n| People | The first version was solo: research, design, build, and test |\n| Time | Final year of a B.Tech, so academics came first and travel was limited |\n| Market | Going against established products, so the audience had to be hooked from day one |\nTable: The ground reality, as I wrote it down"
       },
       {
         section: "The First Design, and What Testing Changed",
@@ -620,11 +620,11 @@ export const projectStudies = [
     slug: "bi0s-hardware-website",
     title: "bi0s Hardware: A Web Identity for a Security Team",
     type: "Organisation Website",
-    heroDescription: "Designing and building the website for bi0s Hardware, the hardware security wing of team bi0s, one of India's top-ranked CTF teams, with a terminal-inspired look that stays clean and readable.",
+    heroDescription: "Designing the website for bi0s Hardware, the hardware security wing of team bi0s, one of India's top-ranked CTF teams, with a terminal-inspired look that stays clean and readable.",
     image: "/bi0shardware.png",
     meta: [
       { label: "Client", value: "Team bi0s Hardware, Amrita University" },
-      { label: "Role", value: "Design and build" },
+      { label: "Role", value: "Design; the code was built by the bi0s team" },
       { label: "Audience", value: "Students, the security community, recruiters" },
       { label: "Archived", value: "December 2022; the domain has since lapsed" }
     ],

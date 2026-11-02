@@ -6,6 +6,7 @@ import { motion, useTransform } from "framer-motion";
 import { playTickSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
 import { useMagnetic } from "@/lib/useMagnetic";
+import { useReducedMotionAfterHydration } from "@/lib/reducedMotion";
 import HoverLabel from "./HoverLabel";
 
 // Opens the UI Lab. Same tile as About and Gallery; the icon is a little switch
@@ -13,6 +14,7 @@ import HoverLabel from "./HoverLabel";
 export default function UILabButton() {
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const reduceMotion = useReducedMotionAfterHydration();
 
   // Leans toward the cursor; the icon inside follows by a fraction for parallax.
   const magnet = useMagnetic();
@@ -51,7 +53,8 @@ export default function UILabButton() {
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseUp={() => setIsPressed(false)}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-2xl border border-black/[0.08] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden"
+        // The lab is the one tile that's highlighted: a cyan ring and glow, unlike its plain neighbours.
+        className="group relative flex h-14 w-14 items-center justify-center rounded-2xl border border-[#2ec4f0]/60 bg-white shadow-[0_0_0_4px_rgba(46,196,240,0.12),0_4px_14px_rgba(46,196,240,0.22)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden"
       >
         {/* Ambient Glow on Hover */}
         <motion.div
@@ -97,6 +100,7 @@ export default function UILabButton() {
               cy="14"
               r="3.6"
               fill="#1d1d1f"
+              initial={{ cx: 9 }}
               animate={{ cx: isHovered ? 19 : 9 }}
               transition={{ ...SPRING.pop, delay: isHovered ? 0.18 : 0 }}
             />
@@ -121,6 +125,11 @@ export default function UILabButton() {
         {/* Micro Bevel Gloss Highlight */}
         <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
       </Link>
+      {/* A live dot on the corner says there's something to play with inside. */}
+      <span aria-hidden className="pointer-events-none absolute -right-1 -top-1 flex h-3 w-3">
+        {!reduceMotion && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2ec4f0] opacity-60" />}
+        <span className="relative inline-flex h-3 w-3 rounded-full border-2 border-white bg-[#2ec4f0]" />
+      </span>
       <HoverLabel>UI Lab</HoverLabel>
     </motion.div>
   );

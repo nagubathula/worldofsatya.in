@@ -208,6 +208,9 @@ export default function HomeTilesLayout() {
                 <MoreLink href="/open-source" label="More open-source work" />
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
+                I also keep a <BioLink href="/ui">UI Lab</BioLink> of live interface pieces you can drag, swipe and turn over.
+              </motion.p>
+              <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
                 Not boasting but I have 10k+ followers on{" "}
                 <BioLink href="https://www.instagram.com/engineerudu">instagram</BioLink>
               </motion.p>

@@ -19,7 +19,7 @@ const studies = [
     ],
     highlights: [
       { value: "~1s", label: "From launch to typing" },
-      { value: "10.8 MB", label: "Installer, on every desktop" },
+      { value: "15.2 MB", label: "Windows installer" },
       { value: "3,500", label: "Lines of Dart, against ~42,600 in the original" },
       { value: "3", label: "Desktops from one codebase" }
     ],
@@ -42,7 +42,7 @@ const studies = [
       },
       {
         section: "Key Decision: Native, Not a Browser in a Box",
-        body: "The usual way to bring an editor like Trace to other platforms is to put a web-based editor inside a desktop shell. Most cross-platform editors are built that way, and it's why most of them need 100 MB or more and a few seconds to start. Desktop web views also behave differently on each platform, and they're weakest on Linux, exactly where reach mattered. For a tool whose whole promise is calm, that was the wrong trade.\n\nSo the editor is built natively in Flutter: about 3,500 lines of Dart doing what the original needs roughly 28,000 lines of Swift and 14,600 of TypeScript for. Each keystroke restyles only the line it touched, so long documents stay as fast as short ones.\n\nThe writer never sees any of that. What they get is about one second from launch to typing, a 10.8 MB installer, and the same behavior on every desktop. Installing follows the same thinking: on Windows, NotBad installs per user without asking for admin rights, because writers install their own tools. Linux gets a tarball and a Snap package, and macOS a zipped app, all built automatically from the same code."
+        body: "The usual way to bring an editor like Trace to other platforms is to put a web-based editor inside a desktop shell. Most cross-platform editors are built that way, and it's why most of them need 100 MB or more and a few seconds to start. Desktop web views also behave differently on each platform, and they're weakest on Linux, exactly where reach mattered. For a tool whose whole promise is calm, that was the wrong trade.\n\nSo the editor is built natively in Flutter: about 3,500 lines of Dart doing what the original needs roughly 28,000 lines of Swift and 14,600 of TypeScript for. Each keystroke restyles only the line it touched, so long documents stay as fast as short ones.\n\nThe writer never sees any of that. What they get is about one second from launch to typing, a 15.2 MB Windows installer, and the same behavior on every desktop. Installing follows the same thinking: on Windows, NotBad installs per user without asking for admin rights, because writers install their own tools. Linux gets a tarball and a Snap package, and macOS a zipped app, all built automatically from the same code."
       },
       {
         section: "Key Decision: Hide the Syntax, Keep the Text",
@@ -78,7 +78,7 @@ const studies = [
       },
       {
         section: "Outcomes",
-        body: "- **About 1 second** from cold start to typing.\n- **10.8 MB** installer, about 29 MB installed.\n- **Three desktops, one design**: built and tested automatically on every change, with regression tests guarding the sharp edges (view modes, line endings, list continuation, search, tables, and the Telugu engine).\n- **Telugu and Hindi input** within weeks of launch, without adding a single screen.\n\nAnd the one that can't be measured: the resting state of the app is a piece of paper with your words on it. That was the whole brief."
+        body: "- **About 1 second** from cold start to typing.\n- **15.2 MB** Windows installer; 18 to 27 MB downloads on Linux and macOS.\n- **Three desktops, one design**: built and tested automatically on every change, with regression tests guarding the sharp edges (view modes, line endings, list continuation, search, tables, and the Telugu engine).\n- **Telugu and Hindi input** within weeks of launch, without adding a single screen.\n\nAnd the one that can't be measured: the resting state of the app is a piece of paper with your words on it. That was the whole brief."
       },
       {
         section: "What This Project Taught Me",

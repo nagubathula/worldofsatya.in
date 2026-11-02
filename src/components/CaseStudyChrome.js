@@ -99,7 +99,7 @@ export function RevealOnScroll() {
   return null;
 }
 
-// "10.8 MB" counts up from 0.0 MB; the text around the number stays put.
+// "15.2 MB" counts up from 0.0 MB; the text around the number stays put.
 export function CountUp({ value, delay = 0 }) {
   const ref = useRef(null);
   const reduceMotion = useReducedMotionAfterHydration();
