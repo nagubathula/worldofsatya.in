@@ -9,29 +9,39 @@
   @font-face { font-family: "SF Pro"; font-weight: 500; src: url("fonts/SFPro-Medium.ttf") format("truetype"); }
   @font-face { font-family: "SF Pro"; font-weight: 700; src: url("fonts/SFPro-Bold.ttf") format("truetype"); }
 
+  :root { --accent: #2447d8; --ink: #111; --muted: #4a4a4a; --tint: #eef2ff; }
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: #fff; }
   body {
     font-family: "SF Pro", "Segoe UI", Arial, sans-serif;
     font-feature-settings: "liga" 0, "clig" 0; /* keep ligatures off so ATS text extraction stays clean */
-    color: #111; font-size: 9pt; line-height: 1.3;
-    width: 210mm; padding: 10mm 14mm 7mm;
+    color: var(--ink); font-size: 9pt; line-height: 1.3;
+    width: 210mm; padding: 9mm 14mm 6mm;
+    border-top: 2.2mm solid var(--accent);
   }
-  a { color: #1a4fa3; text-decoration: none; }
-  .contact a { color: #1a4fa3; }
-  h1 { font-size: 20pt; font-weight: 700; letter-spacing: -0.2pt; line-height: 1.1; }
-  .headline { font-size: 10.5pt; font-weight: 500; margin-top: 0.8mm; }
-  .contact { margin-top: 1.4mm; color: #333; }
-  h2 { font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6pt;
-       margin: 3mm 0 1.2mm; padding-bottom: 0.7mm; border-bottom: 0.8pt solid #111; }
+  a { color: var(--accent); text-decoration: none; }
+  h1 { font-size: 23pt; font-weight: 700; letter-spacing: -0.4pt; line-height: 1.05; }
+  .headline { font-size: 11pt; font-weight: 500; margin-top: 1mm; color: var(--accent); }
+  .contact { margin-top: 1.2mm; color: var(--muted); }
+
+  /* Impact strip: plain text in one row, so parsers read it as normal lines */
+  .impact { display: flex; margin-top: 3mm; background: var(--tint); border-left: 1.2mm solid var(--accent); }
+  .impact div { flex: 1; padding: 1.6mm 2.6mm; }
+  .impact div + div { border-left: 0.4pt solid #c9d3fb; }
+  .impact b { display: block; font-size: 13pt; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .impact span { font-size: 7.6pt; color: #333; line-height: 1.2; display: block; margin-top: 0.4mm; }
+
+  h2 { font-size: 9.6pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9pt; color: var(--accent);
+       margin: 3.2mm 0 1.2mm; padding-bottom: 0.7mm; border-bottom: 0.9pt solid var(--accent); }
   p { margin: 0; }
   .item { margin-bottom: 1.5mm; }
   .item-head { display: flex; justify-content: space-between; gap: 6mm; }
   .title { font-weight: 700; }
-  .dates { white-space: nowrap; }
+  .dates { white-space: nowrap; color: var(--muted); }
   ul { margin: 0.6mm 0 0 4.2mm; }
   li { margin-bottom: 0.3mm; }
+  li::marker { color: var(--accent); }
   .skills p { margin-bottom: 0.6mm; }
   b { font-weight: 700; }
 </style>
@@ -42,36 +52,43 @@
   <p class="contact">Hyderabad, India (open to remote and relocation) | <a href="mailto:nagubathula.satyasai@gmail.com">nagubathula.satyasai@gmail.com</a> | <a href="tel:+918499888133">+91 84998 88133</a></p>
   <p class="contact" style="margin-top:0.4mm">Portfolio: <a href="https://worldofsatya.in">worldofsatya.in</a> | LinkedIn: <a href="https://www.linkedin.com/in/satyasainagubathula">linkedin.com/in/satyasainagubathula</a></p>
 
+  <div class="impact">
+    <div><b>14</b><span>LLM web apps shipped</span></div>
+    <div><b>INR 2M</b><span>revenue, Billjot (founder)</span></div>
+    <div><b>100K+</b><span>followers on 14 channels</span></div>
+    <div><b>90%</b><span>faster production setup</span></div>
+  </div>
+
   <h2>Summary</h2>
-  <p>UI engineer who <b>transitioned from freelance UI designer to engineer</b>, now building frontend-focused full-stack products with React, Next.js, and TypeScript, with AI built into how I design, code, and ship. I lead the front end of an AI video editor at NxtWave, have shipped 14 LLM-powered web applications, and contributed to an open-source React design system. <b>Founded Billjot</b> and worked directly with the founders of Traboda and Redantio; at NxtWave I work closely with <b>VPs and heads of department</b>.</p>
+  <p><b>Freelance UI designer turned UI engineer.</b> I take products from Figma to production in React, Next.js, and TypeScript, with AI built into how I design, code, and ship. I lead the frontend of an AI video editor at NxtWave, working directly with <b>VPs and heads of department</b>.</p>
 
   <h2>Experience</h2>
 
   <div class="item">
     <div class="item-head"><p><span class="title">Generative AI Engineer and Creative Lead</span>, NxtWave Disruptive Technologies</p><p class="dates">May 2025 - Present</p></div>
     <ul>
-      <li><b>Lead 3 engineers and a 20+ person creative team</b> on an AI video editor; own the <b>React and TypeScript</b> interface from prompt and timeline to review.</li>
-      <li><b>Shipped 14 web applications</b> using large language models (LLMs), RAG, and context-aware agents.</li>
-      <li><b>Automated design system creation with AI bots</b>, now used across <b>5 applications on web, Android, and iOS</b>; cut the time to create new design systems and reduced reliance on shadcn/ui.</li>
-      <li>Built private <b>Figma plugins that convert designs into live webpages</b> and let Figma files <b>act as a CMS</b>, so content and layout updates publish straight from design.</li>
-      <li>Built <a href="https://worldofsatya.in/works/contentflow"><b>ContentFlow</b></a>, a role-based content platform with <b>30+ dashboards</b> and an 8-stage production pipeline across 5 languages, and <a href="https://worldofsatya.in/works/content-nexus"><b>Content Nexus</b></a>, a REST service for usage, performance, and reliability.</li>
-      <li><b>Cut production setup time by 90%</b> with shared Python and JSON automation handling thousands of batch requests (Veo 3, Wan 2.2), helping grow <b>14 channels from 0 to 100K+ followers</b> and 1,000+ videos per month.</li>
+      <li><b>Lead the frontend of an AI video editor</b> with 3 engineers and a 20+ person creative team; own the <b>React and TypeScript</b> interface from prompt and timeline to review.</li>
+      <li><b>Shipped 14 web applications</b> built on large language models (LLMs), RAG, and context-aware agents.</li>
+      <li><b>Cut production setup time by 90%</b> with shared Python and JSON automation handling thousands of batch requests (Veo 3, Wan 2.2), helping grow <b>14 channels from 0 to 100K+ followers</b> and 1,000+ videos a month.</li>
+      <li><b>5 apps on web, Android, and iOS</b> run on design systems generated by AI bots I built, cutting setup time and reliance on shadcn/ui.</li>
+      <li><b>Turned Figma into a CMS</b>: private plugins convert designs into live webpages, so content and layout publish straight from design.</li>
+      <li><b>30+ dashboards</b> in <a href="https://worldofsatya.in/works/contentflow"><b>ContentFlow</b></a>, an 8-stage, 5-language content platform, and <a href="https://worldofsatya.in/works/content-nexus"><b>Content Nexus</b></a>, a REST service for usage and reliability.</li>
     </ul>
   </div>
 
   <div class="item">
-    <div class="item-head"><p><span class="title">Founder, Billjot</span></p><p class="dates">Nov 2024 - Mar 2025</p></div>
+    <div class="item-head"><p><span class="title">Founder</span>, Billjot</p><p class="dates">Nov 2024 - Mar 2025</p></div>
     <ul>
-      <li><b>Took <a href="https://billjot.com">Billjot</a> from 0 to 1</b>: an HTML5 PWA and <b>Electron</b> client on custom POS hardware with a headless OS.</li>
-      <li>Owned the billing UI, branding, and marketing funnel; the product <b>generated INR 2M in revenue</b>.</li>
+      <li><b>INR 2M in revenue</b>: took <a href="https://billjot.com">Billjot</a> from 0 to 1 as an HTML5 PWA and <b>Electron</b> client on custom POS hardware with a headless OS.</li>
+      <li>Owned the billing UI, branding, and marketing funnel end to end.</li>
     </ul>
   </div>
 
   <div class="item">
     <div class="item-head"><p><span class="title">Product and Design Engineer (Consultant)</span>, Andhra Pradesh Solar Power Corporation</p><p class="dates">Jul 2024 - Oct 2024</p></div>
     <ul>
-      <li>Designed and built the public <a href="https://apspcl.ap.gov.in"><b>APSPCL website</b></a> (apspcl.ap.gov.in) and admin dashboards for the state solar power corporation.</li>
-      <li>Created a <b>design system</b> and built <b>internal tools and a CRM</b> to manage the corporation's operations.</li>
+      <li><b>Shipped the public <a href="https://apspcl.ap.gov.in">APSPCL website</a></b> (apspcl.ap.gov.in) and admin dashboards for the state solar power corporation.</li>
+      <li>Built a <b>design system</b>, <b>internal tools, and a CRM</b> to run the corporation's operations.</li>
     </ul>
   </div>
 
@@ -86,7 +103,7 @@
   <div class="item">
     <div class="item-head"><p><span class="title">Design and Development Engineer Intern</span>, Redantio</p><p class="dates">Jan 2022 - Feb 2023</p></div>
     <ul>
-      <li><b>Key designer for CompatrIoT</b>, an open hardware-security trainer (STM32, ESP32) with 20 gamified labs; built a LoRa detection interface that <b>identifies signals in 800 ms</b>. Tutored Figma.</li>
+      <li><b>Identifies signals in 800 ms</b>: built the LoRa detection interface and was key designer for <b>CompatrIoT</b>, an open hardware-security trainer (STM32, ESP32) with 20 gamified labs. Tutored Figma.</li>
       <li>Created <b>terminal UIs for hardware badges</b> using Python (Tkinter) and CMake.</li>
     </ul>
   </div>
@@ -94,11 +111,11 @@
   <h2>Projects</h2>
   <div class="item">
     <p><span class="title">OpenWeave</span> | Next.js, TypeScript, Tauri, WebRTC, MCP | <a href="https://worldofsatya.in/works/openweave">worldofsatya.in/works/openweave</a></p>
-    <ul><li>Open, programmable design editor that reads and writes Figma files; AI builds designs with 90+ tools, plus a CLI, MCP server, JSX/Tailwind export, and peer-to-peer collaboration in a 7 MB desktop app.</li></ul>
+    <ul><li>Open, programmable design editor that reads and writes Figma files; AI builds designs with <b>90+ tools</b>, plus a CLI, MCP server, JSX/Tailwind export, and peer-to-peer collaboration in a <b>7 MB desktop app</b>.</li></ul>
   </div>
   <div class="item">
     <p><span class="title">NotBad</span> | Flutter, Dart | <a href="https://worldofsatya.in/works/notbad">worldofsatya.in/works/notbad</a></p>
-    <ul><li>Cross-platform Markdown editor with concealed syntax; 3.5k lines of Dart replace 42k upstream, 1-second cold start.</li></ul>
+    <ul><li>Cross-platform Markdown editor with concealed syntax; <b>3.5k lines of Dart replace 42k upstream</b>, with a 1-second cold start.</li></ul>
   </div>
   <div class="item">
     <p><span class="title">Toothpaste</span> | Adobe CEP, JavaScript, FFmpeg | <a href="https://worldofsatya.in/works/toothpaste">worldofsatya.in/works/toothpaste</a></p>
