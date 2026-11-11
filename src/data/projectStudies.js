@@ -337,13 +337,13 @@ export const projectStudies = [
     slug: "contentflow-platform",
     title: "ContentFlow: Running a Five-Language Content Operation",
     type: "Internal Platform",
-    heroDescription: "Building the internal platform behind a multi-language video operation: 30+ role-based dashboards and an eight-stage pipeline that track every handoff from script to posted video.",
+    heroDescription: "The internal platform behind a multi-language video operation: 30+ role-based dashboards and an eight-stage pipeline from script to posted video, plus a live analytics command centre — YouTube data, thumbnail click-through, and velocity alerts — all under one set of permissions.",
     image: "/cases/contentflow-hero.webp",
     meta: [
-      { label: "Product", value: "Content operations platform" },
+      { label: "Product", value: "Content operations and analytics platform" },
       { label: "Role", value: "Design and build" },
       { label: "Languages", value: "Telugu, Hindi, Tamil, Marathi, Kannada" },
-      { label: "Channels", value: "YouTube and Instagram" }
+      { label: "Stack", value: "React, PostgreSQL, REST APIs, YouTube Data API" }
     ],
     highlights: [
       { value: "30+", label: "Role-based dashboards" },
@@ -354,11 +354,11 @@ export const projectStudies = [
     content: [
       {
         section: "Overview",
-        body: "Producing content at scale across YouTube and Instagram in five languages means dozens of people touching every video: writers, voice artists, editors, designers, and managers. Spreadsheets and chat threads don't survive that. ContentFlow is the internal platform I built to run the whole operation in one place.\n\n| Language | Language | Language | Language | Language |\n|---|---|---|---|---|\n| Telugu | Hindi | Tamil | Marathi | Kannada |\nTable: Every video can exist in five languages, each with its own team"
+        body: "Producing content at scale across YouTube and Instagram in five languages means dozens of people touching every video: writers, voice artists, editors, designers, and managers. Then, once a video is live, someone has to read what it did. Spreadsheets and chat threads survive neither job. ContentFlow is the internal platform I built to run the whole operation in one place — the production work, and the numbers that follow it.\n\nThe team knows the analytics side as Content Nexus. It isn't a separate tool but the command centre inside the same platform, sharing one login, one set of roles, and one set of permissions.\n\n| Language | Language | Language | Language | Language |\n|---|---|---|---|---|\n| Telugu | Hindi | Tamil | Marathi | Kannada |\nTable: Every video can exist in five languages, each with its own team"
       },
       {
         section: "The Pipeline",
-        body: "Every piece of content moves through eight stages, from the first draft of the script to the posted video. Each stage has an owner, and every handoff is recorded instead of lost in chat.\n\n![Eight stages from script to posted](/cases/contentflow-pipeline.svg)\n\nThe pipeline is visible on a shared content calendar, filterable by channel and by status, so anyone can see what's stuck and where."
+        body: "Every piece of content moves through eight stages, from the first draft of the script to the posted video — Script, Review, Voice Over, Audio Cut, Raw Upload, Editing, Ready, Posted. Each stage has an owner, and every handoff is recorded instead of lost in chat.\n\n![Eight stages from script to posted](/cases/contentflow-pipeline.svg)\n\nThe pipeline is visible on a shared content calendar, filterable by channel and by status, so anyone can see what's stuck and where."
       },
       {
         section: "Key Decision: A Dashboard per Job",
@@ -366,15 +366,23 @@ export const projectStudies = [
       },
       {
         section: "Access by Role, Language, and Region",
-        body: "Role-based access control decides what each person can see and do, and everything is also scoped by language and region. A Telugu editor sees Telugu work; a Hindi manager sees Hindi channels.\n\n| Scope | What it limits |\n|---|---|\n| Role | Which screens and actions a person has |\n| Language | Which language's content they work on |\n| Region | Which channels and teams they see |\nTable: Three layers of access"
+        body: "Role-based access control decides what each person can see and do, and everything is also scoped by language and region. A Telugu editor sees Telugu work; a Hindi manager sees Hindi channels. The same permission model carries straight into the analytics side, which is why outside collaborators can be let into the numbers without being let into everything.\n\n| Scope | What it limits |\n|---|---|\n| Role | Which screens and actions a person has |\n| Language | Which language's content they work on |\n| Region | Which channels and teams they see |\nTable: Three layers of access"
+      },
+      {
+        section: "The Analytics Command Centre",
+        body: "Once a video is posted, the platform stops tracking work and starts tracking performance. The YouTube Data API feeds a PostgreSQL store, the platform tracks thumbnail click-through, and it watches each video's velocity for anomalies — flagging a video that's suddenly taking off, or stalling, instead of waiting for someone to notice.\n\n![From the YouTube API to tiered dashboards](/cases/contentnexus-flow.svg)\n\n| Capability | What it does |\n|---|---|\n| Live YouTube data | Channel and video metrics through the YouTube Data API |\n| Thumbnail CTR tracking | Automatic click-through tracking for every thumbnail |\n| Velocity anomaly alerts | Flags videos whose growth suddenly changes |\n| Permission tiers | Separates internal teams from outside collaborators |\nTable: One command centre instead of a dozen YouTube Studio tabs"
+      },
+      {
+        section: "Key Decision: Permissions as a First-Class Feature",
+        body: "Most analytics tools treat sharing as an afterthought. This operation runs with internal teams and external collaborators side by side, so permission tiers are built into every view rather than bolted on. The numbers a partner can see are a property of their tier, not a report someone remembers to redact.\n\n| Who | What they get |\n|---|---|\n| Internal team | The full picture across channels and languages |\n| External collaborators | Only what their tier allows |\nTable: Strict permission tiers, by design"
       },
       {
         section: "Around the Pipeline",
-        body: "| System | What it does |\n|---|---|\n| Content calendar | Every video on one calendar, filtered by channel and status |\n| Channel analytics | Performance across channels, including YouTube analytics |\n| Studio booking | Recording slots for voice artists |\n| Team management | Roles and access for every member |\nTable: The supporting systems"
+        body: "| System | What it does |\n|---|---|\n| Content calendar | Every video on one calendar, filtered by channel and status |\n| Channel analytics | Performance across channels, including live YouTube data |\n| Studio booking | Recording slots for voice artists |\n| Team management | Roles and access for every member |\nTable: The supporting systems"
       },
       {
         section: "Impact",
-        body: "ContentFlow is the operational backbone behind more than 2,000 videos and channels grown past 100,000 followers, with every handoff between roles tracked instead of lost in chat.\n\n| Before | After |\n|---|---|\n| Spreadsheets and chat threads | One platform |\n| Handoffs lost in messages | Every handoff recorded |\n| Everyone sees everything | Each role sees its own work |\n| Status by asking around | Status on a shared calendar |\nTable: What changed for the team"
+        body: "ContentFlow is the operational backbone behind more than 2,000 videos and channels grown past 100,000 followers, with every handoff between roles tracked instead of lost in chat — and every posted video measured in the same place it was made.\n\n| Before | After |\n|---|---|\n| Spreadsheets and chat threads | One platform |\n| Handoffs lost in messages | Every handoff recorded |\n| Everyone sees everything | Each role sees its own work |\n| Status by asking around | Status on a shared calendar |\n| Numbers in scattered YouTube Studio tabs | One analytics command centre |\nTable: What changed for the team\n\nContentFlow is an internal platform, so there's no public build or source to link to."
       }
     ]
   },
@@ -449,43 +457,6 @@ export const projectStudies = [
       {
         section: "The Result",
         body: "| For the team | What it means |\n|---|---|\n| Consistency | Scenes in one video share a look by default |\n| Reproducibility | Any good take can be traced back to its seed |\n| Speed | People fill in parameters instead of writing prompts |\nTable: What changed\n\nWhatThePrompt is an internal tool, so there's no public build or source to link to."
-      }
-    ]
-  },
-  {
-    slug: "content-nexus-tool",
-    title: "Content Nexus: One Command Centre for Every Channel",
-    type: "Internal Tool",
-    heroDescription: "A centralised operations suite for digital media distribution: live YouTube analytics, thumbnail click-through tracking, velocity alerts, and strict permission tiers for internal and external collaborators.",
-    image: "/cases/contentnexus-hero.webp",
-    meta: [
-      { label: "Product", value: "Media operations suite" },
-      { label: "Role", value: "Design and build" },
-      { label: "Stack", value: "PostgreSQL, React, REST APIs" },
-      { label: "Users", value: "Channel teams and collaborators" }
-    ],
-    highlights: [
-      { value: "Live", label: "YouTube Data API integration" },
-      { value: "CTR", label: "Tracked for every thumbnail" },
-      { value: "Auto", label: "Alerts on unusual velocity" },
-      { value: "2", label: "Permission worlds: internal and external" }
-    ],
-    content: [
-      {
-        section: "The Problem",
-        body: "Distributing media across many channels, languages, and creators needs two things that usually fight each other: precise numbers, and strict separation of who can see what. Content Nexus was built as the single command centre for both.\n\n| Need | Why it's hard |\n|---|---|\n| Live metrics for every channel | Numbers spread across YouTube Studio tabs |\n| Knowing if a thumbnail works | Click-through rate is buried per video |\n| Catching a video that's taking off, or stalling | You only notice if you happen to look |\n| Sharing data with outside collaborators | Without exposing everything else |\nTable: What the team needed"
-      },
-      {
-        section: "How It Works",
-        body: "The YouTube Data API feeds a PostgreSQL store, the platform tracks thumbnail click-through and watches each video's velocity for anomalies, and every person sees dashboards according to their permission tier.\n\n![From the YouTube API to tiered dashboards](/cases/contentnexus-flow.svg)"
-      },
-      {
-        section: "Key Decision: Permissions as a First-Class Feature",
-        body: "Most analytics tools treat sharing as an afterthought. Content Nexus works with internal teams and external collaborators, so permission tiers are built into every view.\n\n| Who | What they get |\n|---|---|\n| Internal team | The full picture across channels |\n| External collaborators | Only what their tier allows |\nTable: Strict permission tiers, by design"
-      },
-      {
-        section: "Capabilities",
-        body: "| Capability | What it does |\n|---|---|\n| Live YouTube data | Channel and video metrics through the YouTube Data API |\n| Thumbnail CTR tracking | Automatic click-through tracking for every thumbnail |\n| Velocity anomaly alerts | Flags videos whose growth suddenly changes |\n| Permission tiers | Separates internal and external collaborators |\nTable: One suite instead of a dozen tabs\n\nContent Nexus is an internal tool, so there's no public build or source to link to."
       }
     ]
   },

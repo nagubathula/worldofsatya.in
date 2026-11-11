@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# resume (local only, not tracked)
+/resume
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
