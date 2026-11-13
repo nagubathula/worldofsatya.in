@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import WorksFan from "./WorksFan";
 import ButtonLab from "./ButtonLab";
 import SensorLab from "./SensorLab";
+import LayoutLab from "./LayoutLab";
+import TypeLab from "./TypeLab";
 import { calendarSections } from "./FlipCalendarNav";
 import { useBlackHoleTransition } from "./BlackHoleTransition";
 
@@ -47,6 +49,26 @@ const PIECES = [
     // The grid sets its own height; the padding leaves room for the hint.
     stage: "pb-10",
     Demo: ButtonLab,
+  },
+  {
+    id: "layout",
+    title: "Things that move into place",
+    description:
+      "Layout animation, where the browser decides where a box goes and springs fill in the frames between. A tab pill that glides to the one you pick, a list you reorder by its grip, a toast stack that fans out on hover and swipes away, and a card that grows out of its own thumbnail.",
+    tags: ["Shared layout", "Drag to reorder", "Gestures", "AnimatePresence"],
+    hint: "Click the tabs, drag a row, stack some toasts, open the card.",
+    stage: "pb-10",
+    Demo: LayoutLab,
+  },
+  {
+    id: "type",
+    title: "Letters, numbers, light",
+    description:
+      "Small pieces about type and texture. Text that decodes itself, an odometer that rolls each digit on its own spring, one light that crosses four tiles, dots that melt into each other under an SVG filter, a sentence that rises out of a blur, and a slider that stretches like rubber when you pull past the end.",
+    tags: ["Text effects", "SVG filters", "Rubber banding", "Stagger"],
+    hint: "Hover, click, and pull the slider past its ends.",
+    stage: "pb-10",
+    Demo: TypeLab,
   },
   {
     id: "sensors",
