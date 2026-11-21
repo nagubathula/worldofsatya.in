@@ -6,10 +6,11 @@ import Image from "next/image";
 import { motion, useTransform, AnimatePresence } from "framer-motion";
 import { playTickSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { TOKENS } from "@/lib/tokens";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
-export default function RiveAboutButton({ showFace = false }) {
+export default function RiveAboutButton({ showFace = false, href = "/about", onClick }) {
     const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [blink, setBlink] = useState(false);
@@ -74,7 +75,8 @@ export default function RiveAboutButton({ showFace = false }) {
       className="group/label relative shrink-0 select-none"
     >
       <Link
-        href="/about"
+        href={href}
+        onClick={onClick}
         aria-label="About Satya"
         onPointerMove={magnet.move}
         onMouseEnter={handleMouseEnter}
@@ -145,7 +147,7 @@ export default function RiveAboutButton({ showFace = false }) {
                   {/* Torso / Shoulders with gentle breathing bob */}
                   <motion.path
                     d="M7 27C7 22.8 10.8 20 16 20C21.2 20 25 22.8 25 27"
-                    stroke="#1d1d1f"
+                    stroke={TOKENS.ink}
                     strokeWidth="2.2"
                     strokeLinecap="round"
                     animate={{
@@ -183,7 +185,7 @@ export default function RiveAboutButton({ showFace = false }) {
                       cy="11.5"
                       r="5.7"
                       fill="#ffffff"
-                      stroke="#1d1d1f"
+                      stroke={TOKENS.ink}
                       strokeWidth="2.2"
                     />
 
@@ -199,7 +201,7 @@ export default function RiveAboutButton({ showFace = false }) {
                         cx="14"
                         cy="11.5"
                         r="1.1"
-                        fill="#1d1d1f"
+                        fill={TOKENS.ink}
                         animate={{
                           scaleY: blink ? 0.1 : 1,
                         }}
@@ -211,7 +213,7 @@ export default function RiveAboutButton({ showFace = false }) {
                         cx="18"
                         cy="11.5"
                         r="1.1"
-                        fill="#1d1d1f"
+                        fill={TOKENS.ink}
                         animate={{
                           scaleY: blink ? 0.1 : 1,
                         }}
@@ -221,7 +223,7 @@ export default function RiveAboutButton({ showFace = false }) {
                       {/* Smiling Expression Arc */}
                       <motion.path
                         d="M14.5 13.8C15 14.4 17 14.4 17.5 13.8"
-                        stroke="#1d1d1f"
+                        stroke={TOKENS.ink}
                         strokeWidth="1.2"
                         strokeLinecap="round"
                         animate={{

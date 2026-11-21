@@ -15,10 +15,10 @@ const INLINE = /(\*\*\*.+?\*\*\*|\*\*.+?\*\*|\[[^\]]+\]\([^)\s]+\)|\*[^*\s](?:[^
 function Inline({ text }) {
   return text.split(INLINE).map((part, i) => {
     if (part.startsWith('***') && part.endsWith('***') && part.length > 6) {
-      return <strong key={i} className="font-semibold italic text-[#1d1d1f]">{part.slice(3, -3)}</strong>;
+      return <strong key={i} className="font-semibold italic text-ink">{part.slice(3, -3)}</strong>;
     }
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
-      return <strong key={i} className="font-semibold text-[#1d1d1f]">{part.slice(2, -2)}</strong>;
+      return <strong key={i} className="font-semibold text-ink">{part.slice(2, -2)}</strong>;
     }
     const link = part.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/);
     if (link) {
@@ -28,7 +28,7 @@ function Inline({ text }) {
           key={i}
           href={link[2]}
           {...(external && { target: '_blank', rel: 'noopener noreferrer' })}
-          className="text-[#1d1d1f] underline decoration-black/20 underline-offset-4 hover:decoration-black"
+          className="text-ink underline decoration-black/20 underline-offset-4 hover:decoration-black"
         >
           <Inline text={link[1].trim()} />
         </a>
@@ -111,7 +111,7 @@ export default function CaseStudyBody({ text, seed }) {
                 className="noise-stage-media h-auto max-h-[80vh] w-full"
               />
             </NoiseStage>
-            {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
+            {caption && <figcaption className="mt-2 text-center text-sm text-ink-muted">{caption}</figcaption>}
           </figure>
         );
       }
@@ -123,7 +123,7 @@ export default function CaseStudyBody({ text, seed }) {
           <NoiseStage seed={seed} className="p-3 sm:p-8">
             <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 640px, 100vw" alt={caption} loading="lazy" decoding="async" className="noise-stage-media h-auto max-h-[80vh] w-full object-contain" />
           </NoiseStage>
-          {caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{caption}</figcaption>}
+          {caption && <figcaption className="mt-2 text-center text-sm text-ink-muted">{caption}</figcaption>}
         </figure>
       );
     }
@@ -137,7 +137,7 @@ export default function CaseStudyBody({ text, seed }) {
               <thead>
                 <tr className="border-b border-black/[0.08] bg-black/[0.03]">
                   {head.map((cell, j) => (
-                    <th key={j} scope="col" className="px-4 py-3 font-semibold text-[#1d1d1f]"><Inline text={cell} /></th>
+                    <th key={j} scope="col" className="px-4 py-3 font-semibold text-ink"><Inline text={cell} /></th>
                   ))}
                 </tr>
               </thead>
@@ -145,31 +145,31 @@ export default function CaseStudyBody({ text, seed }) {
                 {rows.map((row, r) => (
                   <tr key={r} className="border-b border-black/[0.06] last:border-0">
                     {row.map((cell, j) => (
-                      <td key={j} className={`px-4 py-3 align-top ${j === 0 ? 'font-medium text-[#1d1d1f]' : ''}`}><Inline text={cell} /></td>
+                      <td key={j} className={`px-4 py-3 align-top ${j === 0 ? 'font-medium text-ink' : ''}`}><Inline text={cell} /></td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          {block.caption && <figcaption className="mt-2 text-center text-sm text-[#6e6e73]">{block.caption}</figcaption>}
+          {block.caption && <figcaption className="mt-2 text-center text-sm text-ink-muted">{block.caption}</figcaption>}
         </figure>
       );
     }
     if (block.kind === 'quote') {
       return (
-        <blockquote key={i} className="border-l-2 border-black/15 pl-5 italic text-[#1d1d1f]">
+        <blockquote key={i} className="border-l-2 border-black/15 pl-5 italic text-ink">
           <Inline text={block.text.slice(2)} />
         </blockquote>
       );
     }
     if (block.kind === 'h3') {
-      return <h3 key={i} className="mt-2 text-lg font-semibold tracking-[-0.02em] text-[#1d1d1f]">{block.text.slice(5)}</h3>;
+      return <h3 key={i} className="mt-2 text-lg font-semibold tracking-[-0.02em] text-ink">{block.text.slice(5)}</h3>;
     }
     const List = block.kind;
     const marker = block.kind === 'ol' ? NUMBERED : BULLET;
     return (
-      <List key={i} className={`flex flex-col gap-3 pl-5 ${block.kind === 'ol' ? 'list-decimal' : 'list-disc'} marker:text-[#6e6e73]`}>
+      <List key={i} className={`flex flex-col gap-3 pl-5 ${block.kind === 'ol' ? 'list-decimal' : 'list-disc'} marker:text-ink-muted`}>
         {block.items.map((item, j) => (
           <li key={j} className="pl-1"><Inline text={item.replace(marker, '')} /></li>
         ))}

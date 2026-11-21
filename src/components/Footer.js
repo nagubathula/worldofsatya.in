@@ -32,7 +32,7 @@ export default function Footer() {
             initial="rest"
             whileHover="hover"
             animate="rest"
-            className="inline-block text-5xl sm:text-7xl md:text-8xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.04em]"
+            className="inline-block text-5xl sm:text-7xl md:text-8xl font-sans font-semibold text-ink tracking-[-0.04em]"
           >
             <span className="sr-only">Let&apos;s Talk.</span>
             <span aria-hidden="true" className="flex">
@@ -70,7 +70,7 @@ export default function Footer() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.94 }}
               transition={SPRING.press}
-              className="px-3 py-1.5 rounded-full text-sm sm:text-base font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
+              className="px-3 py-1.5 rounded-full text-sm sm:text-base font-medium text-ink hover:bg-black/[0.04] transition-colors select-none"
             >
               {link.label}
             </MotionLink>
@@ -78,7 +78,7 @@ export default function Footer() {
           ))}
         </nav>
 
-        <div className="w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-sans text-[#6e6e73]" suppressHydrationWarning>
+        <div className="w-full flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-sans text-ink-muted" suppressHydrationWarning>
           <p>© {new Date().getFullYear()} Satya Sai Nagubathula</p>
           <div className="flex gap-2 sm:gap-3 mt-4 md:mt-0" suppressHydrationWarning>
             {[
@@ -95,7 +95,7 @@ export default function Footer() {
                 whileHover={{ y: -2, scale: 1.05 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING.press}
-                className="px-3 py-1 rounded-full text-[#6e6e73] hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-colors select-none"
+                className="px-3 py-1 rounded-full text-ink-muted hover:text-ink hover:bg-black/[0.04] transition-colors select-none"
               >
                 {link.label}
               </motion.a>

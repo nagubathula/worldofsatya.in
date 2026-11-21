@@ -48,7 +48,7 @@ function TimelineEntry({ exp, reduceMotion }) {
       {/* Year, beside the line on wide screens */}
       <div className="hidden pt-5 text-right md:block">
         <p className="text-4xl font-semibold leading-none tracking-[-0.04em] text-[#111111]">{startYear(exp.period)}</p>
-        <p className="mt-2 text-[11px] text-[#6e6e73]">{exp.period}</p>
+        <p className="mt-2 text-[11px] text-ink-muted">{exp.period}</p>
       </div>
 
       {/* The dot on the line; it fills in as the role comes into view */}
@@ -71,14 +71,14 @@ function TimelineEntry({ exp, reduceMotion }) {
         }`}
       >
         {/* Year and dates, above the card on phones */}
-        <p className={`mb-3 text-[11px] font-medium md:hidden ${dark ? "text-white/50" : "text-[#6e6e73]"}`}>{exp.period}</p>
+        <p className={`mb-3 text-[11px] font-medium md:hidden ${dark ? "text-white/50" : "text-ink-muted"}`}>{exp.period}</p>
 
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <CompanyLogo logo={exp.logo} name={exp.company} className="h-10 w-10" />
             <div className="min-w-0">
               <h4 className="truncate text-sm font-semibold">{exp.company}</h4>
-              <p className={`truncate text-xs ${dark ? "text-white/50" : "text-[#6e6e73]"}`}>{exp.location}</p>
+              <p className={`truncate text-xs ${dark ? "text-white/50" : "text-ink-muted"}`}>{exp.location}</p>
             </div>
           </div>
           {dark ? (
@@ -87,21 +87,21 @@ function TimelineEntry({ exp, reduceMotion }) {
               Current role
             </span>
           ) : (
-            <span className="shrink-0 whitespace-nowrap rounded-full bg-black/[0.04] px-2.5 py-1 text-[11px] font-medium text-[#6e6e73]">
+            <span className="shrink-0 whitespace-nowrap rounded-full bg-black/[0.04] px-2.5 py-1 text-[11px] font-medium text-ink-muted">
               {exp.type}
             </span>
           )}
         </div>
 
         <h3 className="mt-4 text-lg font-semibold leading-snug tracking-[-0.02em]">{exp.role}</h3>
-        <p className={`mt-2 text-sm leading-relaxed ${dark ? "text-white/70" : "text-[#515154]"}`}>{exp.description}</p>
+        <p className={`mt-2 text-sm leading-relaxed ${dark ? "text-white/70" : "text-ink-secondary"}`}>{exp.description}</p>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
           {exp.tags.map((tag) => (
             <span
               key={tag}
               className={`whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-medium ${
-                dark ? "bg-white/10 text-white/80" : "bg-[#f5f5f7] text-[#515154]"
+                dark ? "bg-white/10 text-white/80" : "bg-[#f5f5f7] text-ink-secondary"
               }`}
             >
               {tag}
@@ -153,7 +153,7 @@ export default function ExperienceTable() {
           >
             Work Experience
           </h2>
-          <p className="mt-2 text-base text-[#6e6e73]">
+          <p className="mt-2 text-base text-ink-muted">
             Engineering roles, company history, and core technologies.
           </p>
         </div>
@@ -171,7 +171,7 @@ export default function ExperienceTable() {
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer ${
                   isActive
                     ? "bg-[#111111] text-white shadow-xs"
-                    : "bg-white/80 hover:bg-white text-[#515154] hover:text-[#111111] border border-black/5"
+                    : "bg-white/80 hover:bg-white text-ink-secondary hover:text-[#111111] border border-black/5"
                 }`}
               >
                 {tag}

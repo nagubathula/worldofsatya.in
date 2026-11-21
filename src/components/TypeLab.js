@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue, useTransform } from "framer-motion";
 import { RotateCcw, Volume1, Volume2 } from "lucide-react";
 import { playPopSound, playTickSound } from "./SoundEffects";
+import { scaleDuration, scaleSpring, useLabTuner } from "@/lib/labTuning";
 import { SPRING } from "@/lib/motion";
 
 // Six pieces about type and texture: letters, numbers, light and goo.
@@ -13,7 +14,7 @@ function Cell({ label, children }) {
   return (
     <div className="relative flex min-h-[190px] flex-col items-center justify-center gap-5 overflow-hidden rounded-2xl border border-black/[0.05] bg-white/70 px-4 py-6">
       <div className="flex min-h-[72px] w-full items-center justify-center">{children}</div>
-      <p className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#6e6e73]">{label}</p>
+      <p className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-muted">{label}</p>
     </div>
   );
 }
@@ -22,7 +23,7 @@ const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=<>/";
 const WORDS = ["DESIGN ENGINEER", "MOTION + CODE", "PIXELS THAT MOVE"];
 
 // Letters spin through random glyphs and lock in left to right.
-function ScrambleText({ reduceMotion }) {
+function ScrambleText({ reduceMotion, scrambleMs = 32 }) {
   const [index, setIndex] = useState(0);
   const [text, setText] = useState(WORDS[0]);
   const timer = useRef(null);
@@ -45,9 +46,9 @@ function ScrambleText({ reduceMotion }) {
         );
         if (frame % 3 === 0) playTickSound(2400 + Math.random() * 600, 0.015);
         if (settled >= target.length) clearInterval(timer.current);
-      }, 32);
+      }, scrambleMs);
     },
-    [reduceMotion]
+    [reduceMotion, scrambleMs]
   );
 
   useEffect(() => {
@@ -68,7 +69,7 @@ function ScrambleText({ reduceMotion }) {
       onPointerEnter={(e) => e.pointerType === "mouse" && run(WORDS[index])}
       onClick={nextWord}
       aria-label={`Scramble text: ${WORDS[index]}. Click for the next phrase.`}
-      className="rounded-lg px-2 py-1 font-mono text-[17px] font-semibold tracking-[0.08em] text-[#1d1d1f] outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
+      className="rounded-lg px-2 py-1 font-mono text-[17px] font-semibold tracking-[0.08em] text-ink outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
     >
       <span aria-hidden="true">{text}</span>
     </button>
@@ -76,13 +77,13 @@ function ScrambleText({ reduceMotion }) {
 }
 
 // One column of 0–9 per digit; each slides to its number on its own spring.
-function Digit({ value }) {
+function Digit({ value, stiffness = 180, timeScale = 1 }) {
   return (
     <span className="relative inline-block h-[1em] w-[0.62em] overflow-hidden">
       <motion.span
         className="absolute inset-x-0 top-0 flex flex-col"
         animate={{ y: `${-value}em` }}
-        transition={{ type: "spring", stiffness: 180, damping: 22 }}
+        transition={scaleSpring({ type: "spring", stiffness, damping: 22 }, timeScale)}
       >
         {Array.from({ length: 10 }, (_, n) => (
           <span key={n} className="block h-[1em] text-center leading-none">
@@ -94,7 +95,7 @@ function Digit({ value }) {
   );
 }
 
-function Odometer() {
+function Odometer({ stiffness = 180, timeScale = 1 }) {
   const [value, setValue] = useState(4096);
   const digits = String(value).padStart(5, "0").split("").map(Number);
   const bump = (by) => {
@@ -103,11 +104,11 @@ function Odometer() {
   };
   return (
     <div className="flex flex-col items-center gap-4">
-      <p className="flex text-[40px] font-semibold leading-none tracking-[-0.02em] text-[#1d1d1f] tabular-nums" aria-live="polite" aria-label={String(value)}>
+      <p className="flex text-[40px] font-semibold leading-none tracking-[-0.02em] text-ink tabular-nums" aria-live="polite" aria-label={String(value)}>
         {digits.map((d, i) => (
           <span key={i} className="flex" aria-hidden="true">
             {i === 2 && <span className="w-[0.3em] text-center leading-none">,</span>}
-            <Digit value={d} />
+            <Digit value={d} stiffness={stiffness} timeScale={timeScale} />
           </span>
         ))}
       </p>
@@ -123,7 +124,7 @@ function Odometer() {
             onClick={onClick}
             whileTap={{ scale: 0.92 }}
             transition={SPRING.press}
-            className="h-8 rounded-full border border-black/[0.08] bg-white px-3 text-[12px] font-medium text-[#1d1d1f] outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
+            className="h-8 rounded-full border border-black/[0.08] bg-white px-3 text-[12px] font-medium text-ink outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
           >
             {label}
           </motion.button>
@@ -164,7 +165,7 @@ function SpotlightGrid() {
             className="absolute inset-0 rounded-xl"
             style={{ background: `radial-gradient(120px circle at var(--x) var(--y), ${VIOLET}, transparent 70%)` }}
           />
-          <span className="relative flex h-full items-end overflow-hidden rounded-[11px] bg-white px-2.5 py-2 text-[12px] font-medium text-[#515154]">
+          <span className="relative flex h-full items-end overflow-hidden rounded-[11px] bg-white px-2.5 py-2 text-[12px] font-medium text-ink-secondary">
             <span
               aria-hidden="true"
               className="absolute inset-0"
@@ -243,7 +244,7 @@ function WordReveal({ reduceMotion }) {
   const inView = useInView(ref, { once: false, amount: 0.8 });
   return (
     <div ref={ref} className="flex flex-col items-center gap-3">
-      <p key={run} className="max-w-[230px] text-center text-[19px] font-semibold leading-tight tracking-[-0.02em] text-[#1d1d1f]">
+      <p key={run} className="max-w-[230px] text-center text-[19px] font-semibold leading-tight tracking-[-0.02em] text-ink">
         {LINE.split(" ").map((word, i) => (
           <motion.span
             key={i}
@@ -262,7 +263,7 @@ function WordReveal({ reduceMotion }) {
         whileTap={{ scale: 0.9, rotate: -90 }}
         transition={SPRING.press}
         aria-label="Replay"
-        className="grid h-8 w-8 place-items-center rounded-full border border-black/[0.08] bg-white text-[#515154] outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
+        className="grid h-8 w-8 place-items-center rounded-full border border-black/[0.08] bg-white text-ink-secondary outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
       >
         <RotateCcw size={13} />
       </motion.button>
@@ -271,7 +272,7 @@ function WordReveal({ reduceMotion }) {
 }
 
 // Pull past either end and the track stretches like rubber, then snaps back on release.
-function ElasticSlider() {
+function ElasticSlider({ rubberStretch = 28, timeScale = 1 }) {
   const track = useRef(null);
   const [value, setValue] = useState(0.5);
   const [dragging, setDragging] = useState(false);
@@ -291,7 +292,7 @@ function ElasticSlider() {
     setValue(v);
     const over = raw < 0 ? raw * r.width : raw > 1 ? (raw - 1) * r.width : 0;
     // Diminishing returns: the further you pull, the less it gives.
-    overflow.set(Math.sign(over) * 28 * (1 - Math.exp(-Math.abs(over) / 60)));
+    overflow.set(Math.sign(over) * rubberStretch * (1 - Math.exp(-Math.abs(over) / 60)));
     const tick = Math.round(v * 10);
     if (tick !== lastTick.current) {
       lastTick.current = tick;
@@ -303,11 +304,11 @@ function ElasticSlider() {
     if (!held.current) return;
     held.current = false;
     setDragging(false);
-    animate(overflow, 0, { type: "spring", stiffness: 500, damping: 15 });
+    animate(overflow, 0, scaleSpring({ type: "spring", stiffness: 500, damping: 15 }, timeScale));
   };
 
   return (
-    <div className="flex w-full max-w-[240px] items-center gap-3 text-[#6e6e73]">
+    <div className="flex w-full max-w-[240px] items-center gap-3 text-ink-muted">
       <motion.span style={{ scale: lowScale }}><Volume1 size={16} /></motion.span>
       <motion.div
         ref={track}
@@ -351,14 +352,29 @@ function ElasticSlider() {
 }
 
 export default function TypeLab({ reduceMotion }) {
+  const tuner = useLabTuner("type", {
+    scrambleMs: 32,
+    odometerStiffness: 180,
+    rubberStretch: 28,
+  });
+
   return (
     <div className="grid w-full grid-cols-1 gap-3 p-3 sm:grid-cols-3 sm:gap-4 sm:p-6">
-      <Cell label="Scramble text"><ScrambleText reduceMotion={reduceMotion} /></Cell>
-      <Cell label="Odometer"><Odometer /></Cell>
+      <Cell label="Scramble text">
+        <ScrambleText
+          reduceMotion={reduceMotion}
+          scrambleMs={scaleDuration(tuner.scrambleMs, tuner.timeScale)}
+        />
+      </Cell>
+      <Cell label="Odometer">
+        <Odometer stiffness={tuner.odometerStiffness} timeScale={tuner.timeScale} />
+      </Cell>
       <Cell label="Cursor spotlight"><SpotlightGrid /></Cell>
       <Cell label="Gooey loader"><GooeyLoader reduceMotion={reduceMotion} /></Cell>
       <Cell label="Word reveal"><WordReveal reduceMotion={reduceMotion} /></Cell>
-      <Cell label="Elastic slider"><ElasticSlider /></Cell>
+      <Cell label="Elastic slider">
+        <ElasticSlider rubberStretch={tuner.rubberStretch} timeScale={tuner.timeScale} />
+      </Cell>
     </div>
   );
 }

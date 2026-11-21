@@ -26,6 +26,7 @@ import {
 import { motion, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 import { allWorks } from "@/data/works";
+import { verifyAccessPin } from "@/lib/accessPin";
 import { playPopSound, playTickSound } from "./SoundEffects";
 import RetroVideoPlayer from "./RetroVideoPlayer";
 
@@ -46,14 +47,6 @@ const CATEGORY_PRIORITY = {
   "AI Videos": 4,
 };
 const ITEMS_PER_PAGE = 12;
-
-// SHA-256 of the access code for locked works, so the code itself isn't in the bundle.
-const ACCESS_CODE_HASH = "8c46ec847fa9848854e8f3ef3c720acf04f6aa508ed8bde8c3102508a3201dfe";
-
-async function sha256Hex(text) {
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 // Case studies cut across categories: any work with a written study counts.
 const hasCaseStudy = (work) => work.category === "Case Study" || Boolean(work.study);
@@ -148,7 +141,7 @@ function CardPlaceholder({ category, tag }) {
         }}
       />
       <div className="relative z-10">
-        <span className="text-[10px] font-sans font-semibold tracking-widest text-[#6e6e73] uppercase">
+        <span className="text-[10px] font-sans font-semibold tracking-widest text-ink-muted uppercase">
           {tag || category}
         </span>
       </div>
@@ -420,7 +413,7 @@ export default function WorksList() {
   const handlePinSubmit = async (e) => {
     e.preventDefault();
     if (pin.length !== 6 || !lockedTool) return;
-    if ((await sha256Hex(pin)) === ACCESS_CODE_HASH) {
+    if (await verifyAccessPin(pin)) {
       const work = lockedTool;
       setLockedTool(null);
       setPin("");
@@ -435,7 +428,7 @@ export default function WorksList() {
 
   const openWork = (work) => {
     const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
-    const isInternal = work.category === "Internal Tools" || work.isInternal;
+    const isInternal = (work.category === "Internal Tools" || work.isInternal) && !work.semiUnlocked;
     // Every work opens its own page first; the outside link (repo, store, article)
     // is the button on that page.
     const destinationHref = `/works/${work.slug}`;
@@ -498,7 +491,7 @@ export default function WorksList() {
               transition={SPRING.press}
               aria-pressed={isActive}
               className={`relative flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
-                isActive ? "text-[#1d1d1f]" : "text-[#6e6e73] hover:text-[#1d1d1f]"
+                isActive ? "text-ink" : "text-ink-muted hover:text-ink"
               }`}
             >
               {isActive && (
@@ -512,8 +505,8 @@ export default function WorksList() {
               <span
                 className={`relative z-10 text-[10px] font-sans px-1.5 py-0.2 rounded-full transition-colors ${
                   isActive
-                    ? "bg-black/[0.07] text-[#1d1d1f] font-semibold"
-                    : "bg-black/[0.03] text-[#6e6e73]"
+                    ? "bg-black/[0.07] text-ink font-semibold"
+                    : "bg-black/[0.03] text-ink-muted"
                 }`}
               >
                 {count}
@@ -528,7 +521,7 @@ export default function WorksList() {
 
         {/* Inline Search Bar */}
         <div className="relative flex items-center rounded-full bg-white/70 focus-within:bg-white border border-black/[0.06] focus-within:border-black/[0.25] shadow-sm transition-all duration-300 min-w-0 flex-1 sm:flex-none sm:w-44 md:w-52 focus-within:sm:w-56 md:focus-within:w-64 h-9 sm:h-8 px-2.5">
-          <Search size={13} className="text-[#6e6e73] shrink-0 mr-1.5" />
+          <Search size={13} className="text-ink-muted shrink-0 mr-1.5" />
           <input
             ref={searchInputRef}
             type="text"
@@ -538,7 +531,7 @@ export default function WorksList() {
               setCurrentPage(1);
             }}
             placeholder="Search..."
-            className="w-full text-xs font-sans placeholder-[#6e6e73] text-[#1d1d1f] bg-transparent outline-none pr-4"
+            className="w-full text-xs font-sans placeholder-ink-muted text-ink bg-transparent outline-none pr-4"
           />
           {searchQuery ? (
             <button
@@ -548,13 +541,13 @@ export default function WorksList() {
                 setCurrentPage(1);
                 searchInputRef.current?.focus();
               }}
-              className="absolute right-2 p-0.5 rounded-full text-[#6e6e73] hover:text-[#1d1d1f] transition-colors"
+              className="absolute right-2 p-0.5 rounded-full text-ink-muted hover:text-ink transition-colors"
               aria-label="Clear search"
             >
               <X size={12} />
             </button>
           ) : (
-            <div className="absolute right-2 pointer-events-none hidden sm:flex items-center text-[10px] font-mono text-[#6e6e73] bg-[#f5f5f7] rounded px-1 py-0.2 border border-black/[0.04]">
+            <div className="absolute right-2 pointer-events-none hidden sm:flex items-center text-[10px] font-mono text-ink-muted bg-[#f5f5f7] rounded px-1 py-0.2 border border-black/[0.04]">
               <span>/</span>
             </div>
           )}
@@ -563,11 +556,11 @@ export default function WorksList() {
         {/* Filter box (phones): a native select, so the OS picker does the work. */}
         <label className="relative flex sm:hidden shrink-0 items-center h-9 rounded-full bg-white border border-black/[0.06] shadow-sm focus-within:border-black/[0.25]">
           <span className="sr-only">Filter by category</span>
-          <SlidersHorizontal size={13} className="pointer-events-none absolute left-3 text-[#6e6e73]" />
+          <SlidersHorizontal size={13} className="pointer-events-none absolute left-3 text-ink-muted" />
           <select
             value={filter}
             onChange={(e) => handleFilterClick(e.target.value)}
-            className="h-full appearance-none bg-transparent pl-8 pr-8 text-xs font-sans font-medium text-[#1d1d1f] outline-none"
+            className="h-full appearance-none bg-transparent pl-8 pr-8 text-xs font-sans font-medium text-ink outline-none"
           >
             {CATEGORY_TABS.map((tab) => (
               <option key={tab.key} value={tab.key}>
@@ -575,15 +568,15 @@ export default function WorksList() {
               </option>
             ))}
           </select>
-          <ChevronDown size={13} className="pointer-events-none absolute right-3 text-[#6e6e73]" />
+          <ChevronDown size={13} className="pointer-events-none absolute right-3 text-ink-muted" />
         </label>
       </div>
 
       {/* Search Result Feedback Indicator */}
       {searchQuery.trim() && (
-        <div className="flex items-center justify-between px-2 text-xs text-[#6e6e73] font-sans -mt-2 mb-1">
+        <div className="flex items-center justify-between px-2 text-xs text-ink-muted font-sans -mt-2 mb-1">
           <span>
-            Found <strong className="text-[#1d1d1f] font-medium">{filteredWorks.length}</strong>{" "}
+            Found <strong className="text-ink font-medium">{filteredWorks.length}</strong>{" "}
             {filteredWorks.length === 1 ? "result" : "results"} for &ldquo;{searchQuery}&rdquo;
             {filter !== "All" ? ` in ${filter}` : ""}
           </span>
@@ -603,13 +596,13 @@ export default function WorksList() {
       {/* Grid of Works or Empty State */}
       {filteredWorks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center rounded-3xl bg-[#f5f5f7]/60 border border-black/[0.04] my-4">
-          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#6e6e73] mb-4 shadow-sm border border-black/[0.04]">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-ink-muted mb-4 shadow-sm border border-black/[0.04]">
             <Search size={20} />
           </div>
-          <h3 className="text-lg font-sans font-semibold text-[#1d1d1f] mb-1">
+          <h3 className="text-lg font-sans font-semibold text-ink mb-1">
             No matching works found
           </h3>
-          <p className="text-sm text-[#6e6e73] max-w-sm font-sans mb-5 leading-relaxed">
+          <p className="text-sm text-ink-muted max-w-sm font-sans mb-5 leading-relaxed">
             We couldn&apos;t find anything matching &ldquo;{searchQuery}&rdquo;
             {filter !== "All" ? ` in ${filter}` : ""}. Try adjusting your keywords or clearing the category filter.
           </p>
@@ -618,7 +611,7 @@ export default function WorksList() {
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="px-4 py-2 bg-[#1d1d1f] text-white rounded-full text-xs font-sans font-medium hover:bg-[#333336] transition-all shadow-sm"
+                className="px-4 py-2 bg-ink text-white rounded-full text-xs font-sans font-medium hover:bg-[#333336] transition-all shadow-sm"
               >
                 Clear Search
               </button>
@@ -630,7 +623,7 @@ export default function WorksList() {
                   setListDirection(1);
                   setFilter("All");
                 }}
-                className="px-4 py-2 bg-white text-[#1d1d1f] border border-black/[0.08] rounded-full text-xs font-sans font-medium hover:bg-[#f5f5f7] transition-all shadow-sm"
+                className="px-4 py-2 bg-white text-ink border border-black/[0.08] rounded-full text-xs font-sans font-medium hover:bg-[#f5f5f7] transition-all shadow-sm"
               >
                 View All Works
               </button>
@@ -661,7 +654,7 @@ export default function WorksList() {
             <AnimatePresence mode="popLayout" initial={intro}>
               {paginatedWorks.map((work, index) => {
                 const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
-                const isInternal = work.category === "Internal Tools" || work.isInternal;
+                const isInternal = (work.category === "Internal Tools" || work.isInternal) && !work.semiUnlocked;
                 return (
                   <AnimatedWorkRow
                     key={work.id}
@@ -688,22 +681,22 @@ export default function WorksList() {
                     <div className="py-4 px-6 min-w-0 flex items-center gap-2.5">
                       {isAIVideo && <Play size={11} className="text-purple-500 fill-purple-500 shrink-0" />}
                       {isInternal && <Lock size={11} className="text-orange-500 shrink-0" />}
-                      <span className="font-semibold text-[13px] text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors line-clamp-1">
+                      <span className="font-semibold text-[13px] text-ink group-hover:text-[#0071e3] transition-colors line-clamp-1">
                         {work.title}
                       </span>
                     </div>
                     <div className="py-4 px-6 min-w-0 flex items-center">
-                      <span className="text-[11px] font-mono text-[#6e6e73] truncate">
+                      <span className="text-[11px] font-mono text-ink-muted truncate">
                         {work.tag}
                       </span>
                     </div>
                     <div className="py-4 px-6 min-w-0 flex items-center">
-                      <span className="text-[13px] text-[#515154] line-clamp-1 font-sans">
+                      <span className="text-[13px] text-ink-secondary line-clamp-1 font-sans">
                         {work.description}
                       </span>
                     </div>
                     <div className="py-4 px-6 flex items-center justify-end">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f5f5f7] border border-black/[0.04] text-[#515154] whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f5f5f7] border border-black/[0.04] text-ink-secondary whitespace-nowrap">
                         {getCategoryIcon(work.category)}
                         {work.category}
                       </span>
@@ -719,7 +712,7 @@ export default function WorksList() {
             <AnimatePresence mode="popLayout" initial={intro}>
               {paginatedWorks.map((work, index) => {
                 const isAIVideo = work.category === "AI Videos" || Boolean(work.videoSrc);
-                const isInternal = work.category === "Internal Tools" || work.isInternal;
+                const isInternal = (work.category === "Internal Tools" || work.isInternal) && !work.semiUnlocked;
                 return (
                   <AnimatedWorkRow
                     key={work.id}
@@ -749,15 +742,15 @@ export default function WorksList() {
                     </div>
                     <div className="flex-1 min-w-0">
                       {/* Under the title, not beside it, so the description keeps the width. */}
-                      <span className="inline-flex max-w-full items-center gap-1 text-[10px] font-medium uppercase tracking-[0.08em] text-[#6e6e73]">
+                      <span className="inline-flex max-w-full items-center gap-1 text-[10px] font-medium uppercase tracking-[0.08em] text-ink-muted">
                         {getCategoryIcon(work.category)}
                         <span className="truncate">{work.tag || work.category}</span>
                       </span>
                       <div className="mt-0.5 flex items-center gap-1.5">
-                        <span className="font-semibold text-[15px] leading-snug tracking-[-0.01em] text-[#1d1d1f] line-clamp-1">{work.title}</span>
+                        <span className="font-semibold text-[15px] leading-snug tracking-[-0.01em] text-ink line-clamp-1">{work.title}</span>
                         {isInternal && <Lock size={11} className="text-orange-500 shrink-0" />}
                       </div>
-                      <p className="mt-0.5 text-[13px] leading-snug text-[#6e6e73] line-clamp-2">{work.description}</p>
+                      <p className="mt-0.5 text-[13px] leading-snug text-ink-muted line-clamp-2">{work.description}</p>
                     </div>
                     <ChevronRight size={16} className="shrink-0 text-[#c7c7cc]" aria-hidden />
                   </AnimatedWorkRow>
@@ -826,10 +819,10 @@ export default function WorksList() {
       {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="mt-6 flex flex-col items-center gap-3 sm:mt-10 sm:gap-4">
-          <p className="text-xs text-[#6e6e73] font-sans">
-            Showing <span className="font-medium text-[#1d1d1f]">{startIndex + 1}</span>–
-            <span className="font-medium text-[#1d1d1f]">{endIndex}</span> of{" "}
-            <span className="font-medium text-[#1d1d1f]">{filteredWorks.length}</span> productions
+          <p className="text-xs text-ink-muted font-sans">
+            Showing <span className="font-medium text-ink">{startIndex + 1}</span>–
+            <span className="font-medium text-ink">{endIndex}</span> of{" "}
+            <span className="font-medium text-ink">{filteredWorks.length}</span> productions
           </p>
 
           <nav
@@ -854,8 +847,8 @@ export default function WorksList() {
               transition={SPRING.press}
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
                 validCurrentPage <= 1
-                  ? "opacity-30 cursor-not-allowed text-[#6e6e73]"
-                  : "text-[#1d1d1f] hover:bg-white hover:shadow-sm"
+                  ? "opacity-30 cursor-not-allowed text-ink-muted"
+                  : "text-ink hover:bg-white hover:shadow-sm"
               }`}
             >
               <ChevronLeft size={16} />
@@ -880,7 +873,7 @@ export default function WorksList() {
                   aria-label={`Page ${pageNum}`}
                   aria-current={isActive ? "page" : undefined}
                   className={`relative flex h-8 min-w-8 sm:h-9 sm:min-w-9 items-center justify-center px-3 rounded-full text-xs sm:text-[13px] font-sans font-medium transition-colors select-none ${
-                    isActive ? "text-[#1d1d1f]" : "text-[#6e6e73] hover:text-[#1d1d1f]"
+                    isActive ? "text-ink" : "text-ink-muted hover:text-ink"
                   }`}
                 >
                   {isActive && (
@@ -913,8 +906,8 @@ export default function WorksList() {
               transition={SPRING.press}
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs transition-colors select-none ${
                 validCurrentPage >= totalPages
-                  ? "opacity-30 cursor-not-allowed text-[#6e6e73]"
-                  : "text-[#1d1d1f] hover:bg-white hover:shadow-sm"
+                  ? "opacity-30 cursor-not-allowed text-ink-muted"
+                  : "text-ink hover:bg-white hover:shadow-sm"
               }`}
             >
               <ChevronRight size={16} />
@@ -958,22 +951,22 @@ export default function WorksList() {
             >
               <button
                 onClick={() => setLockedTool(null)}
-                className="absolute top-5 right-5 text-[#6e6e73] hover:text-[#1d1d1f] transition-colors p-1"
+                className="absolute top-5 right-5 text-ink-muted hover:text-ink transition-colors p-1"
                 aria-label="Close"
               >
                 <X size={18} />
               </button>
 
               <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 rounded-full bg-[#f5f5f7] flex items-center justify-center text-[#1d1d1f] mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#f5f5f7] flex items-center justify-center text-ink mb-4">
                   <Lock size={20} />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-sans font-semibold text-[#1d1d1f] mb-1.5">
+                <h3 className="text-xl sm:text-2xl font-sans font-semibold text-ink mb-1.5">
                   Restricted Access
                 </h3>
-                <p className="text-sm text-[#6e6e73] font-sans mb-6">
+                <p className="text-sm text-ink-muted font-sans mb-6">
                   Enter the 6-digit access code to unlock{" "}
-                  <span className="font-semibold text-[#1d1d1f]">{lockedTool.title}</span>.
+                  <span className="font-semibold text-ink">{lockedTool.title}</span>.
                 </p>
 
                 <form onSubmit={handlePinSubmit} className="w-full flex flex-col items-center">
@@ -1003,7 +996,7 @@ export default function WorksList() {
                   <button
                     type="submit"
                     disabled={pin.length !== 6}
-                    className="w-full py-3 bg-[#1d1d1f] text-white rounded-full text-sm font-sans font-medium hover:bg-[#333336] transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+                    className="w-full py-3 bg-ink text-white rounded-full text-sm font-sans font-medium hover:bg-[#333336] transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
                   >
                     Unlock Tool
                   </button>

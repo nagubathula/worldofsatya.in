@@ -1,35 +1,63 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { playPopSound, playTickSound, playWhooshSound } from "./SoundEffects";
+import { Check, Copy, Smartphone } from "lucide-react";
+import { playPopSound, playTickSound, playTingSound, playWhooshSound } from "./SoundEffects";
+import { QRCodeSvg } from "@/lib/qr";
+import { TOKENS } from "@/lib/tokens";
 
 // Pieces that answer to the phone itself: tilt it, shake it. Every one has a
 // mouse stand-in, so a laptop gets the same toys.
 
+const SENSOR_MOBILE_URL = "https://worldofsatya.in/ui/sensors";
+const DESKTOP_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
+
+function subscribeDesktop(onChange) {
+  const query = window.matchMedia(DESKTOP_POINTER_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function useIsDesktopPointer() {
+  return useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(DESKTOP_POINTER_QUERY).matches,
+    () => false
+  );
+}
+
 const clamp = (v, min = -1, max = 1) => Math.min(max, Math.max(min, v));
+
+const COARSE_POINTER_QUERY = "(pointer: coarse)";
+
+function subscribeCoarse(onChange) {
+  const query = window.matchMedia(COARSE_POINTER_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
 
 // iOS asks before it hands over motion sensors, and only from a tap.
 function useMotionPermission() {
-  const [needed, setNeeded] = useState(false);
-  useEffect(() => {
-    // Touch screens only: some desktop browsers expose the call but have no sensors.
-    setNeeded(
+  const supported = useSyncExternalStore(
+    subscribeCoarse,
+    () =>
       typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function" &&
-        window.matchMedia("(pointer: coarse)").matches
-    );
-  }, []);
+      typeof DeviceOrientationEvent.requestPermission === "function" &&
+      window.matchMedia(COARSE_POINTER_QUERY).matches,
+    () => false
+  );
+  const [granted, setGranted] = useState(false);
   const request = useCallback(async () => {
     try {
       const results = await Promise.all([
         DeviceOrientationEvent.requestPermission?.(),
         typeof DeviceMotionEvent !== "undefined" ? DeviceMotionEvent.requestPermission?.() : "granted",
       ]);
-      if (results.every((r) => r === "granted" || r === undefined)) setNeeded(false);
+      if (results.every((r) => r === "granted" || r === undefined)) setGranted(true);
     } catch {}
   }, []);
-  return { needed, request };
+  return { needed: supported && !granted, request };
 }
 
 // Tilt as two springs from -1 to 1: the phone's angle where there is one, the
@@ -78,7 +106,10 @@ function useTilt(ref) {
 // over the element (four turns inside 700ms).
 function useShake(ref, onShake) {
   const callback = useRef(onShake);
-  callback.current = onShake;
+
+  useEffect(() => {
+    callback.current = onShake;
+  }, [onShake]);
 
   useEffect(() => {
     let last = null;
@@ -137,8 +168,8 @@ function Cell({ label, hint, children }) {
       {/* Stretched, so the whole cell answers the mouse, not just the toy in it. */}
       <div className="flex w-full flex-1 items-stretch justify-center">{children}</div>
       <div className="text-center">
-        <p className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#6e6e73]">{label}</p>
-        <p className="mt-1 text-[11px] text-[#6e6e73]">{hint}</p>
+        <p className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-muted">{label}</p>
+        <p className="mt-1 text-[11px] text-ink-muted">{hint}</p>
       </div>
     </div>
   );
@@ -159,7 +190,7 @@ function HoloCard() {
     <div ref={ref} className="grid h-full w-full place-items-center p-4" style={{ perspective: 700 }}>
       <motion.div
         className="relative h-[170px] w-[120px] overflow-hidden rounded-2xl shadow-[0_20px_40px_-14px_rgba(40,30,120,0.5)]"
-        style={{ rotateX, rotateY, background: "#1d1d1f" }}
+        style={{ rotateX, rotateY, background: TOKENS.ink }}
       >
         <motion.span
           className="absolute inset-0 opacity-70 mix-blend-screen"
@@ -203,7 +234,7 @@ function Die({ value, roll, delay }) {
         <span
           key={i}
           className="absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ left: `${px}%`, top: `${py}%`, background: value === 1 ? "#ff375f" : "#1d1d1f" }}
+          style={{ left: `${px}%`, top: `${py}%`, background: value === 1 ? "#ff375f" : TOKENS.ink }}
         />
       ))}
     </motion.div>
@@ -236,7 +267,7 @@ function ShakeDice() {
       <button
         type="button"
         onClick={rollDice}
-        className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-[#1d1d1f] outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
+        className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-ink outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
       >
         Roll · {dice[0] + dice[1]}
       </button>
@@ -287,15 +318,58 @@ function MarbleLevel() {
           style={{ x: mx, y: my }}
         />
       </div>
-      <p className="font-mono text-[12px] tabular-nums text-[#1d1d1f]" aria-live="off">
+      <p className="font-mono text-[12px] tabular-nums text-ink" aria-live="off">
         {level}
       </p>
     </div>
   );
 }
 
+function DesktopPhoneQR() {
+  const [copied, setCopied] = useState(false);
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(SENSOR_MOBILE_URL);
+    } catch {}
+    setCopied(true);
+    playTingSound(2093, 0.045);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 1600);
+  };
+
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-black/[0.05] bg-white/80 px-4 py-3">
+      <div className="flex items-center gap-4">
+        <div className="shrink-0 overflow-hidden rounded-xl border border-black/[0.08] bg-white p-1.5 text-ink shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <QRCodeSvg value={SENSOR_MOBILE_URL} size={64} />
+        </div>
+        <div className="min-w-0">
+          <p className="inline-flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink">
+            <Smartphone size={12} className="text-[#5b4cf0]" /> Open on your phone
+          </p>
+          <p className="mt-1 text-[12.5px] leading-snug text-ink-secondary">
+            Scan to test live gyroscope tilt, accelerometer shake, and haptics on mobile.
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={copy}
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-[12px] font-medium text-ink transition-colors hover:bg-[#f5f5f7] outline-none focus-visible:ring-2 focus-visible:ring-[#0879a0]"
+      >
+        {copied ? <Check size={13} className="text-[#1f9d55]" /> : <Copy size={13} />}
+        {copied ? "Copied!" : "Copy URL"}
+      </button>
+    </div>
+  );
+}
+
 export default function SensorLab() {
   const { needed, request } = useMotionPermission();
+  const isDesktop = useIsDesktopPointer();
   return (
     <div className="flex w-full flex-col gap-3 p-3 sm:gap-4 sm:p-6">
       {needed && (
@@ -318,6 +392,7 @@ export default function SensorLab() {
           <MarbleLevel />
         </Cell>
       </div>
+      {isDesktop && <DesktopPhoneQR />}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { CameraControls, CameraControlsImpl, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { galleryWorks, layoutGallery, viewForCluster } from "@/data/galleryWorks";
+import { TOKENS } from "@/lib/tokens";
 
 const ACTION = CameraControlsImpl.ACTION;
 const BACKGROUND = "#ffffff";
@@ -127,7 +128,7 @@ function makePlaceholderTexture(item) {
   ctx.fillText(String(item.title || "Poster"), 84, height * 0.5);
   ctx.fillStyle = "#2ec4f0";
   ctx.fillRect(88, height * 0.5 + 44, 160, 6);
-  ctx.fillStyle = "#6e6e73";
+  ctx.fillStyle = TOKENS.inkMuted;
   ctx.font = `500 30px ${sans}`;
   ctx.fillText(String(item.category || ""), 88, height * 0.5 + 110);
   const texture = new THREE.CanvasTexture(canvas);
@@ -468,7 +469,7 @@ function ClusterLabel({ cluster, dim }) {
       wrapperClass="pointer-events-none"
       style={{ pointerEvents: "none" }}
     >
-      <div ref={el} className="select-none whitespace-nowrap text-[13px] font-medium tracking-[-0.01em] text-[#6e6e73]">
+      <div ref={el} className="select-none whitespace-nowrap text-[13px] font-medium tracking-[-0.01em] text-ink-muted">
         {cluster.category}
       </div>
     </Html>
@@ -711,7 +712,7 @@ export default function CanvasGallery({ nav, reduceMotion, onSelect, onDismiss, 
 
   if (failed) {
     return (
-      <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-[#6e6e73]">
+      <div className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-ink-muted">
         This browser can’t open the 3D archive. Try a current desktop browser with WebGL enabled.
       </div>
     );

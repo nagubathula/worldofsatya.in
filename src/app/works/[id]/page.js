@@ -12,6 +12,7 @@ import { caseStudiesData } from "@/data/caseStudies";
 import CaseStudyBody from "@/components/CaseStudyBody";
 import NoiseStage from "@/components/NoiseStage";
 import Magnetic from "@/components/Magnetic";
+import RestrictedAppButton from "@/components/RestrictedAppButton";
 import { CaseStudyContents, CountUp, ReadingProgress, RevealOnScroll } from "@/components/CaseStudyChrome";
 
 const findStudy = (work) => work.study && caseStudiesData.find((study) => study.slug === work.study);
@@ -89,21 +90,31 @@ export default async function WorkDetailPage({ params }) {
 
   const study = findStudy(work);
   if (study) {
+    const action = work.semiUnlocked ? (
+      <RestrictedAppButton
+        title={work.title}
+        label={work.actionText || "Live App (Restricted)"}
+        repoUrl={work.restrictedRepoUrl}
+      />
+    ) : (
+      hasLink && (
+        <Magnetic max={6}>
+          <LinkComponent
+            {...linkProps}
+            className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-[0_6px_20px_-8px_rgba(0,0,0,0.45)] transition-[background-color,transform,box-shadow] duration-200 hover:bg-[#333336] hover:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)] active:scale-95"
+          >
+            {work.actionText}
+            <ArrowUpRight size={17} className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </LinkComponent>
+        </Magnetic>
+      )
+    );
+
     return (
       <CaseStudy
         study={study}
         work={work}
-        action={hasLink && (
-          <Magnetic max={6}>
-            <LinkComponent
-              {...linkProps}
-              className="group inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white shadow-[0_6px_20px_-8px_rgba(0,0,0,0.45)] transition-[background-color,transform,box-shadow] duration-200 hover:bg-[#333336] hover:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)] active:scale-95"
-            >
-              {work.actionText}
-              <ArrowUpRight size={17} className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </LinkComponent>
-          </Magnetic>
-        )}
+        action={action}
         prevWork={prevWork}
         nextWork={nextWork}
       />
@@ -114,15 +125,15 @@ export default async function WorkDetailPage({ params }) {
     <div className="min-h-screen relative w-full">
       <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-12 sm:pb-20">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 mb-8 sm:mb-16">
-          <BackToWorks className="mb-8 inline-block text-sm text-[#515154] hover:text-black" />
+          <BackToWorks className="mb-8 inline-block text-sm text-ink-secondary hover:text-black" />
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6 sm:mb-8">
-            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#f5f5f7] text-xs sm:text-[13px] font-sans font-medium text-[#6e6e73] uppercase tracking-wider border border-black/[0.04]">
+            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#f5f5f7] text-xs sm:text-[13px] font-sans font-medium text-ink-muted uppercase tracking-wider border border-black/[0.04]">
               {getIcon(work.category)}
               {work.category}
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-sans font-semibold tracking-[-0.035em] text-[#1d1d1f] mb-6 sm:mb-10 text-center leading-[1.08] max-w-5xl mx-auto">
+          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-sans font-semibold tracking-[-0.035em] text-ink mb-6 sm:mb-10 text-center leading-[1.08] max-w-5xl mx-auto">
             {work.title}
           </h1>
           
@@ -130,7 +141,7 @@ export default async function WorkDetailPage({ params }) {
             {hasLink && (
               <LinkComponent
                 {...linkProps}
-                className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#1d1d1f] text-white rounded-full font-sans font-medium shadow-sm hover:bg-[#333336] active:scale-95 transition-all duration-150 text-sm sm:text-base"
+                className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-ink text-white rounded-full font-sans font-medium shadow-sm hover:bg-[#333336] active:scale-95 transition-all duration-150 text-sm sm:text-base"
               >
                 {work.actionText} <ArrowUpRight size={17} />
               </LinkComponent>
@@ -172,11 +183,11 @@ export default async function WorkDetailPage({ params }) {
             ) : null}
             
             {/* One column at a comfortable reading width. */}
-            <div className="prose prose-base sm:prose-lg font-sans text-[#515154] leading-relaxed max-w-3xl mx-auto mt-8 sm:mt-12">
+            <div className="prose prose-base sm:prose-lg font-sans text-ink-secondary leading-relaxed max-w-3xl mx-auto mt-8 sm:mt-12">
               {work.content ? (
                 <div dangerouslySetInnerHTML={{ __html: work.content }} />
               ) : (
-                <div className="flex flex-col items-center justify-center py-20 text-center text-[#6e6e73] col-span-full">
+                <div className="flex flex-col items-center justify-center py-20 text-center text-ink-muted col-span-full">
                   <BookOpen size={40} className="mb-4 text-neutral-300" />
                   <p className="text-lg">Detailed project notes and process breakdown coming soon.</p>
                 </div>
@@ -226,7 +237,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
       <RevealOnScroll />
       <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-16">
         <div className="mx-auto w-full max-w-3xl px-4 sm:px-8">
-          <BackToWorks className="cs-rise mb-10 inline-block text-sm text-[#515154] hover:text-black" />
+          <BackToWorks className="cs-rise mb-10 inline-block text-sm text-ink-secondary hover:text-black" />
           <header>
             {study.logo && (
               <Image
@@ -239,19 +250,19 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
                 style={{ "--cs-i": 0 }}
               />
             )}
-            <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-[#6e6e73]" style={{ "--cs-i": 1 }}>
+            <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-ink-muted" style={{ "--cs-i": 1 }}>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.05] bg-[#f5f5f7] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#626267]">
-                <BookOpen size={11} className="text-[#8c9385]" /> {study.type}
+                <BookOpen size={11} className="text-sage" /> {study.type}
               </span>
               <span className="whitespace-nowrap tabular-nums">
                 {minutes} min read <span aria-hidden="true" className="mx-1.5">·</span> {sections.length} sections
               </span>
             </div>
-            <h1 className="mt-6 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[#1d1d1f] [text-wrap:balance] sm:text-6xl lg:text-[4.25rem]">
+            <h1 className="mt-6 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-ink [text-wrap:balance] sm:text-6xl lg:text-[4.25rem]">
               <RisingWords text={study.title} from={2} />
             </h1>
             <p
-              className="cs-rise mt-6 max-w-2xl text-lg leading-relaxed text-[#515154] [text-wrap:pretty] sm:text-xl sm:leading-relaxed"
+              className="cs-rise mt-6 max-w-2xl text-lg leading-relaxed text-ink-secondary [text-wrap:pretty] sm:text-xl sm:leading-relaxed"
               style={{ "--cs-i": titleWords + 3 }}
             >
               {study.heroDescription}
@@ -260,7 +271,7 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
               {action}
               <a
                 href={`#${sections[0].id}`}
-                className="group inline-flex items-center gap-2 text-sm font-medium text-[#515154] transition-colors hover:text-[#1d1d1f]"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-ink-secondary transition-colors hover:text-ink"
               >
                 Start reading
                 <span aria-hidden="true" className="transition-transform duration-300 ease-out group-hover:translate-y-0.5">↓</span>
@@ -275,8 +286,8 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
             >
               {study.meta.map((item) => (
                 <div key={item.label}>
-                  <dt className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#6e6e73]">{item.label}</dt>
-                  <dd className="mt-1.5 text-sm leading-snug text-[#1d1d1f]">{item.value}</dd>
+                  <dt className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-muted">{item.label}</dt>
+                  <dd className="mt-1.5 text-sm leading-snug text-ink">{item.value}</dd>
                 </div>
               ))}
             </dl>
@@ -291,10 +302,10 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
                   className="cs-rise group rounded-2xl border border-black/[0.04] bg-[#f5f5f7] px-4 py-4 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_10px_30px_-16px_rgba(0,0,0,0.25)]"
                   style={{ "--cs-i": titleWords + 6 + i }}
                 >
-                  <p className="text-2xl font-semibold tabular-nums tracking-[-0.03em] text-[#1d1d1f] sm:text-[1.75rem]">
+                  <p className="text-2xl font-semibold tabular-nums tracking-[-0.03em] text-ink sm:text-[1.75rem]">
                     <CountUp value={item.value} delay={0.45 + (titleWords + 6 + i) * 0.045} />
                   </p>
-                  <p className="mt-1 text-[13px] leading-snug text-[#6e6e73]">{item.label}</p>
+                  <p className="mt-1 text-[13px] leading-snug text-ink-muted">{item.label}</p>
                 </li>
               ))}
             </ul>
@@ -343,21 +354,21 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
           <article className="flex max-w-2xl flex-col gap-16 sm:gap-20">
             {study.content.map((section, idx) => (
               <section key={idx} id={sections[idx].id} data-cs-reveal="" className="scroll-mt-28">
-                <div className="flex items-baseline gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-[#6e6e73]">
-                  <span className="tabular-nums text-[#1d1d1f]">{String(idx + 1).padStart(2, "0")}</span>
+                <div className="flex items-baseline gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-muted">
+                  <span className="tabular-nums text-ink">{String(idx + 1).padStart(2, "0")}</span>
                   <span className="h-px w-8 bg-black/15" aria-hidden="true" />
                   <span className="tabular-nums">{String(sections.length).padStart(2, "0")}</span>
                 </div>
-                <h2 className="mt-3 text-[1.65rem] font-semibold leading-tight tracking-[-0.035em] text-[#1d1d1f] [text-wrap:balance] sm:text-3xl">
+                <h2 className="mt-3 text-[1.65rem] font-semibold leading-tight tracking-[-0.035em] text-ink [text-wrap:balance] sm:text-3xl">
                   {section.section}
                 </h2>
-                <div className="mt-5 flex flex-col gap-5 text-[17px] leading-[1.75] text-[#515154] [text-wrap:pretty]">
+                <div className="mt-5 flex flex-col gap-5 text-[17px] leading-[1.75] text-ink-secondary [text-wrap:pretty]">
                   <CaseStudyBody text={section.body} seed={work.slug} />
                 </div>
               </section>
             ))}
             {study.source && (
-              <p className="border-t border-black/[0.08] pt-6 text-sm text-[#6e6e73]">
+              <p className="border-t border-black/[0.08] pt-6 text-sm text-ink-muted">
                 Originally published on{" "}
                 <a href={study.source} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-black">
                   Medium

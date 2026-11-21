@@ -58,7 +58,7 @@ function StatTile({ stat, index, total }) {
       <span className="mt-6 text-6xl font-semibold tracking-[-0.05em] sm:text-7xl">
         <CountUp value={stat.value} />
       </span>
-      <span className={`mt-3 text-[11px] font-medium uppercase tracking-[0.16em] ${dark ? "text-white/60" : "text-[#6e6e73]"}`}>
+      <span className={`mt-3 text-[11px] font-medium uppercase tracking-[0.16em] ${dark ? "text-white/60" : "text-ink-muted"}`}>
         {stat.label}
       </span>
     </div>
@@ -69,10 +69,10 @@ function StatsIntro({ hint }) {
   return (
     <div className="flex w-full flex-col justify-center pr-4 sm:w-[60vw] sm:max-w-[280px] sm:shrink-0">
       <h2 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#111111] sm:text-5xl">By the numbers</h2>
-      <p className="mt-3 text-sm text-[#6e6e73]">Four years of design, engineering, and AI work.</p>
+      <p className="mt-3 text-sm text-ink-muted">Four years of design, engineering, and AI work.</p>
       {/* The row moves sideways as you scroll down; say so. */}
       {hint && (
-        <p className="mt-6 flex items-center gap-2 text-xs font-medium text-[#6e6e73]">
+        <p className="mt-6 flex items-center gap-2 text-xs font-medium text-ink-muted">
           Scroll
           <motion.span aria-hidden="true" animate={{ x: [0, 4, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}>
             →
@@ -117,7 +117,7 @@ function StatsGrid() {
               <span className={`font-semibold tracking-[-0.05em] ${dark ? "text-6xl" : "text-5xl"}`}>
                 <CountUp value={stat.value} />
               </span>
-              <span className={`mt-2 text-[10px] font-medium uppercase leading-snug tracking-[0.14em] ${dark ? "text-white/60" : "text-[#6e6e73]"}`}>
+              <span className={`mt-2 text-[10px] font-medium uppercase leading-snug tracking-[0.14em] ${dark ? "text-white/60" : "text-ink-muted"}`}>
                 {stat.label}
               </span>
             </div>
@@ -203,7 +203,7 @@ function StatsRow() {
 
 export default function AboutMe() {
   return (
-    <div className="mx-auto w-full max-w-6xl text-[#1d1d1f] flex flex-col gap-14 sm:gap-20 pb-16 sm:pb-24">
+    <div className="mx-auto w-full max-w-6xl text-ink flex flex-col gap-14 sm:gap-20 pb-16 sm:pb-24">
       {/* The page's heading, for screen readers and search; the page itself opens on the Venn. */}
       <h1 className="sr-only">About Satya Sai Nagubathula, AI + Design Engineer</h1>
 

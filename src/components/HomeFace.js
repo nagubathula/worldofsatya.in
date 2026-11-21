@@ -32,7 +32,7 @@ const PAGES = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Works", href: "/works" },
-  { label: "UI Lab", href: "/ui" },
+  { label: "UI Labs", href: "/ui" },
   { label: "Gallery", href: "/gallery" },
 ];
 
@@ -61,8 +61,14 @@ const item = {
 // back when you scroll up.
 export default function HomeFace() {
   const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setHidden(false);
+    setOpen(false);
+  }
   // Phones can't hover, so there the face is a button that opens the menu.
   const [touch, setTouch] = useState(false);
   // The open card is as tall as its list, measured once it is on the page.
@@ -126,8 +132,6 @@ export default function HomeFace() {
   }, [pathname, rideX, rideY, rideScale]);
 
   useEffect(() => {
-    setHidden(false);
-    setOpen(false);
     let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;

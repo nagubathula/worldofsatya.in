@@ -13,16 +13,16 @@ export const EXPERIENCES = [
     tags: ["Generative AI", "Product Design", "Fullstack", "AI Video", "Team Leadership"],
   },
   {
-    company: "CrestLogic",
-    role: "Product Engineer",
+    company: "Billjot",
+    role: "Founder",
     period: "11/2024 – 03/2025",
     isCurrent: false,
     location: "Hyderabad, India",
-    type: "Contract",
+    type: "Founder",
     logo: "/images/crestlogic-icon.svg",
     description:
-      "Branding, User Interface Design, and marketing funnel development for billjot.",
-    tags: ["Product Design", "Frontend", "Branding", "UI/UX"],
+      "Took Billjot from 0 to 1 (INR 2M in revenue): an offline-first POS, KOT kitchen routing, QR table ordering, live inventory alerts, and an Electron client now running on 500+ terminals across 584 restaurants.",
+    tags: ["Product Design", "Frontend", "Electron", "POS & ERP"],
   },
   {
     company: "APSPCL",

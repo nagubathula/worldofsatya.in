@@ -231,7 +231,8 @@ function WorksDeck({ items, go, reduceMotion }) {
 // Selected work as a hand of cards. Hover lifts a card out of the fan; a click
 // morphs its screenshot into the project page (see workMediaStyle). The card group
 // is named: the flip card around the fan is a `group` too.
-export default function WorksFan({ items, onNavigate, interactive, reduceMotion }) {
+// `showMore` hides the "view more works" link where the page has no works index (the one-pager).
+export default function WorksFan({ items, onNavigate, interactive, reduceMotion, showMore = true }) {
   const [active, setActive] = useState(null);
   const compact = useCompact();
   const count = items.length;
@@ -313,6 +314,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
       </div>
       )}
 
+      {showMore && (
       <motion.button
         type="button"
         onClick={(event) => go(event, "/works")}
@@ -323,6 +325,7 @@ export default function WorksFan({ items, onNavigate, interactive, reduceMotion 
       >
         view more works
       </motion.button>
+      )}
     </div>
   );
 }

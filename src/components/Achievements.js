@@ -65,13 +65,13 @@ export default function Achievements({ limit, page = false }) {
     >
       <div className="py-12 sm:py-16 w-full flex flex-col gap-8 sm:gap-10" suppressHydrationWarning>
         <motion.div variants={itemAnim} className="mb-2 sm:mb-8" suppressHydrationWarning>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-[#6e6e73] text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]" suppressHydrationWarning>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f5f5f7] text-ink-muted text-xs font-sans mb-4 uppercase tracking-wider font-medium border border-black/[0.04]" suppressHydrationWarning>
             <Trophy size={13} /> Recognition
           </div>
-          <Heading className="text-3xl sm:text-5xl font-sans font-semibold text-[#1d1d1f] tracking-[-0.03em] mb-3 sm:mb-4">
+          <Heading className="text-3xl sm:text-5xl font-sans font-semibold text-ink tracking-[-0.03em] mb-3 sm:mb-4">
             Achievements
           </Heading>
-          <p className="text-base sm:text-lg text-[#6e6e73] max-w-2xl leading-relaxed font-sans">
+          <p className="text-base sm:text-lg text-ink-muted max-w-2xl leading-relaxed font-sans">
             Milestones and awards from my journey in design and development.
           </p>
         </motion.div>
@@ -86,13 +86,13 @@ export default function Achievements({ limit, page = false }) {
                 className={`group flex flex-col p-6 sm:p-8 rounded-3xl bg-white border border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.05)] hover:border-black/[0.1] transition-all ${isLink ? 'cursor-pointer block' : ''}`}
               >
                 <div className="flex justify-between items-start mb-3 sm:mb-4" suppressHydrationWarning>
-                  <div suppressHydrationWarning className="p-2.5 rounded-full bg-[#f5f5f7] text-[#1d1d1f]">{item.icon}</div>
+                  <div suppressHydrationWarning className="p-2.5 rounded-full bg-[#f5f5f7] text-ink">{item.icon}</div>
                   {isLink && (
-                    <ArrowUpRight size={16} className="text-[#6e6e73] group-hover:text-[#1d1d1f] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight size={16} className="text-ink-muted group-hover:text-ink transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   )}
                 </div>
-                <h3 className="text-lg sm:text-xl font-sans font-semibold text-[#1d1d1f] tracking-tight mb-1.5 group-hover:text-black transition-colors">{item.title}</h3>
-                <p className="text-[#515154] text-sm sm:text-base leading-relaxed font-sans">{item.description}</p>
+                <h3 className="text-lg sm:text-xl font-sans font-semibold text-ink tracking-tight mb-1.5 group-hover:text-black transition-colors">{item.title}</h3>
+                <p className="text-ink-secondary text-sm sm:text-base leading-relaxed font-sans">{item.description}</p>
               </div>
             );
 
@@ -110,7 +110,7 @@ export default function Achievements({ limit, page = false }) {
         
         {limit && achievements.length > limit && (
           <motion.div variants={itemAnim} className="mt-4 sm:mt-8 flex justify-center" suppressHydrationWarning>
-            <Link href="/achievements" className="px-6 py-2.5 bg-[#1d1d1f] text-white rounded-full text-xs sm:text-sm font-sans font-medium hover:bg-[#333336] transition-all shadow-sm">
+            <Link href="/achievements" className="px-6 py-2.5 bg-ink text-white rounded-full text-xs sm:text-sm font-sans font-medium hover:bg-[#333336] transition-all shadow-sm">
               View More Achievements
             </Link>
           </motion.div>

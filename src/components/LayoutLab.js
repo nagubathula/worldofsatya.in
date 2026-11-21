@@ -13,7 +13,7 @@ function Cell({ label, children, className = "" }) {
   return (
     <div className={`relative flex min-h-[280px] flex-col rounded-2xl border border-black/[0.05] bg-white/70 p-4 ${className}`}>
       <div className="relative flex flex-1 items-center justify-center">{children}</div>
-      <p className="mt-4 text-center font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#6e6e73]">{label}</p>
+      <p className="mt-4 text-center font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-muted">{label}</p>
     </div>
   );
 }
@@ -54,7 +54,7 @@ function SlidingTabs() {
                 transition={SPRING.pill}
               />
             )}
-            <span className={`relative transition-colors duration-200 ${i === active ? "text-[#1d1d1f]" : "text-[#6e6e73]"}`}>{tab.label}</span>
+            <span className={`relative transition-colors duration-200 ${i === active ? "text-ink" : "text-ink-muted"}`}>{tab.label}</span>
           </button>
         ))}
       </div>
@@ -72,7 +72,7 @@ function SlidingTabs() {
             animate="center"
             exit="exit"
             transition={SPRING.enter}
-            className="absolute inset-0 flex items-center px-5 text-[14px] leading-snug text-[#515154]"
+            className="absolute inset-0 flex items-center px-5 text-[14px] leading-snug text-ink-secondary"
           >
             {TABS[active].body}
           </motion.p>
@@ -99,7 +99,7 @@ function TaskRow({ task }) {
       whileDrag={{ scale: 1.04, boxShadow: "0 12px 28px rgba(0,0,0,0.14)", zIndex: 2 }}
       transition={SPRING.enter}
       onDragEnd={() => playTickSound(1900, 0.05)}
-      className="relative flex h-11 select-none items-center gap-3 rounded-xl border border-black/[0.06] bg-white pl-2 pr-3 text-[13.5px] font-medium text-[#1d1d1f]"
+      className="relative flex h-11 select-none items-center gap-3 rounded-xl border border-black/[0.06] bg-white pl-2 pr-3 text-[13.5px] font-medium text-ink"
     >
       <span
         onPointerDown={(e) => {
@@ -202,12 +202,12 @@ function ToastStack() {
               <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#5b4cf0]/10 text-[#5b4cf0]">
                 <Bell size={14} />
               </span>
-              <span className="flex-1 truncate text-[13px] font-medium text-[#1d1d1f]">{toast.text}</span>
+              <span className="flex-1 truncate text-[13px] font-medium text-ink">{toast.text}</span>
               <button
                 type="button"
                 onClick={() => dismiss(toast.id)}
                 aria-label="Dismiss"
-                className="grid h-6 w-6 place-items-center rounded-full text-[#a1a1a6] hover:bg-black/[0.05] hover:text-[#1d1d1f]"
+                className="grid h-6 w-6 place-items-center rounded-full text-[#a1a1a6] hover:bg-black/[0.05] hover:text-ink"
               >
                 <X size={13} />
               </button>

@@ -17,13 +17,13 @@ export default function Works() {
         <header className="mx-auto mb-8 w-full max-w-5xl sm:mb-14">
           <div className="flex items-center gap-2 mb-4">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f5f5f7] text-[11px] font-sans font-medium text-[#626267] uppercase tracking-[0.16em] border border-black/[0.04]">
-              <Sparkles size={11} className="text-[#8c9385]" /> Ideas, Made Real
+              <Sparkles size={11} className="text-sage" /> Ideas, Made Real
             </span>
           </div>
-          <h1 className="mb-4 text-6xl font-semibold tracking-[-0.05em] text-[#1d1d1f] sm:text-8xl">
-            Works<span className="text-[#8c9385]">.</span>
+          <h1 className="mb-4 text-6xl font-semibold tracking-[-0.05em] text-ink sm:text-8xl">
+            Works<span className="text-sage">.</span>
           </h1>
-          <p className="max-w-2xl text-[15px] leading-relaxed text-[#515154] sm:text-lg">
+          <p className="max-w-2xl text-[15px] leading-relaxed text-ink-secondary sm:text-lg">
             Products I&apos;ve built, design case studies, generative AI videos, internal automation tools, and open-source systems. Everything lives together in one unified collection.
           </p>
         </header>
@@ -31,7 +31,7 @@ export default function Works() {
         <section id="collection" aria-label="Work collection" className="scroll-mt-24">
           <WorksList />
         </section>
-        <PageTurn prev={{ href: "/about", title: "About" }} next={{ href: "/ui", title: "UI Lab" }} />
+        <PageTurn prev={{ href: "/about", title: "About" }} next={{ href: "/ui", title: "UI Labs" }} />
       </main>
       <Footer />
     </div>

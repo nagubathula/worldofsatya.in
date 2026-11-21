@@ -1,0 +1,58 @@
+export const UI_LAB_NOTES = [
+  {
+    id: "interruptible-springs",
+    num: "01",
+    title: "Interruptible Springs vs. Duration Curves",
+    subtitle: "Why physical momentum survives mid-flight retargeting while cubic-bezier curves restart from zero velocity.",
+    readTime: "3 min read",
+    tags: ["Harmonic Oscillator", "Velocity Preservation", "Interruption"],
+    formula: "a = (-k·(x - target) - c·v) / m",
+    takeaways: [
+      "Duration curves bind position to normalized time t ∈ [0, 1]; reversing mid-flight snaps velocity or produces sluggish double-duration easing.",
+      "Springs carry state (position x, velocity v) into the next target—retaining physical inertia on rapid taps.",
+      "For slow-motion debugging (timeScale = s), scale stiffness by s² and damping by s so the damping ratio ζ = c / (2√km) stays identical.",
+    ],
+  },
+  {
+    id: "rubber-banding",
+    num: "02",
+    title: "Asymptotic Rubber-Banding & Velocity Projection",
+    subtitle: "Making boundaries feel soft and letting flick speed decide where a sheet settles.",
+    readTime: "3 min read",
+    tags: ["Exponential Decay", "Detents", "Pointer Gesture"],
+    formula: "y(x) = M · (1 − e^(−x / R))",
+    takeaways: [
+      "Linear resistance (0.3×) eventually lets a fast drag stretch past the bezel; exponential decay smoothly approaches an asymptotic ceiling M.",
+      "Evaluating snap targets from currentY + velocityY × horizon lets users flick through intermediate detents naturally.",
+      "Passing gesture release velocity directly into spring config prevents the abrupt pause between finger lift and settle.",
+    ],
+  },
+  {
+    id: "zero-asset-audio",
+    num: "03",
+    title: "Zero-Asset Tactile Synthesis with Web Audio",
+    subtitle: "Synthesizing crisp UI ticks, bubble pops, glass chimes, and filtered whooshes in ~2 KB of procedural JS.",
+    readTime: "2 min read",
+    tags: ["Web Audio API", "Envelopes", "Bandpass Noise"],
+    formula: "f(t) = f₀ · 1.35 → 0.75 (55 ms)",
+    takeaways: [
+      "Pre-recorded MP3/WAV packs add network latency and feel repetitive when rapid clicks trigger identical samples.",
+      "A 55 ms sine pitch-drop paired with a tiny 5 ms linear fade-in eliminates speaker DC clicks while feeling organic.",
+      "Debounce each sound type by 50–120 ms so bubbling pointer handlers never double-trigger on the same gesture.",
+    ],
+  },
+  {
+    id: "60fps-discipline",
+    num: "04",
+    title: "60fps Discipline: MotionValues, Demand Loops & Zero CLS",
+    subtitle: "Keeping React reconciliations at zero during pointer sweeps and GPU power at zero when idle.",
+    readTime: "4 min read",
+    tags: ["MotionValue", "R3F Demand", "Zero CLS"],
+    formula: "setState/frame = 0 · CLS = 0.00",
+    takeaways: [
+      "Storing high-frequency pointer coordinates in React state forces full JSX diffs every 16.6 ms; MotionValues write transforms directly to the DOM.",
+      "In Three.js / R3F, frameloop='demand' stops rendering 500 ms after kinetic energy drops below epsilon.",
+      "Reserve fixed-height slots for async validation and error hints so inline feedback never shifts surrounding controls.",
+    ],
+  },
+];
