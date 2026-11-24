@@ -172,7 +172,7 @@ export default function TransitionScreen() {
                   className={`inline-block ${i === chars.length - 1 ? "text-[#2ec4f0]" : ""}`}
                   style={{ transform: "translateY(110%)" }}
                 >
-                  {char === " " ? " " : char}
+                  {char === " " ? "\u00a0" : char}
                 </span>
               </span>
             ))}

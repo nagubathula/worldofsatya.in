@@ -23,7 +23,7 @@ const bioReveal = {
 };
 
 // Small print under a big name, as in the design. Phones get a size up to stay readable.
-const bioText = "text-[15px] sm:text-[16px] leading-[1.6] tracking-[-0.01em] text-[#6e6e73]";
+const bioText = "text-[15px] sm:text-[16px] leading-[1.6] tracking-[-0.01em] text-ink-muted";
 
 const highlight =
   "font-medium text-[#3a3a3c] underline decoration-wavy decoration-[#2ec4f0] decoration-[1.5px] underline-offset-[4px] transition-colors hover:text-[#111111]";
@@ -158,7 +158,7 @@ export default function HomeTilesLayout() {
   return (
     <div
       data-lenis-prevent="true"
-      className="relative w-full min-h-screen text-[#1d1d1f] overflow-x-hidden selection:bg-black selection:text-white"
+      className="relative w-full min-h-screen text-ink overflow-x-hidden selection:bg-black selection:text-white"
     >
       <section className="relative w-full max-w-5xl mx-auto min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-10 pt-28 lg:pt-16 pb-12 select-none">
         {/* The face, or the fanned works once the card turns */}
@@ -189,8 +189,12 @@ export default function HomeTilesLayout() {
               <motion.h1 variants={bioReveal} className="text-[38px] sm:text-[52px] lg:text-[58px] font-semibold tracking-[-0.045em] leading-[1.05] text-[#111111]">
                 Satya Sai Nagubathula
               </motion.h1>
+              <motion.p variants={bioReveal} className="mt-3 text-[17px] sm:text-[19px] font-medium tracking-[-0.02em] text-[#3a3a3c]">
+                Frontend Engineer &amp; Product Designer
+              </motion.p>
               <motion.p variants={bioReveal} className={`mt-5 ${bioText}`}>
-                I have <BioLink href="/about">4 years of experience</BioLink> in Design and Engineering and worked across software and hardware{" "}
+                I design and build interfaces, from Figma to production in React and Next.js. I have{" "}
+                <BioLink href="/about">4 years of experience</BioLink> across software and hardware, and now lead design and engineering for an AI video editor at NxtWave{" "}
                 <MoreLink href="/about" label="More about Satya" />
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
@@ -208,7 +212,7 @@ export default function HomeTilesLayout() {
                 <MoreLink href="/open-source" label="More open-source work" />
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
-                I also keep a <BioLink href="/ui">UI Lab</BioLink> of live interface pieces you can drag, swipe and turn over.
+                I run <BioLink href="/ui">UI Labs</BioLink> — a separate experimental world of live interfaces, physics, sound, and motion craft.
               </motion.p>
               <motion.p variants={bioReveal} className={`mt-3 ${bioText}`}>
                 Not boasting but I have 10k+ followers on{" "}
@@ -267,7 +271,7 @@ export default function HomeTilesLayout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ ...SMOOTH, delay: introDelay + 0.9 }}
-              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium text-[#6e6e73] transition-colors hover:text-[#1d1d1f] [@media(hover:none)]:mt-6"
+              className="order-5 mt-12 flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium text-ink-muted transition-colors hover:text-ink [@media(hover:none)]:mt-6"
             >
               <span className="[@media(hover:none)]:hidden">Scroll down for works</span>
               <span className="hidden [@media(hover:none)]:inline">Swipe up for works</span>

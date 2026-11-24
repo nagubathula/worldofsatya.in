@@ -48,14 +48,23 @@ html.lenis, html.lenis-smooth {
 
 @layer base {
   :root {
-    --foreground: #1d1d1f; /* Apple primary text */
+    --ink-primary: #1d1d1f;
+    --ink-primary-rgb: 29 29 31;
+    --ink-secondary: #515154;
+    --ink-secondary-rgb: 81 81 84;
+    --ink-muted: #6e6e73;
+    --ink-muted-rgb: 110 110 115;
+    --accent-sage: #8c9385;
+    --accent-sage-rgb: 140 147 133;
+
+    --foreground: var(--ink-primary); /* Apple primary text */
     --background: #fbfbfd; /* Apple pure canvas */
-    --foreground-rgb: 29 29 31;
+    --foreground-rgb: var(--ink-primary-rgb);
     --background-rgb: 251 251 253;
 
     --card-surface: #ffffff;
     --card-surface-hover: #f5f5f7;
-    --retro-ink: #1d1d1f;
+    --retro-ink: var(--ink-primary);
     --retro-amber: #0071e3; /* Apple signature system blue */
     --retro-teal: #06c;
 
@@ -120,7 +129,7 @@ html.lenis, html.lenis-smooth {
     border-radius: 9999px;
     border: 1px solid rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
-    color: #1d1d1f;
+    color: var(--ink-primary);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     transition: all 180ms ease;
     user-select: none;
@@ -502,4 +511,40 @@ body:has([data-not-found]) [data-home-face] {
     0 0 0 1px rgb(255 255 255 / 0.14),
     0 24px 60px -18px rgb(0 0 0 / 0.55),
     0 4px 14px -4px rgb(0 0 0 / 0.3);
+}
+
+/* Pause CSS animations inside UI Lab stages when scrolled off-screen. */
+[data-stage-paused="true"],
+[data-stage-paused="true"] * {
+  animation-play-state: paused !important;
+}
+
+/* UI Labs: Standalone Light Studio World */
+body:has([data-ui-world]) [data-home-face] {
+  display: none !important;
+}
+
+.lab-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.032) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.lab-blueprint-bg {
+  background-color: #f0f6fa;
+  background-image:
+    linear-gradient(to right, rgba(8, 121, 160, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(8, 121, 160, 0.09) 1px, transparent 1px),
+    linear-gradient(to right, rgba(8, 121, 160, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(8, 121, 160, 0.035) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+}
+
+[data-time-scale="0.25"] * {
+  transition-duration: 1.4s !important;
+}
+
+[data-time-scale="0.1"] * {
+  transition-duration: 3.2s !important;
 }

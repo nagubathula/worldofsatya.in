@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { playTickSound, playPopSound, playSocialBurstSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { TOKENS } from "@/lib/tokens";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
@@ -148,7 +149,7 @@ export default function SocialBurst({ open, onToggle }) {
               : SPRING.pop
           }
           className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 overflow-hidden ${
-            open ? "border-[#1d1d1f] bg-[#1d1d1f] text-white" : "border-black/[0.08] bg-white text-[#1d1d1f]"
+            open ? "border-ink bg-ink text-white" : "border-black/[0.08] bg-white text-ink"
           }`}
         >
           {/* Ambient Glow */}
@@ -194,7 +195,7 @@ export default function SocialBurst({ open, onToggle }) {
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="overflow-visible">
                     <motion.path
                       d="M21 11.5C21 16.1944 16.9706 20 12 20C10.4285 20 8.94827 19.6171 7.66667 18.9412L3 20L4.28571 16.2778C3.47953 14.8872 3 13.2543 3 11.5C3 6.80558 7.02944 3 12 3C16.9706 3 21 6.80558 21 11.5Z"
-                      stroke="#1d1d1f"
+                      stroke={TOKENS.ink}
                       strokeWidth="2.1"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -211,7 +212,7 @@ export default function SocialBurst({ open, onToggle }) {
                           cx={cx}
                           cy="11.5"
                           r="1.3"
-                          fill="#1d1d1f"
+                          fill={TOKENS.ink}
                           animate={{
                             y: isHovered ? [-1.6, 1.4, -1.6] : [0, -1, 0],
                             opacity: [0.35, 1, 0.35],

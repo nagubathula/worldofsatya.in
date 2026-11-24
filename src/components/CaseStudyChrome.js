@@ -15,7 +15,7 @@ export function ReadingProgress() {
     <motion.div
       aria-hidden="true"
       style={{ scaleX: reduceMotion ? scrollYProgress : smooth }}
-      className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-[#1d1d1f]"
+      className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-ink"
     />
   );
 }
@@ -39,7 +39,7 @@ export function CaseStudyContents({ sections }) {
 
   return (
     <nav aria-label="Contents" className="sticky top-32">
-      <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.16em] text-[#6e6e73]">Contents</p>
+      <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-muted">Contents</p>
       <ol className="flex flex-col">
         {sections.map(({ id, title }, i) => {
           const on = id === active;
@@ -49,13 +49,13 @@ export function CaseStudyContents({ sections }) {
                 <motion.span
                   layoutId="case-study-contents"
                   transition={SPRING.pill}
-                  className="absolute -left-4 top-1.5 bottom-1.5 w-[2px] rounded-full bg-[#1d1d1f]"
+                  className="absolute -left-4 top-1.5 bottom-1.5 w-[2px] rounded-full bg-ink"
                 />
               )}
               <a
                 href={`#${id}`}
                 aria-current={on ? "true" : undefined}
-                className={`flex gap-3 py-1.5 text-[13px] leading-snug transition-colors duration-200 ${on ? "text-[#1d1d1f]" : "text-[#6e6e73] hover:text-[#515154]"}`}
+                className={`flex gap-3 py-1.5 text-[13px] leading-snug transition-colors duration-200 ${on ? "text-ink" : "text-ink-muted hover:text-ink-secondary"}`}
               >
                 <span className="w-4 shrink-0 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                 <span className="line-clamp-2">{title}</span>

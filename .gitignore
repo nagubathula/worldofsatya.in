@@ -42,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CliqPe brochure (client work, not part of the site)
+/brochure-cliqpe/

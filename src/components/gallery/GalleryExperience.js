@@ -10,7 +10,7 @@ import { useBlackHoleTransition } from "../BlackHoleTransition";
 const CanvasGallery = dynamic(() => import("@/components/gallery/CanvasGallery"), {
   ssr: false,
   loading: () => (
-    <div className="absolute inset-0 grid place-items-center text-sm text-[#6e6e73]">
+    <div className="absolute inset-0 grid place-items-center text-sm text-ink-muted">
       Opening the archive…
     </div>
   ),
@@ -133,7 +133,7 @@ export default function GalleryExperience() {
       data-lenis-prevent
       data-lenis-prevent-wheel
       data-lenis-prevent-touch
-      className="fixed inset-0 z-0 overflow-hidden bg-white text-[#1d1d1f]"
+      className="fixed inset-0 z-0 overflow-hidden bg-white text-ink"
     >
       <div className="absolute inset-0 z-0 cursor-grab active:cursor-grabbing">
         <CanvasGallery
@@ -162,7 +162,7 @@ export default function GalleryExperience() {
         <h1 className="text-[34px] font-semibold leading-[1.05] tracking-[-0.045em] text-[#111111] sm:text-[44px] lg:text-[48px]" style={{ textShadow: "0 0 18px #fff, 0 0 36px #fff" }}>
           Gallery
         </h1>
-        <p className="mt-4 max-w-md text-[13px] leading-[1.6] tracking-[-0.01em] text-[#6e6e73]" style={{ textShadow: "0 0 12px #fff, 0 0 24px #fff" }}>
+        <p className="mt-4 max-w-md text-[13px] leading-[1.6] tracking-[-0.01em] text-ink-muted" style={{ textShadow: "0 0 12px #fff, 0 0 24px #fff" }}>
           Posters, visual identities, design artifacts, motion studies, and 3D renders. Drag to move through the room.{" "}
           <span className="[@media(hover:none)]:hidden">Scroll to come closer.</span>
           <span className="hidden [@media(hover:none)]:inline">Pinch to come closer.</span>
@@ -179,7 +179,7 @@ export default function GalleryExperience() {
                 className={`rounded-full border px-4 py-2 text-xs font-medium tracking-[-0.01em] shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors ${
                   isActive
                     ? "border-[#2ec4f0]/40 bg-[#2ec4f0]/10 text-[#0879a0]"
-                    : "border-black/[0.08] bg-white text-[#6e6e73] hover:text-[#111111]"
+                    : "border-black/[0.08] bg-white text-ink-muted hover:text-[#111111]"
                 }`}
               >
                 {category}
@@ -189,7 +189,7 @@ export default function GalleryExperience() {
         </div>
       </motion.header>
 
-      <div className="pointer-events-none absolute bottom-5 right-5 z-20 hidden text-[11px] tracking-wide text-[#6e6e73] sm:block" style={{ textShadow: "0 0 8px #fff, 0 0 16px #fff" }}>
+      <div className="pointer-events-none absolute bottom-5 right-5 z-20 hidden text-[11px] tracking-wide text-ink-muted sm:block" style={{ textShadow: "0 0 8px #fff, 0 0 16px #fff" }}>
         {selected ? "Esc to return" : `${visibleCount} works · Drag · Scroll · Click`}
       </div>
 
@@ -218,12 +218,12 @@ export default function GalleryExperience() {
                 type="button"
                 onClick={dismiss}
                 aria-label="Back to the archive"
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-black/[0.04] text-[#1d1d1f] transition-colors hover:bg-black/[0.08]"
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-black/[0.04] text-ink transition-colors hover:bg-black/[0.08]"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <p className="mt-2 text-[13px] leading-[1.6] tracking-[-0.01em] text-[#6e6e73]">
+            <p className="mt-2 text-[13px] leading-[1.6] tracking-[-0.01em] text-ink-muted">
               {selected.description}
             </p>
             <div className="mt-4 flex items-center gap-2">
@@ -240,7 +240,7 @@ export default function GalleryExperience() {
               <button
                 type="button"
                 onClick={dismiss}
-                className="rounded-full px-3 py-2 text-xs font-medium text-[#6e6e73] transition-colors hover:text-[#111111]"
+                className="rounded-full px-3 py-2 text-xs font-medium text-ink-muted transition-colors hover:text-[#111111]"
               >
                 Back
               </button>
@@ -276,7 +276,7 @@ export default function GalleryExperience() {
                   setFullSize(false);
                   setNav((current) => ({ ...current, controlsEnabled: true }));
                 }}
-                className="absolute -top-12 right-0 grid h-9 w-9 place-items-center rounded-full bg-white text-[#1d1d1f] shadow-sm"
+                className="absolute -top-12 right-0 grid h-9 w-9 place-items-center rounded-full bg-white text-ink shadow-sm"
               >
                 <X className="h-4 w-4" />
               </button>

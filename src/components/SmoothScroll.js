@@ -9,7 +9,12 @@ function ScrollReset() {
   const lenis = useLenis();
 
   useEffect(() => {
-    if (lenis) {
+    if (!lenis) return;
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    const target = hash ? document.getElementById(hash.slice(1)) : null;
+    if (target) {
+      lenis.scrollTo(target, { offset: -96, immediate: true });
+    } else {
       lenis.scrollTo(0, { immediate: true });
     }
   }, [pathname, lenis]);

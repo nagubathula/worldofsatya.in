@@ -17,9 +17,13 @@ const sansFont = Inter({
 
 export const metadata = {
   metadataBase: new URL("https://worldofsatya.in"),
-  title: "Satya Sai Nagubathula | AI + Design Engineer",
-  description: "AI + Design Engineer building interfaces, interactive prototypes, and AI-powered tools across product design, frontend engineering, and generative AI.",
+  title: "Satya Sai Nagubathula | Product Designer, Frontend & AI Engineer",
+  description: "Product designer, frontend and AI engineer taking products from Figma to production: React and Next.js interfaces, RAG and LLM pipelines, and AI-powered tools.",
   keywords: [
+    "Frontend Engineer",
+    "Product Designer",
+    "UI Engineer",
+    "React",
     "AI + Design Engineer",
     "Design Technologist",
     "AI Engineer",
@@ -33,8 +37,8 @@ export const metadata = {
     "Next.js",
   ],
   openGraph: {
-    title: "Satya Sai Nagubathula | AI + Design Engineer",
-    description: "AI + Design Engineer building interfaces, interactive prototypes, and AI-powered tools across product design, frontend engineering, and generative AI.",
+    title: "Satya Sai Nagubathula | Product Designer, Frontend & AI Engineer",
+    description: "Product designer, frontend and AI engineer taking products from Figma to production: React and Next.js interfaces, RAG and LLM pipelines, and AI-powered tools.",
     url: "https://worldofsatya.in",
     siteName: "World of Satya",
     images: [{ url: "/main.jpeg", width: 800, height: 800, alt: "Satya Sai Nagubathula" }],
@@ -43,8 +47,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Satya Sai Nagubathula | AI + Design Engineer",
-    description: "AI + Design Engineer building interfaces, interactive prototypes, and AI-powered tools across product design, frontend engineering, and generative AI.",
+    title: "Satya Sai Nagubathula | Product Designer, Frontend & AI Engineer",
+    description: "Product designer, frontend and AI engineer taking products from Figma to production: React and Next.js interfaces, RAG and LLM pipelines, and AI-powered tools.",
     images: ["/main.jpeg"],
   },
 };
@@ -57,7 +61,7 @@ const personSchema = {
   name: "Satya Sai Nagubathula",
   url: "https://worldofsatya.in",
   image: "https://worldofsatya.in/main.jpeg",
-  jobTitle: "AI + Design Engineer",
+  jobTitle: "Product Designer, Frontend & AI Engineer",
   sameAs: [
     "https://www.linkedin.com/in/satyasainagubathula",
     "https://github.com/nagubathula",

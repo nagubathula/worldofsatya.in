@@ -5,13 +5,15 @@ import Link from "next/link";
 import { motion, useTransform } from "framer-motion";
 import { playTickSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { TOKENS } from "@/lib/tokens";
 import { useMagnetic } from "@/lib/useMagnetic";
 import { useReducedMotionAfterHydration } from "@/lib/reducedMotion";
 import HoverLabel from "./HoverLabel";
 
-// Opens the UI Lab. Same tile as About and Gallery; the icon is a little switch
-// that a cursor clicks on when you hover, since everything in the lab is live.
-export default function UILabButton() {
+// Opens UI Labs as an autonomous experimental world. Same luminous tile as About and Gallery;
+// the icon is a switch that a cursor clicks on when you hover, with a cyan ring and live dot.
+// `href`/`onClick` let a one-page layout point it at a section instead of /ui.
+export default function UILabButton({ href = "/ui", onClick }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const reduceMotion = useReducedMotionAfterHydration();
@@ -46,8 +48,9 @@ export default function UILabButton() {
   return (
     <motion.div style={{ x: magneticX, y: magneticY }} className="group/label relative shrink-0 select-none">
       <Link
-        href="/ui"
-        aria-label="UI Lab"
+        href={href}
+        onClick={onClick}
+        aria-label="Enter UI Labs world"
         onPointerMove={magnet.move}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -91,7 +94,7 @@ export default function UILabButton() {
               width="22"
               height="12"
               rx="6"
-              stroke="#1d1d1f"
+              stroke={TOKENS.ink}
               strokeWidth="2"
               animate={{ fill: isHovered ? "#2ec4f0" : "#ffffff" }}
               transition={{ duration: 0.2, delay: isHovered ? 0.18 : 0 }}
@@ -99,7 +102,7 @@ export default function UILabButton() {
             <motion.circle
               cy="14"
               r="3.6"
-              fill="#1d1d1f"
+              fill={TOKENS.ink}
               initial={{ cx: 9 }}
               animate={{ cx: isHovered ? 19 : 9 }}
               transition={{ ...SPRING.pop, delay: isHovered ? 0.18 : 0 }}
@@ -109,7 +112,7 @@ export default function UILabButton() {
             <motion.path
               d="M0 0L0 10.5L2.8 8L4.6 12L6.4 11.2L4.6 7.3L8.2 7.1Z"
               fill="#ffffff"
-              stroke="#1d1d1f"
+              stroke={TOKENS.ink}
               strokeWidth="1.5"
               strokeLinejoin="round"
               animate={
@@ -125,12 +128,12 @@ export default function UILabButton() {
         {/* Micro Bevel Gloss Highlight */}
         <div className="absolute inset-0 rounded-2xl border border-white/60 pointer-events-none" />
       </Link>
-      {/* A live dot on the corner says there's something to play with inside. */}
+      {/* A live dot on the corner says there's an active world inside. */}
       <span aria-hidden className="pointer-events-none absolute -right-1 -top-1 flex h-3 w-3">
         {!reduceMotion && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2ec4f0] opacity-60" />}
         <span className="relative inline-flex h-3 w-3 rounded-full border-2 border-white bg-[#2ec4f0]" />
       </span>
-      <HoverLabel>UI Lab</HoverLabel>
+      <HoverLabel>UI Labs ↗</HoverLabel>
     </motion.div>
   );
 }

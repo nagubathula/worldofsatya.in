@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { IBM_Plex_Mono } from "next/font/google";
 import { EXPERIENCES } from "@/data/experiences";
+import { useLabTuner } from "@/lib/labTuning";
 import { drawBack, drawFront, drawStrap, shade } from "./lanyard/badgeArt";
 
 // A wall of conference badges, one per job, each hung from the top of the stage
@@ -42,15 +43,24 @@ const LOOKS = {
       ],
     },
   },
-  CrestLogic: {
-    color: "#0f766e",
-    band: "#0a514b",
-    band2: "#063833",
-    strap: "#0c5f58",
-    front: { design: ["billjot branding", "Product UI"], build: ["Marketing funnel", "Product frontend"] },
+  Billjot: {
+    color: "#0d8a38",
+    band: "#086327",
+    band2: "#054219",
+    strap: "#0a722e",
+    front: {
+      design: ["POS & billing UI", "Brand & funnel"],
+      build: ["Offline-first ERP", "500+ POS terminals"],
+    },
     back: {
-      design: ["Branding for billjot", "User interface design for the product"],
-      build: ["Built billjot's marketing funnel", "Frontend for the product"],
+      design: [
+        "Owned product UI, branding, and marketing funnel from 0 to 1",
+        "Designed around research in 168 restaurants",
+      ],
+      build: [
+        "MERN PWA + Supabase + Electron POS client (INR 2M revenue)",
+        "Offline billing, KOT routing & QR ordering across 584 restaurants",
+      ],
     },
   },
   APSPCL: {
@@ -167,6 +177,7 @@ const extB = new V3();
 
 function step(sim, h) {
   sim.t += h;
+  const g = -(sim.gravity ?? -G);
   const breeze = breezeAt(sim);
   const { grab, lanyards } = sim;
 
@@ -180,13 +191,13 @@ function step(sim, h) {
       tA.subVectors(x, p).multiplyScalar(1 - 0.8 * h);
       p.copy(x);
       x.add(tA);
-      x.y += G * h * h;
+      x.y += g * h * h;
       x.x += Math.sin(sim.t * 0.8 + k * 0.6 + L.i * 2.1) * breeze * h * h;
     }
 
     L.prevPos.copy(L.pos);
     L.prevQ.copy(L.q);
-    L.vel.y += G * h;
+    L.vel.y += g * h;
     L.vel.x += Math.sin(sim.t * 0.55 + L.i * 1.7) * breeze * 0.4 * h;
     const held = grab && grab.i === L.i;
     if (L.unspin) {
@@ -612,10 +623,27 @@ function layoutFor(count, viewport) {
 
 /* ---------- scene ---------- */
 
-function Wall({ badges, assets, reduce, ctlRef, hitsRef, liveRef, boxRef }) {
+function Wall({ badges, assets, reduce, paused, gravity, unwindAfter, timeScale, ctlRef, hitsRef, liveRef, boxRef }) {
   const { invalidate, get } = useThree();
   const viewport = useThree((s) => s.viewport);
   const simRef = useRef(null);
+  const pausedRef = useRef(paused);
+  const tuningRef = useRef({ gravity, unwindAfter, timeScale });
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    if (!paused && simRef.current && moving(simRef.current)) invalidate();
+  }, [paused, invalidate]);
+
+  useEffect(() => {
+    tuningRef.current = { gravity, unwindAfter, timeScale };
+    if (simRef.current) {
+      simRef.current.gravity = gravity;
+      simRef.current.unwindAfter = unwindAfter;
+      simRef.current.quiet = 0;
+      invalidate();
+    }
+  }, [gravity, unwindAfter, timeScale, invalidate]);
 
   useEffect(() => {
     const { camera, gl, scene } = get();
@@ -635,7 +663,17 @@ function Wall({ badges, assets, reduce, ctlRef, hitsRef, liveRef, boxRef }) {
     for (const L of lanyards) root.add(L.group, ...L.ribbons);
     scene.add(root);
 
-    const sim = { lanyards, reduce, t: 0, acc: 0, grab: null, quiet: 0, lastTouch: 0 };
+    const sim = {
+      lanyards,
+      reduce,
+      t: 0,
+      acc: 0,
+      grab: null,
+      quiet: 0,
+      lastTouch: 0,
+      gravity: tuningRef.current.gravity,
+      unwindAfter: tuningRef.current.unwindAfter,
+    };
     simRef.current = sim;
 
     const ray = new THREE.Raycaster();
@@ -665,7 +703,7 @@ function Wall({ badges, assets, reduce, ctlRef, hitsRef, liveRef, boxRef }) {
       L.face ^= 1;
       // Every flip turns the same way, so each one winds another half-twist into the strap.
       L.clicks = Math.abs(L.twist) < 0.5 ? 1 : L.clicks + 1;
-      if (L.clicks >= UNWIND_AFTER) {
+      if (L.clicks >= Math.round(sim.unwindAfter ?? UNWIND_AFTER)) {
         L.clicks = 0;
         L.unspin = true;
         L.unspinT = 0;
@@ -757,15 +795,17 @@ function Wall({ badges, assets, reduce, ctlRef, hitsRef, liveRef, boxRef }) {
   }, [viewport, invalidate]);
 
   useFrame((state, delta) => {
+    if (pausedRef.current) return;
     const sim = simRef.current;
     if (!sim) return;
-    sim.acc = Math.min(sim.acc + Math.min(delta, 1 / 20), MAX_STEPS * H);
+    const dt = delta * (tuningRef.current.timeScale || 1);
+    sim.acc = Math.min(sim.acc + Math.min(dt, 1 / 20), MAX_STEPS * H);
     while (sim.acc >= H) {
       step(sim, H);
       sim.acc -= H;
     }
     sync(sim, state.camera, state.size, hitsRef);
-    sim.quiet = moving(sim) ? 0 : sim.quiet + delta;
+    sim.quiet = moving(sim) ? 0 : sim.quiet + dt;
     // Settled: stop drawing until something moves it.
     if (sim.quiet < 0.5) state.invalidate();
   });
@@ -815,6 +855,12 @@ async function loadAssets() {
   return { fonts: { body, mono }, logos };
 }
 
+let cachedAssetsPromise = null;
+function getAssets() {
+  cachedAssetsPromise ||= loadAssets();
+  return cachedAssetsPromise;
+}
+
 // How many badges fit across the stage.
 function countFor(width) {
   if (width < 520) return 2;
@@ -823,7 +869,8 @@ function countFor(width) {
   return BADGES.length;
 }
 
-export default function LanyardWall({ reduceMotion = false }) {
+export default function LanyardWall({ reduceMotion = false, paused = false }) {
+  const tuner = useLabTuner("id-badge", { gravity: 16, unwindAfter: 7 });
   const boxRef = useRef(null);
   const ctlRef = useRef(null);
   const hitsRef = useRef([]);
@@ -833,7 +880,7 @@ export default function LanyardWall({ reduceMotion = false }) {
 
   useEffect(() => {
     let alive = true;
-    loadAssets().then((a) => alive && setAssets(a));
+    getAssets().then((a) => alive && setAssets(a));
     const observer = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
       setDims((d) => (d && d.width === width && d.height === height ? d : { width, height }));
@@ -863,7 +910,19 @@ export default function LanyardWall({ reduceMotion = false }) {
           // The badges' own hit boxes take the pointer, so the page still scrolls under the rest of the stage.
           style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
         >
-          <Wall badges={badges} assets={assets} reduce={reduceMotion} ctlRef={ctlRef} hitsRef={hitsRef} liveRef={liveRef} boxRef={boxRef} />
+          <Wall
+            badges={badges}
+            assets={assets}
+            reduce={reduceMotion}
+            paused={paused}
+            gravity={tuner.gravity}
+            unwindAfter={tuner.unwindAfter}
+            timeScale={tuner.timeScale}
+            ctlRef={ctlRef}
+            hitsRef={hitsRef}
+            liveRef={liveRef}
+            boxRef={boxRef}
+          />
         </Canvas>
       )}
       {badges.map((b, i) => (

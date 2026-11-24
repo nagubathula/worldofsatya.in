@@ -5,12 +5,14 @@ import Link from "next/link";
 import { motion, useTransform } from "framer-motion";
 import { playTickSound, playPopSound } from "./SoundEffects";
 import { SPRING } from "@/lib/motion";
+import { TOKENS } from "@/lib/tokens";
 import { useMagnetic } from "@/lib/useMagnetic";
 import HoverLabel from "./HoverLabel";
 
 // Opens the gallery. Same tile as About and contact; the icon is a small stack
 // of prints that fans out on hover, like the works fan.
-export default function GalleryButton() {
+// `href`/`onClick` let a one-page layout point it at a section instead of /gallery.
+export default function GalleryButton({ href = "/gallery", onClick }) {
     const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -44,7 +46,8 @@ export default function GalleryButton() {
   return (
     <motion.div style={{ x: magneticX, y: magneticY }} className="group/label relative shrink-0 select-none">
       <Link
-        href="/gallery"
+        href={href}
+        onClick={onClick}
         aria-label="Gallery"
         onPointerMove={magnet.move}
         onMouseEnter={handleMouseEnter}
@@ -89,7 +92,7 @@ export default function GalleryButton() {
               height="19"
               rx="3"
               fill="#ffffff"
-              stroke="#1d1d1f"
+              stroke={TOKENS.ink}
               strokeWidth="2"
               style={{ originX: "50%", originY: "100%" }}
               animate={{ rotate: isHovered ? -16 : -8, x: isHovered ? -2.5 : -1 }}
@@ -102,8 +105,8 @@ export default function GalleryButton() {
               animate={{ rotate: isHovered ? 9 : 4, x: isHovered ? 2 : 1, y: isHovered ? -1 : 0 }}
               transition={SPRING.pop}
             >
-              <rect x="9" y="6" width="16" height="20" rx="3" fill="#ffffff" stroke="#1d1d1f" strokeWidth="2" />
-              <path d="M11.5 21.5L15 17.5L17.5 20L19.5 18L22.5 21.5" stroke="#1d1d1f" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              <rect x="9" y="6" width="16" height="20" rx="3" fill="#ffffff" stroke={TOKENS.ink} strokeWidth="2" />
+              <path d="M11.5 21.5L15 17.5L17.5 20L19.5 18L22.5 21.5" stroke={TOKENS.ink} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               <motion.circle
                 cx="20"
                 cy="11.5"

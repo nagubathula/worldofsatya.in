@@ -24,6 +24,7 @@ export default function KeyboardNav() {
     if (pathname === "/" || pathname.startsWith("/gallery")) return;
 
     const onKey = (event) => {
+      if (document.querySelector("[data-ui-world]")) return;
       if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
       if (event.target instanceof Element && event.target.closest(TYPING)) return;
       // An open dialog (video player, code prompt) gets the keys first.

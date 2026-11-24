@@ -15,7 +15,7 @@ const DOMAINS = {
       "I work where design, fullstack engineering, and generative AI overlap: designing products, building them, and wiring in the AI that makes them useful.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Gen AI Engineer & Designer" },
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Product Engineer" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Founder" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Product Engineer" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Product & Design Engineer" },
     ],
@@ -28,7 +28,7 @@ const DOMAINS = {
     description:
       "Typography, layout, micro-interactions, and design systems. Turning unclear problems into interfaces people find easy to use.",
     companies: [
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Product Design & Branding" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Product Design & Branding" },
       { name: "Redantio", logo: "/images/redantio-icon.png", role: "Brand Identity & UI Sprint" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "GovTech Information Architecture" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Design Systems & Storybook" },
@@ -44,7 +44,7 @@ const DOMAINS = {
     companies: [
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Frontend & Architecture" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Fullstack Web Infrastructure" },
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Component Engineering" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Component Engineering" },
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Systems & Infrastructure" },
     ],
   },
@@ -57,7 +57,7 @@ const DOMAINS = {
       "End-to-end generative media workflows, LLM orchestration, model evaluation, and automation pipelines that run in production.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Generative AI Lead" },
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Automated Data Systems" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Automated Data Systems" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "AI Workflow Exploration" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Digital Infrastructure" },
     ],
@@ -72,7 +72,7 @@ const DOMAINS = {
     companies: [
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Chaya UI Design System" },
       { name: "Redantio", logo: "/images/redantio-icon.png", role: "Design-to-Code Velocity" },
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Reusable Component Design" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Reusable Component Design" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Accessible Design Tokens" },
     ],
   },
@@ -85,7 +85,7 @@ const DOMAINS = {
       "Creative tools built on generation: text-to-vector canvases, automated video with Veo 3, and custom diffusion pipelines.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Generative AI Video & Creative" },
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Synthetic Brand Assets" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Synthetic Brand Assets" },
       { name: "Redantio", logo: "/images/redantio-icon.png", role: "Creative Prototyping" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Interactive Visuals" },
     ],
@@ -99,7 +99,7 @@ const DOMAINS = {
       "Agent tooling, Model Context Protocol (MCP) servers, background queues, and pipelines that let AI models work with real software.",
     companies: [
       { name: "NxtWave", logo: "/images/nxtwave-logo.svg", role: "Model Pipelines & Tooling" },
-      { name: "CrestLogic", logo: "/images/crestlogic-icon.svg", role: "Background Task Queues" },
+      { name: "Billjot", logo: "/images/crestlogic-icon.svg", role: "Background Task Queues" },
       { name: "Traboda", logo: "/images/traboda-icon.png", role: "Autonomous Automation" },
       { name: "APSPCL", logo: "/images/apspcl-logo.svg", role: "Data Infrastructure" },
     ],
@@ -208,7 +208,7 @@ function DomainCard({ domain, flat = false }) {
       {/* Shaped by flowAround while the card meets the face; empty otherwise. */}
       <div data-notch-float aria-hidden="true" className="h-0 w-0" />
       <h3 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-[#111111]">{domain.title}</h3>
-      <p className="mt-2 text-[13px] leading-relaxed text-[#515154]">{domain.description}</p>
+      <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary">{domain.description}</p>
       {/* Inline logos, not a flex row, so they can flow around the notch like words. */}
       <div className="mt-4 -mb-2 leading-none">
         {domain.companies.map((company) => (
@@ -220,7 +220,7 @@ function DomainCard({ domain, flat = false }) {
           </div>
         ))}
       </div>
-      <p className="mt-2 text-[11px] text-[#6e6e73]">{domain.companies.map((company) => company.name).join(" · ")}</p>
+      <p className="mt-2 text-[11px] text-ink-muted">{domain.companies.map((company) => company.name).join(" · ")}</p>
     </div>
   );
 }

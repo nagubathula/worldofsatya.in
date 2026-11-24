@@ -336,53 +336,66 @@ export const projectStudies = [
   {
     slug: "contentflow-platform",
     title: "ContentFlow: Running a Five-Language Content Operation",
-    type: "Internal Platform",
-    heroDescription: "The internal platform behind a multi-language video operation: 30+ role-based dashboards and an eight-stage pipeline from script to posted video, plus a live analytics command centre — YouTube data, thumbnail click-through, and velocity alerts — all under one set of permissions.",
-    image: "/cases/contentflow-hero.webp",
+    type: "Product Design & Engineering Case Study",
+    logo: "/cases/content-nexus/contentflow-logo.png",
+    heroDescription: "Designing and building the internal operations and analytics platform behind a five-language media network: 30+ role-scoped views, an eight-stage production pipeline, live YouTube telemetry, and strict regional access control from script to posted video.",
+    image: "/cases/content-nexus/overview-hero-dark.webp",
     meta: [
-      { label: "Product", value: "Content operations and analytics platform" },
-      { label: "Role", value: "Design and build" },
+      { label: "Product", value: "Media operations & analytics PWA" },
+      { label: "Role", value: "Product design and full-stack engineering" },
       { label: "Languages", value: "Telugu, Hindi, Tamil, Marathi, Kannada" },
-      { label: "Stack", value: "React, PostgreSQL, REST APIs, YouTube Data API" }
+      { label: "Stack", value: "React, TypeScript, Supabase, Edge Functions" }
     ],
     highlights: [
-      { value: "30+", label: "Role-based dashboards" },
-      { value: "8", label: "Pipeline stages" },
-      { value: "2,000+", label: "Videos orchestrated" },
-      { value: "100K+", label: "Followers on channels it runs" }
+      { value: "30+", label: "Role-scoped workspace views" },
+      { value: "8", label: "Pipeline stages, script to posted" },
+      { value: "2,000+", label: "Videos orchestrated end to end" },
+      { value: "100K+", label: "Followers scaled per flagship channel" }
     ],
     content: [
       {
         section: "Overview",
-        body: "Producing content at scale across YouTube and Instagram in five languages means dozens of people touching every video: writers, voice artists, editors, designers, and managers. Then, once a video is live, someone has to read what it did. Spreadsheets and chat threads survive neither job. ContentFlow is the internal platform I built to run the whole operation in one place — the production work, and the numbers that follow it.\n\nThe team knows the analytics side as Content Nexus. It isn't a separate tool but the command centre inside the same platform, sharing one login, one set of roles, and one set of permissions.\n\n| Language | Language | Language | Language | Language |\n|---|---|---|---|---|\n| Telugu | Hindi | Tamil | Marathi | Kannada |\nTable: Every video can exist in five languages, each with its own team"
+        body: "Producing content at scale across YouTube and Instagram in five languages means twenty or more specialists touch every release: scriptwriters, managers, voice artists, central operations, video editors, editing managers, graphic designers, and admins.\n\nI designed and built ContentFlow end to end to replace fragmented spreadsheets, Drive links scattered across chat threads, and shared YouTube Studio logins. In practice, the platform carries three coordinated names across its surfaces: **ContentFlow** as the daily workspace shell teammates live in, **ContentHub** as the Google OAuth authentication portal, and **Content Nexus** as the installable Progressive Web App and telemetry codename underneath.\n\n![Three surfaces of one platform: ContentFlow (workspace shell), ContentHub (OAuth portal), and Content Nexus (PWA package)](/cases/content-nexus/brand-identity-dark.webp)\n\n| Language | Language | Language | Language | Language |\n|---|---|---|---|---|\n| Telugu | Hindi | Tamil | Marathi | Kannada |\nTable: Every video can exist in five languages, each with its own team"
       },
       {
-        section: "The Pipeline",
-        body: "Every piece of content moves through eight stages, from the first draft of the script to the posted video — Script, Review, Voice Over, Audio Cut, Raw Upload, Editing, Ready, Posted. Each stage has an owner, and every handoff is recorded instead of lost in chat.\n\n![Eight stages from script to posted](/cases/contentflow-pipeline.svg)\n\nThe pipeline is visible on a shared content calendar, filterable by channel and by status, so anyone can see what's stuck and where."
+        section: "The Problem: Spreadsheets, Chat Threads, and Shared Logins",
+        body: "Publishing across five regional languages breaks down quickly when production status lives in one place, raw files live in another, and channel performance sits behind individual YouTube Studio tabs.\n\n| Failure mode | Operational cost |\n|---|---|\n| Fragmented channel metrics | Team leads switched across multiple YouTube Studio accounts to compare subscriber velocity and views |\n| Lost handoffs across eight steps | Scripts, voiceovers, raw footage, and V1/V2 edits slipped through chat messages without clear ownership |\n| Credential-sharing risk | Giving editors or external collaborators direct Studio access exposed channels unnecessarily |\n| Unlogged revision loops | When an edit failed review, feedback stayed verbal instead of staying attached to the content timeline |\nTable: Why spreadsheets and chat threads broke at multi-channel scale\n\nThe entry point sets that boundary from the first screen: every teammate authenticates with Google OAuth through **ContentHub** and lands directly in a ContentFlow workspace scoped to their assigned roles and language regions.\n\n![ContentHub: single Google OAuth sign-in routing every teammate into their role-scoped ContentFlow workspace](/cases/content-nexus/auth-signin-dark.webp)"
       },
       {
-        section: "Key Decision: A Dashboard per Job",
-        body: "One dashboard trying to serve everyone ends up serving no one: a voice artist doesn't need channel analytics, and a manager doesn't need the recording queue. So ContentFlow ships 30+ purpose-built views, and each role sees exactly the screens, actions, and data its job needs.\n\n| Role | What they need from the platform |\n|---|---|\n| Writer | Scripts to write and review notes |\n| Voice Artist | Scripts ready to record and studio slots |\n| Editor and Editing Manager | Raw uploads to edit, and what's due |\n| Graphic Designer | Thumbnails and assets to make |\n| Manager | Status across the pipeline and the team |\n| Central Team and Admin | Every channel and language, and roles |\nTable: A few of the roles, each with its own views"
+        section: "Design System: Calm Density for Eight-Hour Shifts",
+        body: "An operations console used for eight hours a day cannot rely on loud gradients or decorative chrome. I built an Apple-inspired token system on **Tailwind CSS**, **Radix primitives**, and **shadcn/ui** with a **0.875rem (14px)** radius base and **#007AFF** system blue reserved strictly for primary actions and active navigation states.\n\nEvery role, workflow stage, and regional language carries a distinct semantic token so teammates scan dense tables and Kanban columns without reading every pill label first.\n\n![Semantic color system: dark surfaces, 8 role identity tokens, 8 workflow stage pills, and 5 regional gradients](/cases/content-nexus/color-system-dark.webp)\n\nTypography uses **SF Pro Display** loaded locally across all nine weights (100 Ultralight through 900 Black) with tight negative tracking (-0.03em on display titles, -0.025em on section headers, -0.01em on body copy) to keep multi-column production tables crisp at 1440px and readable at 390px.\n\n![SF Pro Display across nine weights with tight tracking tuned for dense tables and status pills](/cases/content-nexus/typography-sf-pro.webp)\n\nButtons, format badges (Full Length, Short, Reel, Post), Drive URL fields, progress meters, 5-star editor ratings, and inline revision banners all share the same set of primitives.\n\n![Core UI primitives: action states, content format badges, Drive URL inputs, star ratings, and revision alerts](/cases/content-nexus/ui-kit-primitives.webp)"
+      },
+      {
+        section: "Key Decision: Dual-Theme Parity from One Token Sheet",
+        body: "Video editors and admins review color-graded frames and thumbnails in dim edit bays where a pure black canvas (**#000000** background, **#0A0A0A** sidebar, **#121212** cards) eliminates glare. Managers and central coordinators planning schedules in bright rooms prefer an off-white Light surface (**#FAFAFA** canvas, **#FFFFFF** pure white cards, multi-layered shadows, and **20px** glass blur).\n\nBoth appearances read from the same HSL CSS custom property sheet via **next-themes**, switching cleanly without duplicate component trees.\n\n![The executive overview in Light Mode: layered elevation and soft regional channel gradients](/cases/content-nexus/overview-light.webp)"
+      },
+      {
+        section: "The Pipeline: Kanban, Spreadsheet, and Calendar",
+        body: "Every piece of content moves sequentially through eight stages: **Script, Review, Voice Over, Audio Cut, Raw Upload, Editing, Ready, and Posted**. Each stage has an owner, and every handoff is recorded instead of lost in chat.\n\n![Eight stages from script to posted](/cases/contentflow-pipeline.svg)\n\nWhen checking flow and bottlenecks, the **Kanban view** arranges all eight lanes side by side with step completion bars, overdue alerts, revision pills, and one-click script links.\n\n![Kanban view: eight stage columns with step progress bars, due-date warnings, and direct script links](/cases/content-nexus/pipeline-kanban.webp)\n\nWhen central operations needs to update twenty statuses or filter by channel, region, and format during a standup, cards are too slow. Switching to the **Spreadsheet view** pivots the exact same real-time Supabase rows into stage-grouped inline-editable columns with bulk selection actions.\n\n![Spreadsheet view: stage-tabbed inline table for rapid status updates and bulk operations](/cases/content-nexus/pipeline-spreadsheet.webp)\n\nFor forward planning across releases, the shared **Content Calendar** plots every item on a monthly grid color-coded across all eight pipeline stages and filterable by channel, date field, and status.\n\n![The shared Content Calendar: monthly schedule color-coded across all eight pipeline stages](/cases/content-nexus/content-calendar.webp)"
+      },
+      {
+        section: "Key Decision: 30+ Views, Scoped to One Job Each",
+        body: "One dashboard trying to serve everyone ends up serving no one: a voice artist doesn't need channel analytics, and a manager doesn't need the recording queue. So ContentFlow ships 30+ purpose-built views across eight primary roles, dynamically rendering both the sidebar navigation and active workspace through PostgreSQL Row-Level Security across **Role × Language Region**.\n\n| Role | Primary workspace focus | Handoff output |\n|---|---|---|\n| Writer | Script cards, revision alerts, and personal analytics | Google Docs V1 and Final script links |\n| Manager | Pending V1 and Final script queues with delivery dates | Approved scripts pushed to recording |\n| Voice Artist | Recording queue with script links and audio preview player | Recorded voiceover URLs |\n| Central Team | Raw footage ingestion and stage-wide coordination | Uploaded footage and editor handoffs |\n| Editing Manager | Unassigned queue, editor scorecards, and format stats table | Assigned cuts and **EM Approved** sign-off |\n| Editor | Assigned tasks, asset pills, and version submission timeline | V1, V2, and Final video cut links |\n| Graphic Designer | Pending, In Progress (V1), and Completed thumbnail queues | Final thumbnail assets attached to tasks |\n| Admin | Video QA console, star ratings, and publishing pipeline | Approved releases and live post tracking |\nTable: Eight dedicated role workspaces sharing one live database\n\n![Manager script approval console: Pending V1 and Final Script queues with expected delivery dates](/cases/content-nexus/manager-dashboard.webp)\n\nFor writers, each task card carries an inline revision alert banner, stage tracker, direct V2 Google Docs submission input, and a collapsible **Script History** log so nothing has to be chased over chat.\n\n![Writer content card: inline revision banner, V2 Google Docs submission, and full script history](/cases/content-nexus/writer-revision-card.webp)\n\nEditors work from filtered task queues showing asset pills, due dates, and version submission forms, while Editing Managers oversee capacity through live **Editor Performance** scorecards and a date-filtered format table across Full Length, Shorts, Reels, and Posts.\n\n![Editor workspace: assigned cuts, revision alerts, asset links, and completion tracking](/cases/content-nexus/editor-dashboard-top.webp)\n\n![Editing Manager performance matrix: per-editor completion rates and format breakdown across Full Length, Shorts, Reels, and Posts](/cases/content-nexus/editor-performance.webp)"
+      },
+      {
+        section: "Two-Step Video QA: Catching Mistakes Before Publish",
+        body: "Early versions routed edited cuts straight from the editor to final admin review. Technical issues like audio dips, chart contrast bugs, or missing B-roll kept forcing late rejects at the very end of the week.\n\nI introduced a **two-step approval flow**: the Editing Manager performs the technical review first (tagging the item **EM Approved**), before it enters the Admin's **Video Reviews** console. Inside the review card, Admins compare V1 and V2 playback links, inspect the chronological timeline, score the cut with a 5-star editor rating, and either approve for posting or log timestamped revision feedback.\n\n![Admin Video Review console: EM Approved badge, V1 and V2 version links, 5-star rating, and revision timeline](/cases/content-nexus/admin-video-reviews.webp)\n\n![Two-step video review card: version links, star rating, and timestamped revision notes](/cases/content-nexus/admin-review-card.webp)"
+      },
+      {
+        section: "Live YouTube & Team Telemetry Without Sharing Logins",
+        body: "To keep channel analytics inside the workspace without exposing YouTube Studio credentials, Supabase Deno Edge Functions (**youtube-channel-stats** and **youtube-analytics**) batch-fetch channel metrics through the **YouTube Data API v3**. The parser normalizes channel IDs, @handles, and custom URLs, running on authenticated cron schedules or on-demand refreshes and storing historical snapshots in PostgreSQL.\n\nThe **YouTube Analytics** dashboard turns those snapshots into 30-day subscriber, view, and upload velocity area charts alongside per-channel and per-language breakdowns.\n\n![YouTube Team Channel Analytics: cross-channel KPIs, 30-day subscriber growth curve, and per-channel comparisons](/cases/content-nexus/youtube-analytics-view.webp)\n\nAlongside external reach, the internal **Analytics** dashboard plots daily created, completed, and posted output, status distribution across all eight stages, and contributor-level throughput.\n\n![Internal operations analytics: daily creation-to-posting velocity, stage distribution, and contributor output](/cases/content-nexus/analytics-dashboard.webp)"
       },
       {
         section: "Access by Role, Language, and Region",
-        body: "Role-based access control decides what each person can see and do, and everything is also scoped by language and region. A Telugu editor sees Telugu work; a Hindi manager sees Hindi channels. The same permission model carries straight into the analytics side, which is why outside collaborators can be let into the numbers without being let into everything.\n\n| Scope | What it limits |\n|---|---|\n| Role | Which screens and actions a person has |\n| Language | Which language's content they work on |\n| Region | Which channels and teams they see |\nTable: Three layers of access"
+        body: "Role-based access control decides what each person can see and do, and everything is also scoped by language and region. A Telugu editor sees Telugu work; a Hindi manager sees Hindi channels.\n\n| Scope | What it limits |\n|---|---|\n| Role | Which screens and actions a person has |\n| Language | Which language's content they work on |\n| Region | Which channels and teams they see |\nTable: Three layers of access\n\nManagers assign multiple role chips and multiple language regions per team member inside **Team Role Management**, while **Channels** groups YouTube and Instagram properties across Tamil, Hindi, Kannada, Marathi, and Telugu.\n\n![Team Role Management: assigning multiple role chips and regional language scopes per member](/cases/content-nexus/team-roles.webp)\n\n![Multi-regional YouTube and Instagram channels grouped across Tamil, Hindi, Kannada, Marathi, and Telugu](/cases/content-nexus/channels-management.webp)\n\nBecause voice artists and on-camera hosts share physical recording booths across regional teams, **Studio Booking** manages weekly recording windows with language tags, Zod-validated reservation modals, and slot locking to prevent double-bookings.\n\n![Studio Booking scheduler: regional voiceover and shoot windows with slot locking](/cases/content-nexus/studio-booking.webp)"
       },
       {
-        section: "The Analytics Command Centre",
-        body: "Once a video is posted, the platform stops tracking work and starts tracking performance. The YouTube Data API feeds a PostgreSQL store, the platform tracks thumbnail click-through, and it watches each video's velocity for anomalies — flagging a video that's suddenly taking off, or stalling, instead of waiting for someone to notice.\n\n![From the YouTube API to tiered dashboards](/cases/contentnexus-flow.svg)\n\n| Capability | What it does |\n|---|---|\n| Live YouTube data | Channel and video metrics through the YouTube Data API |\n| Thumbnail CTR tracking | Automatic click-through tracking for every thumbnail |\n| Velocity anomaly alerts | Flags videos whose growth suddenly changes |\n| Permission tiers | Separates internal teams from outside collaborators |\nTable: One command centre instead of a dozen YouTube Studio tabs"
+        section: "Google Drive OAuth and Installable Mobile PWA",
+        body: "Large video cuts and raw footage stay in **Google Drive** rather than duplicating storage. Dedicated OAuth Edge Functions (**google-drive-auth**, **google-drive-callback**, and **google-drive-api**) store refresh tokens in PostgreSQL and automatically renew expiring access tokens with a 5-minute safety buffer, letting users browse folders and upload assets right from Settings or task cards.\n\nReal-time notification triggers pair visual badge updates with configurable sound cues, email notifications, and browser push alerts.\n\n![Settings and Integrations: connected Google Drive OAuth status, push and sound alerts, and theme controls](/cases/content-nexus/settings-integrations.webp)\n\nBecause leads and admins often approve scripts or cuts away from a desk, the Vite build bundles **vite-plugin-pwa** with Workbox **NetworkFirst** caching for Supabase calls and a responsive 390px mobile layout with a frosted-glass navigation drawer.\n\n![Mobile PWA at 390x844: single-column KPI feed beside the frosted-glass navigation drawer](/cases/content-nexus/mobile-pwa-pair.webp)"
       },
       {
-        section: "Key Decision: Permissions as a First-Class Feature",
-        body: "Most analytics tools treat sharing as an afterthought. This operation runs with internal teams and external collaborators side by side, so permission tiers are built into every view rather than bolted on. The numbers a partner can see are a property of their tier, not a report someone remembers to redact.\n\n| Who | What they get |\n|---|---|\n| Internal team | The full picture across channels and languages |\n| External collaborators | Only what their tier allows |\nTable: Strict permission tiers, by design"
-      },
-      {
-        section: "Around the Pipeline",
-        body: "| System | What it does |\n|---|---|\n| Content calendar | Every video on one calendar, filtered by channel and status |\n| Channel analytics | Performance across channels, including live YouTube data |\n| Studio booking | Recording slots for voice artists |\n| Team management | Roles and access for every member |\nTable: The supporting systems"
-      },
-      {
-        section: "Impact",
-        body: "ContentFlow is the operational backbone behind more than 2,000 videos and channels grown past 100,000 followers, with every handoff between roles tracked instead of lost in chat — and every posted video measured in the same place it was made.\n\n| Before | After |\n|---|---|\n| Spreadsheets and chat threads | One platform |\n| Handoffs lost in messages | Every handoff recorded |\n| Everyone sees everything | Each role sees its own work |\n| Status by asking around | Status on a shared calendar |\n| Numbers in scattered YouTube Studio tabs | One analytics command centre |\nTable: What changed for the team\n\nContentFlow is an internal platform, so there's no public build or source to link to."
+        section: "Impact and What Building It Taught Me",
+        body: "ContentFlow grew into the operational backbone behind more than 2,000 videos and channels grown past 100,000 followers, with every handoff between roles tracked instead of lost in chat.\n\n| Before ContentFlow | With ContentFlow |\n|---|---|\n| Spreadsheets and chat threads | Single real-time source of truth across 8 pipeline stages |\n| Handoffs lost in messages | Every script, voiceover, cut, and review recorded on timeline |\n| Broad shared logins across channels | Role × Language Region RBAC enforced via PostgreSQL RLS |\n| Switching tabs across YouTube Studio accounts | Automated Edge Function snapshots inside one analytics view |\nTable: What changed for the media team\n\nThree design and engineering lessons carried forward from building it:\n\n1. **Permissions are information architecture.** Scoping each screen by Role × Language Region didn't just improve security; it removed clutter so a writer, voice artist, or editor only saw the exact next action they owned.\n2. **Put revision history on the artifact.** Attaching feedback directly to V1/V2 script and video cards ended most \"which file is latest?\" follow-ups across chat.\n3. **Match the view to the task.** Giving central operations a Spreadsheet view on top of the exact same data that drives Kanban and Calendar views kept power users fast without complicating the board for everyone else."
       }
     ]
   },
@@ -662,6 +675,63 @@ export const projectStudies = [
       {
         section: "The Method",
         body: "| Step | Question |\n|---|---|\n| 1. One job | What is the single thing this piece must make someone do? |\n| 2. Hierarchy | What must be read first, second, and third? |\n| 3. Identity | What does this event or brand already look like? |\n| 4. Subject | What is the image, and how does type stay out of its way? |\n| 5. Format | Where will it be seen: a wall, a feed, a screen? |\nTable: The questions behind every piece\n\n![A product campaign composed as one board](/gallery/product-ads.jpg)"
+      }
+    ]
+  },
+  {
+    slug: "gen-ai-production",
+    title: "Gen AI Production: 14 Channels, One Pipeline",
+    type: "AI Engineering Case Study",
+    heroDescription: "Building the generative AI production line behind NxtWave's content: ComfyUI workflows, Flux with custom-trained LoRAs, ElevenLabs voice-overs run by agents, and a brand system for every channel. 14 channels went from 0 to 100K+ followers.",
+    image: "/aivideos/posters/female_host_ai_generated.jpg",
+    meta: [
+      { label: "Where", value: "NxtWave" },
+      { label: "Role", value: "Pipeline design, engineering and creative direction" },
+      { label: "Team", value: "3 engineers and 3 designers, supporting a creative team of 20+" },
+      { label: "Stack", value: "ComfyUI, Flux with custom LoRAs, ElevenLabs, agents" }
+    ],
+    highlights: [
+      { value: "14", label: "Channels, each with its own brand" },
+      { value: "100K+", label: "Followers, grown from zero" },
+      { value: "1,000+", label: "Videos produced a month" },
+      { value: "90%", label: "Less production time with the internal tools" }
+    ],
+    content: [
+      {
+        section: "Overview",
+        body: "At NxtWave I lead the generative AI production behind 14 social channels. The job isn't one good video; it's a thousand a month that still look like they belong to the right brand, with the same characters, the same voices and the same quality bar.\n\nSo instead of making videos one at a time, we built a production line: ComfyUI workflows for images and video, Flux with custom-trained LoRAs for characters that stay themselves, ElevenLabs voices driven by agents, and a brand system for each channel. Internal tools tie it together, and they cut production time by 90%.\n\n![Engineerudu, widescreen](/aivideos/engineerudu_horizontal.mp4)"
+      },
+      {
+        section: "The Problem: Scale Without Losing the Brand",
+        body: "Generative AI makes one impressive clip easy. It makes the thousandth consistent clip hard.\n\n| What scale breaks | Why it matters |\n|---|---|\n| Faces drift between shots | A presenter who changes face every scene isn't a presenter |\n| Every channel starts to look the same | 14 channels need 14 identities, not one AI look |\n| Voice-overs become the bottleneck | Recording a thousand scripts a month by hand doesn't scale |\n| Work lives in one person's head | A creative team of 20+ needs repeatable steps, not one expert |\nTable: Why volume is the hard part"
+      },
+      {
+        section: "The Pipeline",
+        body: "Every video moves through the same stages, and each stage has its own tool.\n\n| Stage | Tool | What it does |\n|---|---|---|\n| Brand | Brand design per channel | Type, colour, characters and tone for each of the 14 channels |\n| Characters | Flux + custom LoRAs | Trained models that keep a character's face and look across every shot |\n| Images and video | ComfyUI workflows | Saved, repeatable graphs instead of one-off prompts |\n| Voice | ElevenLabs + agents | Agents turn scripts into finished voice-overs |\n| Assembly | Internal tools | Edit, version and publish, with 90% less production time |\nTable: From brief to published video"
+      },
+      {
+        section: "Characters That Stay Themselves",
+        body: "The hardest part of AI video is identity. A prompt alone gives you a slightly different person every time, which is fine for a one-off and fatal for a channel with a recurring host.\n\nThe fix was training custom LoRAs for Flux: small add-on models trained on a character, so the base model draws *that* face, wardrobe and look on demand. It's what made 100+ AI ads with consistent characters possible.\n\n![A presenter who was never filmed](/aivideos/female_host_ai_generated.mp4)\n\n![The same host across scenes](/cases/ai-female_host_ai_generated-frames.webp)"
+      },
+      {
+        section: "Workflows, Not Prompts",
+        body: "In ComfyUI a result is a graph: model, LoRAs, prompts, control inputs and upscaling, wired together and saved. That turns a good result into a repeatable one. A designer on the team can open the workflow that made last week's hit and make the next one, without starting from a blank prompt.\n\n![Hyper-realistic detail](/aivideos/hyper_realistic_detail.mp4)\n\n![Mustang, AI realism](/aivideos/mustang_ai_realism.mp4)"
+      },
+      {
+        section: "Voices by Agent",
+        body: "Voice-over was the step that didn't scale by hand. Agents now take a script, prepare it for speech and generate the voice-over with ElevenLabs, so a finished script becomes finished audio without a recording session.\n\nThe result is a voice that matches its character and channel every time, which matters as much as a consistent face.\n\n![NIAT UGC](/aivideos/niat_ugc.mp4)"
+      },
+      {
+        section: "A Brand for Every Channel",
+        body: "With 14 channels, the risk is that everything starts to look like \"AI\". Each channel got its own brand: type, colour, characters and tone. Engineerudu, for example, carries the same red display type across its widescreen and vertical cuts, so either one is recognisable in a second.\n\n![Engineerudu, vertical cut](/aivideos/engineerudu_vertical.mp4)\n\n![Four moments from the Engineerudu film](/cases/ai-engineerudu_horizontal-frames.webp)"
+      },
+      {
+        section: "Selected Films",
+        body: "A few of the pieces this pipeline and team made, from commercials to presenters.\n\n![Stereo Headphones](/aivideos/AI_ADVERTISEMENT.mp4)\n\n![Hangy](/aivideos/HANGY.mp4)\n\n![Four moments from Stereo Headphones](/cases/ai-AI_ADVERTISEMENT-frames.webp)"
+      },
+      {
+        section: "Results",
+        body: "| Result | Where it came from |\n|---|---|\n| 14 channels, from 0 to 100K+ followers | A brand per channel and steady output |\n| 1,000+ videos a month | Repeatable ComfyUI workflows and agent-run voice-overs |\n| 100+ AI ads with consistent characters | Custom LoRAs trained for Flux |\n| 90% less production time | Internal tools that tie the pipeline together |\nTable: What the pipeline delivered"
       }
     ]
   },
