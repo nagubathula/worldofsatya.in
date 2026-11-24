@@ -18,9 +18,6 @@ import { SPRING } from "@/lib/motion";
 import CaseStudyOverlay from "./CaseStudyOverlay";
 import DepthGallery from "./DepthGallery";
 import PatchBoard from "./PatchBoard";
-import HorizontalShowcase from "./HorizontalShowcase";
-import MarqueeTrack from "./MarqueeTrack";
-import FloatingNavPill from "./FloatingNavPill";
 
 const EMAIL = "nagubathula.satyasai@gmail.com";
 const FAN_ITEMS = calendarSections.find((s) => s.isWorks).previewItems;
@@ -695,11 +692,6 @@ export default function OnePageHome({ projects, writing, extras = [], experience
         </div>
       </section>
 
-      {/* GSAP Velocity-Scrubbed Infinite Craft Marquee */}
-      <div className="w-full mt-6 sm:mt-10">
-        <MarqueeTrack />
-      </div>
-
       <main className="mx-auto w-full max-w-[620px] px-5 pb-10 pt-8">
 
         {/* Now */}
@@ -805,16 +797,9 @@ export default function OnePageHome({ projects, writing, extras = [], experience
             </li>
           ))}
         </ul>
-      </div>
 
-      {/* GSAP Horizontal Scroll Showcase */}
-      <div className="my-24 w-full">
-        <HorizontalShowcase onOpen={open} />
-      </div>
-
-      <div className="mx-auto w-full max-w-[620px] px-5">
         {/* Services */}
-        <section className="mt-20">
+        <section className="mt-32">
           <Reveal>
             <Label n="06">What I do</Label>
           </Reveal>
@@ -908,8 +893,6 @@ export default function OnePageHome({ projects, writing, extras = [], experience
           </motion.div>
         )}
       </AnimatePresence>
-
-      <FloatingNavPill />
 
       <AnimatePresence>{artifact && <Lightbox key={artifact.id} item={artifact} onClose={() => setArtifact(null)} />}</AnimatePresence>
       <AnimatePresence>{openWork && <CaseStudyOverlay key={openWork.slug} work={openWork} onClose={close} />}</AnimatePresence>
