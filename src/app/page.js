@@ -55,12 +55,19 @@ function projects() {
 }
 
 function writing() {
+  const metaMap = {
+    "design-to-code": { tag: "Engineering & Design", readTime: "5 min read" },
+    "why-i-choose-minimal-design": { tag: "Philosophy", readTime: "4 min read" },
+    "from-doodles-to-design": { tag: "Creative Journey", readTime: "6 min read" },
+  };
+
   return WRITING.map((study) => allWorks.find((w) => w.study === study))
     .filter(Boolean)
     .map((work) => {
       const study = studyFor(work);
       const date = study?.meta?.find((m) => /date|published/i.test(m.label))?.value || "";
-      return { ...pack(work, study), tag: "Writing", date };
+      const extra = metaMap[work.study] || { tag: "Essay", readTime: "4 min read" };
+      return { ...pack(work, study), tag: extra.tag, readTime: extra.readTime, date };
     });
 }
 

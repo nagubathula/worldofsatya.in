@@ -432,26 +432,62 @@ function Accordion({ items }) {
   );
 }
 
-// An article as a slightly tilted card.
-const TILTS = [-2.5, 2, -1.2];
-const OFFSETS = ["sm:mt-0", "sm:mt-16", "sm:-mt-4"];
+// An article card in a clean editorial grid.
 function ThoughtCard({ item, index, onOpen }) {
+  const image = item.image;
   return (
     <motion.a
       href={workHref(item)}
       data-transition="off"
       onClick={overlayClick(item, onOpen)}
-      initial={{ opacity: 0, y: 24, rotate: 0 }}
-      whileInView={{ opacity: 1, y: 0, rotate: TILTS[index % TILTS.length] }}
-      whileHover={{ rotate: 0, y: -6, scale: 1.02 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ type: "spring", stiffness: 160, damping: 20 }}
-      className={`relative block w-full max-w-[280px] overflow-hidden rounded-[20px] border border-black/[0.06] bg-white p-6 text-left shadow-[0_20px_50px_-24px_rgba(0,0,0,0.25)] ${OFFSETS[index % OFFSETS.length]}`}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.33, 1, 0.68, 1] }}
+      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] border border-black/[0.08] bg-white p-5 text-left shadow-[0_8px_24px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:border-black/[0.16] hover:shadow-[0_20px_40px_-14px_rgba(0,0,0,0.1)] sm:p-6"
     >
-      <p className="text-[21px] font-medium leading-[1.15] tracking-[-0.01em] text-[#181818]">{item.title}</p>
-      {item.date && <p className="mt-2 text-[12.8px] text-[#666]">{item.date}</p>}
-      <p className="mt-4 line-clamp-5 text-[12.8px] leading-[1.6] text-[#181818]">{item.study?.heroDescription || item.description}</p>
-      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+      <div>
+        {/* Visual thumbnail */}
+        {image && (
+          <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-[14px] bg-[#f5f5f7] border border-black/[0.04]">
+            <Image
+              src={image}
+              alt={item.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 320px"
+              className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+          </div>
+        )}
+
+        {/* Tag & Date row */}
+        <div className="flex items-center justify-between gap-2 text-[12px]">
+          <span className="rounded-full bg-[#f4f4f6] px-2.5 py-0.5 font-medium text-[#666]">
+            {item.tag || "Essay"}
+          </span>
+          <span className="text-[#888] tabular-nums">
+            {item.date} {item.readTime && `· ${item.readTime}`}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 className="mt-3.5 text-[17px] font-semibold leading-[1.3] tracking-[-0.015em] text-[#181818] transition-colors group-hover:text-black sm:text-[18px]">
+          {item.title}
+        </h3>
+
+        {/* Excerpt */}
+        <p className="mt-2 line-clamp-3 text-[13px] leading-[1.6] text-[#666]">
+          {item.study?.heroDescription || item.description}
+        </p>
+      </div>
+
+      {/* Footer link */}
+      <div className="mt-5 flex items-center gap-1.5 border-t border-black/[0.06] pt-3.5 text-[12.5px] font-medium text-[#181818]">
+        <span>Read essay</span>
+        <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+          →
+        </span>
+      </div>
     </motion.a>
   );
 }
@@ -811,9 +847,12 @@ export default function OnePageHome({ projects, writing, extras = [], experience
       <section className="mx-auto mt-32 w-full max-w-[620px] px-5">
         <Reveal>
           <Label n="07">Thoughts</Label>
+          <p className="mt-6 text-[15px] font-medium leading-[1.4] text-[#666]">
+            Short essays on bridging design and code, minimalism, and creative discipline.
+          </p>
         </Reveal>
       </section>
-      <div className="mx-auto mt-10 flex w-full max-w-[860px] flex-col items-center gap-8 px-5 sm:flex-row sm:items-start sm:justify-center sm:gap-6">
+      <div className="mx-auto mt-8 grid w-full max-w-[880px] grid-cols-1 gap-5 px-5 sm:grid-cols-3 sm:gap-6">
         {writing.map((item, i) => (
           <ThoughtCard key={item.slug} item={item} index={i} onOpen={open} />
         ))}

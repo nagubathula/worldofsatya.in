@@ -193,6 +193,7 @@ export const allWorks = [
     link: "",
     actionText: "",
     study: "why-i-choose-minimal-design",
+    image: "/articles/why-i-choose-minimal-design/01.jpg",
   },
 
   // Open Source
