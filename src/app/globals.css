@@ -82,7 +82,7 @@ html.lenis, html.lenis-smooth {
     @apply bg-background text-foreground font-sans antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.011em;
+    letter-spacing: -0.018em;
     transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
   }
 }

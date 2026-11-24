@@ -354,9 +354,9 @@ function ProofStrip({ delay = 0 }) {
   );
 }
 
-// The hero's board: a charcoal cutting mat. A fine grid with a heavier line
-// every fifth square, ruler ticks along the top and left edges, and a soft light
-// from the top left. Pure CSS; the patches are drawn on top in three.js.
+// The hero's board: an artisan studio cutting mat in rich forest green (#144830).
+// A fine grid with a heavier line every fifth square, ruler ticks along the edges,
+// and soft light from the top left.
 const TICKS_X =
   "repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0 1px, transparent 1px 8px), repeating-linear-gradient(90deg, rgba(255,255,255,0.6) 0 1px, transparent 1px 40px)";
 const TICKS_Y =
@@ -369,11 +369,11 @@ function BoardSurface() {
         className="absolute inset-0"
         style={{
           backgroundImage: [
-            "radial-gradient(ellipse 70% 60% at 30% 20%, rgba(255,255,255,0.07), transparent 70%)",
-            "linear-gradient(rgba(255,255,255,0.075) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.075) 1px, transparent 1px)",
-            "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
+            "radial-gradient(ellipse 70% 60% at 30% 20%, rgba(255,255,255,0.12), transparent 70%)",
+            "linear-gradient(rgba(120,215,165,0.22) 1px, transparent 1px)",
+            "linear-gradient(90deg, rgba(120,215,165,0.22) 1px, transparent 1px)",
+            "linear-gradient(rgba(120,215,165,0.08) 1px, transparent 1px)",
+            "linear-gradient(90deg, rgba(120,215,165,0.08) 1px, transparent 1px)",
           ].join(","),
           backgroundSize: "100% 100%, 200px 200px, 200px 200px, 40px 40px, 40px 40px",
           backgroundPosition: "0 0, 20px 20px, 20px 20px, 20px 20px, 20px 20px",
@@ -381,7 +381,12 @@ function BoardSurface() {
       />
       <div className="absolute inset-x-5 top-0 h-[9px]" style={{ backgroundImage: TICKS_X, backgroundSize: "100% 5px, 100% 9px", backgroundRepeat: "no-repeat" }} />
       <div className="absolute inset-y-5 left-0 w-[9px]" style={{ backgroundImage: TICKS_Y, backgroundSize: "5px 100%, 9px 100%", backgroundRepeat: "no-repeat" }} />
-      <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_80px_rgba(0,0,0,0.45)]" />
+      <div
+        className="absolute inset-0 rounded-[inherit]"
+        style={{
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 0 100px rgba(5,26,16,0.6)",
+        }}
+      />
     </div>
   );
 }
@@ -609,7 +614,7 @@ export default function OnePageHome({ projects, writing, extras = [], experience
       <section
         ref={boardRef}
         aria-label="Introduction"
-        className="relative mx-2.5 mt-2.5 overflow-hidden rounded-[24px] bg-[#17181b] text-white sm:mx-3.5 sm:mt-3.5 sm:rounded-[28px]"
+        className="relative mx-2.5 mt-2.5 overflow-hidden rounded-[24px] bg-[#144830] text-white sm:mx-3.5 sm:mt-3.5 sm:rounded-[28px]"
       >
         <BoardSurface />
         <PatchBoard boardRef={boardRef} />

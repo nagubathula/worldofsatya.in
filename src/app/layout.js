@@ -7,9 +7,9 @@ import KeyboardNav from "@/components/KeyboardNav";
 import TransitionScreen from "@/components/TransitionScreen";
 import SoundEffects from "@/components/SoundEffects";
 import AmbientBackground from "@/components/AmbientBackground";
-import { Inter } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 
-const sansFont = Inter({ 
+const sansFont = Inter_Tight({ 
   subsets: ['latin'],
   variable: '--font-sans',
 });
