@@ -16,7 +16,7 @@ import WorksFan from "@/components/WorksFan";
 import { calendarSections } from "@/components/FlipCalendarNav";
 import { SPRING } from "@/lib/motion";
 import CaseStudyOverlay from "./CaseStudyOverlay";
-import DepthGallery from "./DepthGallery";
+import HorizontalGallery from "./HorizontalGallery";
 import PatchBoard from "./PatchBoard";
 
 const EMAIL = "nagubathula.satyasai@gmail.com";
@@ -823,11 +823,13 @@ export default function OnePageHome({ projects, writing, extras = [], experience
       <section id="artifacts" className="mx-auto mt-32 w-full max-w-[620px] scroll-mt-10 px-5">
         <Reveal>
           <Label n="08">Artifacts</Label>
-          <p className="mt-6 text-[15px] font-medium leading-[1.4] text-[#666]">Posters, interfaces, 3D and AI work from along the way. Keep scrolling to fly through.</p>
+          <p className="mt-6 text-[15px] font-medium leading-[1.4] text-[#666]">
+            Posters, interfaces, 3D and AI work from along the way. Scroll to explore the archive.
+          </p>
         </Reveal>
       </section>
-      <div className="mt-6">
-        <DepthGallery items={artifacts} onOpen={setArtifact} />
+      <div className="mt-8">
+        <HorizontalGallery items={artifacts} onOpen={setArtifact} />
       </div>
 
       {/* Contact */}
