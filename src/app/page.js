@@ -34,6 +34,8 @@ function pack(work, study) {
           image: study.image || work.image || "",
           meta: study.meta || [],
           highlights: study.highlights || [],
+          panels: study.panels ?? null,
+          cover: study.cover ?? null,
           content: (study.content || []).map(({ section, body }) => ({ section, body })),
         }
       : null,

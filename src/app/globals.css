@@ -548,3 +548,130 @@ body:has([data-ui-world]) [data-home-face] {
 [data-time-scale="0.1"] * {
   transition-duration: 3.2s !important;
 }
+
+/* A case study's opening strip, pinned and driven sideways (SidewaysLead.js). */
+.sw-bar { display: none; }
+
+@media (min-width: 1024px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .sw {
+    --sw-h: calc(100svh - 108px);
+    height: calc(100svh + var(--sw, 0px));
+    /* Cancels <main>'s top padding so the strip starts at the top of the screen. */
+    margin-top: -8rem;
+  }
+
+  .sw-pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: clip;
+  }
+
+  .sw-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    height: 100%;
+    padding: 64px 6vw 44px;
+    will-change: transform;
+  }
+
+  .sw-track > .sw-intro {
+    flex: none;
+    width: min(46rem, 52vw);
+    max-width: none;
+    margin: 0;
+    padding: 0 5vw 0 0;
+  }
+
+  .sw-track > .sw-panels {
+    flex: none;
+    width: auto;
+    margin: 0;
+  }
+
+  .sw-track > .sw-panels > ul {
+    display: flex;
+    gap: 20px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .sw-track > .sw-panels li {
+    flex: none;
+    width: calc(var(--sw-h) * 1320 / 2868);
+    height: var(--sw-h);
+  }
+
+  .sw-track > .sw-cover {
+    flex: none;
+    width: auto;
+    max-width: none;
+    margin: 0 0 0 5vw;
+    padding: 0;
+  }
+
+  .sw-track > .sw-cover img {
+    /* Sized up front so the strip's length doesn't change as it loads. */
+    width: min(88vw, var(--sw-h) * var(--sw-ratio));
+    height: auto;
+  }
+
+  .sw-bar {
+    display: block;
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    width: 120px;
+    height: 3px;
+    margin-left: -60px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: rgb(0 0 0 / 0.1);
+  }
+
+  .sw-bar > span {
+    display: block;
+    height: 100%;
+    background: #1d1d1f;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+
+/* Short windows: the intro tightens so its back link and buttons stay on screen. */
+@media (min-width: 1024px) and (min-height: 600px) and (max-height: 840px) and (prefers-reduced-motion: no-preference) {
+  .sw:not(.sw-sheet) .sw-intro > :first-child { margin-bottom: 1.25rem; }
+  .sw-intro header > img { width: 2.75rem; height: 2.75rem; margin-bottom: 0.9rem; }
+  .sw-intro h1 { margin-top: 1rem; font-size: clamp(2.4rem, 7svh, 4.25rem); }
+  .sw-intro header > p { margin-top: 1rem; font-size: 1.0625rem; line-height: 1.55; }
+  .sw-intro header > div:last-child { margin-top: 1.35rem; }
+}
+
+/* The same strip inside the home page's sheet, measured against its scroll area. */
+@media (min-width: 1024px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .sw-wide { max-width: 1480px; }
+
+  .sw-wide > .sw-scroller { container-type: size; }
+
+  .sw-sheet {
+    --sw-h: calc(100cqh - 64px);
+    height: calc(100cqh + var(--sw, 0px));
+    margin-top: 0;
+  }
+
+  .sw-sheet > .sw-pin { height: 100cqh; }
+
+  .sw-sheet .sw-track { padding: 24px 4cqw 40px; }
+
+  .sw-sheet .sw-track > .sw-intro {
+    width: min(38rem, 46cqw);
+    padding: 0 4cqw 0 0;
+  }
+
+  .sw-sheet .sw-track > .sw-cover { margin-left: 4cqw; }
+
+  .sw-sheet .sw-track > .sw-cover img { width: min(88cqw, var(--sw-h) * var(--sw-ratio)); }
+
+  .sw-sheet .sw-bar { bottom: 16px; }
+}

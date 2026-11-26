@@ -1,0 +1,10 @@
+@font-face{font-family:SFx;font-weight:500;src:url(../images/about/sf-pro-display/SFPRODISPLAYMEDIUM.OTF)}
+@font-face{font-family:SFx;font-weight:700;src:url(../images/about/sf-pro-display/SFPRODISPLAYBOLD.OTF)}
+*{box-sizing:border-box;margin:0}
+body{min-width:1820px;min-height:956px;position:relative;overflow:hidden;background:#fff;font-family:SFx}
+.p{position:absolute;top:0;width:440px;height:956px}
+h2{position:absolute;left:38px;top:54px;font-weight:700;font-size:61px;line-height:.98;letter-spacing:-.042em;white-space:nowrap}
+#gl{position:absolute;inset:0;width:1820px;height:956px;z-index:1;filter:drop-shadow(0 22px 20px rgba(8,6,20,.30))}
+.gut{position:absolute;top:0;width:20px;height:956px;background:#fff;z-index:9}
+.ui{position:absolute;overflow:hidden;box-shadow:0 2px 5px rgba(10,8,20,.2),0 28px 46px -8px rgba(10,8,20,.42)}
+.ui i{position:absolute;inset:0;background-repeat:no-repeat}

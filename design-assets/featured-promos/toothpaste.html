@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><title>toothpaste</title><link rel="stylesheet" href="style.css"><script type="importmap">{"imports":{"three":"../../node_modules/three/build/three.module.js"}}</script></head><body><script type="module">
+import { THREE, panels, piece, stage, V, curve, mesh, texture, load } from "./lib.js";
+panels([
+  { bg: "linear-gradient(165deg,#8ff0dc,#4fdcc2)", text: "Paste it.<br>It’s on the<br>timeline." },
+  { bg: "linear-gradient(165deg,#f1edff,#dcd3ff)", text: "One panel.<br>One<br>keystroke." },
+  { bg: "linear-gradient(165deg,#8568ff,#6544f2)", fg: "#fff", text: "Take just<br>the part<br>you need." },
+  { bg: "linear-gradient(165deg,#ff8cb4,#ff6a9c)", text: "Over 1,000<br>sites. One<br>squeeze." },
+]);
+const { scene, done } = stage({ env: 0.75, key: 1.6, ambient: 0.25 });
+await document.fonts.load("700 40px SFx");
+const stripes = texture(8, 1024, (g, w, h) => { ["#ffffff", "#6a49f5", "#ffffff", "#25b6ff", "#ffffff", "#6a49f5", "#ffffff", "#25b6ff"].forEach((c, i) => { g.fillStyle = c; g.fillRect(0, (i * h) / 8, w, h / 8 + 1); }); });
+const paste = new THREE.MeshPhysicalMaterial({ map: stripes, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.12 });
+// Squeezed paste: out of the nozzle, one loop, then away through every panel.
+const c = curve([[226, -596, 40], [204, -640, 46], [180, -690, 60], [120, -740, 90], [84, -800, 130], [140, -856, 160], [240, -850, 150], [300, -790, 110], [284, -728, 60], [220, -730, 20], [190, -800, -20], [250, -880, -10], [360, -880, 40], [470, -820, 70], [590, -800, 60], [700, -850, 60], [800, -880, 100], [900, -830, 130], [960, -770, 90], [920, -726, 30], [860, -770, -20], [900, -850, -10], [1020, -884, 50], [1160, -840, 70], [1290, -800, 60], [1390, -840, 80], [1470, -886, 120], [1580, -860, 140], [1620, -790, 100], [1560, -744, 40], [1500, -790, -20], [1560, -866, 0], [1700, -880, 40], [1900, -820, 40]]);
+const N = 2600, M = 64, RAD = 38, pos = [], uv = [], idx = [];
+const fr = c.computeFrenetFrames(N, false), pts = c.getSpacedPoints(N);
+for (let i = 0; i <= N; i++) { const s = i / N, r0 = RAD * Math.min(1, 0.72 + s * 14);
+  for (let j = 0; j <= M; j++) { const a = (j / M) * 2 * Math.PI, rr = r0 * (1 + 0.07 * Math.cos(a * 8));
+    const q = pts[i].clone().addScaledVector(fr.normals[i], rr * Math.cos(a)).addScaledVector(fr.binormals[i], rr * Math.sin(a));
+    pos.push(q.x, q.y, q.z); uv.push(0.5, j / M + 1 / 16 + s * 5); } }
+for (let i = 0; i < N; i++) for (let j = 0; j < M; j++) { const k = i * (M + 1) + j; idx.push(k, k + M + 1, k + 1, k + 1, k + M + 1, k + M + 2); }
+const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals();
+paste.side = THREE.DoubleSide; mesh(scene, g, paste);
+// The tube: round at the shoulder, flat at the crimp.
+const tube = new THREE.Group(), L = 262, A = 160, B = 96, tp = [], tu = [], ti = [];
+for (let i = 0; i <= B; i++) { const t = i / B, f = 1 - t, dent = 1 - 0.18 * Math.exp(-(((t - 0.45) / 0.14) ** 2));
+  const rx = 68 + 26 * t, rz = Math.max(3, 68 * Math.pow(f, 0.62)) * dent;
+  for (let j = 0; j <= A; j++) { const a = (j / A) * 2 * Math.PI; tp.push(rx * Math.sin(a), t * L, rz * Math.cos(a)); tu.push(j / A, t); } }
+for (let i = 0; i < B; i++) for (let j = 0; j < A; j++) { const k = i * (A + 1) + j; ti.push(k, k + 1, k + A + 1, k + 1, k + A + 2, k + A + 1); }
+const label = texture(2048, 1024, (x, w, h) => {
+  x.fillStyle = "#fbfaff"; x.fillRect(0, 0, w, h);
+  x.fillStyle = "#6a49f5"; x.fillRect(0, 0, w, 120); x.fillStyle = "#25b6ff"; x.fillRect(0, h - 70, w, 70); 
+  x.save(); x.translate(0, 0);
+  for (const cx of [0, w]) { x.save(); x.translate(cx, h / 2 + 20); x.rotate(Math.PI / 2); x.textAlign = "center"; x.fillStyle = "#2b1877"; x.font = "700 148px SFx"; x.fillText("toothpaste", 0, 50); x.restore(); }
+  x.restore();
+});
+const tg = new THREE.BufferGeometry(); tg.setAttribute("position", new THREE.Float32BufferAttribute(tp, 3)); tg.setAttribute("uv", new THREE.Float32BufferAttribute(tu, 2)); tg.setIndex(ti); tg.computeVertexNormals();
+const tm = new THREE.Mesh(tg, new THREE.MeshPhysicalMaterial({ map: label, envMapIntensity: 0.55, roughness: 0.5, clearcoat: 0.25, clearcoatRoughness: 0.15, side: THREE.DoubleSide }));
+const crimp = new THREE.Mesh(new THREE.BoxGeometry(188, 24, 7), new THREE.MeshPhysicalMaterial({ color: "#25b6ff", roughness: 0.35 })); crimp.position.y = L + 8;
+const shoulder = new THREE.Mesh(new THREE.CylinderGeometry(68, 34, 26, 96), new THREE.MeshPhysicalMaterial({ color: "#6a49f5", roughness: 0.25, clearcoat: 1 })); shoulder.position.y = -13;
+const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(32, 32, 34, 96), new THREE.MeshPhysicalMaterial({ color: "#ffffff", roughness: 0.3 })); nozzle.position.y = -42;
+tube.add(tm, crimp, shoulder, nozzle); tube.traverse((o) => { o.castShadow = o.receiveShadow = true; });
+tube.position.set(241, -552, 40); tube.rotation.set(0.12, 0.04, -0.34, "ZYX"); scene.add(tube);
+await piece({ src: "tp-closed.png", x: 76, y: 262, w: 1368, h: 1318, left: 494, top: 292, width: 372, r: 24, rot: -2, bg: "#222" });
+await piece({ src: "tp-open.png", x: 170, y: 1000, w: 1180, h: 590, left: 948, top: 300, width: 384, r: 20, rot: -3, bg: "#1b1b1f" });
+await piece({ src: "tp-open.png", x: 330, y: 730, w: 880, h: 260, left: 976, top: 516, width: 340, r: 22, rot: 3, bg: "#26262b", pad: 10 });
+const logo = await load("../../public/cases/toothpaste-logo.webp");
+const d = document.createElement("div"); d.className = "ui"; d.style.cssText = "left:1420px;top:286px;width:360px;height:366px;border-radius:30px;background:#fff;transform:rotate(3deg);z-index:4"; d.innerHTML = `<img src="${logo.src}" style="position:absolute;inset:18px;width:324px">`; document.body.append(d);
+await done();
+</script></body></html>

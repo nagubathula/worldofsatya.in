@@ -10,6 +10,15 @@ const studies = [
     image: "/notbad-editor.png",
     video: "/videos/notbad-launch.mp4",
     logo: "/notbad-logo.png",
+    // Cut-out cover: transparent, any shape, shown without the stage.
+    cover: { src: "/cases/covers/notbad.webp", width: 2400, height: 1896, alt: "The NotBad editor with its sidebar, surrounded by drifting pages of writing" },
+    // Promo panels shown under the intro; source in design-assets/featured-promos.
+    panels: [
+      { src: "/cases/promos/notbad-1.webp", alt: "The words are the interface: pages of real NotBad text drifting through all four images" },
+      { src: "/cases/promos/notbad-2.webp", alt: "Type marks. See writing: Markdown before and after its marks fade" },
+      { src: "/cases/promos/notbad-3.webp", alt: "One thought at a time, in focus: focus mode dims every other paragraph" },
+      { src: "/cases/promos/notbad-4.webp", alt: "Plain files. Always yours: NotBad’s sidebar of documents" }
+    ],
     // The facts a reader wants before the story.
     meta: [
       { label: "Product", value: "Distraction-free Markdown writer" },
@@ -100,6 +109,15 @@ const studies = [
     type: "Product Design Case Study",
     heroDescription: "Taking an open-source Figma-compatible editor and pushing it toward the work designers do after the static frame: motion, prototypes on real devices, handoff, and live shader layers, while keeping the file on your own disk.",
     image: "/openweave-shader.png",
+    // Cut-out cover: transparent, any shape, shown without the stage.
+    cover: { src: "/cases/covers/openweave.webp", width: 2400, height: 1688, alt: "The OpenWeave editor with its motion timeline, resting on a braid of five coloured ribbons" },
+    // Promo panels shown under the intro; source in design-assets/featured-promos.
+    panels: [
+      { src: "/cases/promos/openweave-1.webp", alt: "Design past the still frame: a sheet of woven ribbons whose strands run on through all four images" },
+      { src: "/cases/promos/openweave-2.webp", alt: "Motion, next to your layers: OpenWeave’s transform controls and keyframe timeline" },
+      { src: "/cases/promos/openweave-3.webp", alt: "Feel it on a real device: a prototype presented inside a phone frame" },
+      { src: "/cases/promos/openweave-4.webp", alt: "Handoff is one shortcut: Dev Mode’s CSS beside the selected frame" }
+    ],
     meta: [
       { label: "Product", value: "Open-source design editor and toolkit" },
       { label: "Role", value: "Product design and engineering, on top of an open-source fork" },

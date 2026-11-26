@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { ArrowUpRight, X } from "lucide-react";
 import CaseStudyBody from "@/components/CaseStudyBody";
 import NoiseStage from "@/components/NoiseStage";
+import CaseStudyPanels from "@/components/CaseStudyPanels";
+import SidewaysLead from "@/components/SidewaysLead";
 
 const EASE = [0.32, 0.72, 0, 1];
 
@@ -14,8 +17,12 @@ const EASE = [0.32, 0.72, 0, 1];
 export default function CaseStudyOverlay({ work, onClose }) {
   const panelRef = useRef(null);
   const closeRef = useRef(null);
+  const scrollRef = useRef(null);
   const lenis = useLenis();
   const study = work.study;
+  // With promo images the sheet opens sideways, like the full page.
+  const Lead = study?.panels ? SidewaysLead : Fragment;
+  const leadProps = study?.panels ? { scroller: scrollRef } : {};
 
   // Page scroll pauses underneath; the sheet scrolls on its own.
   useEffect(() => {
@@ -82,7 +89,7 @@ export default function CaseStudyOverlay({ work, onClose }) {
         aria-modal="true"
         aria-labelledby={`study-${work.slug}`}
         data-lenis-prevent="true"
-        className="relative z-10 flex h-[94dvh] w-full max-w-[880px] flex-col overflow-hidden rounded-t-[28px] bg-[#fbfbfa] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] sm:h-[90dvh] sm:rounded-[28px]"
+        className={`relative z-10 flex h-[94dvh] w-full max-w-[880px] flex-col overflow-hidden rounded-t-[28px] bg-[#fbfbfa] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] sm:h-[90dvh] sm:rounded-[28px] ${study?.panels ? "sw-wide" : ""}`}
         initial={{ y: "100%", opacity: 0.6 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0.6 }}
@@ -121,14 +128,39 @@ export default function CaseStudyOverlay({ work, onClose }) {
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <header className="mx-auto max-w-[680px] px-5 pt-10 sm:px-8 sm:pt-14">
-            {study?.type && <p className="text-[12px] font-medium uppercase tracking-[0.14em] text-ink-muted">{study.type}</p>}
-            <h2 id={`study-${work.slug}`} className="mt-3 text-[30px] font-semibold leading-[1.08] tracking-[-0.035em] text-ink sm:text-[40px]">
-              {study?.title || work.title}
-            </h2>
-            <p className="mt-4 text-[16px] leading-[1.6] text-ink-secondary sm:text-[17px]">{study?.heroDescription || work.description}</p>
+        <div ref={scrollRef} className="sw-scroller min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <Lead {...leadProps}>
+            <header className="sw-intro mx-auto max-w-[680px] px-5 pt-10 sm:px-8 sm:pt-14">
+              {study?.type && <p className="text-[12px] font-medium uppercase tracking-[0.14em] text-ink-muted">{study.type}</p>}
+              <h2 id={`study-${work.slug}`} className="mt-3 text-[30px] font-semibold leading-[1.08] tracking-[-0.035em] text-ink sm:text-[40px]">
+                {study?.title || work.title}
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.6] text-ink-secondary sm:text-[17px]">{study?.heroDescription || work.description}</p>
+            </header>
 
+            {study?.panels && (
+              <div className="sw-panels mx-auto mt-8 max-w-[820px]">
+                <CaseStudyPanels panels={study.panels} full />
+              </div>
+            )}
+
+            {study?.cover && (
+              <div className="sw-cover mx-auto mt-10 max-w-[860px] px-3 sm:px-5">
+                <Image
+                  src={study.cover.src}
+                  alt={study.cover.alt}
+                  width={study.cover.width}
+                  height={study.cover.height}
+                  loading="eager"
+                  style={{ "--sw-ratio": study.cover.width / study.cover.height }}
+                  sizes="(min-width: 1024px) 1000px, (min-width: 880px) 820px, 100vw"
+                  className="h-auto w-full"
+                />
+              </div>
+            )}
+          </Lead>
+
+          <div className="mx-auto max-w-[680px] px-5 sm:px-8">
             {study?.meta?.length > 0 && (
               <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-black/[0.08] py-5 sm:grid-cols-4">
                 {study.meta.map((item) => (
@@ -150,9 +182,9 @@ export default function CaseStudyOverlay({ work, onClose }) {
                 ))}
               </ul>
             )}
-          </header>
+          </div>
 
-          {study?.image && (
+          {!study?.cover && study?.image && (
             <div className="mx-auto mt-10 max-w-[820px] px-4 sm:px-8">
               <NoiseStage seed={work.slug} className="p-3 sm:p-8">
                 <img src={study.image} alt={work.title} className="noise-stage-media h-auto w-full object-contain" />

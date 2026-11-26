@@ -1,0 +1,119 @@
+<!doctype html><html><head><meta charset="utf-8"><title>ContentFlow promo set v2</title>
+<style>
+@font-face{font-family:SFx;font-weight:500;src:url(../images/about/sf-pro-display/SFPRODISPLAYMEDIUM.OTF)}
+@font-face{font-family:SFx;font-weight:700;src:url(../images/about/sf-pro-display/SFPRODISPLAYBOLD.OTF)}
+*{box-sizing:border-box;margin:0}
+body{width:1820px;height:956px;position:relative;overflow:hidden;background:#fff;font-family:SFx}
+.p{position:absolute;top:0;width:440px;height:956px}
+h2{position:absolute;z-index:3;left:38px;top:54px;font-weight:700;font-size:61px;line-height:.98;letter-spacing:-.042em;color:#141419;white-space:nowrap}
+#gl{position:absolute;inset:0;width:1820px;height:956px;z-index:1;filter:drop-shadow(0 26px 22px rgba(20,12,4,.30))}
+.gut{position:absolute;top:0;width:20px;height:956px;background:#fff;z-index:9}
+.ui{position:absolute;z-index:4;overflow:hidden;box-shadow:0 2px 5px rgba(15,10,5,.18),0 28px 46px -8px rgba(15,10,5,.38)}
+.ui i{position:absolute;inset:0;background-repeat:no-repeat}
+.brand{position:absolute;z-index:3;left:38px;bottom:36px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:25px;letter-spacing:-.03em;color:#141419}
+.brand img{width:44px;height:44px}
+</style></head><body>
+<div class="p" style="left:0;background:linear-gradient(165deg,#ffcb47,#ffb21a)"><h2>Script<br>to screen,<br>in one flow.</h2></div>
+<div class="p" style="left:460px;background:linear-gradient(165deg,#fff6e6,#fbe7c6)"><h2>See where<br>every video<br>stands.</h2></div>
+<div class="p" style="left:920px;background:linear-gradient(165deg,#3c93ff,#0a6df0)"><h2 style="color:#fff">Catch it<br>before<br>it’s live.</h2></div>
+<div class="p" style="left:1380px;background:linear-gradient(165deg,#ff7350,#f4502c)"><h2>Five<br>languages.<br>One team.</h2></div>
+<canvas id="gl"></canvas>
+<div id="cards"></div>
+<div class="gut" style="left:440px"></div><div class="gut" style="left:900px"></div><div class="gut" style="left:1360px"></div>
+<script type="importmap">{"imports":{"three":"../../node_modules/three/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+import { RoomEnvironment } from "../../node_modules/three/examples/jsm/environments/RoomEnvironment.js";
+const S = "../../public/cases/content-nexus/";
+const load = (n) => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = S + n + ".webp"; });
+const names = ["overview-light", "admin-review-card", "youtube-analytics-view", "pipeline-kanban", "content-calendar"];
+const img = Object.fromEntries(await Promise.all(names.map(async (n) => [n, await load(n)])));
+
+// Floating pieces: untouched crops of the product screenshots. k scales source px to CSS px.
+function piece({ src, x, y, w, h, left, top, width, rot = 0, r = 20, pad = 0, bg = "#111" }) {
+  const k = (width - pad * 2) / w, im = img[src];
+  const d = document.createElement("div");
+  d.className = "ui";
+  d.style.cssText = `left:${left}px;top:${top}px;width:${width}px;height:${h * k + pad * 2}px;transform:rotate(${rot}deg);border-radius:${r}px;background:${bg}`;
+  d.innerHTML = `<i style="inset:${pad}px;background-image:url(${S}${src}.webp);background-size:${im.width * k}px ${im.height * k}px;background-position:${-x * k}px ${-y * k}px"></i>`;
+  document.querySelector("#cards").append(d);
+}
+// 2: pipeline cards
+piece({ src: "pipeline-kanban", x: 975, y: 843, w: 438, h: 360, left: 490, top: 300, width: 300, rot: -4 });
+piece({ src: "pipeline-kanban", x: 1468, y: 843, w: 438, h: 360, left: 572, top: 520, width: 300, rot: 3 });
+// 3: the review column
+piece({ src: "admin-review-card", x: 1752, y: 24, w: 514, h: 748, left: 973, top: 286, width: 334, pad: 14, r: 26 });
+// 4: one channel card per language
+const ch = (col, row, left, top, rot) => piece({ src: "overview-light", x: [521, 973, 1424, 1875][col], y: [1912, 2128][row], w: 431, h: 196, left, top, width: 292, rot, r: 15, bg: "#fff" });
+ch(2, 1, 1410, 296, -4); ch(1, 0, 1498, 420, 3); ch(3, 0, 1404, 546, -2); ch(0, 1, 1500, 672, 3); ch(2, 0, 1412, 798, -3);
+
+// Film texture
+// A fifth colour value marks a full channel card, centred on its own tint.
+const crops = [
+  ["overview-light", 507, 589, 370, 277], ["pipeline-kanban", 966, 770, 456, 342], ["overview-light", 980, 1920, 412, 182, "#fde1cf"],
+  ["admin-review-card", 1750, 10, 522, 391], ["overview-light", 1432, 1920, 412, 182, "#e9defc"], ["admin-review-card", 46, 38, 244, 176],
+  ["overview-light", 1040, 589, 370, 277], ["overview-light", 529, 2136, 412, 182, "#d3f4e3"], ["youtube-analytics-view", 700, 1722, 840, 630],
+  ["overview-light", 1432, 2136, 412, 182, "#fdeccb"], ["content-calendar", 1548, 560, 800, 600], ["overview-light", 1883, 1920, 412, 182, "#fbd9e0"],
+];
+const CELL = 640, H = 640, FW = 586, FH = 440, N = crops.length;
+const c = document.createElement("canvas"); c.width = CELL * N; c.height = H;
+const g = c.getContext("2d");
+g.fillStyle = "#1d1512"; g.fillRect(0, 0, c.width, H);
+crops.forEach(([n, x, y, w, h, tint], i) => {
+  const dx = i * CELL + (CELL - FW) / 2, dy = (H - FH) / 2;
+  g.save(); g.beginPath(); g.roundRect(dx, dy, FW, FH, 22); g.clip();
+  g.imageSmoothingQuality = "high";
+  if (tint) { g.fillStyle = tint; g.fillRect(dx, dy, FW, FH); const th = (FW * h) / w; g.drawImage(img[n], x, y, w, h, dx, dy + (FH - th) / 2, FW, th); }
+  else g.drawImage(img[n], x, y, w, h, dx, dy, FW, FH);
+  g.restore(); g.strokeStyle = "rgba(255,225,195,.22)"; g.lineWidth = 4; g.beginPath(); g.roundRect(dx, dy, FW, FH, 22); g.stroke();
+  g.fillStyle = "#e9a13b"; g.font = "700 22px SFx,sans-serif"; g.fillText(`${i + 1}A  ▸  CONTENTFLOW`, dx + 190, H - 8);
+});
+g.globalCompositeOperation = "destination-out";
+for (let x = 0; x < c.width; x += 80) for (const y of [22, H - 22 - 50]) { g.beginPath(); g.roundRect(x + 24, y, 34, 50, 9); g.fill(); }
+const tex = new THREE.CanvasTexture(c);
+tex.colorSpace = THREE.SRGBColorSpace; tex.wrapS = THREE.RepeatWrapping; tex.anisotropy = 16;
+
+// Scene in CSS pixels, y up
+const W = 1820, HH = 956, DPR = 3;
+const r = new THREE.WebGLRenderer({ canvas: document.querySelector("#gl"), alpha: true, antialias: true, preserveDrawingBuffer: true });
+r.setPixelRatio(DPR); r.setSize(W, HH, false);
+r.toneMapping = THREE.NoToneMapping;
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture;
+const cam = new THREE.OrthographicCamera(0, W, 0, -HH, -2000, 4000);
+const key = new THREE.DirectionalLight(0xffffff, 0.95); key.position.set(-300, 500, 900); scene.add(key);
+
+// Path: a two-turn helix in panel 1 that unrolls through the rest.
+const TILT = 0.30, RAD = 164, RW = 172;
+const pts = [];
+const turns = 1.66, a0 = -1.32 * Math.PI, yTop = 418, drop = 238;
+for (let i = 0; i <= 90; i++) {
+  const t = i / 90, a = a0 + t * turns * 2 * Math.PI;
+  pts.push(new THREE.Vector3(218 + RAD * Math.sin(a), -(yTop + drop * turns * t), RAD * Math.cos(a)));
+}
+for (const p of [[310, -822, 156], [420, -832, 120], [540, -830, 50], [680, -800, -30], [800, -776, 60], [920, -800, 120], [1040, -838, 60], [1150, -842, -40], [1260, -790, 20], [1360, -690, 100], [1480, -600, 60], [1620, -560, -60], [1760, -600, 60], [1900, -640, 100]]) pts.push(new THREE.Vector3(...p));
+const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal");
+const SEG = 1600, len = curve.getLength(), pos = [], uv = [], idx = [];
+const up = new THREE.Vector3(0.0, 1, 0);
+const rot = new THREE.Matrix4().makeRotationX(TILT);
+const P = curve.getSpacedPoints(SEG);
+for (let i = 0; i <= SEG; i++) {
+  const p = P[i], s = i / SEG;
+  for (const v of [0, 1]) {
+    const q = p.clone().addScaledVector(up, (v - 0.5) * RW);
+    // Tilt about the point's own height so layout stays in page pixels.
+    const z = q.z, y = q.y;
+    pos.push(q.x, y - z * Math.sin(TILT), z + (y - p.y) * Math.sin(TILT)); uv.push((s * len) / (RW * N), v);
+  }
+  if (i < SEG) { const k = i * 2; idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3); }
+}
+const geo = new THREE.BufferGeometry();
+geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+geo.setIndex(idx); geo.computeVertexNormals();
+const mat = (side, extra) => new THREE.MeshPhysicalMaterial({ map: tex, alphaTest: 0.5, side, roughness: 0.42, clearcoat: 0.8, clearcoatRoughness: 0.25, ...extra });
+scene.add(new THREE.Mesh(geo, mat(THREE.FrontSide, { color: 0xcfcfcf, envMapIntensity: 0.34 })));
+scene.add(new THREE.Mesh(geo, mat(THREE.BackSide, { color: 0x8a6a50, envMapIntensity: 0.3 })));
+await document.fonts.ready;
+r.render(scene, cam);
+</script></body></html>

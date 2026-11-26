@@ -115,6 +115,15 @@ export default function CaseStudyBody({ text, seed }) {
           </figure>
         );
       }
+      // Transparent cut-outs stand on the page itself, without a stage.
+      if (src.startsWith('/cases/covers/')) {
+        return (
+          <figure key={i} className="my-4">
+            <img src={src} srcSet={stillSrcSet(src)} sizes="(min-width: 768px) 672px, 100vw" alt={caption} loading="lazy" decoding="async" className="h-auto w-full" />
+            {caption && <figcaption className="mt-3 text-center text-sm text-ink-muted">{caption}</figcaption>}
+          </figure>
+        );
+      }
       return (
         <figure key={i} className="my-2">
           {/* Plain img: these are a mix of sizes and animated GIFs. Stills still get

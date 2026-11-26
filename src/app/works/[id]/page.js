@@ -11,6 +11,8 @@ import { workMediaStyle } from "@/lib/motion";
 import { caseStudiesData } from "@/data/caseStudies";
 import CaseStudyBody from "@/components/CaseStudyBody";
 import NoiseStage from "@/components/NoiseStage";
+import CaseStudyPanels from "@/components/CaseStudyPanels";
+import SidewaysLead from "@/components/SidewaysLead";
 import Magnetic from "@/components/Magnetic";
 import RestrictedAppButton from "@/components/RestrictedAppButton";
 import { CaseStudyContents, CountUp, ReadingProgress, RevealOnScroll } from "@/components/CaseStudyChrome";
@@ -230,55 +232,82 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
   const words = study.content.reduce((n, s) => n + s.body.split(/\s+/).length, 0);
   const minutes = Math.max(1, Math.round(words / 230));
   const titleWords = study.title.split(" ").length;
+  // With promo images the opening runs sideways; without, it's a plain column.
+  const Lead = study.panels ? SidewaysLead : Fragment;
 
   return (
     <div className="min-h-screen relative w-full">
       <ReadingProgress />
       <RevealOnScroll />
       <main className="relative z-10 flex flex-col pt-24 sm:pt-32 pb-16">
-        <div className="mx-auto w-full max-w-3xl px-4 sm:px-8">
-          <BackToWorks className="cs-rise mb-10 inline-block text-sm text-ink-secondary hover:text-black" />
-          <header>
-            {study.logo && (
-              <Image
-                src={study.logo}
-                alt=""
-                width={256}
-                height={256}
-                sizes="64px"
-                className="cs-rise mb-6 h-14 w-14 drop-shadow-[0_10px_20px_rgba(0,0,0,0.22)] sm:h-16 sm:w-16"
-                style={{ "--cs-i": 0 }}
-              />
-            )}
-            <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-ink-muted" style={{ "--cs-i": 1 }}>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.05] bg-[#f5f5f7] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#626267]">
-                <BookOpen size={11} className="text-sage" /> {study.type}
-              </span>
-              <span className="whitespace-nowrap tabular-nums">
-                {minutes} min read <span aria-hidden="true" className="mx-1.5">·</span> {sections.length} sections
-              </span>
-            </div>
-            <h1 className="mt-6 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-ink [text-wrap:balance] sm:text-6xl lg:text-[4.25rem]">
-              <RisingWords text={study.title} from={2} />
-            </h1>
-            <p
-              className="cs-rise mt-6 max-w-2xl text-lg leading-relaxed text-ink-secondary [text-wrap:pretty] sm:text-xl sm:leading-relaxed"
-              style={{ "--cs-i": titleWords + 3 }}
-            >
-              {study.heroDescription}
-            </p>
-            <div className="cs-rise mt-9 flex flex-wrap items-center gap-x-6 gap-y-4" style={{ "--cs-i": titleWords + 4 }}>
-              {action}
-              <a
-                href={`#${sections[0].id}`}
-                className="group inline-flex items-center gap-2 text-sm font-medium text-ink-secondary transition-colors hover:text-ink"
+        <Lead>
+          <div className="sw-intro mx-auto w-full max-w-3xl px-4 sm:px-8">
+            <BackToWorks className="cs-rise mb-10 inline-block text-sm text-ink-secondary hover:text-black" />
+            <header>
+              {study.logo && (
+                <Image
+                  src={study.logo}
+                  alt=""
+                  width={256}
+                  height={256}
+                  sizes="64px"
+                  className="cs-rise mb-6 h-14 w-14 drop-shadow-[0_10px_20px_rgba(0,0,0,0.22)] sm:h-16 sm:w-16"
+                  style={{ "--cs-i": 0 }}
+                />
+              )}
+              <div className="cs-rise flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-ink-muted" style={{ "--cs-i": 1 }}>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.05] bg-[#f5f5f7] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#626267]">
+                  <BookOpen size={11} className="text-sage" /> {study.type}
+                </span>
+                <span className="whitespace-nowrap tabular-nums">
+                  {minutes} min read <span aria-hidden="true" className="mx-1.5">·</span> {sections.length} sections
+                </span>
+              </div>
+              <h1 className="mt-6 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-ink [text-wrap:balance] sm:text-6xl lg:text-[4.25rem]">
+                <RisingWords text={study.title} from={2} />
+              </h1>
+              <p
+                className="cs-rise mt-6 max-w-2xl text-lg leading-relaxed text-ink-secondary [text-wrap:pretty] sm:text-xl sm:leading-relaxed"
+                style={{ "--cs-i": titleWords + 3 }}
               >
-                Start reading
-                <span aria-hidden="true" className="transition-transform duration-300 ease-out group-hover:translate-y-0.5">↓</span>
-              </a>
-            </div>
-          </header>
+                {study.heroDescription}
+              </p>
+              <div className="cs-rise mt-9 flex flex-wrap items-center gap-x-6 gap-y-4" style={{ "--cs-i": titleWords + 4 }}>
+                {action}
+                <a
+                  href={`#${sections[0].id}`}
+                  className="group inline-flex items-center gap-2 text-sm font-medium text-ink-secondary transition-colors hover:text-ink"
+                >
+                  Start reading
+                  <span aria-hidden="true" className="transition-transform duration-300 ease-out group-hover:translate-y-0.5">↓</span>
+                </a>
+              </div>
+            </header>
+          </div>
 
+          {study.panels && (
+            <div className="sw-panels mt-12 w-full sm:mt-14">
+              <CaseStudyPanels panels={study.panels} full />
+            </div>
+          )}
+
+          {study.cover && (
+            <div className="sw-cover mx-auto mt-12 w-full max-w-[1240px] px-3 sm:mt-16 sm:px-8">
+              <Image
+                src={study.cover.src}
+                alt={study.cover.alt}
+                width={study.cover.width}
+                height={study.cover.height}
+                loading="eager"
+                style={{ "--sw-ratio": study.cover.width / study.cover.height }}
+                sizes="(min-width: 1240px) 1176px, 100vw"
+                className="h-auto w-full"
+              />
+            </div>
+          )}
+        </Lead>
+
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-8">
           {study.meta && (
             <dl
               className="cs-rise mt-12 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-black/[0.08] py-6 sm:grid-cols-4"
@@ -312,10 +341,10 @@ function CaseStudy({ study, work, action, prevWork, nextWork }) {
           )}
         </div>
 
-        {image && (
+        {image && (!study.cover || study.video) && (
           <div className="mx-auto mt-14 w-full max-w-5xl px-4 sm:mt-16 sm:px-8">
             <NoiseStage seed={work.slug} className="p-4 sm:p-12">
-              <div data-work-media style={workMediaStyle(work.slug)} className="noise-stage-media">
+              <div {...(!study.cover && { "data-work-media": "", style: workMediaStyle(work.slug) })} className="noise-stage-media">
                 {study.video ? (
                   // A launch film leads when there is one; its poster lives in posters/ beside it.
                   <video

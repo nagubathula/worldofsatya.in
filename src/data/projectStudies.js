@@ -106,6 +106,15 @@ export const projectStudies = [
     type: "Product Design Case Study",
     heroDescription: "Designing and shipping a billing system for small Indian restaurants still running on old billing machines and notebooks: researched across 168 restaurants, redesigned for phones after the first test, and deployed in 8.",
     image: "/cases/oyb-v2.webp",
+    // Cut-out cover: transparent, any shape, shown without the stage.
+    cover: { src: "/cases/covers/billjot.webp", width: 2400, height: 1713, alt: "A long printed bill sweeping past Billjot’s outlet console, stock alert, and table order" },
+    // Promo panels shown under the intro; source in design-assets/featured-promos.
+    panels: [
+      { src: "/cases/promos/billjot-1.webp", alt: "From table to bill, in a tap: a long printed bill that runs on through all four images" },
+      { src: "/cases/promos/billjot-2.webp", alt: "Scan, order, straight to the kitchen: a QR table order in Billjot" },
+      { src: "/cases/promos/billjot-3.webp", alt: "No internet? Keep billing: Billjot’s offline mode with the counter still running" },
+      { src: "/cases/promos/billjot-4.webp", alt: "Know the day as it happens: live sales, bill count, and low-stock cards" }
+    ],
     meta: [
       { label: "Product", value: "Point-of-sale and billing system" },
       { label: "Role", value: "Research, design, development, and testing; solo on the first version" },
@@ -121,7 +130,7 @@ export const projectStudies = [
     content: [
       {
         section: "Overview",
-        body: "Billjot is a point-of-sale system for small restaurants: the kind of busy, locally famous family place that still bills on an old machine and keeps tabs in a notebook. The goals were short: build a POS that fits in your hand, make it easy for anyone on staff, and let each restaurant shape it to how it works.\n\nI did it alone, as a freelance project in the final year of my B.Tech: the research, the design, the development, and the testing in real restaurants. It started life as Own Your Bill; today it's [Billjot](https://billjot.com), billing and point of sale for restaurants and shops across India.\n\n![Version 2, designed at a bakery owner's request: menu on the left, the bill on the right](/cases/oyb-v2.webp)"
+        body: "Billjot is a point-of-sale system for small restaurants: the kind of busy, locally famous family place that still bills on an old machine and keeps tabs in a notebook. The goals were short: build a POS that fits in your hand, make it easy for anyone on staff, and let each restaurant shape it to how it works.\n\nI did it alone, as a freelance project in the final year of my B.Tech: the research, the design, the development, and the testing in real restaurants. It started life as Own Your Bill; today it's [Billjot](https://billjot.com), billing and point of sale for restaurants and shops across India.\n\n![Version 2, designed at a bakery owner's request: menu on the left, the bill on the right](/cases/covers/billjot-v2.webp)"
       },
       {
         section: "Phase 1: The Story",
@@ -204,6 +213,15 @@ export const projectStudies = [
     type: "Open-Source Tool",
     heroDescription: "Building a Premiere Pro and After Effects extension that turns copy and paste into an import: images, files, and links from the web land on the timeline without a trip through the Downloads folder.",
     image: "/toothpaste-panel-wide.png",
+    // Cut-out cover: transparent, any shape, shown without the stage.
+    cover: { src: "/cases/covers/toothpaste.webp", width: 2400, height: 1634, alt: "A tube squeezing striped paste around the Toothpaste panel" },
+    // Promo panels shown under the intro; source in design-assets/featured-promos.
+    panels: [
+      { src: "/cases/promos/toothpaste-1.webp", alt: "Paste it. It’s on the timeline: a tube squeezing striped paste through all four images" },
+      { src: "/cases/promos/toothpaste-2.webp", alt: "One panel. One keystroke: the Toothpaste panel" },
+      { src: "/cases/promos/toothpaste-3.webp", alt: "Take just the part you need: start and end times, quality, and cookie options" },
+      { src: "/cases/promos/toothpaste-4.webp", alt: "Over 1,000 sites. One squeeze: the Toothpaste logo" }
+    ],
     meta: [
       { label: "Product", value: "Adobe CEP extension for Premiere Pro and After Effects" },
       { label: "Role", value: "Design and development, solo" },
@@ -340,6 +358,15 @@ export const projectStudies = [
     logo: "/cases/content-nexus/contentflow-logo.png",
     heroDescription: "Designing and building the internal operations and analytics platform behind a five-language media network: 30+ role-scoped views, an eight-stage production pipeline, live YouTube telemetry, and strict regional access control from script to posted video.",
     image: "/cases/content-nexus/overview-hero-dark.webp",
+    // Cut-out cover: transparent, any shape, shown without the stage.
+    cover: { src: "/cases/covers/contentflow.webp", width: 2400, height: 1737, alt: "The ContentFlow dashboard with a loop of film running around it" },
+    // Promo panels shown under the intro. One film strip runs through all four.
+    panels: [
+      { src: "/cases/content-nexus/promo-v3-1.webp", alt: "Script to screen, in one flow: a coil of film whose frames are ContentFlow screens" },
+      { src: "/cases/content-nexus/promo-v3-2.webp", alt: "See where every video stands: pipeline cards with step progress and due dates" },
+      { src: "/cases/content-nexus/promo-v3-3.webp", alt: "Catch it before it’s live: the video review panel with ratings, approval, and a revision timeline" },
+      { src: "/cases/content-nexus/promo-v3-4.webp", alt: "Five languages. One team: Telugu, Hindi, Tamil, Marathi, and Kannada channel cards" }
+    ],
     meta: [
       { label: "Product", value: "Media operations & analytics PWA" },
       { label: "Role", value: "Product design and full-stack engineering" },

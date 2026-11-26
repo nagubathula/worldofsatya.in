@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><title>notbad</title><link rel="stylesheet" href="style.css"><script type="importmap">{"imports":{"three":"../../node_modules/three/build/three.module.js"}}</script></head><body><script type="module">
+import { THREE, panels, piece, stage, V, mesh, texture, load } from "./lib.js";
+panels([
+  { bg: "linear-gradient(165deg,#f5edde,#e8dcc4)", text: "The words<br>are the<br>interface." },
+  { bg: "linear-gradient(165deg,#3a8bf0,#1b6ddb)", fg: "#fff", text: "Type marks.<br>See<br>writing." },
+  { bg: "linear-gradient(165deg,#333331,#222220)", fg: "#fff", text: "One thought<br>at a time,<br>in focus." },
+  { bg: "linear-gradient(165deg,#ff7a59,#f2552f)", text: "Plain files.<br>Always<br>yours." },
+]);
+const { scene, done } = stage({ env: 0.42, key: 1.2, ambient: 0.12 });
+const im = {}; for (const n of ["files", "focus", "marks", "write"]) im[n] = await load(`captures/nb-${n}.png`);
+// Pages carry real editor text.
+const page = (src, x, y, w) => texture(900, 1200, (g, W, H) => {
+  g.fillStyle = "#f7f6f3"; g.fillRect(0, 0, W, H); const k = (W - 150) / w;
+  const h = Math.min(1500 - y - 170, (H - 120) / k); g.drawImage(im[src], x, y, w, h, 85, 85, w * k, h * k);
+});
+const tex = [page("files", 700, 110, 1440), page("write", 480, 110, 720), page("focus", 470, 180, 1440), page("files", 700, 110, 760), page("write", 480, 110, 720)];
+const mats = tex.map((t) => new THREE.MeshPhysicalMaterial({ map: t, roughness: 0.8, side: THREE.DoubleSide }));
+function sheet(w, bend, m) {
+  const h = w * 4 / 3, g = new THREE.PlaneGeometry(w, h, 60, 60), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), d = (x * 0.8 + y * 0.6) / w; // curl along a diagonal
+    p.setZ(i, bend * w * (d * d * 1.1 + 0.35 * d * d * d));
+  }
+  g.computeVertexNormals(); return mesh(scene, g, m);
+}
+// x, y, z, width, bend, rx, ry, rz, texture
+[
+  [216, 520, 40, 236, 0.55, -0.2, 0.35, 0.1, 0],
+  [118, 372, -140, 96, 0.8, 0.5, -0.7, 0.5, 1],
+  [338, 418, -90, 100, 0.7, -0.5, 0.6, -0.45, 3],
+  [106, 700, 120, 158, 0.75, -0.4, -0.5, 0.42, 1],
+  [330, 742, 180, 190, 0.6, 0.35, 0.5, -0.3, 2],
+  [180, 890, 240, 176, 0.7, -0.6, 0.3, 0.28, 0],
+  [452, 868, 120, 168, 0.8, 0.5, -0.6, -0.5, 1],
+  [588, 820, -40, 140, 0.8, -0.5, 0.5, 0.35, 0],
+  [736, 878, 60, 180, 0.7, 0.45, 0.4, -0.25, 3],
+  [898, 826, 80, 160, 0.8, -0.5, -0.6, 0.42, 2],
+  [1050, 884, 60, 176, 0.7, 0.5, 0.4, -0.35, 0],
+  [1208, 836, -20, 144, 0.85, -0.4, 0.6, 0.3, 1],
+  [1356, 872, 90, 176, 0.7, 0.5, -0.5, -0.4, 2],
+  [1510, 832, 20, 150, 0.8, -0.5, 0.5, 0.36, 3],
+  [1664, 884, 80, 184, 0.7, 0.4, 0.4, -0.3, 1],
+  [1806, 820, 0, 150, 0.8, -0.5, -0.5, 0.4, 0],
+].forEach(([x, y, z, w, b, rx, ry, rz, t]) => { const o = sheet(w, b, mats[t]); o.position.set(x, -y, z); o.rotation.set(rx, ry, rz); });
+const e = { r: 18, bg: "#f7f6f3" };
+await piece({ src: "nb-marks.png", x: 456, y: 96, w: 740, h: 310, left: 482, top: 290, width: 386, rot: -3, ...e, pad: 14 });
+await piece({ src: "nb-write.png", x: 456, y: 96, w: 700, h: 300, left: 508, top: 520, width: 360, rot: 3, ...e, pad: 14 });
+await piece({ src: "nb-focus.png", x: 470, y: 196, w: 1440, h: 1040, left: 938, top: 296, width: 404, r: 20, bg: "#f7f6f3", pad: 16, rot: -2 });
+await piece({ src: "nb-files.png", x: 0, y: 84, w: 460, h: 540, left: 1424, top: 296, width: 336, r: 20, bg: "#eeece8", rot: -3 });
+await done();
+</script></body></html>

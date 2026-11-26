@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><title>openweave</title><link rel="stylesheet" href="style.css"><script type="importmap">{"imports":{"three":"../../node_modules/three/build/three.module.js"}}</script></head><body><script type="module">
+import { THREE, panels, piece, stage, strip, V, mesh } from "./lib.js";
+panels([
+  { bg: "linear-gradient(165deg,#7a4dff,#5a25ee)", fg: "#fff", text: "Design<br>past the<br>still frame." },
+  { bg: "linear-gradient(165deg,#f3efff,#ded4ff)", text: "Motion,<br>next to<br>your layers." },
+  { bg: "linear-gradient(165deg,#2b9bff,#0a74f0)", fg: "#fff", text: "Feel it<br>on a real<br>device." },
+  { bg: "linear-gradient(165deg,#1fd18b,#08b374)", text: "Handoff<br>is one<br>shortcut." },
+]);
+const { scene, done } = stage({ env: 0.36, key: 1.55, ambient: 0.1 });
+const mat = (c) => new THREE.MeshPhysicalMaterial({ color: c, side: THREE.DoubleSide, roughness: 0.36, clearcoat: 0.7, clearcoatRoughness: 0.2 });
+// Warp and weft: a sheet of eight ribbons whose weft runs on through every panel.
+const X = [52, 138, 224, 310], Y = [470, 572, 674, 776], WD = 76, AMP = 17;
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const warpC = ["#f4f1ff", "#ffc933", "#f4f1ff", "#ff86b2"], weftC = ["#16123a", "#2b9bff", "#ff5a7a", "#1fd18b"];
+X.forEach((x, i) => {
+  const P = [], D = [];
+  for (let k = 0; k <= 400; k++) {
+    const y = 330 + (k / 400) * 700;
+    const ph = ((y - Y[0]) / 102) * Math.PI;
+    const curl = smooth(440, 330, y);
+    P.push(V(x + curl * 26, -(y + curl * 30), AMP * Math.cos(ph) * (i % 2 ? -1 : 1) + curl * 34)); D.push(V(1, 0, 0));
+  }
+  mesh(scene, strip(P, D, WD), mat(warpC[i]));
+});
+Y.forEach((y0, i) => {
+  const P = [], D = [];
+  for (let k = 0; k <= 2400; k++) {
+    const x = -60 + (k / 2400) * 1960, s = smooth(340, 620, x);
+    const ph = ((x - X[0]) / 86) * Math.PI;
+    const a = ((x - 380) / 520) * 2 * Math.PI + (i * Math.PI) / 2;
+    const y = y0 * (1 - s) + s * (790 + 92 * Math.sin(a) + 26 * Math.sin(x / 260));
+    const z = -AMP * Math.cos(ph) * (i % 2 ? -1 : 1) * (1 - s) + s * 92 * Math.cos(a);
+    P.push(V(x, -y, z)); const tw = s * 0.75 * Math.cos(a); D.push(V(0, Math.cos(tw), Math.sin(tw)));
+  }
+  mesh(scene, strip(P, D, WD), mat(weftC[i]));
+});
+await piece({ src: "ow-motion.png", x: 2961, y: 684, w: 617, h: 640, left: 540, top: 270, width: 336, rot: 3, r: 22 });
+await piece({ src: "ow-motion.png", x: 0, y: 1728, w: 1270, h: 398, left: 478, top: 586, width: 400, rot: -3, r: 16, line: "#3a3a3a" });
+await piece({ src: "ow-present.png", x: 1272, y: 178, w: 1055, h: 2192, left: 1000, top: 270, width: 280, r: 40, bg: "#000" });
+await piece({ src: "ow-dev.png", x: 2961, y: 700, w: 617, h: 520, left: 1404, top: 288, width: 372, rot: -2, r: 22 });
+await piece({ src: "ow-dev.png", x: 1490, y: 905, w: 670, h: 745, left: 1496, top: 610, width: 256, rot: 4, r: 18, bg: "#f4f4f4" });
+await done();
+</script></body></html>
